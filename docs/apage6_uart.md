@@ -46,7 +46,7 @@ Default baud rate is: 256000 (Max tested baudrate is 1000 0000)
     Step 1 | Step 2 
     ---- | ---- 
     Made sure your platformio.ini file looks like this (usually platformio will auto detect the COM port) | Click the icon marked in red and that will open a serial terminal
-    <p align="left"> <img src="../assets/vscode1.PNG" alt="drawing" width="500"/> <br /> </p> | <p align="left"> <img src="../assets/vscode2.PNG" alt="drawing" width="800"/> <br /> </p>  <p align="left"> <img src="../assets/vscode3.PNG" alt="drawing" width="800"/> <br /> </p>
+    <p align="left"> <img src="../assets/vscode1.PNG" alt="drawing" width="500"/> <br /> </p> | <p align="left"> <img src="../assets/vscode2.PNG" alt="drawing" width="800"/> <br /> </p>  <p align="left"> <img src="../assets/VScode3.PNG" alt="drawing" width="800"/> <br /> </p>
     
 
 === "Arduino"

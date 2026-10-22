@@ -8,9 +8,9 @@ Or buy a single motor driver here: [Link](https://source-robotics.com/products/s
 ## **Recommended hardware**
 
 1. [Diametrically magnetized magnet](https://source-robotics.com/products/6x2-5mm-diametrical-neodymium-magnet)
-2. BLDC motor; check [here]() for all tested motors
+2. BLDC motor; check [here](apage9_3_tested_motors.md) for all tested motors
 3. [Programming adapter](https://source-robotics.com/products/jtag-programming-adapter-1-27-pitch)
-4. [Serial adapter]()
+4. [Serial adapter](https://source-robotics.com/products/usb-to-serial-adapter)
 5. [CAN adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter) 
 6. [Termistor](https://source-robotics.com/products/100k-ntc-thermistor)
 7. [CAN wires](https://source-robotics.com/products/spectral-micro-can-cable) and [power wires](https://source-robotics.com/products/spectral-micro-power-cable)

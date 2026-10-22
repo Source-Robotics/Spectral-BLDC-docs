@@ -23,7 +23,7 @@ Or buy a single motor driver here: [Link](https://source-robotics.com/products/s
 * [Mobile robot guide](Guides/Mobile%20robot%20guide.md)
 * [Python guide](Guides/Python%20guide.md)
 * [Quadruped robot guide](Guides/Quadruped%20guide.md)
-* [Gravity compensation guide]()
+* [Gravity compensation guide](Guides/Gravity%20compensation%20guide.md)
 * [Bilateral teleoperation guide](Guides/Bilateral%20teleoperation%20guide.md)
 * [SimpleFOC guide](Guides/SIMPLEFOC%20guide.md)
 
