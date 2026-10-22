@@ -1,5 +1,6 @@
 site_name: SPECTRAL BLDC DOCS
 site_url: https://docs.source-robotics.com/Spectral-BLDC-docs/
+site_description: Documentation for the Spectral Micro BLDC motor controller by Source Robotics.
 theme:
   name: material
   features:
@@ -18,15 +19,15 @@ theme:
     - scheme: slate
       toggle:
         icon: material/weather-sunny
-        name: Switch to dark mode
+        name: Switch to light mode
       primary: blue
-      accent: blur 
+      accent: blue
     - scheme: default 
       toggle:
         icon: material/weather-night
-        name: Switch to light mode    
+        name: Switch to dark mode    
       primary: blue
-      accent: blur
+      accent: blue
 
 plugins:
 - search
@@ -54,7 +55,6 @@ markdown_extensions:
   - pymdownx.superfences
   - attr_list
   - md_in_html
-  - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
@@ -63,8 +63,6 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - attr_list
-  - md_in_html
 
 copyright: |
   &copy; 2023 <a href="https://github.com/PCrnjak"  target="_blank" rel="noopener">Petar Crnjak</a>
