@@ -12,7 +12,7 @@ Or buy a single motor driver here: [Link](https://source-robotics.com/products/s
 3. [Programming adapter](https://source-robotics.com/products/jtag-programming-adapter-1-27-pitch)
 4. [Serial adapter](https://source-robotics.com/products/usb-to-serial-adapter)
 5. [CAN adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter) 
-6. [Termistor](https://source-robotics.com/products/100k-ntc-thermistor)
+6. [Thermistor](https://source-robotics.com/products/100k-ntc-thermistor)
 7. [CAN wires](https://source-robotics.com/products/spectral-micro-can-cable) and [power wires](https://source-robotics.com/products/spectral-micro-power-cable)
 
 !!! Note annotate "" 
@@ -41,7 +41,7 @@ Some hardware considerations:
 1. Solder motor phases to **U,W,V**
 2. Connect motor power to one of the **Power connectors** terminals
 3. If you are using UART comms. Connect Uart adapter to **UART connector**
-4. If you are using termistor, connect it to **Termistor connecor**
+4. If you are using thermistor, connect it to **Thermistor connector**
 5. If you are using CAN comms. Connect CAN adapter to one of **CAN connectors**
 6. When uploading code connect JTAG adapter to **JTAG connector**
 
@@ -55,7 +55,7 @@ Some hardware considerations:
 
 ## **Connecting multiple motors (daisy chaining)**
 
-Multiple Spectral BLDC drivers and nodes can be connected to single CAN bus using daisy-chaining. First an last nodes on can bus should have termination resistors. On Spectral micro you can flip the CAN switch to "ON" positon to enable termination resistor.
+Multiple Spectral BLDC drivers and nodes can be connected to single CAN bus using daisy-chaining. First and last nodes on can bus should have termination resistors. On Spectral micro you can flip the CAN switch to "ON" position to enable termination resistor.
 
 !!! Tip annotate "Power connectors can handle max 4 A DC. Usually if you are using 10ohm gimbal motor you can daisy chain 3-4 of them." 
 
@@ -66,7 +66,7 @@ Multiple Spectral BLDC drivers and nodes can be connected to single CAN bus usin
 
 ## **Thermistor connection**
 
-Solder the termistor like shown in the image. 
+Solder the thermistor like shown in the image. 
 !!! Tip annotate "Thermistor is disabled by default. To enable it use command #Term 1" 
 
 <p align="left"> <img src="../assets/TERM1-Photoroom.png" alt="drawing" width="600"/> <br /> </p> 

@@ -15,7 +15,7 @@ What you will need to create a simple mobile robot is:
 * Wires to connect everything up: [CAN wires](https://source-robotics.com/products/spectral-micro-can-cable), [Power wires](https://source-robotics.com/products/spectral-micro-power-cable)
 * 2 x BLDC motors
 * 1 x [CAN adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter)
-* 1 x Drill battery adapter: [Example](https://s.click.aliexpress.com/e/_DExmYtl) - This is great way to power your BLDC motors with cheap and affortable batteries
+* 1 x Drill battery adapter: [Example](https://s.click.aliexpress.com/e/_DExmYtl) - This is great way to power your BLDC motors with cheap and affordable batteries
 * A Laptop or raspberry pi
 * Xbox controller
 
@@ -32,7 +32,7 @@ The setup will be the same for any kind of mobile robot. You will need to follow
 * First you need to calibrate your Spectral BLDC drivers with the motors you are using. 
 * After that change the CAN ids of one of the drivers to CAN 1. You can do it by using UART commands: #CANID 1 and after that #Save
 * Now connect CAN adapters CAN bus to one of the drivers and then from that driver connect to the second driver. Make sure that last driver in chain has its CAN termination resistor in "ON" state
-* Connect the power to both drivers. You can daisy chain it or use 2 seperate wires.
+* Connect the power to both drivers. You can daisy chain it or use 2 separate wires.
 * You will also need to connect your xbox controller to the PC/laptop via Bluetooth.
 
 The code below is really simple example that drives the robot using the left joystick of the controller.

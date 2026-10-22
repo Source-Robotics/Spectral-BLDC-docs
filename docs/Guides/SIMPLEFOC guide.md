@@ -43,7 +43,7 @@ lib_archive = false
 If you want to develop more advanced applications with SimpleFOC you can follow these tutorials:
 
 * [Getting started](https://docs.simplefoc.com/example_from_scratch)
-* [Writting the code](https://docs.simplefoc.com/code)
+* [Writing the code](https://docs.simplefoc.com/code)
 * [SimpleFOC Driver and Support Library](https://github.com/simplefoc/Arduino-FOC-drivers/tree/master)
 
 

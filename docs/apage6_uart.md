@@ -15,7 +15,7 @@ Default baud rate is: 256000 (Max tested baudrate is 1000 0000)
 
 ## **How to connect**
 
-!!! Danger annotate "Voltage warrning" 
+!!! Danger annotate "Voltage warning" 
     Spectral micro UART port uses 3.3 volts. Using 5V will destroy your board!
 
 <p align="left"> <img src="../assets/UART connection.PNG" alt="drawing" width="500"/> <br /> </p>
@@ -31,7 +31,7 @@ Default baud rate is: 256000 (Max tested baudrate is 1000 0000)
     **Download Putty from this link: [Modified Putty](https://www.grzegorz.net/pliki/putty-crlf.zip)**
 
     !!! Note annotate "Note" 
-        You need to have Putty from above link to add CR LF option. Stock Putty cant do that!
+        You need to have Putty from above link to add CR LF option. Stock Putty can't do that!
 
     Step 1 | Step 2
     ---- | ---- 
@@ -76,24 +76,24 @@ All commands are response-only; that means the motor driver will never send data
 
 
 
-Aftter **#** You can enter your command. For example: #Error<br />
+After **#** You can enter your command. For example: #Error<br />
  Commands that are type **`set/get`** can have a number argument after command name. Number argument for command can be one of following types as described in table column "Input Data type"
 
 * int - positive and negative integer values
 * float - positive and negative float values
 * bool - 0 or 1
 
-Commands and numbers need to be seperated by a single space! Example: #LED 1
+Commands and numbers need to be separated by a single space! Example: #LED 1
 
 !!! Note annotate "Commands are case sensitive!" 
-    Command names are case sensitive and need to be same as in the table to be registred.
+    Command names are case sensitive and need to be same as in the table to be registered.
 
 Template of command:<br />
 `#Name number`
 
 Here are few examples:
 
-* Calling `#P 100` will set our motor to positon mode with setpoint of 100 and return its current position, but calling `#P` will only return current positon of the motor.
+* Calling `#P 100` will set our motor to position mode with setpoint of 100 and return its current position, but calling `#P` will only return current position of the motor.
 * Calling `#V 1000` will set motor to velocity mode with setpoint of 100 and return its current velocity, but calling `#V` will only return current velocity of the motor.
 * Calling `#LED 1` will enable led indication on the motor and `#LED 0` will disable it; also both examples wilL return its current status. Calling only `#LED` will tell us the current status.<br />
 
@@ -115,11 +115,11 @@ There are few cyclic commands available. they initiate a motor to send data ever
 
 
 ### **Motion commands**
- Name | Type | Input Data type | Desciption | Response
+ Name | Type | Input Data type | Description | Response
 ---- | ---- | ---- | ---- | ----
 `Iq` | Set/Get | float | `Switches actuator to current control mode and sets current setpoint to Iq value.` |   Iq value [mA] 
 `V` | Set/Get | int | `Switches actuator to velocity control mode and sets velocity to setpoint V` |   Velocity value [Encoder ticks/s]  
-`P` | Set/Get | int | `Switches actuator to position mode and sets positon setopint to P value` |   Position [Encoder ticks]
+`P` | Set/Get | int | `Switches actuator to position mode and sets position setpoint to P value` |   Position [Encoder ticks]
 `PD` | Set/Get | int | `Switches actuator to Impedance PD control mode and sets position setpoint to PD value` |  Current position [Encoder ticks]
 `PDV` | Set/Get | int | `Set/Get velocity setpoint when in Impedance PD mode.`<br /> |  Current velocity setpoint when in PD mode 
 `PDI` | Set/Get | int | `Set/Get current setpoint when in Impedance PD mode` |  Current current setpoint when in PD mode
@@ -127,7 +127,7 @@ There are few cyclic commands available. they initiate a motor to send data ever
 
 
 ### **PID tuning commands**
- Name | Type | Input Data type |  Desciption | Response
+ Name | Type | Input Data type |  Description | Response
 ---- | ---- | ---- | ---- | ----
 `Kpp` | Set/Get | float | `Set/Get position loop Kp gain` |  Current value of Kpp
 `Kpv` | Set/Get | float | `Set/Get velocity loop Kp gain` |  Current value of Kpv
@@ -141,18 +141,18 @@ There are few cyclic commands available. they initiate a motor to send data ever
 `Id` | Set/Get | float | `Set/Get the value of Id setpoint. Usually we do not touch this and should stay at 0` |   Id value [mA] 
 `KP` | Set/Get | float | `Set/Get KP of impedance PD loop` |  Current value of KP 
 `KD` | Set/Get | float | `Set/Get KD of impedance PD loop` |  Current value of KD
-`Rstint` | Set/Get | bool | `Set/Get do we want to reset integral accumulators after receiving new setopint, default is 0.` | 0 if disabled 1 if enabled
+`Rstint` | Set/Get | bool | `Set/Get do we want to reset integral accumulators after receiving new setpoint, default is 0.` | 0 if disabled 1 if enabled
 `Vlim` | Set/Get | int | `Voltage limit for Ud and Uq voltages. ` | Current value of Vlim in V
 
 
 
 ### **Calibration and motor parameter commands**
- Name | Type | Input Data type | Desciption | Response
+ Name | Type | Input Data type | Description | Response
 ---- | ---- | ---- | ---- | ----
 `Cal` | Action |  | `Start motor calibration procedure` |
 `R` | Set/Get | float | `Set/Get phase Resistance` |   Phase Resistance [Ohm]
 `L` | Set/Get | float | `Set/Get phase Inductance` |   Phase Inductance [Ohm]
-`PP` | Set/Get | int | `Set/get Number of POLE PAIRS!` | Current nomber of pole pairs
+`PP` | Set/Get | int | `Set/get Number of POLE PAIRS!` | Current number of pole pairs
 `Kt` | Set/Get | float | `Set/Get Kt (Torque constant)` |  Current value of Kt
 `KV` | Set/Get | float | `Set/Get KV (motor velocity constant)`  |  Current value of KV
 `Flux` | Set/Get | float | `Set/Get flux linkage` |  Current flux linkage value 
@@ -168,17 +168,17 @@ There are few cyclic commands available. they initiate a motor to send data ever
 
 
 ### **Utility commands**
- Name | Type | Input Data type | Desciption | Response
+ Name | Type | Input Data type | Description | Response
 ---- | ---- | ---- | ---- | ----
 `Idle` | Action |  | `Set motor to idle state` | 
 `Save` | Action |  | `Save current config to EEPROM` |
 `LED` | Set/Get | bool | `Enable disable LED status` | Current status of LED indication; 0 is off, 1 is on
 `Reset` | Action |  | `Reset the MCU` |
 `Default` | Action |  | `Load default config to EEPROM` | **Note this will rewrite all data saved in eeprom (including serial number, hardware version, batch date...) Before using it make sure to manually backup any important data. 
-`Temp` | Action |  | `Get termistor temperature in degrees` | Temperature in degrees
-`Term` | Set/Get |bool | `Enable/disable termistor mesurment `| 0 disabled 1 enabled
+`Temp` | Action |  | `Get thermistor temperature in degrees` | Temperature in degrees
+`Term` | Set/Get |bool | `Enable/disable thermistor measurement `| 0 disabled 1 enabled
 `Tlim` | Set/Get |int | `Set/Get the temperature at which thermal error will trigger`| Be careful here value of 75 is default and it is not recommended to go higher than that unless you know you motor is rated for more
-`Mode` | Action |  | `Get current operating mode` | Operating mode (Open loop, Idle, Positon control...)
+`Mode` | Action |  | `Get current operating mode` | Operating mode (Open loop, Idle, Position control...)
 `Vbus` | Action |  | `Get current value of Vbus` | current value of Vbus [mV]
 `Error` | Action |  | `Get current state of all errors` | List of errors
 `Clear` | Action |  | `Clear all errors and go to idle; *NOTE: this will not clear calibration error if drive is not calibrated. `
@@ -193,7 +193,7 @@ There are few cyclic commands available. they initiate a motor to send data ever
 `SERNUM` | Set/Get | int | `Set/Get motor controller serial number`  | Current serial number of motor controller
 `Calibrated` | Set/Get | bool | `Set/Get motor calibration status. *NOTE: calling #Calibrated 1 will set controllers calibration status to 1 but motor controller might not be properly calibrated. To run auto calibration run #Cal command` | Calibrated or not calibrated
 `Activate` | Set/Get | bool | `Activate the motor (Not used in this version of code)` |
-`Pullconfig`| Action |  | `Prints all motor data over serial; used for updating the Spectral motor GUI` | Motor data seperated by single space char
+`Pullconfig`| Action |  | `Prints all motor data over serial; used for updating the Spectral motor GUI` | Motor data separated by single space char
 
 ### **Gripper commands**
 Commands used when in gripper mode. Procedure: 
@@ -204,11 +204,11 @@ Commands used when in gripper mode. Procedure:
 * Gripcur x (x is value from 0 - 1000 [mA])
 * Grippos x (x is vale from 0 - 255; 0 being fully open 255 fully closed)
 
- Name | Type | Input Data type | Desciption | Response
+ Name | Type | Input Data type | Description | Response
 ---- | ---- | ---- | ---- | ----
 `Gripper` | Set/Get | bool | `Set/get Am I a gripper` | Is this device gripper or not
 `Gripcal` | Action |  | `Start gripper calibration` |   None
-`Grippos` | Set/Get | uint8_t | `Set/get desired gripper setpoint position (from 0 to 255). Also will set gripper into GOTO mode and execute the command` | Gripper positon value
+`Grippos` | Set/Get | uint8_t | `Set/get desired gripper setpoint position (from 0 to 255). Also will set gripper into GOTO mode and execute the command` | Gripper position value
 `Gripvel` | Set/Get | uint8_t | `Set/get desired gripper velocity setpoint (from 0 to 255)` | Gripper velocity value setpoint
 `Gripcur` | Set/Get | int | `Set/get desired gripper current in mA from 0 - 1000 (Note value below 150 are unstable)` | Gripper current value setpoint; to get current current value use #Iq
 `Gripact` | Set/Get | bool | `Set/get gripper activation bit` | Is gripper activated or not

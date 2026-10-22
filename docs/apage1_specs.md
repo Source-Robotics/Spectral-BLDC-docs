@@ -53,8 +53,8 @@ Motor phases are conneceted to U,V and W. Power is connected to DC+ and DC-
 
 !!! Note annotate "Note!" 
 
-    * to enable hal you need to solder 12 10k reistors above HAL connecor
-    * termistor pin is using pulldown of 54.9 kilo ohms. 
+    * to enable hal you need to solder 12 10k resistors above HAL connector
+    * thermistor pin is using pulldown of 54.9 kilo ohms. 
     * UART is 3v3 only. Using 5V will destroy the board.
     * "PIN" can be used as analog input or general purpose input/output
 
@@ -73,7 +73,7 @@ Spectral micro uses same hole spacing as **NEMA17 format** motors.
 
 ## **CAN termination**
 
-To use CAN termination make sure to place the swith in **ON** position!
+To use CAN termination make sure to place the switch in **ON** position!
 <p align="left"> <img src="../assets/TERM.png" alt="drawing" width="600"/> <br /> </p>
 
 
@@ -89,7 +89,7 @@ Default settings that come prelaoded are:
 
 - LED indication: 1  
 - Calibrated: 0
-- Using termistor: 0
+- Using thermistor: 0
 - Watchdog active: 0
 - Heartbeat active: 0
 - UART baud rate: 256000

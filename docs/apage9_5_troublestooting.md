@@ -67,7 +67,7 @@ Another example is your Vbus is 2V and you are getting Vbus error. You now adjus
 
 ## **Motor temperature**
 
-* If termistor is not placed in motor windings your motor can overheat.
+* If thermistor is not placed in motor windings your motor can overheat.
 * Overheating can reduce performance and destroy your motor windings and BLDC controller
 
 !!! Note annotate "" 
@@ -75,11 +75,11 @@ Another example is your Vbus is 2V and you are getting Vbus error. You now adjus
 
 ## **Driver temperature**
 
-If driver gets over some temperature it will automatically shut down. This is hardware feture of the hardware chip we use and cant be modified in software. 
+If driver gets over some temperature it will automatically shut down. This is hardware feature of the hardware chip we use and can't be modified in software. 
 
 !!! Note annotate "" 
 
-## **Calibration issuses**
+## **Calibration issues**
 
 Check [calibration page](apage4_calibration.md) for these issues.
 
@@ -88,7 +88,7 @@ Check [calibration page](apage4_calibration.md) for these issues.
 ## **CAN bus issues**
 
 * Make sure you use correct baud rate; default is 1Mbit
-* First and last node on the CAN bus should have termination resistors of 120ohm. To test that remove your device from any power and use multimeter to mesure resistance between CANH and CANL anywhere on the bus; it should be around 60 ohms.
+* First and last node on the CAN bus should have termination resistors of 120ohm. To test that remove your device from any power and use multimeter to measure resistance between CANH and CANL anywhere on the bus; it should be around 60 ohms.
 * Use twisted pair wires.
 
 !!! Note annotate "" 

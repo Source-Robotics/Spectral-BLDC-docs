@@ -2,7 +2,7 @@
 
 !!! Note annotate "" 
 
-**CAN bus** should be your primary choice when developing robotic aplication. <br />
+**CAN bus** should be your primary choice when developing robotic application. <br />
 Spectral micro uses 5V CAN bus that adheres to the CAN 2.0 standard. Each Spectral micro has 2 CAN bus connectors allowing you to easily daisy chain multiple devices. 
 
 
@@ -31,7 +31,7 @@ Node with smallest Node ID is strongest in CAN bus arbitration.
 
 !!! Tip annotate "**Messages prefixed with Send are messages that the host can send to the Spectral BLDC controller. Note that to some of these messages the driver will respond with pre-defined message prefixed with Respond**" 
 !!! Note annotate "**Messages prefixed with Respond  are messages that the Spectral BLDC controller can send to the host.**" 
-!!! Danger annotate "**Messages prefixed with Send_Respond are messages that host can request from BLDC controller and it will respond with the desired data packet with the same Command ID as recived command. Host is sending these msgs with RTR bit and Spectral is responding with RTR 0 and some data packet.**" 
+!!! Danger annotate "**Messages prefixed with Send_Respond are messages that host can request from BLDC controller and it will respond with the desired data packet with the same Command ID as received command. Host is sending these msgs with RTR bit and Spectral is responding with RTR 0 and some data packet.**" 
 
 
  Command ID | Name | Type | Data 
@@ -40,7 +40,7 @@ Node with smallest Node ID is strongest in CAN bus arbitration.
 3 | `Respond_data_pack_1` | Respond | Position [Encoder ticks] <br /> Velocity [Encoder ticks/s] <br /> Current [mA]
 5 | `Respond_data_pack_2` | Respond | Data 
 7 | `Respond_data_pack_3`| Respond | Data 
-60 | `Respond_Gripper_data_pack` | Respond | Position  <br /> Current <br /> Gripper activation status <br /> Gripper action status <br /> Object detection status  <br /> Temperature error <br /> Timeour error <br /> Estop error <br /> Calibration status
+60 | `Respond_Gripper_data_pack` | Respond | Position  <br /> Current <br /> Gripper activation status <br /> Gripper action status <br /> Object detection status  <br /> Temperature error <br /> Timeout error <br /> Estop error <br /> Calibration status
 
 
  Command ID | Name | Type | Data 
@@ -93,12 +93,12 @@ To clear the error you will need to call:
 
 ## **Heartbeat**
 **By default heartbeat will send data at 1Hz or every 1 second.**<br />
-Hearbeat is function that will Send "Respond_Heartbeat" msg every time interval you set in "Send_Heartbeat_Setup". <br />
-This is usefull when your host device needs to see if spectral BLDC is connected/alive. <br />
+Heartbeat is function that will Send "Respond_Heartbeat" msg every time interval you set in "Send_Heartbeat_Setup". <br />
+This is useful when your host device needs to see if spectral BLDC is connected/alive. <br />
 In case your spectral BLDC sends any other data (as a response to command) it will reset its heartbeat timer.
 
 !!! Tip annotate "**Heartbeat timer reset**" 
-    For example if spectral BLDC is sending data every 10ms and heartbeat is setup to send every 1s; hearbeat will never send its data. 
+    For example if spectral BLDC is sending data every 10ms and heartbeat is setup to send every 1s; heartbeat will never send its data. 
 
 !!! Note annotate "" 
 
@@ -157,7 +157,7 @@ Size (bytes) | Variable (Spectral_BLDC Lib python attribute)  | Type | Details
 1-2 | gripper_current |  16 bit signed | 0 min current, 1300 max current, unit mA
 3(bit 0) | gripper_activated | bit (0/1) | gripper activate (1) / deactivated (0)
 3(bit 1) | gripper_action_status | bit (0/1) |  1 is goto, 0 is idle or performing auto release or in calibration
-3(bit 2 and 3) | gripper_object_detection | 2 bit | 0 in motion, 1 object detected closing, 2 object detected opening, 3 at positon
+3(bit 2 and 3) | gripper_object_detection | 2 bit | 0 in motion, 1 object detected closing, 2 object detected opening, 3 at position
 3(bit 4) | gripper_temperature_error | bit (0/1) | gripper_temperature_error
 3(bit 5) | gripper_timeout_error | bit (0/1) | gripper_timeout_error
 3(bit 6) | gripper_estop_error | bit (0/1) | gripper_estop_error
@@ -169,14 +169,14 @@ Size (bytes) | Variable (Spectral_BLDC Lib python attribute)  | Type | Details
 
 !!! Note annotate "" 
 
-This command will place the driver in position, speed or current control mode depending on the amount of paramters you give it.<br />
+This command will place the driver in position, speed or current control mode depending on the amount of parameters you give it.<br />
 Note that if you dont want feedforward just set it to 0. 
 
 * Command ID: 2 <br />
 * Direction: Host -> BLDC driver <br />
 * Python call: Send_data_pack_1() <br />
 * Type of frame: standard <br />
-* Lenght: 8 byte -  If using positon setpoint with speed and current feedforward
+* Length: 8 byte -  If using position setpoint with speed and current feedforward
 
 Size (bytes) | Variable | Type | Details
 ---- | ---- | ---- | ----
@@ -184,20 +184,20 @@ Size (bytes) | Variable | Type | Details
 3 - 5 | Velocity feedforward  | signed 24bit | unit is encoder ticks/s
 6 - 7 | Current feedforward | signed 16bit | unit is mA
 
-* Lenght: 5 byte -  If using speed setpoint and current feedforward
+* Length: 5 byte -  If using speed setpoint and current feedforward
 
 Size (bytes) | Variable | Type | Details
 ---- | ---- | ---- | ----
 0 - 2 | Velocity setpoint | signed 24bit | unit is encoder ticks/s
 3 - 5 | Current feedforward| signed 16bit | unit is mA
 
-* Lenght: 2 byte -  If using current setpoint
+* Length: 2 byte -  If using current setpoint
 
 Size (bytes) | Variable | Type | Details
 ---- | ---- | ---- | ----
 0 - 1 | Current setpoint| signed 16bit | unit is mA
 
-Driver will respons to this command with:<br />
+Driver will respond to this command with:<br />
 **Respond_data_pack_1**
 
 ---
@@ -259,7 +259,7 @@ Alternatively you can send empty Send_gripper_data_pack command.
 * Type of frame: standard <br />
 * Length: 0 byte 
 
-Driver will respons to this command with:<br />
+Driver will respond to this command with:<br />
 **Respond_Gripper_data_pack**
 
 ---
@@ -535,7 +535,7 @@ Size (bytes) | Variable | Type | Details
 
 !!! Note annotate "" 
 
-This command will set heartbeat paramters of the motor driver.
+This command will set heartbeat parameters of the motor driver.
 
 * Command ID: 30 <br />
 * Direction: Host -> BLDC driver <br />
@@ -551,7 +551,8 @@ Size (bytes) | Variable | Type
 
 ### **Send_Cyclic_command**
 
-**TODO**
+!!! info "Work in progress"
+    This section is not documented yet.
 
 ---
 
@@ -632,7 +633,7 @@ This command will request that motor driver responds with its version informatio
 
 Size (bytes) | Variable (Spectral_BLDC Lib python attribute)  | Type | Details
 ---- | ---- | ---- | ----
-0  | HARDWARE_VERSION | byte | harware version of the driver
+0  | HARDWARE_VERSION | byte | hardware version of the driver
 1  | BATCH_DATE | byte | date when the batch was produced
 2  | SOFTWARE_VERSION | byte | version of the software on the driver
 3 - 6  | SERIAL_NUMBER | 32 bit | serial number of the driver
@@ -770,7 +771,7 @@ Start Bit | Data Bits (LSB first) <br />
    0       |     0  0  0  0  1  1  0  1 <br />
 
 
-transmition of bytes is LSB byte first. So if we have data packet of 4 bytes; byte 3,2,1,0; byte 3 will be sent first and byte 0 last.<br />
+transmission of bytes is LSB byte first. So if we have data packet of 4 bytes; byte 3,2,1,0; byte 3 will be sent first and byte 0 last.<br />
 
 Data is packed in arrays so that for 16 bit number, 8 MSB bits go to array index 0 and 8 LSB bits go to array index 1.<br />
 When transmitting that data If you look here: https://en.wikipedia.org/wiki/CAN_bus LSB are sent first so array element with index 1 is transmitted first.<br />

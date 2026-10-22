@@ -20,7 +20,7 @@ Spectral firmware has autocalibration feature that allows you to automatically d
 
 ## **Positive rotation**
 
-!!! Tip annotate "In spectral firmware positive rotation is always counter-clockwise. That means that positive current will result in rotation in that direction. Positive speed setpoint will rotate motor in that direction and rotating in that direction will increase motor positon!" 
+!!! Tip annotate "In spectral firmware positive rotation is always counter-clockwise. That means that positive current will result in rotation in that direction. Positive speed setpoint will rotate motor in that direction and rotating in that direction will increase motor position!" 
 
 <p align="left"> <img src="../assets/Positive_rotation.png" alt="drawing" width="450"/> <br /> </p>
 
@@ -45,7 +45,7 @@ These generic parameters will work for motor with resistances ranging from 2 - 2
 !!! Note annotate "Note" 
     Resistance and inductance values returned from calibration will have variations and are just estimates of real values.
 
-Note that the values that Spectral drives calculate are only estimations and if you want to get exact values use high precision insturments to measure them.
+Note that the values that Spectral drives calculate are only estimations and if you want to get exact values use high precision instruments to measure them.
 
 !!! Note annotate "" 
 
@@ -140,7 +140,7 @@ Good output will look like this (Your numbers will be different):
     and for cheap and poor quality motors you can get different results in by 2-3 times magnitude. 
 
 **Calibration end**<br />
-In case your calibration was succesful you will get message like below. Make sure to save the config.
+In case your calibration was successful you will get message like below. Make sure to save the config.
 After the successful config is saved you dont need to re run calibration when you start your motor driver.
 
     Calibration success!
@@ -169,7 +169,7 @@ The fix? Properly calibrate your electrical angle (often called the **theta offs
 
 After you ran **#Cal** command you need to run **#Calangle** command. <br />
 
-Your motor will start to spin in one direction and then swith to another multiple times. This process can take up to 2 minutes, if it takes longer it will timeout and return that theta_offset is 0.00 (You can check what current theta_offset is by typing #Offset). If it is successful you will see that #Offset will retrun some value different from 0. To check it again you can command motor to spin in one direction with some current setpoint like #Iq 500, and note the speed with #V. Then do the same for #Iq -500 and note the speed with #V. The speeds for both directions should be around the same value.
+Your motor will start to spin in one direction and then switch to another multiple times. This process can take up to 2 minutes, if it takes longer it will timeout and return that theta_offset is 0.00 (You can check what current theta_offset is by typing #Offset). If it is successful you will see that #Offset will return some value different from 0. To check it again you can command motor to spin in one direction with some current setpoint like #Iq 500, and note the speed with #V. Then do the same for #Iq -500 and note the speed with #V. The speeds for both directions should be around the same value.
 
 **After you ran #Calangle and you confirmed it was successful you need to run #Cal again to re-calulate correct Kt and KV values.**
 
@@ -198,4 +198,4 @@ Wrong phase order. Switch motor phases
     Calibration failed!
 
 
-If calibration is successful but your LED is in error mode and calling #Error reports no error try to call #Info command. If you see -1 somwhere that means that default config was no loaded and eeprom is filled with junk variables. To fix that call the #Default command.
+If calibration is successful but your LED is in error mode and calling #Error reports no error try to call #Info command. If you see -1 somewhere that means that default config was no loaded and eeprom is filled with junk variables. To fix that call the #Default command.

@@ -15,7 +15,7 @@ To tune the controller you will need to have it fully calibrated and without any
 
 !!! Note annotate "" 
 
-## **Tuning cascade postion, velocty and current controller**
+## **Tuning cascade position, velocity and current controller**
 
 <img src="../assets/cascadeloop.png" alt="drawing" width="1000"/> <br /> </p>
 
@@ -27,19 +27,19 @@ For tuning the cascaded structure, we should first focus on the inner loops and 
 
 The innermost stage is always a current/torque controller that accepts torque/current requests and uses a PI controller to select voltage (PWM values) to achieve that current. You need to pick Kp and Ki for that loop. If they are too large, they can create audible noise or instability. If they are too small, the response to changes in commanded torque or disturbances will be reduced.
 
-Torque bandwidth (current loop bandwitdh) is mesure of how fast a system can respond to those commands or disturbances. 
+Torque bandwidth (current loop bandwidth) is measure of how fast a system can respond to those commands or disturbances. 
 Current controller can be auto tuned during the calibration by selecting desired torque/current bandwidth (UART command #Cbw).  Motor calibration measures your motor’s  phase resistance and phase inductance. It uses this information and desired torque bandwidth setpoint to set its current controller gains.
-Default torque bandwitdh is 200 Hz. 
+Default torque bandwidth is 200 Hz. 
 
 **Generally in industry bandwidths of more than 800 Hz are standard.** Higher torque bandwidth is desired for legged robots, or other applications where it is necessary to respond to external disturbances as fast as possible. Higher torque bandwidths will result in audiable noise and if they are too large in drive instability.
 
-We recommned tuning the current controller gains with auto tune feature in #Cal command.
+We recommend tuning the current controller gains with auto tune feature in #Cal command.
 
 If you want to tune it by hand:
 
-1. Increase proportional gain until system starts to become unstable (it will oscilate or create humming sounds). Use command #Kpiq
-2. Reduce that value by 20% and comfirm that there is no oscilation. If it still oscilates reduce it more.
-3. Now slowly increase Ki until system starts to become unstable (it will oscilate or create humming sounds). Use command #Kiiq
+1. Increase proportional gain until system starts to become unstable (it will oscillate or create humming sounds). Use command #Kpiq
+2. Reduce that value by 20% and confirm that there is no oscilation. If it still oscilates reduce it more.
+3. Now slowly increase Ki until system starts to become unstable (it will oscillate or create humming sounds). Use command #Kiiq
 4. Reduce the value slightly until it becomes stable.
 
 To test the current controller you will need to issue a #Iq VALUE Command. VALUE will be the value of Iq current you want as a setpoint, make sure it is not too large and that your motor can handle it.
@@ -49,9 +49,9 @@ To test the current controller you will need to issue a #Iq VALUE Command. VALUE
 So after making sure the Torque loop works in an acceptable manner, we can start tuning velocity controller. 
 
 1. Controllers come preloaded with weak gains. If it oscilates with them reduce Kp and Ki to 0.
-2. Increase proportional velocity gain until system starts to become unstable (it will oscilate or create humming sounds). Use command #Kpv
-3. Reduce that value by 20% and comfirm that there is no oscilation. If it still oscilates reduce it more.
-4. Now slowly increase Ki until system starts to become unstable (it will oscilate or create humming sounds). Use command #Kpi
+2. Increase proportional velocity gain until system starts to become unstable (it will oscillate or create humming sounds). Use command #Kpv
+3. Reduce that value by 20% and confirm that there is no oscilation. If it still oscilates reduce it more.
+4. Now slowly increase Ki until system starts to become unstable (it will oscillate or create humming sounds). Use command #Kpi
 
 !!! Tip annotate "Tip" 
     Bear in mind that the Ki gain is highly sensitive as it acts as an integrator accumulating over time. Setting excessively high values for Ki can potentially render your system unstable. For some motors, setting the Speed controller Ki to zero and relying solely on the Speed controller Kp gain might be adequate. However, in such cases, getting a zero steady-state error is hard. Therefore, the Ki gain plays a important role in both reaching the desired goal and sustaining it over time.
@@ -70,7 +70,7 @@ So after making sure the Torque loop works in an acceptable manner, we can start
 3. Increase until you notice overshoot in the position response. If overshooting is excessive or oscillations start, reduce the gain slightly until satisfactory performance is achieved without instability.
 4. Ideally, the response should be quick to reach the desired position but without excessive oscillations.
 
-You can set motor positon command by using #P VALUE. VALUE will be the value of position in encoder ticks.
+You can set motor position command by using #P VALUE. VALUE will be the value of position in encoder ticks.
 
 
 ### **Testing the cascade controller**

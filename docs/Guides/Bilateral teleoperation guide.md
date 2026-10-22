@@ -54,7 +54,7 @@ You will need to follow the diagram above to wire everything up.
 * First you need to calibrate your Spectral BLDC drivers with the motors you are using. 
 * After that change the CAN ids of one of the drivers to CAN 1. You can do it by using UART commands: #CANID 1 and after that #Save
 * Now connect CAN adapters CAN bus to one of the drivers and then from that driver connect to the second driver. Make sure that last driver in chain has its CAN termination resistor in "ON" state
-* Connect the power to both drivers. You can daisy chain it or use 2 seperate wires.
+* Connect the power to both drivers. You can daisy chain it or use 2 separate wires.
 
 ## **The code**
 

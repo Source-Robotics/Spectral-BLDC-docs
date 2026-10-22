@@ -1,7 +1,7 @@
 # Quadruped robot guide
 
 ## **Intro**
-In this quide we wil show you how you can control a leg of any quadruped robot using Spectral micro BLDC drivers. <br />If you can control one of them you can control all the rest!<br />
+In this guide we will show you how you can control a leg of any quadruped robot using Spectral micro BLDC drivers. <br />If you can control one of them you can control all the rest!<br />
 
 **After you finish this guide you will be able to do something like this: [Link](https://youtu.be/g9rHJr9-tok) **<br />
 
@@ -52,7 +52,7 @@ value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / fo
 
 ## Testing / Calibrating the leg
 
-Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in positon data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
+Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
 
 
 ![drawing](../assets/leg.PNG)
@@ -127,7 +127,7 @@ We defined that trajectory with our function generate_circle_coords and with par
 ![drawing](../assets/circ_2.png)
 
 
-How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perflectly. With larger speeds the system cant keep up and overshoots. This is due multiple reaseons like:
+How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perfectly. With larger speeds the system can't keep up and overshoots. This is due multiple reaseons like:
 
 * Inertia and Momentum: At higher speeds, the inertia and momentum of the robot leg increase, making it harder to change directions quickly and accurately.
 * Centrifugal and Coriolis Forces
