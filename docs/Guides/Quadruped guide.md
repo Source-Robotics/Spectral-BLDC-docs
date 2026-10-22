@@ -6,7 +6,7 @@ In this quide we wil show you how you can control a leg of any quadruped robot u
 **After you finish this guide you will be able to do something like this: [Link](https://youtu.be/g9rHJr9-tok) **<br />
 
 !!! Tip annotate "Python API and toolbox" 
-    This guide leverages [Spectral BLDC python API](https://github.com/PCrnjak/Spectral-BLDC-Python/tree/main) and [Source robotics toolbox](https://github.com/PCrnjak/Source-Robotics-Toolbox)
+    This guide leverages [Spectral BLDC python API](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main) and [Source robotics toolbox](https://github.com/Source-Robotics/Source-Robotics-Toolbox)
 
 
 ![drawing](../assets/LEG.jpg)

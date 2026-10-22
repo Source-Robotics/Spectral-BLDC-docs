@@ -7,7 +7,7 @@ This guide is a really simple example on how you can control mobile robot based 
 **By following this guide you will be able to make something like this: [Link!](https://youtu.be/LGMLyr4dZZ0)**
 
 !!! Tip annotate "Python API" 
-    This guide leverages [Spectral BLDC python API](https://github.com/PCrnjak/Spectral-BLDC-Python/tree/main)
+    This guide leverages [Spectral BLDC python API](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main)
 
 What you will need to create a simple mobile robot is:
 

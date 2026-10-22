@@ -62,7 +62,7 @@ This code will run on your PC and it will communicate with the drivers from the 
 
 
 !!! Danger annotate "Advanced example" 
-    More advanced code that allows communication over UDP can be found here: [Link](https://github.com/PCrnjak/Spectral-BLDC-Python/tree/main/examples/Advanced/SSG48%20gripper%20bilateral%20teleop) 
+    More advanced code that allows communication over UDP can be found here: [Link](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples/Advanced/SSG48%20gripper%20bilateral%20teleop) 
 
 
 ``` py title="Spectral_mobile_robot_xbox.py"

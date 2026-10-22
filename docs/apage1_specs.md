@@ -62,7 +62,7 @@ Motor phases are conneceted to U,V and W. Power is connected to DC+ and DC-
 
 ## **CAD and dimensions**
 
-[You can download Spectral micro STEP files here!](https://github.com/PCrnjak/Spectral-Micro-BLDC-controller/tree/main/STEP%20files)
+[You can download Spectral micro STEP files here!](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files)
 <p align="left"> <img src="../assets/bldc_step.PNG" alt="drawing" width="600"/> <br /> </p>
 
 Spectral micro uses same hole spacing as **NEMA17 format** motors.

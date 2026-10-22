@@ -1,5 +1,5 @@
 site_name: SPECTRAL BLDC DOCS
-site_url: https://PCrnjak.github.io/SPECTRAL_BLDC_DOCS/
+site_url: https://docs.source-robotics.com/Spectral-BLDC-docs/
 theme:
   name: material
   features:

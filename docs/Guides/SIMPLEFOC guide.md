@@ -3,7 +3,7 @@
 !!! Tip annotate "**Tested with Simple FOC@^2.3.2 release**" 
 
 
-**Main firmware that runs on Spectral micro is [Spectral firmware](https://github.com/PCrnjak/Spectral-Micro-BLDC-controller).**<br />
+**Main firmware that runs on Spectral micro is [Spectral firmware](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller).**<br />
 
 SimpleFOC is alternative to Spectral Firmware. <br />
 The library is intended both for:

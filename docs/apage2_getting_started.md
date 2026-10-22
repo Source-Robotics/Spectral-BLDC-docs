@@ -21,7 +21,7 @@ Or buy a single motor driver here: [Link](https://source-robotics.com/products/s
 
 ### **Mounting PCB to Motor**
 
-To mount your BLDC to PCB you can use [example motor bracket](https://github.com/PCrnjak/Spectral-Micro-BLDC-controller/tree/main/STEP%20files) and modify it for your motor.<br />
+To mount your BLDC to PCB you can use [example motor bracket](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files) and modify it for your motor.<br />
 <p align="left"> <img src="../assets/brack.PNG" alt="drawing" width="500"/> <br /> </p>
 
 Some hardware considerations:
@@ -83,7 +83,7 @@ Normal operation | Calibration | Error mode
 ---- | ---- | ----
 3 short flashed and a pause <p align="left"> <img src="../assets/Normal.gif" alt="drawing" width="180"/> <br /> </p> | Flashing every 0.5 seconds <p align="left"> <img src="../assets/Calib.gif" alt="drawing" width="180"/> <br /> </p> | Solid LED, no flashing. <p align="left"> <img src="../assets/Error2.PNG" alt="drawing" width="180"/> <br /> </p>
 
-If you have [spectral firmware](https://github.com/PCrnjak/Spectral-Micro-BLDC-controller/tree/main/Spectral%20BLDC%20Firmware) uploaded on your spectral BLDC LEDs will be in one of 3 states.
+If you have [spectral firmware](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/Spectral%20BLDC%20Firmware) uploaded on your spectral BLDC LEDs will be in one of 3 states.
 
 * **Normal operation** is when motor controller has no active errors and is calibrated
 * **Error mode** is active if any error on the motor driver is active. List of possible errors:
@@ -100,7 +100,7 @@ If you have [spectral firmware](https://github.com/PCrnjak/Spectral-Micro-BLDC-c
 
 ## **What next?**
 
-* Flash the [latest firmware](https://github.com/PCrnjak/Spectral-Micro-BLDC-controller/tree/main/Spectral%20BLDC%20Firmware) to your driver (Note that drivers arrive with preflashed firmware)
-* You will need to [calibrate your motor](https://source-robotics.github.io/Spectral-BLDC-docs/apage4_calibration/)
-* [Tune your PID loops](https://source-robotics.github.io/Spectral-BLDC-docs/apage5_PID_tuning/)
+* Flash the [latest firmware](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/Spectral%20BLDC%20Firmware) to your driver (Note that drivers arrive with preflashed firmware)
+* You will need to [calibrate your motor](apage4_calibration.md)
+* [Tune your PID loops](apage5_PID_tuning.md)
 * Follow one of the guides or examples to start using Spectral driver
