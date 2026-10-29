@@ -31,7 +31,7 @@ commands:
   PDI: {group: motion, argument: current feedforward in mA, description: The current feedforward of the PD loop., response: the PD current feedforward}
   Uq: {group: motion, argument: voltage in mV, description: Voltage-torque mode with the given q-axis voltage (no current loop)., response: the Uq setpoint in mV}
   Ud: {group: motion, argument: voltage in mV, description: The d-axis voltage used in voltage-torque mode; does not change the mode., response: the Ud setpoint in mV}
-  Openloop: {group: motion, argument: electrical speed, description: Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv., response: the open-loop speed}
+  Openloop: {group: motion, argument: electrical speed, description: "Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv.", response: the open-loop speed}
   Idle: {group: motion, description: Goes to idle; the motor coasts or brakes as set by Brake., response: "`Idle`"}
   Brake: {group: motion, argument: 0 or 1, description: "What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open). Takes effect once the driver is idle, so send Idle first. Added in firmware 107.", response: the setting}
   Close: {group: motion, description: Leaves open loop and goes back to closed-loop idle., response: nothing}
@@ -54,34 +54,34 @@ commands:
 
   # ------------------------------------------------------------ calibration and motor parameters
   Cal: {group: calibration, description: "Runs the calibration routine (see Calibration): it measures R and L, finds the pole pairs, the phase order and the angle offset, and measures Kt, KV and the flux linkage.", response: the calibration log}
-  R: {group: calibration, argument: resistance in Ω, description: The phase resistance of the motor, measured by Cal; it can also be set by hand., response: the current value}
-  L: {group: calibration, argument: inductance in H, description: The phase inductance of the motor, measured by Cal; it can also be set by hand., response: the current value}
-  PP: {group: calibration, argument: pole pairs, description: The motor's pole pairs, found by Cal; they can also be set by hand., response: the current value}
-  Kt: {group: calibration, argument: Nm/A, description: The torque constant, found by calibration., response: the current value}
-  KV: {group: calibration, argument: rpm/V, description: The velocity constant, found by calibration., response: the current value}
+  R: {group: calibration, argument: resistance in Ω, description: "The phase resistance of the motor, measured by Cal; it can also be set by hand.", response: the current value}
+  L: {group: calibration, argument: inductance in H, description: "The phase inductance of the motor, measured by Cal; it can also be set by hand.", response: the current value}
+  PP: {group: calibration, argument: pole pairs, description: "The motor's pole pairs, found by Cal; they can also be set by hand.", response: the current value}
+  Kt: {group: calibration, argument: Nm/A, description: "The torque constant, found by calibration.", response: the current value}
+  KV: {group: calibration, argument: rpm/V, description: "The velocity constant, found by calibration.", response: the current value}
   Flux: {group: calibration, argument: Wb, description: "The flux linkage, found by calibration. Not reachable over UART: the parser accepts `#flux` (lowercase) but the handler expects `Flux`, so neither spelling works.", response: the current value}
-  Offset: {group: calibration, argument: angle in rad, description: The angle offset between encoder zero and electrical zero, found by calibration., response: the current value}
+  Offset: {group: calibration, argument: angle in rad, description: "The angle offset between encoder zero and electrical zero, found by calibration.", response: the current value}
   Iqoffset: {group: calibration, argument: current in mA, description: The current used by the angle-offset search., response: the current value}
   Magnet: {group: calibration, description: Reads the encoder's magnet status., response: "`Magnet Good` or `Magnet Bad`"}
   Dir: {group: calibration, argument: 0 or 1, description: The counting direction of the encoder (1 is the default)., response: the current value}
   Phase: {group: calibration, description: Prints the phase order found by calibration., response: "`Phase order is: N`"}
   Resv: {group: calibration, argument: voltage in mV, description: The voltage the resistance test of Cal starts at; it rises until the power reaches Calpwr., response: the current value}
   Calpwr: {group: calibration, argument: power in W, description: The power the resistance and inductance tests of Cal may dissipate in the motor., response: the current value}
-  Openv: {group: calibration, argument: voltage in mV, description: The voltage of the open-loop spin, in calibration and with Openloop., response: the current value}
+  Openv: {group: calibration, argument: voltage in mV, description: "The voltage of the open-loop spin, in calibration and with Openloop.", response: the current value}
   Opens: {group: calibration, argument: electrical speed in rad/s, description: The speed of the open-loop spin in calibration., response: the current value}
   Vp: {group: calibration, argument: voltage in mV, description: The voltage of the phase-order search in calibration., response: the current value}
   Calibrated: {group: calibration, argument: 0 or 1, description: "The calibrated flag. `#Calibrated 1` clears a calibration error without calibrating; the motor may still be uncalibrated.", response: the flag}
 
   # ------------------------------------------------------------ status and utility
   Save: {group: utility, description: Writes the configuration to the EEPROM. Do it after calibration and after tuning., response: "`Save`"}
-  Reset: {group: utility, description: Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again., response: nothing}
-  Default: {group: utility, description: Writes the factory defaults to the EEPROM, including the serial number, hardware version and batch date, and clears the gripper flag, heartbeat and watchdog. Back those up first., response: "`Loaded default config!`"}
-  Pullconfig: {group: utility, description: Prints the whole configuration on one line, for Motor GUI., response: the configuration}
+  Reset: {group: utility, description: "Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again.", response: nothing}
+  Default: {group: utility, description: "Writes the factory defaults to the EEPROM, including the serial number, hardware version and batch date, and clears the gripper flag, heartbeat and watchdog. Back those up first.", response: "`Loaded default config!`"}
+  Pullconfig: {group: utility, description: "Prints the whole configuration on one line, for Motor GUI.", response: the configuration}
   Info: {group: utility, description: "Prints the driver's identity and state: hardware and firmware version, serial number, motor parameters, calibration, errors.", response: the report}
   Param: {group: utility, description: Prints every gain of every loop., response: the gains}
   Help: {group: utility, description: Prints a short command reference. Added in firmware 106., response: the reference}
   Error: {group: utility, description: Prints which errors are active., response: "`No errors!` or `In error state!` followed by one line per active error"}
-  Clear: {group: utility, description: Clears the errors and goes to idle. An error whose cause is still present comes straight back; a calibration error is cleared only by calibrating (or `#Calibrated 1`)., response: "`Clear errors`"}
+  Clear: {group: utility, description: "Clears the errors and goes to idle. An error whose cause is still present comes straight back; a calibration error is cleared only by calibrating (or `#Calibrated 1`).", response: "`Clear errors`"}
   Mode: {group: utility, description: Prints the control mode., response: "`Idle mode`, `Position control`, `Speed control`, `Current control`, `PD control`, `Open loop`, `Gripper mode`, `Gripper calib mode`"}
   Vbus: {group: utility, description: Prints the supply voltage., response: mV}
   Vmax: {group: utility, argument: voltage in mV, description: The supply voltage above which a Vbus error is raised., response: "`Vmax in mV: N`"}
@@ -91,16 +91,16 @@ commands:
   Iabc: {group: utility, description: Prints the phase currents., response: "`Ia`, `Ib` in mA"}
   PWM: {group: utility, description: Prints the PWM duty values., response: the duties}
   LED: {group: utility, argument: 0 or 1, description: Turns the status LED on or off., response: the LED state}
-  CANID: {group: utility, argument: 0 to 13, description: "The CAN node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over CAN. Setting the ID also sets the bootloader's board ID. Kept over a power cycle after Save.", response: the ID, or `Invalid CAN ID`}
+  CANID: {group: utility, argument: 0 to 13, description: "The CAN node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over CAN. Setting the ID also sets the bootloader's board ID. Kept over a power cycle after Save.", response: "the ID, or `Invalid CAN ID`"}
   SERNUM: {group: utility, argument: number, description: The serial number stored in the EEPROM., response: "`Serial number is: N`"}
   Activate: {group: utility, description: Sets the activated flag., response: "`Controller activated`"}
   Cyc: {group: utility, argument: interval in ms (0 = off), description: "Sends position, speed and Iq on its own every interval: `$ <position> <speed> <Iq>`; for BetterSerialPlotter.", response: "`Cyclic disabled` when turned off"}
   Cyca: {group: utility, argument: interval in ms (0 = off), description: "Like Cyc, in the Arduino plotter format `Position:x,Speed:y,Iq:z`.", response: "`Cyclic disabled` when turned off"}
 
   # ------------------------------------------------------------ gripper
-  Gripper: {group: gripper, argument: 0 or 1, description: Whether this driver is a gripper. Save it; `#Default` clears it., response: the flag}
+  Gripper: {group: gripper, argument: 0 or 1, description: "Whether this driver is a gripper. Save it; `#Default` clears it.", response: the flag}
   Gripcal: {group: gripper, description: Starts the gripper calibration (the jaws find their end stops)., response: "`Gripper calibration!`"}
-  Grippos: {group: gripper, argument: 0 (open) to 255 (closed), description: The position setpoint; also activates the gripper, sets the action bit and goes to gripper mode., response: the current position}
+  Grippos: {group: gripper, argument: 0 (open) to 255 (closed), description: "The position setpoint; also activates the gripper, sets the action bit and goes to gripper mode.", response: the current position}
   Gripvel: {group: gripper, argument: 0 to 255, description: The speed setpoint of gripper moves., response: the setpoint}
   Gripcur: {group: gripper, argument: current in mA, description: The current limit of gripper moves. The firmware does not clamp it; see the gripper manual for the safe range., response: the setpoint}
   Gripact: {group: gripper, argument: 0 or 1, description: The activate bit., response: the bit}

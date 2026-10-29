@@ -202,7 +202,7 @@ commands:
     response_fields:
       - {bytes: "0", name: HARDWARE_VERSION, type: unsigned 8-bit, meaning: PCB revision}
       - {bytes: "1", name: BATCH_DATE, type: unsigned 8-bit, meaning: production batch}
-      - {bytes: "2", name: SOFTWARE_VERSION, type: unsigned 8-bit, meaning: firmware release, e.g. 107}
+      - {bytes: "2", name: SOFTWARE_VERSION, type: unsigned 8-bit, meaning: "firmware release, e.g. 107"}
       - {bytes: "3-6", name: SERIAL_NUMBER, type: unsigned 32-bit, meaning: serial number}
   OUT_IN_STATE_OF_ERRORS_CAN:
     name: Send_Respond_State_of_Errors
@@ -214,7 +214,7 @@ commands:
       - {bytes: "0", bit: 6, name: temperature_error, type: bit, meaning: motor over the temperature limit, _shared: true}
       - {bytes: "0", bit: 5, name: encoder_error, type: bit, meaning: magnet not detected or misaligned, _shared: true}
       - {bytes: "0", bit: 4, name: vbus_error, type: bit, meaning: supply voltage outside the limits, _shared: true}
-      - {bytes: "0", bit: 3, name: driver_error, type: bit, meaning: the MOSFET driver reports undervoltage, thermal shutdown or overcurrent, _shared: true}
+      - {bytes: "0", bit: 3, name: driver_error, type: bit, meaning: "the MOSFET driver reports undervoltage, thermal shutdown or overcurrent", _shared: true}
       - {bytes: "0", bit: 2, name: velocity_error, type: bit, meaning: speed over the limit, _shared: true}
       - {bytes: "0", bit: 1, name: current_error, type: bit, meaning: reserved; never set by this firmware, _shared: true}
       - {bytes: "0", bit: 0, name: estop_error, type: bit, meaning: Send_ESTOP was received, _shared: true}
@@ -346,11 +346,11 @@ commands:
     forms:
       - length: 5
         fields:
-          - {bytes: "0", name: Position, type: unsigned 8-bit, meaning: 0 fully open, 255 fully closed}
-          - {bytes: "1", name: Speed, type: unsigned 8-bit, meaning: 0 slowest, 255 fastest}
-          - {bytes: "2-3", name: Current, type: signed 16-bit, meaning: current limit of the move in mA; not clamped by the firmware, see the gripper manual for the safe range}
-          - {bytes: "4", bit: 7, name: Activate, type: bit, meaning: 1 activate the gripper, 0 deactivate}
-          - {bytes: "4", bit: 6, name: Action, type: bit, meaning: 1 go to the position, 0 idle, _shared: true}
+          - {bytes: "0", name: Position, type: unsigned 8-bit, meaning: "0 fully open, 255 fully closed"}
+          - {bytes: "1", name: Speed, type: unsigned 8-bit, meaning: "0 slowest, 255 fastest"}
+          - {bytes: "2-3", name: Current, type: signed 16-bit, meaning: "current limit of the move in mA; not clamped by the firmware, see the gripper manual for the safe range"}
+          - {bytes: "4", bit: 7, name: Activate, type: bit, meaning: "1 activate the gripper, 0 deactivate"}
+          - {bytes: "4", bit: 6, name: Action, type: bit, meaning: "1 go to the position, 0 idle", _shared: true}
           - {bytes: "4", bit: 5, name: E-stop, type: bit, meaning: 1 raises the gripper E-stop error, _shared: true}
           - {bytes: "4", bit: 4, name: Release direction, type: bit, meaning: read by the firmware but not used, _shared: true}
   IN_GRIPPER_CALIB:
@@ -367,10 +367,10 @@ commands:
       `gripper_object_detection`, `gripper_temperature_error`, `gripper_timeout_error`, `gripper_estop_error`,
       `gripper_calibrated`.
     response_fields:
-      - {bytes: "0", name: gripper_position, type: unsigned 8-bit, meaning: 0 fully open, 255 fully closed}
+      - {bytes: "0", name: gripper_position, type: unsigned 8-bit, meaning: "0 fully open, 255 fully closed"}
       - {bytes: "1-2", name: gripper_current, type: signed 16-bit, meaning: measured current in mA}
       - {bytes: "3", bit: 7, name: gripper_activated, type: bit, meaning: 1 activated}
-      - {bytes: "3", bit: 6, name: gripper_action_status, type: bit, meaning: 1 going to the position, 0 idle, auto-release or calibrating, _shared: true}
+      - {bytes: "3", bit: 6, name: gripper_action_status, type: bit, meaning: "1 going to the position, 0 idle, auto-release or calibrating", _shared: true}
       - {bytes: "3", bit: "5-4", name: gripper_object_detection, type: 2 bits, meaning: "bit 5 is the low bit, bit 4 the high bit: 0 moving, 1 object detected while closing, 2 object detected while opening, 3 at the position", _shared: true}
       - {bytes: "3", bit: 3, name: gripper_temperature_error, type: bit, meaning: "", _shared: true}
       - {bytes: "3", bit: 2, name: gripper_timeout_error, type: bit, meaning: "", _shared: true}

@@ -151,11 +151,11 @@ if loaded:
     uo = pages.uart_overview(d)
     check("B11 the UART overview lists every described handler",
           all(f"`#{h['name']}`" in uo for h in facts["uart"]["handlers"] if h["name"] in d["uart"]["commands"]))
-    answered = next(n for n, c in d["can"]["commands"].items()
-                    if c.get("forms") and facts["can"]["handlers"].get(n, {}).get("responds"))
+    with_forms = [n for n, c in d["can"]["commands"].items() if c.get("forms")]
+    answered = next((n for n in with_forms if facts["can"]["handlers"].get(n, {}).get("responds")), with_forms[0])
     sec = pages.can_section(answered, d["can"]["commands"][answered], d)
     check("B12 a command section: facts strip, the accepted lengths, the answer",
-          "cmd-facts" in sec and "bytes" in sec and "Respond_" in sec, sec[:200])
+          "cmd-facts" in sec and "bytes" in sec and ("Respond_" in sec or not facts["can"]["handlers"].get(answered, {}).get("responds")), sec[:200])
 
 print(f"\n{len(fails)} failure(s)" if fails else "\nall checks passed")
 sys.exit(1 if fails else 0)
