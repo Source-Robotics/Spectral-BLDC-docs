@@ -91,7 +91,7 @@ commands:
   Iabc: {group: utility, description: Prints the phase currents., response: "`Ia`, `Ib` in mA"}
   PWM: {group: utility, description: Prints the PWM duty values., response: the duties}
   LED: {group: utility, argument: 0 or 1, description: Turns the status LED on or off., response: the LED state}
-  CANID: {group: utility, argument: 0 to 15, description: The CAN node ID. Kept over a power cycle after Save., response: the ID, or `Invalid CAN ID`}
+  CANID: {group: utility, argument: 0 to 13, description: "The CAN node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over CAN. Setting the ID also sets the bootloader's board ID. Kept over a power cycle after Save.", response: the ID, or `Invalid CAN ID`}
   SERNUM: {group: utility, argument: number, description: The serial number stored in the EEPROM., response: "`Serial number is: N`"}
   Activate: {group: utility, description: Sets the activated flag., response: "`Controller activated`"}
   Cyc: {group: utility, argument: interval in ms (0 = off), description: "Sends position, speed and Iq on its own every interval: `$ <position> <speed> <Iq>`; for BetterSerialPlotter.", response: "`Cyclic disabled` when turned off"}

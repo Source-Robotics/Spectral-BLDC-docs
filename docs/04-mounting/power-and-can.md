@@ -27,7 +27,7 @@ feeds the next driver, so a chain of drivers hangs on one supply cable and one C
 
 <figure markdown="span">
   ![Cable orientation](../assets/Orientation.png){ width="600" }
-  <figcaption>Figure 9: The orientation of the daisy-chain cables for CAN and power.</figcaption>
+  <figcaption>Figure 9: The orientation of the daisy-chain cables. The picture shows a generic 4-pin cable; the rule is the same for the 2-pin CAN and power cables.</figcaption>
 </figure>
 
 The cables from the shop are made this way: [CAN cable](https://source-robotics.com/products/spectral-micro-can-cable),
@@ -36,8 +36,10 @@ The cables from the shop are made this way: [CAN cable](https://source-robotics.
 
 ## CAN
 
-- CAN 2.0, 1 Mbit/s, 11-bit identifiers. Up to 16 drivers on one bus, each with its own node ID (0 by default;
-  set it with `#CANID` or Send_CAN_ID and save).
+- CAN 2.0, 1 Mbit/s, 11-bit identifiers. Up to 14 drivers on one bus, each with its own node ID, 0 to 13 (0 by default;
+  set it with `#CANID` or Send_CAN_ID and save). The firmware accepts 14 and 15 too, but the
+  [bootloader](../07-firmware/the-bootloader.md) reserves them: a driver on one of those IDs cannot be updated
+  over CAN.
 - Twisted-pair wire; keep the bus short at 1 Mbit/s (a few metres at most).
 - **Termination:** the first and the last node on the bus need a 120 Ω resistor between CAN H and CAN L. The
   switch next to the CAN connectors turns the driver's resistor on (**ON**). Drivers in the middle stay off. A bus

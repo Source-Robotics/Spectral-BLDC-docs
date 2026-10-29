@@ -29,7 +29,8 @@ number, the hardware version and the batch date the driver reports, and clears t
 rate and the watchdog; note what the driver reports before you use it. The defaults are listed in the
 [Defaults](../reference/defaults.md) reference.
 
-Use it after a firmware update when the driver behaves oddly, or when the state shows nonsense values (a `-1`
+Use it before the first calibration of a motor, after a firmware update when the driver behaves oddly, and when
+the state shows nonsense values (a `-1`
 where a number should be): the EEPROM then holds a layout the firmware does not expect.
 
 ## What the driver reports

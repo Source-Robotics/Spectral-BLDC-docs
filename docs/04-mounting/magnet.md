@@ -39,5 +39,9 @@ and the position is wrong.
 ## Checking it
 
 With the driver powered and the serial terminal open, `#Magnet` answers `Magnet Good` when the chip sees enough
-field, `Magnet Bad` when it does not. The calibration routine runs the same test first. "Good" means the field is
-strong enough; it does not prove the magnet is centred or that it cannot slip.
+field, `Magnet Bad` when it does not. The calibration routine runs the same test first. 
+
+!!! warning "What the magnet test checks"
+    Only that a magnet is close enough to the encoder. It passes with a magnet that is not glued, sits off-centre or
+    can slip on the shaft, and fails only when there is no magnet or it is too far away. The 1 mm gap, the centring
+    and the glue are yours to check.

@@ -258,8 +258,9 @@ commands:
     group: system
     python: Send_CAN_ID()
     description: >
-      Gives the driver a new node ID, 0 to 15 (only 4 bits travel on the bus). The driver answers to the new ID at
-      once; the ID is kept over a power cycle only after Send_Save_config.
+      Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15:
+      a driver on one of those cannot be updated over CAN). Setting the ID also sets the bootloader's board ID.
+      The driver answers to the new ID at once; the ID is kept over a power cycle only after Send_Save_config.
     forms:
       - length: 1
         fields:

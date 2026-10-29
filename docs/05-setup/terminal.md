@@ -16,8 +16,10 @@ CR+LF works.
 
 1. Plug the [USB-to-serial adapter](https://source-robotics.com/products/usb-to-serial-adapter) into the UART
    connector with the [UART cable](https://source-robotics.com/products/uart-cable). With another adapter: 3.3 V
-   only, and cross TX and RX.
-2. Power the driver. The USB adapter does not power it.
+   only, and cross TX and RX: the driver's TX to the adapter's RX, the driver's RX to the adapter's TX.
+2. Connect the motor supply. The adapter's 3.3 V powers the driver's logic, so the driver answers over UART with
+   only the adapter plugged in, but it reports a Vbus error and refuses calibration and every motion command
+   until the 12 to 29 V supply is on.
 3. Find the adapter's port: `COM…` on Windows, `/dev/ttyUSB…` or `/dev/ttyACM…` on Linux and macOS.
 
 !!! danger

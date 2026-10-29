@@ -16,7 +16,9 @@ error state:
 </figure>
 
 - **Node ID**, bits 10 to 7: which driver, 0 to 15. A driver acts only on frames with its own node ID and sends
-  with it. Set it with `#CANID` or Send_CAN_ID and save; every driver ships as node 0.
+  with it. Set it with `#CANID` or Send_CAN_ID and save; every driver ships as node 0. Use 0 to 13: the
+  [bootloader](../07-firmware/the-bootloader.md) reserves 14 and 15, and a driver on one of those cannot be
+  updated over CAN.
 - **Command ID**, bits 6 to 1: which message, 0 to 63. The [CAN reference](../reference/can/index.md) lists all of
   them.
 - **Error bit**, bit 0: in a frame from the driver, 1 while any error is active. In a frame from the host it is

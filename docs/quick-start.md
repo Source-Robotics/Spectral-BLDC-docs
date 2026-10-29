@@ -52,6 +52,8 @@ Read in more detail: [Wiring the motor](04-mounting/wiring.md).
 1. The supply to a power connector: **DC+ to positive, DC− to negative**. Check twice.
 2. The serial adapter to the UART connector with the UART cable (TX to RX, RX to TX; 3.3 V only).
 3. Power on. The LED turns on steadily: the driver is not calibrated yet, which it reports as an error state.
+   (The serial adapter alone powers the driver's logic: it answers over UART without the supply, but reports a
+   Vbus error and will not calibrate or move.)
 
 === "Motor GUI"
     Open [motorgui.com](https://motorgui.com/) in Chrome or Edge, choose the serial connection and **Open port** on
@@ -72,7 +74,10 @@ Read in more detail: [Power and the CAN daisy chain](04-mounting/power-and-can.m
 
 ## 6. Calibrate
 
-Fix the motor to the bench, nothing on the shaft, 24 V on the supply. There is nothing to enter first: calibration
+First the factory defaults, so that calibration does not start from another motor's values or from junk in the
+EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also resets the serial number the
+driver reports.) Then fix the motor to the bench, nothing on the shaft, 24 V on the supply. There is nothing to
+enter: calibration
 measures the motor's resistance and inductance and finds its pole pairs and phase order by itself.
 
 === "Motor GUI"

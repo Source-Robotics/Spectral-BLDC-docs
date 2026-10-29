@@ -32,7 +32,24 @@ of 2 to 24 Ω; change them only for a motor outside that range.
     motor, they drive a destructive current. The Spectral Micro is not made for such motors; if you must try one,
     lower the three voltages and the current limit first.
 
-## 1. Run it
+## 1. Restore the defaults
+
+The EEPROM of a new driver, or of one that ran another motor, can hold values that do not fit: another motor's
+parameters, or junk that shows as `-1` in `#Info`. Calibration starts from what is there, so start from the factory
+values.
+
+=== "Motor GUI"
+    *Default* in the settings.
+
+=== "Terminal"
+    ```
+    #Default
+    ```
+
+This also resets the serial number, hardware version and batch date the driver reports; note what `#Info` printed
+if you need them. [Saving the configuration](saving.md) says what else it does.
+
+## 2. Run it
 
 === "Motor GUI"
     Start the calibration. The driver enters *Calibration mode* and the GUI shows its log step by step; when it
@@ -82,7 +99,7 @@ What the steps are:
 
 | Step | What happens | Fails with |
 |---|---|---|
-| Magnet test | the encoder sees enough field | `Magnet test: Failed`: magnet missing, too far, or axially magnetised |
+| Magnet test | the encoder sees enough field: a magnet is there and close enough. The test says nothing about centring, the gap or the glue | `Magnet test: Failed`: magnet missing, too far, or axially magnetised |
 | Vbus test | the supply is within limits | `Vbus test: Failed` |
 | Resistance | a rising voltage is put on the windings and the current measured; the motor clicks. The resistance follows from the two | `Resistance test: Failed`: no current flows, a phase is not connected, or the motor is far outside the 2 to 24 Ω range |
 | Inductance | a voltage step and the rate at which the current rises give the inductance. Kp_iq and Ki_iq are computed from R, L and the bandwidth | `Inductance test: Failed` |
@@ -95,7 +112,7 @@ What the steps are:
     with it Kt and the flux linkage, can be off by a factor of two or three on cheap motors with uneven windings.
     For the loops this does not matter; for a torque estimate in newton-metres, measure Kt yourself.
 
-## 2. Save
+## 3. Save
 
 === "Motor GUI"
     **Save**. The GUI marks *Unsaved changes* until you do.

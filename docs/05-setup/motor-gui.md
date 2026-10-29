@@ -28,7 +28,9 @@ browsers have: Chrome, Edge, Brave, Opera. Firefox and Safari cannot open serial
 
 ## Opening the port
 
-1. Plug in the adapter and power the driver (the adapter does not power it).
+1. Plug in the adapter and the motor supply. The adapter alone powers the driver's logic, enough to open the
+   port and read the settings, but the driver reports a Vbus error and will not calibrate or move until the
+   supply is on.
 2. Open [motorgui.com](https://motorgui.com/), choose the connection kind, and **Open port**. The browser asks
    which port; pick the adapter's.
 3. The driver's identity appears: hardware version, firmware version, serial number, batch date, whether it is

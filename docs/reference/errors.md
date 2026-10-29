@@ -9,6 +9,11 @@
 | on, steady | error mode, or not calibrated |
 | off | no power, or `#LED 0` |
 
+| Normal operation | Calibration | Error mode |
+|---|---|---|
+| ![Three short flashes and a pause](../assets/Normal.gif){ width="180" } | ![Flashing every 0.5 s](../assets/Calib.gif){ width="180" } | ![On, steady](../assets/Error2.PNG){ width="180" } |
+
+
 ## The error flags
 
 The flags as the firmware keeps them, the line `#Error` prints for each, and where each sits in the two bytes of

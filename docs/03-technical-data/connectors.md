@@ -14,12 +14,17 @@
 | Thermistor | TERM, 3V3 | solder pads | the 100 kΩ NTC from the shop or any 100 kΩ NTC, see [Thermistor](../04-mounting/thermistor.md) |
 | JTAG | 3V3, GND, SWCLK, SWDIO | 1.27 mm pads | [Programming adapter](https://source-robotics.com/products/jtag-programming-adapter-1-27-pitch), pressed onto the pads |
 | PIN | GND, PIN, 3V3 | solder pads | your own signal: an analog input or a digital input/output, 3.3 V |
-| HALL | 5V, GND, HALL1, HALL2, HALL3 | solder pads | hall sensors; the Spectral firmware does not use them. The twelve resistor pads above the header take 10 kΩ resistors when the sensors are used |
+| HALL | 5V, GND, HALL1, HALL2, HALL3 | solder pads | hall sensors: not implemented in the firmware, see the note below |
 
 <figure markdown="span">
   ![The pinout of both sides of the board](../assets/PINOUT1.png){ width="900" }
   <figcaption>Figure 3: The pinout. Left the top of the board with the CAN connectors, the motor pads and the termination switch; right the bottom with the UART connector, the power connectors, the thermistor pads and the encoder chip.</figcaption>
 </figure>
+
+!!! note "Hall sensors are not implemented"
+    The HALL header and the twelve resistor pads above it are on the board for hall-sensor commutation, but the
+    Spectral firmware does not implement it: the magnetic encoder is the only position source. Leave the header
+    unpopulated.
 
 !!! danger "Polarity and orientation"
     DC+ to the positive supply, DC− to the negative; a cable the wrong way round destroys the driver. The daisy-chain

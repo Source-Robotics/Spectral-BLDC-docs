@@ -39,8 +39,10 @@ first `0x3000` bytes belong to the bootloader and the firmware never touches the
 
 ## The board ID
 
-The bootloader has a board ID of its own, 0 to 13, stored in its configuration page; 14 and 15 are reserved for
-the firmware's use. The firmware keeps it in step with its CAN node ID: setting the node ID (`#CANID`,
+The bootloader has a board ID of its own, 0 to 13, stored in its configuration page. 14 and 15 do not exist
+for it: its command frame, identifier `0x700`, decodes as node 14 in the firmware's identifier scheme, so those
+two node IDs are reserved. **Give drivers node IDs 0 to 13.** The firmware accepts `#CANID 14` and `15`, but the
+bootloader then keeps its old board ID and a firmware update over CAN cannot reach the driver. The firmware keeps it in step with its CAN node ID: setting the node ID (`#CANID`,
 Send_CAN_ID) writes the bootloader's board ID too, so a driver answers the host tools under its node ID. A
 replacement board ships as ID 0; two boards with the same ID on one bus corrupt each other's flash stream, so
 give the new board its ID alone on the bus first (`set-id` in the host tool).

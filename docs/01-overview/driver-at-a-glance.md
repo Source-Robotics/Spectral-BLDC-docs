@@ -25,7 +25,7 @@ arms and grippers.
 | UART connector (3.3 V) | the serial terminal: every setting, calibration, tuning |
 | Thermistor pads | an NTC in the motor windings for temperature protection |
 | PIN header | a spare pin for your own use: an analog input or a digital input/output |
-| HALL header | pads for hall sensors; the Spectral firmware does not use them |
+| HALL header | pads for hall sensors; not implemented in the firmware |
 | JTAG pads (1.27 mm) | the programming adapter, for installing the bootloader or for development |
 | Status LED | normal operation, calibration or error, see below |
 
@@ -65,3 +65,8 @@ E-stop command and on a watchdog that runs out. The status LED and `#Error` tell
 | on, not flashing | error mode: at least one error is active, or the motor is not calibrated |
 
 The LED can be turned off with `#LED 0`.
+
+| Normal operation | Calibration | Error mode |
+|---|---|---|
+| ![Three short flashes and a pause](../assets/Normal.gif){ width="180" } | ![Flashing every 0.5 s](../assets/Calib.gif){ width="180" } | ![On, steady](../assets/Error2.PNG){ width="180" } |
+
