@@ -60,7 +60,8 @@ def check(facts: dict, can: dict, uart: dict) -> None:
     """The descriptions and the firmware must name the same commands; a byte layout must fit the frame."""
     fw_can = {e["name"] for e in facts["can"]["ids"]}
     doc_can = set(can["commands"])
-    if fw_can != doc_can:
+    # partial: true -> the site describes a subset (a gripper manual); an unknown command still stops the build
+    if fw_can != doc_can and not (can.get("partial") and doc_can <= fw_can):
         raise PluginError(f"can_commands.yml and the firmware disagree: missing {sorted(fw_can - doc_can)}, "
                           f"extra {sorted(doc_can - fw_can)}")
     handlers, tx = facts["can"]["handlers"], facts["can"]["tx"]
@@ -82,7 +83,7 @@ def check(facts: dict, can: dict, uart: dict) -> None:
                 raise PluginError(f"can_commands.yml: {name} response lists {size} bytes, the firmware sends {want}")
     fw_uart = {h["name"] for h in facts["uart"]["handlers"]}
     doc_uart = set(uart["commands"])
-    if fw_uart != doc_uart:
+    if fw_uart != doc_uart and not (uart.get("partial") and doc_uart <= fw_uart):
         raise PluginError(f"uart_commands.yml and the firmware disagree: missing {sorted(fw_uart - doc_uart)}, "
                           f"extra {sorted(doc_uart - fw_uart)}")
     for name, c in uart["commands"].items():
@@ -163,6 +164,8 @@ def can_overview(d: dict) -> str:
     tx_len = {v["id_define"]: v["len"] for v in facts["tx"].values()}
     rows = ["| ID | Message | Direction | Length | Group |", "|---|---|---|---|---|"]
     for e in sorted(facts["ids"], key=lambda e: e["id"]):
+        if e["name"] not in can["commands"]:
+            continue
         c = can["commands"][e["name"]]
         h = facts["handlers"].get(e["name"])
         if e["name"].startswith("OUT_IN_"):
@@ -199,7 +202,8 @@ def uart_rows(names: list[str], d: dict) -> str:
 
 
 def uart_group(group: str, d: dict) -> str:
-    names = [h["name"] for h in d["facts"]["uart"]["handlers"] if d["uart"]["commands"][h["name"]]["group"] == group]
+    names = [h["name"] for h in d["facts"]["uart"]["handlers"]
+             if h["name"] in d["uart"]["commands"] and d["uart"]["commands"][h["name"]]["group"] == group]
     return uart_rows(names, d)
 
 
@@ -207,13 +211,15 @@ def uart_overview(d: dict) -> str:
     by_name = {h["name"]: h for h in d["facts"]["uart"]["handlers"]}
     rows = ["| Command | Kind | Argument | Group |", "|---|---|---|---|"]
     for n in sorted(by_name, key=str.lower):
+        if n not in d["uart"]["commands"]:
+            continue
         h, c = by_name[n], d["uart"]["commands"][n]
         g = d["uart"]["groups"][c["group"]]
         rows.append(f"| [`#{n}`]({g['page']}) | {h['kind']} | {h['arg']} | {g['title']} |")
     accepted = set(d["facts"]["uart"]["accepted"])
     orphans = sorted(accepted - set(by_name))
     text = "\n".join(rows) + "\n"
-    if orphans:
+    if orphans and not d["uart"].get("partial"):
         text += ("\nThe parser also accepts " + ", ".join(f"`#{n}`" for n in orphans) +
                  ", which have no handler: the driver answers nothing to them.\n")
     return text

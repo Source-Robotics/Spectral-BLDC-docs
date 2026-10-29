@@ -117,15 +117,19 @@ if loaded:
           gen.exists() and f"## {shipped['firmware']['tag']} (" in gen.read_text(encoding="utf-8"))
     # the hook refuses a description file that drifts from the facts
     bad_can = json.loads(json.dumps(d["can"]))
-    bad_can["commands"].pop("IN_ESTOP")
+    if d["can"].get("partial"):   # a partial reference may leave commands out, but not invent one
+        bad_can["commands"]["IN_NOPE"] = {"name": "Nope", "group": next(iter(bad_can["groups"])), "description": "x"}
+    else:
+        bad_can["commands"].pop("IN_ESTOP")
     try:
         pages.check(facts, bad_can, d["uart"])
         refused = False
     except PluginError:
         refused = True
-    check("B7 a CAN command the firmware has but the descriptions lack stops the build", refused)
+    check("B7 a CAN command the firmware has but the descriptions lack (or one it does not have) stops the build", refused)
     bad_can = json.loads(json.dumps(d["can"]))
-    bad_can["commands"]["IN_KPP"]["forms"][0]["fields"][0]["bytes"] = "0-7"
+    first_form = next(n for n, c in bad_can["commands"].items() if c.get("forms"))
+    bad_can["commands"][first_form]["forms"][0]["fields"][0]["bytes"] = "0-7"
     try:
         pages.check(facts, bad_can, d["uart"])
         refused = False
@@ -133,7 +137,7 @@ if loaded:
         refused = True
     check("B8 a byte layout that does not fit the frame stops the build", refused)
     bad_uart = json.loads(json.dumps(d["uart"]))
-    bad_uart["commands"]["Nope"] = {"group": "utility", "description": "x"}
+    bad_uart["commands"]["Nope"] = {"group": next(iter(bad_uart["groups"])), "description": "x"}
     try:
         pages.check(facts, d["can"], bad_uart)
         refused = False
@@ -142,12 +146,16 @@ if loaded:
     check("B9 a UART command the firmware lacks stops the build", refused)
     # the rendered tables name every command
     over = pages.can_overview(d)
-    check("B10 the CAN overview lists every command ID", all(f"| {e['id']} |" in over for e in facts["can"]["ids"]))
+    check("B10 the CAN overview lists every described command ID",
+          all(f"| {e['id']} |" in over for e in facts["can"]["ids"] if e["name"] in d["can"]["commands"]))
     uo = pages.uart_overview(d)
-    check("B11 the UART overview lists every handler", all(f"`#{h['name']}`" in uo for h in facts["uart"]["handlers"]))
-    sec = pages.can_section("IN_DATA_PACK_1", d["can"]["commands"]["IN_DATA_PACK_1"], d)
+    check("B11 the UART overview lists every described handler",
+          all(f"`#{h['name']}`" in uo for h in facts["uart"]["handlers"] if h["name"] in d["uart"]["commands"]))
+    answered = next(n for n, c in d["can"]["commands"].items()
+                    if c.get("forms") and facts["can"]["handlers"].get(n, {}).get("responds"))
+    sec = pages.can_section(answered, d["can"]["commands"][answered], d)
     check("B12 a command section: facts strip, the accepted lengths, the answer",
-          "cmd-facts" in sec and "8 bytes" in sec and "Respond_data_pack_1" in sec, sec[:200])
+          "cmd-facts" in sec and "bytes" in sec and "Respond_" in sec, sec[:200])
 
 print(f"\n{len(fails)} failure(s)" if fails else "\nall checks passed")
 sys.exit(1 if fails else 0)
