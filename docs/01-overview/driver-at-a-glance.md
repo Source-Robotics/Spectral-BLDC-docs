@@ -68,5 +68,5 @@ The LED can be turned off with `#LED 0`.
 
 | Normal operation | Calibration | Error mode |
 |---|---|---|
-| ![Three short flashes and a pause](../assets/Normal.gif){ width="180" } | ![Flashing every 0.5 s](../assets/Calib.gif){ width="180" } | ![On, steady](../assets/Error2.PNG){ width="180" } |
+| ![Three short flashes and a pause](../assets/Normal.webp){ width="180" } | ![Flashing every 0.5 s](../assets/Calib.webp){ width="180" } | ![On, steady](../assets/Error2.PNG){ width="180" } |
 
