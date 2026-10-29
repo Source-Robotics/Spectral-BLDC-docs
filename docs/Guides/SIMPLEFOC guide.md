@@ -1,7 +1,6 @@
 # Simple FOC guide
 
-!!! Tip annotate "**Tested with Simple FOC@^2.3.2 release**" 
-
+!!! tip "Tested with Simple FOC@^2.3.2 release"
 
 **Main firmware that runs on Spectral micro is [Spectral firmware](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller).**<br />
 
@@ -16,10 +15,9 @@ The library is intended both for:
 * [Forum](https://community.simplefoc.com/)
 * [DOCS](https://docs.simplefoc.com/)
 * [Discord](https://discord.com/invite/kWBwuzY32n)
-!!! Note annotate "**SimpleFOC forum and discord is best place to look for help when developing with SimpleFOC library**" 
+!!! note "SimpleFOC forum and discord is best place to look for help when developing with SimpleFOC library"
 
-
-## **How to install**
+## How to install
 
 Follow this [guide](https://docs.simplefoc.com/installation)
 
@@ -39,20 +37,18 @@ lib_deps =
 lib_archive = false
 ```
 
-## **SimpleFOC guides**
+## SimpleFOC guides
 If you want to develop more advanced applications with SimpleFOC you can follow these tutorials:
 
 * [Getting started](https://docs.simplefoc.com/example_from_scratch)
 * [Writing the code](https://docs.simplefoc.com/code)
 * [SimpleFOC Driver and Support Library](https://github.com/simplefoc/Arduino-FOC-drivers/tree/master)
 
-
-## **Basic example**
+## Basic example
 
 This example will spin the motor in open loop and enable serial monitor.<br />
 Use this code as a base for more advanced code you will develop with SimpleFOC.<br />
 In the github folder we also offer full FOC example!
-
 
 ``` C++ title="main.cpp"
 #include "Arduino.h"

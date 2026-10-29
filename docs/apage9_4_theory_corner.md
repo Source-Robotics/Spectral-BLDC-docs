@@ -1,7 +1,5 @@
 # Theory corner
 
-!!! Note annotate "" 
-
 ## Impedance Control
 
 **Concept**:
@@ -32,8 +30,6 @@ Impedance control regulates the force output of a system based on the position e
 - 𝑥̈ – acceleration
 
 ---
-
-!!! Note annotate "" 
 
 ### Admittance Control
 
@@ -86,8 +82,6 @@ You can also solve for the desired position 𝑥_desired directly:
 
 ---
 
-!!! Note annotate "" 
-
 ### Summary
 
 **Impedance Control**:
@@ -110,8 +104,6 @@ You can also solve for the desired position 𝑥_desired directly:
 By understanding these control strategies in terms of how the robot interacts with its environment, one can better appreciate their applications and benefits in various robotic tasks.
 
 ---
-
-!!! Note annotate "" 
 
 ## Compliance
 
@@ -168,10 +160,6 @@ This equation shows that the desired position change is directly proportional to
 
 ---
 
-!!! Note annotate "" 
-
 ## Summary
 
 Compliance is a measure of how easily a system deforms in response to an applied force. In robotics and control systems, compliance is crucial for enabling smooth, adaptive, and safe interactions with the environment and humans. It is the inverse of stiffness and can be implemented both passively and actively. Understanding compliance helps in designing control systems that can effectively manage forces and movements, ensuring both precision and safety in robotic operations.
-
-!!! Note annotate "" 

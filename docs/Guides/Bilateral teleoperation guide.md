@@ -1,7 +1,6 @@
 # Bilateral teleoperation guide
 
-
-## **What is bilateral teleoperation?**
+## What is bilateral teleoperation?
 Bilateral teleoperation is a concept that Involves two-way communication where both the operator and the remote device send and receive feedback. The operator controls the device remotely and receives sensory feedback (such as force) from the device to adjust their actions.
 
 The two grippers are virtually coupled to each other, allowing either to act as the master (the haptic interface) or the slave (the manipulator) in the system. We are not using a force sensor at the grippers but are relying on proprioception.
@@ -13,12 +12,10 @@ Watch these example videos to get a "feel" of the concept:
 - [Gripper bilateral](https://www.youtube.com/watch?v=8jfgFuEFNdI) 
 - [2DOF arm bilateral](https://twitter.com/SourceRobotics/status/1812872129148342691)
 
-
-
-!!! Note annotate "**What is this used for?**" 
+!!! note "What is this used for?"
     These kind of setup is perfect for: Teleoperation, Imitation learning, Virtual Environments...
 
-## **The algorithm**
+## The algorithm
 The magic of this setup is done with these 2 simple formulas.
 
  We got them from amazing Ben Katz paper, creator of mini cheetah quad: [Link to the paper](https://dspace.mit.edu/handle/1721.1/118671?show=full)
@@ -27,11 +24,10 @@ The magic of this setup is done with these 2 simple formulas.
 
  𝜏2,𝑖 = 𝐾𝑝(𝜃1,𝑖 − 𝜃2, 𝑖) + 𝐾𝑑( ˙𝜃1,𝑖 − ˙𝜃2,𝑖) − 𝐾( ˙𝜃2,𝑖)
 
-!!! Tip annotate "Learn more!" 
+!!! tip "Learn more!"
     You can read more on how it works in our [blog post!](https://source-robotics.com/blogs/blog/force-sensitive-grippers-for-teleoperation-and-imitation-learning)
 
-
-## **What you will need**
+## What you will need
 
 We recommend these items to create a simple test jig:
 
@@ -43,7 +39,7 @@ We recommend these items to create a simple test jig:
 * A Laptop or raspberry pi
 * [UART adapter](https://source-robotics.com/products/usb-to-serial-adapter)
 
-## **Setup**
+## Setup
 
 Here we are showing you the setup for any 2 motors, for example we are using 2 x [ssg48 grippers](https://source-robotics.com/products/compliant-gripper) that are connected in exactly the same setup.
 
@@ -56,14 +52,12 @@ You will need to follow the diagram above to wire everything up.
 * Now connect CAN adapters CAN bus to one of the drivers and then from that driver connect to the second driver. Make sure that last driver in chain has its CAN termination resistor in "ON" state
 * Connect the power to both drivers. You can daisy chain it or use 2 separate wires.
 
-## **The code**
+## The code
 
 This code will run on your PC and it will communicate with the drivers from the CAN adapter.
 
-
-!!! Danger annotate "Advanced example" 
+!!! danger "Advanced example"
     More advanced code that allows communication over UDP can be found here: [Link](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples/Advanced/SSG48%20gripper%20bilateral%20teleop) 
-
 
 ``` py title="Spectral_mobile_robot_xbox.py"
 import Spectral_BLDC as Spectral
@@ -82,7 +76,6 @@ Communication1 = Spectral.CanCommunication(bustype='slcan', channel='COM123', bi
 Motor: list[Union[Spectral.SpectralCAN,Spectral.SpectralCAN]] = []
 Motor.append(Spectral.SpectralCAN(node_id=0, communication=Communication1))
 Motor.append(Spectral.SpectralCAN(node_id=1, communication=Communication1))
-
 
 Joint: list[Union[SourceRoboticsToolbox.Joint,SourceRoboticsToolbox.Joint]] = []
 Joint.append(SourceRoboticsToolbox.Joint(encoder_resolution = 14, master_position=Needed_joint_pos[0], gear_ratio = Joint_reduction_ratio[0], offset = 0, dir = 0))
@@ -108,7 +101,6 @@ received_ids = [0,0]
 Kp = 650
 Kd = 0.00550 #  0.0060
 Kk = 0.0003 #0.0003
-
 
 while(1):
     t1 = time.perf_counter()
@@ -138,6 +130,5 @@ while(1):
     T0 = Kp*( position_values[1] -  position_values[0]) + Kd*(Motor[1].speed - Motor[0].speed) - Kk*(Motor[0].speed)
     T1 = Kp*( position_values[0] -  position_values[1]) + Kd*(Motor[0].speed - Motor[1].speed) - Kk*(Motor[1].speed)
     # There are no delays here, we send as fast as possible!
-
 
 ```

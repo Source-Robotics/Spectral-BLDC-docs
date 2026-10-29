@@ -1,12 +1,11 @@
 # Mobile robot guide
 
-
-## **Intro**
+## Intro
 This guide is a really simple example on how you can control mobile robot based on **spectral micro BLDC drives** using xbox controller! <br />
 
 **By following this guide you will be able to make something like this: [Link!](https://youtu.be/LGMLyr4dZZ0)**
 
-!!! Tip annotate "Python API" 
+!!! tip "Python API"
     This guide leverages [Spectral BLDC python API](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main)
 
 What you will need to create a simple mobile robot is:
@@ -19,13 +18,12 @@ What you will need to create a simple mobile robot is:
 * A Laptop or raspberry pi
 * Xbox controller
 
-!!! Note annotate "Building the robot" 
+!!! note "Building the robot"
     In this guide we only recommend you the hardware you can use to build the robot you designed. We do not offer already made designs you can build!
 
-## **Setup**
+## Setup
 
 ![drawing](../assets/AMR_setup.png)
-
 
 The setup will be the same for any kind of mobile robot. You will need to follow the  diagram above to wire everything up.
 
@@ -37,7 +35,6 @@ The setup will be the same for any kind of mobile robot. You will need to follow
 
 The code below is really simple example that drives the robot using the left joystick of the controller.
 
-
 ``` py title="Spectral_mobile_robot_xbox.py"
 from inputs import get_gamepad
 import math
@@ -45,14 +42,12 @@ import threading
 import time
 import Spectral_BLDC as Spectral
 
-
 Communication1 = Spectral.CanCommunication(bustype='slcan', channel='COM3', bitrate=1000000)
 Motor = []
 
 # We are using 2 motors with IDs 0 and 1
 Motor.append(Spectral.SpectralCAN(node_id=0, communication=Communication1))
 Motor.append(Spectral.SpectralCAN(node_id=1, communication=Communication1))
-
 
 timeout_setting = 0.00005
 
@@ -73,7 +68,6 @@ def read_left_joystick():
                     left_joystick_y = event.state / MAX_JOY_VAL  # normalize between -1 and 1
                 elif event.code == 'ABS_X':
                     left_joystick_x = event.state / MAX_JOY_VAL  # normalize between -1 and 1
-
 
                   # Apply deadband
                 if abs(left_joystick_x) < DEADBAND_THRESHOLD:
@@ -103,7 +97,6 @@ def control_robot():
         print("Left Wheel Speed:", left_wheel_speed)
         print("Right Wheel Speed:", right_wheel_speed)
 
-
         # Send data to all motors
         Motor[0].Send_data_pack_1(None,int(left_wheel_speed * 1000000),0)
         Motor[1].Send_data_pack_1(None,int(right_wheel_speed * -1000000),0)
@@ -117,7 +110,6 @@ def control_robot():
                 
                 Motor[UnpackedMessageID[0]].UnpackData(message,UnpackedMessageID)
                 print(f"Motor {UnpackedMessageID[0]}, speed is: {Motor[UnpackedMessageID[0]].speed}")
-
 
         time.sleep(0.05)
 

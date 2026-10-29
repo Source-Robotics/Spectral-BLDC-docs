@@ -1,0 +1,32 @@
+# The version facts of this documentation, in ONE place (the same system as Source-Robotics/par6).
+#
+# Edit them here, never in a page. hooks/versions.py writes them into the manual's version box
+# (<!-- doc-meta: KEY --> on its landing page) and into the list of documents (<!-- documents-table -->), and the
+# publishing workflow reads docs_version. README.md, "Versions and releases", says when to change what.
+
+# The documentation version: the Spectral firmware release these pages describe. The publishing workflow publishes
+# the site under this name (the version selector in the header) and points "latest" at it. Older firmware releases
+# keep their own version of the site.
+docs_version: "101"
+
+# The firmware release the pages describe. Its tag must be V<docs_version> (the v101 tag is lowercase). Releases
+# from 105 on are cut from the Bootloader_main branch (see the firmware repository's release_guide.md); 101 and
+# 104 are the releases of the main branch, flashed with a programming adapter.
+firmware:
+  repository: https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller
+  tag: v101
+  src: Spectral BLDC Firmware/src
+
+# One entry per document. revision: YEAR.LETTER, a new letter for every published revision of that document.
+# status: draft until the document is published; published: the date of the revision's publication, or null.
+# firmware: true for a document that describes one firmware release (docs_version) and shows it in its version box.
+manuals:
+  spectral:
+    number: SR-5002
+    title: Spectral Micro Manual
+    revision: 2026.A
+    status: published
+    published: 2026-10-29
+    firmware: true
+    applies_to: Spectral Micro driver PCB v2.0
+    covers: "the Spectral Micro BLDC driver: datasheet, setup, flashing, calibration, tuning, the CAN and UART interfaces, guides"

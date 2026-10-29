@@ -1,7 +1,6 @@
 # Python guide
 
-
-## **Examples**
+## Examples
 
 Check the examples [here!](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples)
 
@@ -37,7 +36,6 @@ while True:
         # We are interested in position and speed data that was requested by calling Send_Respond_Encoder_data
         print(f"Motor position is: {Motor1.position}")
         print(f"Motor speed is: {Motor1.speed}")
-
 
     else:
         print("No message after timeout period!")

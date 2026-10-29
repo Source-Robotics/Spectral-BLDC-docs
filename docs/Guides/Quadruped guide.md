@@ -1,17 +1,16 @@
 # Quadruped robot guide
 
-## **Intro**
+## Intro
 In this guide we will show you how you can control a leg of any quadruped robot using Spectral micro BLDC drivers. <br />If you can control one of them you can control all the rest!<br />
 
 **After you finish this guide you will be able to do something like this: [Link](https://youtu.be/g9rHJr9-tok) **<br />
 
-!!! Tip annotate "Python API and toolbox" 
+!!! tip "Python API and toolbox"
     This guide leverages [Spectral BLDC python API](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main) and [Source robotics toolbox](https://github.com/Source-Robotics/Source-Robotics-Toolbox)
-
 
 ![drawing](../assets/LEG.jpg)
 
-!!! Note annotate "Building the LEG" 
+!!! note "Building the LEG"
     In this guide we only recommend you the hardware you can use to build the robot you designed. We do not offer already made designs you can build!
 
 This guide will cover:
@@ -39,9 +38,7 @@ The setup will be the same for any kind of quadruped leg. You will need to follo
 
 ## Leg kinematics
 
-
 ![drawing](../assets/robot_leg_dh_table.png)
-
 
 First you will need to assign coordinate frames to your leg model.
 We already did it but if you want to learn more on how and why check this [Link](https://automaticaddison.com/how-to-assign-denavit-hartenberg-frames-to-robotic-arms/)<br />
@@ -54,15 +51,12 @@ value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / fo
 
 Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
 
-
 ![drawing](../assets/leg.PNG)
-
 
 ``` py title="leg_calib.py"
 
 import Spectral_BLDC as Spectral
 import time
-
 
 Communication1 = Spectral.CanCommunication(bustype='slcan', channel='COM6', bitrate=1000000)
 Motor = []
@@ -70,9 +64,7 @@ Motor = []
 Motor.append(Spectral.SpectralCAN(node_id=0, communication=Communication1))
 Motor.append(Spectral.SpectralCAN(node_id=1, communication=Communication1)) 
 
-
 timeout_setting = 0.00005
-
 
 while True:
 
@@ -104,7 +96,6 @@ while True:
             print(f"Activated is: {Motor[UnpackedMessageID[0]].activated}")
             """
 
-
     time.sleep(0.5)
 ``` 
 
@@ -113,7 +104,7 @@ while True:
 Joint level control involves directly controlling the angles or positions of the robot's individual joints. Each joint is treated as an independent actuator, and the control system sends commands to each joint to achieve the desired angles. 
 
 For this example we will not use joint level control but a different method called Task/Cartesian Level Control.<br />
- Task or cartesian level control focuses on controlling the position and orientation of the robot's end-effector in a Cartesian coordinate system (X, Y, Z coordinates and orientations). In our robot leg case we dont have Z axes (or orientation) and our end-effector is foot (end of our robot leg).
+ Task or cartesian level control focuses on controlling the position and orientation of the robot's end-effector in a Cartesian coordinate system (X, Y, Z coordinates and orientations). In our robot leg case we don't have Z axes (or orientation) and our end-effector is foot (end of our robot leg).
 
 In this example we will follow a circle trajectory i X,Y plane.
 We defined that trajectory with our function generate_circle_coords and with parameters: 
@@ -123,9 +114,7 @@ We defined that trajectory with our function generate_circle_coords and with par
 * speed - Speed of the end-effector in meters per second
 * time_var - Elapsed time in seconds
 
-
 ![drawing](../assets/circ_2.png)
-
 
 How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perfectly. With larger speeds the system can't keep up and overshoots. This is due multiple reaseons like:
 
@@ -135,7 +124,6 @@ How precise you follow the trajectory depends on the speed you set. With low spe
 * Feedforward Control: Lack of proper feedforward control can lead to errors in trajectory tracking, as the controller might not anticipate the required accelerations and decelerations.
 
 You can see that from the example with speed set to 1 and 3.
-
 
 ## Example code
 
@@ -154,7 +142,6 @@ from oclock import Timer, loop, interactiveloop
 import math
 from typing import Union, Any, List, Optional, cast
 INTERVAL_S = 0.02
-
 
 Needed_joint_pos = np.array([14000,2430]) # These are the positions we got from calib code
 Joint_reduction_ratio = [1, 0.90476190] # Reduction ratio we have on our joints
@@ -183,7 +170,6 @@ testing = 5
 position_values =  np.array([0.0,0.0])
 Motor_values = np.array([0,0])
 received_ids = [0,0]
-
 
 # robot length values (metres)
 l = [0.112, 0.1]
@@ -303,13 +289,11 @@ while timer.elapsed_time < 1100000:
 
 ```
 
-
 ## Plot data
 
 Script that will plot the data of your leg:
 
 ``` py title="plot_leg_data.py"
-
 
 import matplotlib.pyplot as plt
 
@@ -369,7 +353,5 @@ def plot_data(filename):
 # Example usage
 filename = 'C:\\Users\\xx\\Desktop\\test_code\\env\\Robot_leg\\data_2.txt'  # Replace with your actual filename
 plot_data(filename)
-
-
 
 ```

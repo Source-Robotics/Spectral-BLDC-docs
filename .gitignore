@@ -7,3 +7,6 @@ site/
 # Virtual environments
 venv/
 .venv/
+
+# Python bytecode (the build hook and the tools)
+__pycache__/
