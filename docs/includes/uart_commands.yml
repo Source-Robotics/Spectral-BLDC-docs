@@ -1,0 +1,108 @@
+# The hand-written half of the UART reference: what each command is for, its argument and what the response means.
+# The other half (which commands exist, Set/Get or action, the argument type, the mode a command enters, what it
+# prints) comes from the firmware at its release tag (generated/firmware_facts.json), and the build fails when the
+# two disagree. Keys are the command names exactly as the firmware compares them (case matters).
+
+groups:
+  motion:
+    title: Motion
+    page: motion.md
+  gains:
+    title: Gains and limits
+    page: gains.md
+  calibration:
+    title: Calibration and motor parameters
+    page: calibration.md
+  utility:
+    title: Status and utility
+    page: utility.md
+  gripper:
+    title: Gripper
+    page: gripper.md
+
+commands:
+  # ------------------------------------------------------------ motion
+  Iq: {group: motion, argument: current setpoint in mA, description: Current (torque) control with the given Iq setpoint., response: the measured Iq in mA}
+  Id: {group: motion, argument: current setpoint in mA, description: Sets the Id setpoint; normally left at 0., response: the measured Id in mA}
+  V: {group: motion, argument: speed setpoint in encoder ticks/s, description: Velocity control with the given speed., response: the measured speed in ticks/s}
+  P: {group: motion, argument: position setpoint in encoder ticks, description: Position control to the given position., response: the measured position in ticks}
+  PD: {group: motion, argument: position setpoint in encoder ticks, description: Impedance (PD) control around the given position with the gains KP and KD., response: the measured position in ticks}
+  PDV: {group: motion, argument: speed setpoint in encoder ticks/s, description: The speed setpoint of the PD loop., response: the PD speed setpoint}
+  PDI: {group: motion, argument: current feedforward in mA, description: The current feedforward of the PD loop., response: the PD current feedforward}
+  Uq: {group: motion, argument: voltage in mV, description: Voltage-torque mode with the given q-axis voltage (no current loop)., response: the Uq setpoint in mV}
+  Ud: {group: motion, argument: voltage in mV, description: The d-axis voltage used in voltage-torque mode; does not change the mode., response: the Ud setpoint in mV}
+  Openloop: {group: motion, argument: electrical speed, description: Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv., response: the open-loop speed}
+  Idle: {group: motion, description: Goes to idle; the motor coasts or brakes as set by Brake., response: "`Idle`"}
+  Brake: {group: motion, argument: 0 or 1, description: "What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open). Takes effect once the driver is idle, so send Idle first. Added in firmware 107.", response: the setting}
+  Close: {group: motion, description: Leaves open loop and goes back to closed-loop idle., response: nothing}
+
+  # ------------------------------------------------------------ gains and limits
+  Kpp: {group: gains, argument: gain, description: Kp of the position loop., response: the current value}
+  Kpv: {group: gains, argument: gain, description: Kp of the velocity loop., response: the current value}
+  Kiv: {group: gains, argument: gain, description: Ki of the velocity loop., response: the current value}
+  Kpiq: {group: gains, argument: gain, description: Kp of the Iq current loop; also sets Kpid., response: the current value}
+  Kiiq: {group: gains, argument: gain, description: Ki of the Iq current loop; also sets Kiid., response: the current value}
+  Kpid: {group: gains, argument: gain, description: Kp of the Id current loop., response: the current value}
+  Kiid: {group: gains, argument: gain, description: Ki of the Id current loop., response: the current value}
+  KP: {group: gains, argument: gain, description: KP of the impedance (PD) loop., response: the current value}
+  KD: {group: gains, argument: gain, description: KD of the impedance (PD) loop., response: the current value}
+  Vlimit: {group: gains, argument: speed in encoder ticks/s, description: The speed limit; the velocity integrator is clamped to it., response: the current limit}
+  Ilim: {group: gains, argument: current in mA, description: The Iq current limit. Set it to the rated phase current of your motor; the firmware clamps it to 2800 mA., response: the current limit}
+  Vlim: {group: gains, argument: voltage in mV, description: The voltage limit of the current loops (Ud and Uq); 0 means use the supply voltage., response: the current limit in mV}
+  Rstint: {group: gains, argument: 0 or 1, description: Whether the integral accumulators are reset on every new setpoint., response: the setting}
+  Cbw: {group: gains, argument: bandwidth in Hz, description: The current loop bandwidth calibration uses to compute Kpiq and Kiiq., response: the bandwidth}
+
+  # ------------------------------------------------------------ calibration and motor parameters
+  Cal: {group: calibration, description: "Runs the calibration routine (see Calibration): it measures R and L, finds the pole pairs, the phase order and the angle offset, and measures Kt, KV and the flux linkage.", response: the calibration log}
+  R: {group: calibration, argument: resistance in Ω, description: The phase resistance of the motor, measured by Cal; it can also be set by hand., response: the current value}
+  L: {group: calibration, argument: inductance in H, description: The phase inductance of the motor, measured by Cal; it can also be set by hand., response: the current value}
+  PP: {group: calibration, argument: pole pairs, description: The motor's pole pairs, found by Cal; they can also be set by hand., response: the current value}
+  Kt: {group: calibration, argument: Nm/A, description: The torque constant, found by calibration., response: the current value}
+  KV: {group: calibration, argument: rpm/V, description: The velocity constant, found by calibration., response: the current value}
+  Flux: {group: calibration, argument: Wb, description: "The flux linkage, found by calibration. Not reachable over UART: the parser accepts `#flux` (lowercase) but the handler expects `Flux`, so neither spelling works.", response: the current value}
+  Offset: {group: calibration, argument: angle in rad, description: The angle offset between encoder zero and electrical zero, found by calibration., response: the current value}
+  Iqoffset: {group: calibration, argument: current in mA, description: The current used by the angle-offset search., response: the current value}
+  Magnet: {group: calibration, description: Reads the encoder's magnet status., response: "`Magnet Good` or `Magnet Bad`"}
+  Dir: {group: calibration, argument: 0 or 1, description: The counting direction of the encoder (1 is the default)., response: the current value}
+  Phase: {group: calibration, description: Prints the phase order found by calibration., response: "`Phase order is: N`"}
+  Resv: {group: calibration, argument: voltage in mV, description: The voltage the resistance test of Cal starts at; it rises until the power reaches Calpwr., response: the current value}
+  Calpwr: {group: calibration, argument: power in W, description: The power the resistance and inductance tests of Cal may dissipate in the motor., response: the current value}
+  Openv: {group: calibration, argument: voltage in mV, description: The voltage of the open-loop spin, in calibration and with Openloop., response: the current value}
+  Opens: {group: calibration, argument: electrical speed in rad/s, description: The speed of the open-loop spin in calibration., response: the current value}
+  Vp: {group: calibration, argument: voltage in mV, description: The voltage of the phase-order search in calibration., response: the current value}
+  Calibrated: {group: calibration, argument: 0 or 1, description: "The calibrated flag. `#Calibrated 1` clears a calibration error without calibrating; the motor may still be uncalibrated.", response: the flag}
+
+  # ------------------------------------------------------------ status and utility
+  Save: {group: utility, description: Writes the configuration to the EEPROM. Do it after calibration and after tuning., response: "`Save`"}
+  Reset: {group: utility, description: Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again., response: nothing}
+  Default: {group: utility, description: Writes the factory defaults to the EEPROM, including the serial number, hardware version and batch date, and clears the gripper flag, heartbeat and watchdog. Back those up first., response: "`Loaded default config!`"}
+  Pullconfig: {group: utility, description: Prints the whole configuration on one line, for Motor GUI., response: the configuration}
+  Info: {group: utility, description: "Prints the driver's identity and state: hardware and firmware version, serial number, motor parameters, calibration, errors.", response: the report}
+  Param: {group: utility, description: Prints every gain of every loop., response: the gains}
+  Help: {group: utility, description: Prints a short command reference. Added in firmware 106., response: the reference}
+  Error: {group: utility, description: Prints which errors are active., response: "`No errors!` or `In error state!` followed by one line per active error"}
+  Clear: {group: utility, description: Clears the errors and goes to idle. An error whose cause is still present comes straight back; a calibration error is cleared only by calibrating (or `#Calibrated 1`)., response: "`Clear errors`"}
+  Mode: {group: utility, description: Prints the control mode., response: "`Idle mode`, `Position control`, `Speed control`, `Current control`, `PD control`, `Open loop`, `Gripper mode`, `Gripper calib mode`"}
+  Vbus: {group: utility, description: Prints the supply voltage., response: mV}
+  Vmax: {group: utility, argument: voltage in mV, description: The supply voltage above which a Vbus error is raised., response: "`Vmax in mV: N`"}
+  Temp: {group: utility, description: Prints the thermistor temperature., response: "°C, or `Temp Off` while the thermistor is disabled"}
+  Term: {group: utility, argument: 0 or 1, description: Enables the thermistor measurement and the temperature error (off by default)., response: the setting}
+  Tlim: {group: utility, argument: temperature in °C, description: The temperature at which the temperature error is raised; 75 by default., response: "`Temp limit N`"}
+  Iabc: {group: utility, description: Prints the phase currents., response: "`Ia`, `Ib` in mA"}
+  PWM: {group: utility, description: Prints the PWM duty values., response: the duties}
+  LED: {group: utility, argument: 0 or 1, description: Turns the status LED on or off., response: the LED state}
+  CANID: {group: utility, argument: 0 to 15, description: The CAN node ID. Kept over a power cycle after Save., response: the ID, or `Invalid CAN ID`}
+  SERNUM: {group: utility, argument: number, description: The serial number stored in the EEPROM., response: "`Serial number is: N`"}
+  Activate: {group: utility, description: Sets the activated flag., response: "`Controller activated`"}
+  Cyc: {group: utility, argument: interval in ms (0 = off), description: "Sends position, speed and Iq on its own every interval: `$ <position> <speed> <Iq>`; for BetterSerialPlotter.", response: "`Cyclic disabled` when turned off"}
+  Cyca: {group: utility, argument: interval in ms (0 = off), description: "Like Cyc, in the Arduino plotter format `Position:x,Speed:y,Iq:z`.", response: "`Cyclic disabled` when turned off"}
+
+  # ------------------------------------------------------------ gripper
+  Gripper: {group: gripper, argument: 0 or 1, description: Whether this driver is a gripper. Save it; `#Default` clears it., response: the flag}
+  Gripcal: {group: gripper, description: Starts the gripper calibration (the jaws find their end stops)., response: "`Gripper calibration!`"}
+  Grippos: {group: gripper, argument: 0 (open) to 255 (closed), description: The position setpoint; also activates the gripper, sets the action bit and goes to gripper mode., response: the current position}
+  Gripvel: {group: gripper, argument: 0 to 255, description: The speed setpoint of gripper moves., response: the setpoint}
+  Gripcur: {group: gripper, argument: current in mA, description: The current limit of gripper moves. The firmware does not clamp it; see the gripper manual for the safe range., response: the setpoint}
+  Gripact: {group: gripper, argument: 0 or 1, description: The activate bit., response: the bit}
+  Gripstop: {group: gripper, argument: 0 or 1, description: The gripper E-stop bit., response: the bit}
+  Gripinfo: {group: gripper, description: "Prints the gripper state: calibrated, activated, end stops, position, current.", response: the report}

@@ -1,0 +1,35 @@
+# The version facts of this documentation, in ONE place (the same system as Source-Robotics/par6).
+#
+# Edit them here, never in a page. hooks/versions.py writes them into each document's version box
+# (<!-- doc-meta: KEY --> on its landing page) and into the list of documents (<!-- documents-table -->), and the
+# publishing workflow reads docs_version. README.md, "Versions and releases", says when to change what.
+
+# The documentation version: the Spectral firmware release these pages describe. The publishing workflow publishes
+# the site under this name (the version selector in the header) and points "latest" at it. Older firmware releases
+# keep their own version of the site (101 is the last documented release from the main branch, before the bootloader).
+docs_version: "107"
+
+# The firmware release the pages describe, and the generated pages come from. Its tag must be V<docs_version>.
+# Releases are cut from the Bootloader_main branch (see the firmware repository's release_guide.md).
+firmware:
+  repository: https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller
+  tag: V107
+  # The firmware's source folder in that repository, and its Controller_mode numbers with their names (for the
+  # "enters mode" column of the UART reference). tools/sync_firmware.py reads both.
+  src: Spectral BLDC Firmware/src
+  modes: {0: idle, 1: position, 2: velocity, 3: current, 4: PD, 5: open loop, 6: gripper, 7: gripper calibration,
+          8: voltage torque}
+
+# One entry per document. revision: YEAR.LETTER, a new letter for every published revision of that document.
+# status: draft until the document is published; published: the date of the revision's publication, or null.
+# firmware: true for a document that describes one firmware release (docs_version) and shows it in its version box.
+manuals:
+  spectral:
+    number: SR-5002
+    title: Spectral Micro Manual
+    revision: 2026.A
+    status: draft
+    published: null
+    firmware: true
+    applies_to: Spectral Micro driver PCB v2.0
+    covers: "the Spectral Micro BLDC driver: quick start, safety, technical data, mounting, setup with Motor GUI or a terminal, operation, firmware; the API reference; guides"

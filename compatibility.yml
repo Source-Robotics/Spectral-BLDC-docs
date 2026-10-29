@@ -1,0 +1,54 @@
+# Which firmware release works with what. One row per firmware release, newest first. hooks/firmware_pages.py
+# writes it into the "Versions and compatibility" page (<!-- compatibility-table -->); tools/test_tools.py checks
+# that docs_version has a row. The firmware repository has no compatibility file of its own, so this is the source.
+columns:
+  - {key: firmware, title: Firmware}
+  - {key: date, title: Released}
+  - {key: bootloader, title: Bootloader}
+  - {key: stepfoc, title: STEPFOC equivalent}
+  - {key: python, title: Python library (Spectral-BLDC)}
+  - {key: runtime, title: PAR6 runtime}
+  - {key: pcb, title: Spectral Micro PCB}
+  - {key: docs, title: Docs}
+
+rows:
+  - firmware: "107"
+    date: 2026-08-26
+    bootloader: required (installed on boards shipped with 105 or newer)
+    stepfoc: "108"
+    python: 1.20 or newer
+    runtime: 0.9 or newer
+    pcb: v2.0
+    docs: "107"
+  - firmware: "106"
+    date: 2026-07-06
+    bootloader: required
+    stepfoc: 106 and 107
+    python: 1.19 or newer
+    runtime: 0.9 or newer
+    pcb: v2.0
+    docs: not published
+  - firmware: "105"
+    date: 2026-07-05
+    bootloader: required (the first release that needs it)
+    stepfoc: "105"
+    python: 1.19 or newer
+    runtime: 0.9 or newer
+    pcb: v2.0
+    docs: not published
+  - firmware: "104"
+    date: 2026-06-19
+    bootloader: none (flashed with a programming adapter); the last release of the main branch
+    stepfoc: "104"
+    python: 1.19 or newer (1.20 for Send_Voltage_Limit)
+    runtime: 0.9 or newer
+    pcb: v2.0
+    docs: "101 applies; 104 adds the Send_Voltage_Limit message"
+  - firmware: "101"
+    date: 2025-09-29
+    bootloader: none (flashed with a programming adapter)
+    stepfoc: "103"
+    python: 1.17 or newer
+    runtime: 0.9 or newer
+    pcb: v2.0
+    docs: "101"
