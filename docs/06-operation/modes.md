@@ -29,7 +29,7 @@ while an error is active.
 ## Positive rotation
 
 <figure markdown="span">
-  ![Positive rotation](../assets/Positive_rotation.png){ width="520" }
+  ![Positive rotation](../assets/Positive_rotation.webp){ width="520" }
   <figcaption>Figure 15: Looking at the encoder side of the board, the side that faces the magnet, positive rotation is counter-clockwise. A positive current turns the motor that way, a positive speed too, and the position grows.</figcaption>
 </figure>
 

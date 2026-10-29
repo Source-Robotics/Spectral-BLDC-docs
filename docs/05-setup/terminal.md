@@ -8,7 +8,7 @@ The driver talks on its UART connector at 256000 baud, 8N1, 3.3 V. Any terminal 
 CR+LF works.
 
 <figure markdown="span">
-  ![The UART connector and the adapter](../assets/UART connection.PNG){ width="700" }
+  ![The UART connector and the adapter](../assets/UART connection.webp){ width="700" }
   <figcaption>Figure 12: The UART connector. TX of the driver goes to RX of the adapter and RX to TX.</figcaption>
 </figure>
 

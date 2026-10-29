@@ -8,7 +8,7 @@ position at standstill, reports where it is, and runs quietly and efficiently. I
 arms and grippers.
 
 <figure markdown="span">
-  ![The Spectral Micro driver](../assets/spectral-Photoroom.png){ width="520" }
+  ![The Spectral Micro driver](../assets/spectral-Photoroom.webp){ width="520" }
   <figcaption>Figure 1: The Spectral Micro driver, 39 × 39 mm, with the encoder chip in the middle of the board.</figcaption>
 </figure>
 

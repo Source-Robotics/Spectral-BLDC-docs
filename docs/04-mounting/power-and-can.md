@@ -4,7 +4,7 @@ Each driver has two power connectors (JST XH) and two CAN connectors (JST ZH). T
 feeds the next driver, so a chain of drivers hangs on one supply cable and one CAN cable.
 
 <figure markdown="span">
-  ![A daisy chain of drivers](../assets/Daisy_chain-Photoroom.png){ width="700" }
+  ![A daisy chain of drivers](../assets/Daisy_chain-Photoroom.webp){ width="700" }
   <figcaption>Figure 8: Power and CAN pass from driver to driver. The first and the last node on the bus have their termination switch on.</figcaption>
 </figure>
 
@@ -48,6 +48,6 @@ The cables from the shop are made this way: [CAN cable](https://source-robotics.
   which has its own termination.
 
 <figure markdown="span">
-  ![The CAN termination switch](../assets/TERM.png){ width="520" }
+  ![The CAN termination switch](../assets/TERM.webp){ width="520" }
   <figcaption>Figure 10: The termination switch, ON for the first and the last node.</figcaption>
 </figure>

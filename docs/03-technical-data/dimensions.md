@@ -10,7 +10,7 @@ shaft's axis.
 </figure>
 
 <figure markdown="span">
-  ![The STEP model of the driver](../assets/bldc_step.PNG){ width="520" }
+  ![The STEP model of the driver](../assets/bldc_step.webp){ width="520" }
   <figcaption>Figure 5: The STEP model.</figcaption>
 </figure>
 

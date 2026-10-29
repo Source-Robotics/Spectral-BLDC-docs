@@ -20,7 +20,7 @@ once, with a programming adapter on the JTAG connector. After that, every update
   its `README.md` names the current file.
 
 <figure markdown="span">
-  ![The programming adapter on the JTAG pads](../assets/FLASHING2-Photoroom.png){ width="520" }
+  ![The programming adapter on the JTAG pads](../assets/FLASHING2-Photoroom.webp){ width="520" }
   <figcaption>Figure 18: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
 </figure>
 

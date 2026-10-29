@@ -1,7 +1,7 @@
 # Connectors and pinout
 
 <figure markdown="span">
-  ![The connectors of the Spectral Micro](../assets/con2.png){ width="900" }
+  ![The connectors of the Spectral Micro](../assets/con2.webp){ width="900" }
   <figcaption>Figure 2: The connectors. The motor phases go to U, V, W; the supply to DC+ and DC−.</figcaption>
 </figure>
 
@@ -17,7 +17,7 @@
 | HALL | 5V, GND, HALL1, HALL2, HALL3 | solder pads | hall sensors: not implemented in the firmware, see the note below |
 
 <figure markdown="span">
-  ![The pinout of both sides of the board](../assets/PINOUT1.png){ width="900" }
+  ![The pinout of both sides of the board](../assets/PINOUT1.webp){ width="900" }
   <figcaption>Figure 3: The pinout. Left the top of the board with the CAN connectors, the motor pads and the termination switch; right the bottom with the UART connector, the power connectors, the thermistor pads and the encoder chip.</figcaption>
 </figure>
 

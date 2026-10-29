@@ -27,7 +27,7 @@ Crunching and whining sounds at speed usually mean the current limit, or the cur
 ## The loops
 
 <figure markdown="span">
-  ![The cascaded loops](../assets/cascadeloop.png){ width="800" }
+  ![The cascaded loops](../assets/cascadeloop.webp){ width="800" }
   <figcaption>Figure 13: The position loop commands the velocity loop, which commands the current loop.</figcaption>
 </figure>
 
@@ -80,7 +80,7 @@ Run the motor over the whole range of speeds and loads it will see, with a load 
 ## Impedance (PD) mode
 
 <figure markdown="span">
-  ![The PD loop](../assets/PDloop.png){ width="800" }
+  ![The PD loop](../assets/PDloop.webp){ width="800" }
   <figcaption>Figure 14: The impedance loop: a spring (KP) and a damper (KD) around the position setpoint, plus a current feedforward.</figcaption>
 </figure>
 

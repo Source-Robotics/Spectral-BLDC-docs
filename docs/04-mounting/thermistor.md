@@ -5,7 +5,7 @@ default; use it on any motor that runs near its current limit for long, and on a
 standstill, which heats one winding without any movement to show it.
 
 <figure markdown="span">
-  ![The thermistor soldered to the board](../assets/TERM1-Photoroom.png){ width="520" }
+  ![The thermistor soldered to the board](../assets/TERM1-Photoroom.webp){ width="520" }
   <figcaption>Figure 11: The thermistor on the TERM and 3V3 pads.</figcaption>
 </figure>
 
@@ -16,7 +16,7 @@ Put its bead inside the motor's windings, where the heat is: on a gimbal motor t
 bottom and can be reached through one of the mounting holes or past the edge of the stator. Thermal cement holds
 the bead in place and conducts the heat; keep the leads clear of the rotor.
 
-![The thermistor placed in the windings](../assets/TERM2-Photoroom.png){ width="520" }
+![The thermistor placed in the windings](../assets/TERM2-Photoroom.webp){ width="520" }
 
 ## Enabling it
 

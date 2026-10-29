@@ -23,7 +23,7 @@ What you will need to create a simple mobile robot is:
 
 ## Setup
 
-![drawing](../assets/AMR_setup.png)
+![drawing](../assets/AMR_setup.webp)
 
 The setup will be the same for any kind of mobile robot. You will need to follow the  diagram above to wire everything up.
 

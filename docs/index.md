@@ -5,7 +5,7 @@ hide:
 
 # Spectral Micro Manual
 
-![Spectral Micro driver](assets/spectral-Photoroom.png){ .hero }
+![Spectral Micro driver](assets/spectral-Photoroom.webp){ .hero }
 
 <!-- doc-meta: spectral -->
 
