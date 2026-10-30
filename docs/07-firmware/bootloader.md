@@ -49,6 +49,6 @@ settings dialog:
 
 | Settings | Programming |
 |---|---|
-| ![ST-LINK settings](../assets/stlink1.PNG){ width="420" } | ![ST-LINK program and verify](../assets/stlink_prog.png){ width="420" } |
+| ![ST-LINK settings](../assets/stlink1.webp){ width="420" } | ![ST-LINK program and verify](../assets/stlink_prog.webp){ width="420" } |
 
 The same adapter uploads a firmware you build yourself, see [Building from source](building.md).

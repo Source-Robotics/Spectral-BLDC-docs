@@ -26,7 +26,7 @@ feeds the next driver, so a chain of drivers hangs on one supply cable and one C
     ends. A wrong cable destroys the driver at the moment it is powered.
 
 <figure markdown="span">
-  ![Cable orientation](../assets/Orientation.png){ width="600" }
+  ![Cable orientation](../assets/Orientation.webp){ width="600" }
   <figcaption>Figure 9: The orientation of the daisy-chain cables. The picture shows a generic 4-pin cable; the rule is the same for the 2-pin CAN and power cables.</figcaption>
 </figure>
 

@@ -18,6 +18,14 @@ reading, and the document history on the About page says what changed. Take care
 under *Applies to* matches what `#Info` reports on your driver: the version selector in the header switches
 between firmware releases. The text and the images are licensed CC BY-SA 4.0, the code examples MIT.
 
+<div class="gripper-viewer" data-base="assets/models/spectral/" markdown="0">
+  <canvas class="gripper-viewer__canvas" aria-label="The Spectral Micro driver in 3D: drag to turn, scroll to zoom"></canvas>
+  <div class="gripper-viewer__controls">
+    <button type="button" name="reset" class="md-button">Reset view</button>
+  </div>
+  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller">repository</a>, the PCB and everything mounted on it.</p>
+</div>
+
 <div class="grid cards" markdown>
 
 -   :material-rocket-launch:{ .lg .middle } **Quick start**

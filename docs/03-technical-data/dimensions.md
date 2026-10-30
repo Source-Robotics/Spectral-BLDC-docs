@@ -4,8 +4,16 @@ The board is 39 × 39 mm with four mounting holes on the NEMA 17 pattern (31 mm 
 exactly in the middle of the board, so a bracket that centres the board on the motor shaft puts the chip on the
 shaft's axis.
 
+<div class="gripper-viewer" data-base="../../assets/models/spectral/" markdown="0">
+  <canvas class="gripper-viewer__canvas" aria-label="The Spectral Micro driver in 3D: drag to turn, scroll to zoom"></canvas>
+  <div class="gripper-viewer__controls">
+    <button type="button" name="reset" class="md-button">Reset view</button>
+  </div>
+  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller">repository</a>, the PCB and everything mounted on it.</p>
+</div>
+
 <figure markdown="span">
-  ![Dimensions of the board](../assets/micro_dimensions.PNG){ width="600" }
+  ![Dimensions of the board](../assets/micro_dimensions.webp){ width="600" }
   <figcaption>Figure 4: Board dimensions and hole pattern.</figcaption>
 </figure>
 

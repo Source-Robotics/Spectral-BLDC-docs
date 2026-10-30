@@ -1,0 +1,14 @@
+{
+ "body": "body.glb",
+ "jaws": [],
+ "colors": {},
+ "default": {
+  "body": null,
+  "opening": 0.0
+ },
+ "camera": {
+  "azimuth_deg": -35,
+  "polar_deg": 55,
+  "fill": 1.15
+ }
+}

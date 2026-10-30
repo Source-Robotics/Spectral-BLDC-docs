@@ -5,7 +5,7 @@ the shaft's axis, parallel to the board, about **1 mm** above the encoder chip, 
 calibration problem that is not a wiring problem comes from this magnet.
 
 <figure markdown="span">
-  ![Magnet distance to the encoder](../assets/mag_dist.png){ width="700" }
+  ![Magnet distance to the encoder](../assets/mag_dist.webp){ width="700" }
   <figcaption>Figure 6: About 1 mm between the magnet and the encoder chip in the middle of the board.</figcaption>
 </figure>
 

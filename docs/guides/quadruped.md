@@ -38,7 +38,7 @@ The setup will be the same for any kind of quadruped leg. You will need to follo
 
 ## Leg kinematics
 
-![drawing](../assets/robot_leg_dh_table.png)
+![drawing](../assets/robot_leg_dh_table.webp)
 
 First you will need to assign coordinate frames to your leg model.
 We already did it but if you want to learn more on how and why check this [Link](https://automaticaddison.com/how-to-assign-denavit-hartenberg-frames-to-robotic-arms/)<br />

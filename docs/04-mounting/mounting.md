@@ -11,7 +11,7 @@ firmware repository has an example to adapt to your motor, `Spectral_micro_brack
 its hole pattern to the motor's bottom holes and its height so that the magnet ends up 1 mm from the chip.
 
 <figure markdown="span">
-  ![The example bracket](../assets/brack.PNG){ width="500" }
+  ![The example bracket](../assets/brack.webp){ width="500" }
   <figcaption>Figure 7: The example bracket. The motor bolts to one side, the board to the other; the hole in the middle is for the shaft and the magnet.</figcaption>
 </figure>
 

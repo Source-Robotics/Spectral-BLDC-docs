@@ -62,7 +62,13 @@ The tool needs a clone of the firmware repository with its tags, next to this re
 `--firmware PATH` / `FIRMWARE_DIR`, and the network for the release notes (`--no-network` keeps the file
 that is there). The CI build does not run it; the generated files are committed.
 
-## Markdown twins and the "Last update" dates
+## The 3D model, the Markdown twins and the "Last update" dates
+
+`tools/build_model.py --step PATH` builds `docs/assets/models/spectral/` from the board's STEP file (the PCB and
+everything mounted on it, tessellated and decimated for the web); it runs in the workspace's `.venv-cad`
+environment, which has cadquery's Open CASCADE kernel. The landing and dimensions pages show the model in
+`docs/javascripts/gripper-viewer.js` (the gripper sites' viewer; three.js from a CDN through the import map in
+`overrides/main.html`, loaded only on those pages). Run the tool again when the STEP file changes.
 
 `hooks/llms.py` writes, at every build, a Markdown twin of every page next to its HTML (`…/index.md`), `llms.txt`
 (an index of the twins by tab) and `llms-full.txt` (every page in one file), with the links absolute to the
@@ -83,6 +89,13 @@ Comments under every page come from Giscus, wired in `overrides/partials/comment
 `extra.comments`: all the docs sites share one Discussions home, the hub repository
 `Source-Robotics/source-robotics.github.io`, with one thread per site and page. A page opts out with
 `comments: false` in its front matter (the landing page does).
+
+## The PDF of the manual
+
+The `print-site` plugin (the last plugin in `mkdocs.yml`) builds one page with every chapter in order, a cover and
+a table of contents, at `print_page/`. `hooks/pdf.py` prints that page to `site/assets/Spectral-Micro-manual.pdf` with headless
+Chrome when the environment variable `DOCS_PDF` is set, which the publish workflow does; a local build sets it on
+demand (`DOCS_PDF=1 mkdocs build`). While the hook is on, the page-help line of every page links the PDF.
 
 ## Versions and releases
 
