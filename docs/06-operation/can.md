@@ -46,6 +46,21 @@ Send_Watchdog set to a few cycle times the motor stops when the host stops. The 
 Send_Heartbeat_Setup makes the driver send a frame on its own every N ms when it has nothing else to send, so the
 host can see it is alive.
 
+```mermaid
+sequenceDiagram
+    participant H as Host
+    participant D as Driver
+    H->>D: Send_Clear_Error
+    H->>D: Send_Watchdog: a few cycle times
+    H->>D: Send_Heartbeat_Setup: every N ms
+    loop every cycle, 100 Hz to 1 kHz
+        H->>D: Send_data_pack_1: the setpoint, with the feedforwards
+        D-->>H: Respond_data_pack_1: position, speed, current, the error bit
+    end
+    D-->>H: heartbeat, whenever nothing else was sent for N ms
+    Note over D: no valid frame within the watchdog time: watchdog error, the motor stops
+```
+
 ## From a PC
 
 The [CANvas adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter) shows up as a serial port and

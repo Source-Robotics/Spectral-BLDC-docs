@@ -2,6 +2,21 @@
 
 By symptom. The error flags and what clears them are in [Errors and recovery](06-operation/errors.md).
 
+## The motor does not move
+
+```mermaid
+flowchart TD
+    A([The motor does not move]) --> B{Does the driver answer?}
+    B -- no --> C[The supply and its polarity, the LED;<br>UART: the baud rate, TX and RX;<br>CAN: the node ID, 1 Mbit/s, the termination]
+    B -- yes --> D{Calibrated?}
+    D -- no --> E[#Cal and #Save]
+    D -- yes --> F{An error active? The LED on steadily}
+    F -- yes --> G[#Error names it: fix the cause, then #Clear]
+    F -- no --> H{A current limit above 0?}
+    H -- no --> I[#Ilim to the motor's rated current, #Save]
+    H -- yes --> J[Command a setpoint in a closed-loop mode;<br>#Mode and #Info show the state]
+```
+
 ## The driver does not answer
 
 | Symptom | Check |
