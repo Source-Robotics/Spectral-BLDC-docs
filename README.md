@@ -18,7 +18,7 @@ The firmware and hardware files are in
 | `docs/includes/generated/` | written by `tools/sync_firmware.py` from the firmware's release tag: `firmware_facts.json`, `firmware_release_notes.md`. Never edit |
 | `versions.yml` | every version fact: the firmware release the site describes, the manual's number and revision |
 | `compatibility.yml` | which firmware release works with which bootloader, Python library, PAR6 runtime and board |
-| `hooks/` | `versions.py` writes the version facts into the pages; `firmware_pages.py` builds the reference pages |
+| `hooks/` | `versions.py` writes the version facts into the pages; `firmware_pages.py` builds the reference pages; `llms.py` writes the Markdown twin of every page, `llms.txt` and `llms-full.txt` |
 | `tools/` | `sync_firmware.py`, `test_tools.py`, `make_stubs.py`, `root_404.html` |
 | `overrides/` | the theme changes: the older-version banner, the edit/report line, the header's repository card |
 
@@ -61,6 +61,15 @@ python tools/sync_firmware.py --print uart --tag v101   # look at another releas
 The tool needs a clone of the firmware repository with its tags, next to this repository or named by
 `--firmware PATH` / `FIRMWARE_DIR`, and the network for the release notes (`--no-network` keeps the file
 that is there). The CI build does not run it; the generated files are committed.
+
+## Markdown twins and the "Last update" dates
+
+`hooks/llms.py` writes, at every build, a Markdown twin of every page next to its HTML (`…/index.md`), `llms.txt`
+(an index of the twins by tab) and `llms-full.txt` (every page in one file), with the links absolute to the
+published version (`extra.llms_base`). The "Copy this page as Markdown" button in the page header reads the twin.
+
+The "Last update" date under every page comes from the `git-revision-date-localized` plugin (the page's last
+commit; the CI checks out the whole history for it).
 
 ## Analytics and comments
 
