@@ -62,6 +62,18 @@ The tool needs a clone of the firmware repository with its tags, next to this re
 `--firmware PATH` / `FIRMWARE_DIR`, and the network for the release notes (`--no-network` keeps the file
 that is there). The CI build does not run it; the generated files are committed.
 
+## Analytics and comments
+
+The "Was this page helpful?" widget at the end of every page is configured under `extra.analytics.feedback`.
+With `provider: google` (the Google Analytics property all the docs sites share, loaded only after the reader
+accepts the cookie banner of `extra.consent`), Material's own integration records the page views and sends each
+vote as an event named `feedback`.
+
+Comments under every page come from Giscus, wired in `overrides/partials/comments.html` and configured under
+`extra.comments`: all the docs sites share one Discussions home, the hub repository
+`Source-Robotics/source-robotics.github.io`, with one thread per site and page. A page opts out with
+`comments: false` in its front matter (the landing page does).
+
 ## Versions and releases
 
 Each release of the Spectral firmware has its own version of the documentation, named after the release: `101`,
