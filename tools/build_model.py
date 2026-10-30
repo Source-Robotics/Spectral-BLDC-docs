@@ -32,9 +32,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "assets" / "models" / "spectral"
 DEFAULT_STEP = ROOT.parent.parent / "projects" / "Spectral-Micro-BLDC-controller" / "STEP files" / "Spectral_micro_STEP.STEP"
 DEFLECTION_MM = 0.05       # tessellation: the largest gap between the mesh and the true surface
-MAX_FACES = {"pcb": 6000, "parts": 30000}
-COLOURS = {"pcb": "#15181c", "parts": "#9aa0a6"}
-PCB_MAX_THICKNESS_MM = 2.5
+MAX_FACES = {"pcb": 20000, "parts": 30000}   # the PCB keeps its outline and holes: decimating it bends them
+COLOURS = {"pcb": "#15181c", "parts": "#b9bcc0"}
 
 
 def read_step(path: Path):
@@ -91,17 +90,22 @@ def main(argv=None) -> int:
     if not args.step.exists():
         sys.exit(f"build_model: {args.step} not found; pass --step PATH")
     meshes = solid_meshes(read_step(args.step))
-    # the PCB: the thin solid with the largest footprint; everything else is mounted on it
+    # the PCB: the solid with the largest footprint (in this STEP it carries the connectors too); the rest is mounted on it
     def footprint(m):
         e = np.sort(m.extents)
-        return e[1] * e[2] if e[0] * 1000 < PCB_MAX_THICKNESS_MM else 0.0
+        return e[1] * e[2]
     pcb = max(meshes, key=footprint)
     parts = trimesh.util.concatenate([m for m in meshes if m is not pcb])
-    # turn the board: its thin axis becomes +Y, with the components on top
+    # turn the board: its thin axis becomes +Y, with the components on top. The plate's plane is where most of the
+    # PCB's vertices are (its two faces); the components are on the side where most of their vertices lie.
     k = int(np.argmin(pcb.extents))
-    up = np.zeros(3)
-    up[k] = 1.0 if parts.centroid[k] >= pcb.centroid[k] else -1.0
-    turn = trimesh.geometry.align_vectors(up, [0.0, 1.0, 0.0])
+    plate = float(np.median(pcb.vertices[:, k]))
+    sign = 1.0 if float(np.median(parts.vertices[:, k])) >= plate else -1.0
+    axes = {0: (np.pi / 2, [0, 0, 1]), 1: (0.0, [1, 0, 0]), 2: (-np.pi / 2, [1, 0, 0])}   # X, Y or Z up -> +Y up
+    angle, about = axes[k]
+    turn = trimesh.transformations.rotation_matrix(angle, about)
+    if sign < 0:
+        turn = trimesh.transformations.rotation_matrix(np.pi, [0, 0, 1]) @ turn        # upside down: flip about Z
     for m in (pcb, parts):
         m.apply_transform(turn)
     centre = np.vstack([pcb.bounds, parts.bounds])
