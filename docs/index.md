@@ -12,6 +12,8 @@ comments: false
 
 [Quick start](quick-start.md){ .md-button .md-button--primary } [About this manual](about.md){ .md-button }
 
+[Try Motor GUI without hardware](05-setup/motor-gui.md#try-it-without-hardware){ .md-button }
+
 Source Robotics d.o.o. publishes this document for the Spectral Micro BLDC driver. It is revised as the product and
 its firmware change; the document number, firmware version, revision and date above identify the version you are
 reading, and the document history on the About page says what changed. Take care that the firmware version named

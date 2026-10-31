@@ -26,19 +26,39 @@ comms = Spectral.CanCommunication(bustype='slcan', channel='COM41', bitrate=1000
 motor = Spectral.SpectralCAN(node_id=0, communication=comms)
 
 motor.Send_Clear_Error()
-motor.Send_data_pack_1(Position=16384, Speed=0, Current=0)   # one revolution, position mode
 
-while True:
-    message, ids = comms.receive_can_messages(timeout=0.2)
-    if message is None:
-        continue
-    motor.UnpackData(message, ids)        # fills motor.position, motor.speed, motor.current, ...
-    print(motor.position, motor.speed, motor.current, ids.error_bit)
-    time.sleep(0.01)
+# A configured, calibrated motor with a clear shaft: command one turn for five seconds.
+# Each command requests a fresh position/speed/current reply; heartbeat is not required.
+try:
+    deadline = time.monotonic() + 5.0
+    next_cycle = time.monotonic()
+    while time.monotonic() < deadline:
+        motor.Send_data_pack_1(Position=16384, Speed=0, Current=0)
+        reply_deadline = min(deadline, time.monotonic() + 0.02)
+        while time.monotonic() < reply_deadline:
+            message, ids = comms.receive_can_messages(
+                timeout=max(0.0, reply_deadline - time.monotonic()))
+            if message is None:
+                print("No motion feedback in this cycle; check the bus and node ID")
+                break
+            if ids.node_id != 0 or ids.command_id != 3:  # Respond_data_pack_1
+                continue
+            motor.UnpackData(message, ids)
+            print(motor.position, motor.speed, motor.current, ids.error_bit)
+            if ids.error_bit:
+                raise RuntimeError("Driver fault: inspect State_of_Errors before retrying")
+            break
+        next_cycle += 0.02
+        time.sleep(max(0.0, next_cycle - time.monotonic()))
+finally:
+    motor.Send_Idle()                    # also on Ctrl-C; the shaft no longer holds torque
 ```
 
 `receive_can_messages` returns the raw `python-can` message and a tuple with the node ID, the command ID and the
-error bit of the identifier; `UnpackData` decodes the message into the attributes the message carries.
+error bit of the identifier; `UnpackData` decodes the message into the attributes the message carries. This example resends the same
+setpoint at 50 Hz for five seconds, prints only matching motion feedback, and puts the motor in idle when it
+ends. Idle releases torque: support any attached mechanism before running it. A missing reply is reported
+without claiming that a move finished. Configure and calibrate the driver first ([Quick start](../quick-start.md)).
 
 ## What is where
 
