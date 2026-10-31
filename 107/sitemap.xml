@@ -2,290 +2,294 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/02-safety/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/about/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/cad-files/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/quick-start/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/terminology/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/driver-at-a-glance/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/spectral-and-stepfoc/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/what-you-need/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/connectors/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/dimensions/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/ratings/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/tested-motors/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/magnet/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/mounting/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/power-and-can/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/thermistor/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/wiring/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/calibration/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/motor-gui/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/terminal/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/tuning/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/can/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/errors/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/gripper-mode/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/modes/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/motor-gui/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/python/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/uart/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/building/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/releases/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/the-bootloader/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/update/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/firmware-release-notes/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/hardware-revisions/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/theory/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/bilateral-teleoperation/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/gravity-compensation/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/mobile-robot/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/python/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/quadruped/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/simplefoc/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can-tools/</loc>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/defaults/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/errors/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/python/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/gains-and-limits/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/gripper/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/motion/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/status/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/system/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/calibration/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/gains/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/gripper/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/motion/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/utility/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/support/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/support/contributing/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
     <url>
          <loc>https://docs.source-robotics.com/Spectral-BLDC-docs/107/support/report-a-problem/</loc>
-         <lastmod>2026-10-29</lastmod>
+         <lastmod>2026-10-31</lastmod>
     </url>
 </urlset>

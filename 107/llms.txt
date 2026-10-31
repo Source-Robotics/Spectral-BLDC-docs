@@ -1,0 +1,91 @@
+# Spectral Micro
+
+> Documentation for the Spectral Micro BLDC motor controller by Source Robotics.
+
+Every page of this site is also available as Markdown at its address followed by `index.md`, with its links absolute; `llms-full.txt` holds every page in one file. The version box on the landing page names the release the pages describe.
+
+
+## Spectral Micro Manual
+
+- [Spectral Micro Manual](https://docs.source-robotics.com/Spectral-BLDC-docs/107/index.md): Source Robotics d.o.o.
+- [Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/107/quick-start/index.md): From the box to a calibrated motor that follows commands, on one page.
+- [About this manual](https://docs.source-robotics.com/Spectral-BLDC-docs/107/about/index.md): The Spectral Micro Manual covers the Spectral Micro BLDC driver from unpacking to a tuned motor on a CAN bus: what the driver is, how to mount it on a motor and wire it, the first setup with Motor GUI or the serial termi
+- [Overview](https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/index.md): What the Spectral Micro is and what it is made of, how it relates to the STEPFOC stepper driver that is built on it, and what you need around it to get a motor turning.
+- [The driver at a glance](https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/driver-at-a-glance/index.md): The Spectral Micro is a field-oriented controller for small three-phase brushless motors: gimbal motors and other low-current motors with a phase resistance of a few ohms.
+- [Spectral Micro and STEPFOC](https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/spectral-and-stepfoc/index.md): The Spectral Micro and the STEPFOC stepper driver are sister drivers: similar hardware and similar firmware, each made for its kind of motor.
+- [What you need](https://docs.source-robotics.com/Spectral-BLDC-docs/107/01-overview/what-you-need/index.md): This page lists what a Spectral Micro setup is made of, what comes with the driver, and what you buy or make yourself.
+- [2. Safety](https://docs.source-robotics.com/Spectral-BLDC-docs/107/02-safety/index.md): The Spectral Micro is a bare circuit board that drives a motor from a supply of up to 29 V.
+- [Technical data](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/index.md): The numbers: ratings and limits, the connectors with their pinout, the dimensions, and the motors that have been tested with the driver.
+- [Ratings and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/ratings/index.md): The defaults of every setting are listed in the Defaults reference.
+- [Connectors and pinout](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/connectors/index.md)
+- [Dimensions and CAD](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/dimensions/index.md): The board is 39 × 39 mm with four mounting holes on the NEMA 17 pattern (31 mm apart).
+- [Tested motors](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/tested-motors/index.md): The Spectral Micro drives three-phase brushless motors with a phase resistance of about 2 to 24 Ω: the calibration routine's default voltages are made for that range.
+- [Mounting and wiring](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/index.md): How the driver goes onto the motor and what gets connected to it: the encoder magnet on the shaft, the board on a bracket behind the motor, the three phases to the motor terminals, the supply and the CAN bus, and the the
+- [The encoder magnet](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/magnet/index.md): The encoder reads a diametrically magnetised magnet on the end of the motor shaft.
+- [Mounting on the motor](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/mounting/index.md): The board sits behind the motor, with the encoder chip, in the middle of the board, on the axis of the shaft and 1 mm from the magnet.
+- [Wiring the motor](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/wiring/index.md): A three-phase brushless motor has three wires.
+- [Power and the CAN daisy chain](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/power-and-can/index.md): Each driver has two power connectors (JST XH) and two CAN connectors (JST ZH).
+- [Thermistor](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/thermistor/index.md): A 100 kΩ NTC thermistor in the motor lets the driver stop before the motor overheats.
+- [First setup](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/index.md): From a mounted and wired driver to a calibrated, tuned motor.
+- [Motor GUI](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/motor-gui/index.md): Motor GUI reaches the hardware through the browser's serial port access (Web Serial), which Chromium-based browsers have: Chrome, Edge, Brave, Opera.
+- [The serial terminal](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/terminal/index.md): Motor GUI is the usual way to work with the driver; a plain serial terminal is the alternative, and it is what the console inside Motor GUI is.
+- [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/calibration/index.md): Calibration teaches the driver its motor: it checks the magnet and the supply, measures the motor's phase resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find the
+- [Current limit and loop tuning](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/tuning/index.md): Calibration leaves the driver with current loop gains computed for your motor and with conservative velocity and position gains.
+- [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/index.md): Nothing you set survives a power cycle until you save it.
+- [Operation](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/index.md): How a calibrated driver is used: the control modes and what each one does, the two ways to talk to the driver and the two tools on top of them, what happens when something goes wrong, and gripper mode.
+- [Control modes](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/modes/index.md): The driver is always in one control mode.
+- [Over UART](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/uart/index.md): The serial port is the interactive way to use the driver: you type a command, the driver answers in text.
+- [Over CAN](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/can/index.md): CAN is the interface for running a machine: compact frames, a fixed cost per message, up to 16 drivers on one bus, and a host that can be a PC, a microcontroller or a robot control box.
+- [With Python](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/python/index.md): The Spectral-BLDC library wraps the CAN protocol: one method per message, and the driver's answers unpacked into attributes.
+- [Working in Motor GUI](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/motor-gui/index.md): Everyday use of the driver from Motor GUI: moving the motor, watching it, recording what it does, running several motors, and the few things that only work from the console.
+- [Errors and recovery](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/errors/index.md): When the driver detects a fault it stops the motor, goes to idle, turns the status LED on steadily and sets the error bit in every CAN frame it sends.
+- [Gripper mode](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/gripper-mode/index.md): A driver can run a gripper instead of a joint: the same board, with a state machine that moves a jaw to a position between open and closed, at a speed, with a current limit that becomes the grip force, and that reports w
+- [Firmware](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/index.md): The driver's firmware is open source and released as numbered builds.
+- [Releases and versions](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/releases/index.md): A firmware release is a number: 101, 104, 105, … Every release is a tag V<number> in the firmware repository and a GitHub release that carries the image spectral-bldc-firmware-V<number>.bin, a manifest firmware.json with
+- [The bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/the-bootloader/index.md): Every driver shipped with firmware 105 or newer carries a small bootloader in the first 12 KB of its flash.
+- [Updating through the bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/update/index.md): A driver with the bootloader (firmware 105 or newer) is updated over the UART connector or the CAN bus: the host tells the driver to reset, the bootloader waits two seconds for a host, and the host streams the new image
+- [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/index.md): A driver running firmware 104 or older has no bootloader: its firmware starts at the beginning of the flash.
+- [Building from source](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/building/index.md): The firmware is a PlatformIO project for the Arduino core on the STM32F103CB, in the Spectral BLDC Firmware folder of the firmware repository on the Bootloadermain branch.
+- [8. Troubleshooting](https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/index.md): By symptom. The error flags and what clears them are in Errors and recovery.
+- [Firmware release notes](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/firmware-release-notes/index.md): What changed in each firmware release, from the release notes in the firmware repository, up to the release this site describes.
+- [Versions and compatibility](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/index.md): Which firmware release works with which bootloader, Python library, PAR6 runtime and board revision.
+- [Hardware revisions](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/hardware-revisions/index.md): What changed in each revision of the Spectral Micro board, and which firmware and which revision of this manual go with it.
+- [Theory corner](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/theory/index.md): The control concepts behind the driver's modes, for readers who want to know why a setting does what it does.
+- [Glossary](https://docs.source-robotics.com/Spectral-BLDC-docs/107/terminology/index.md)
+- [CAD and downloads](https://docs.source-robotics.com/Spectral-BLDC-docs/107/cad-files/index.md)
+
+## API reference
+
+- [API reference](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/index.md): Every CAN message and every UART command of the firmware release this site describes, the defaults the firmware starts with, the error flags, and the map from the Python library's calls to the messages they send.
+- [CAN frame tool and downloads](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can-tools/index.md): Build or inspect a frame using the command definitions of this manual's firmware release.
+- [CAN protocol](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/index.md): CAN 2.0, 1 Mbit/s, 11-bit identifiers.
+- [Motion](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/motion/index.md): The commands that move the motor and the frames that come back.
+- [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/gains-and-limits/index.md): The commands that set the loop gains and the limits.
+- [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/status/index.md): Data the host asks for with a remote frame (RTR bit set, no data); the driver answers with a data frame with the same command ID.
+- [System](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/system/index.md): Identity, saving, resetting, errors, the watchdog, the heartbeat and the settings.
+- [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/gripper/index.md): The commands of gripper mode (#Gripper 1, saved).
+- [UART commands](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/index.md): Every command the firmware release this site describes understands over the serial port.
+- [Motion](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/motion/index.md)
+- [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/gains/index.md)
+- [Calibration and motor parameters](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/calibration/index.md)
+- [Status and utility](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/utility/index.md)
+- [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/gripper/index.md)
+- [Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/defaults/index.md): The values the firmware starts with, from its source (common.h) at the release this site describes.
+- [Errors and LED states](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/errors/index.md): The flags as the firmware keeps them, the line #Error prints for each, and where each sits in the two bytes of SendRespondStateofErrors (bits numbered from the most significant).
+- [Python library](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/python/index.md): The Spectral-BLDC package (Spectral-BLDC-Python, pip install Spectral-BLDC) has one method per CAN message in SpectralBLDC.SpectralCAN, and SpectralBLDC.CanCommunication for the bus.
+
+## Guides
+
+- [Guides](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/index.md): Worked examples with code, from a first Python program to a mobile robot, a leg, a gravity-compensated arm and two motors coupled over a network, and the SimpleFOC library as an alternative firmware.
+- [Python](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/python/index.md): More examples are in the Spectral-BLDC-Python examples folder.
+- [Mobile robot](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/mobile-robot/index.md): What you will need to create a simple mobile robot is:
+- [Quadruped leg](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/quadruped/index.md): This guide will cover:
+- [Gravity compensation](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/gravity-compensation/index.md): Gravity compensation is a fundamental concept in robotic control that helps counteract the effects of gravity on a robot's joints and links.
+- [Bilateral teleoperation](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/bilateral-teleoperation/index.md): The two grippers are virtually coupled to each other, allowing either to act as the master (the haptic interface) or the slave (the manipulator) in the system.
+- [SimpleFOC](https://docs.source-robotics.com/Spectral-BLDC-docs/107/guides/simplefoc/index.md): SimpleFOC is alternative to Spectral Firmware.
+
+## Support
+
+- [Getting help](https://docs.source-robotics.com/Spectral-BLDC-docs/107/support/index.md): Before you ask, Troubleshooting goes through the common symptoms, and #Info tells most of what anyone will ask you for.
+- [Report a problem](https://docs.source-robotics.com/Spectral-BLDC-docs/107/support/report-a-problem/index.md): Open an issue in the firmware repository for the driver and its firmware, or in Spectral-BLDC-Python for the Python library.
+- [Contributing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/support/contributing/index.md): This documentation lives in Source-Robotics/Spectral-BLDC-docs.
