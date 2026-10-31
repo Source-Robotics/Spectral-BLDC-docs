@@ -11,6 +11,12 @@ error bit in every CAN frame it sends. It stays there until the error is cleared
 - **Send_Respond_State_of_Errors** returns every flag as a bit; **the error bit** of any frame says whether there
   is one.
 
+| Normal operation | Calibration | Error mode |
+|---|---|---|
+| ![Three short flashes and a pause](../assets/Normal.webp){ width="180" } | ![Flashing every 0.5 s](../assets/Calib.webp){ width="180" } | ![On, steady](../assets/Error2.webp){ width="180" } |
+
+In error mode the LED does not flash: it stays on, as in the photo on the right.
+
 ## The errors
 
 | Error | `#Error` line | Cause | What to do |

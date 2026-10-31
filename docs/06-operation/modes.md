@@ -21,7 +21,7 @@ stateDiagram-v2
 A setpoint is `#P`, `#V`, `#Iq`, `#PD` or a CAN motion frame, and a new setpoint switches the mode without
 passing through idle; a fault is any of the errors on [Errors and recovery](errors.md).
 
-| Mode | What the motor does | Entered by | Setpoint unit |
+| ControlMode | What the motor does | Entered by | Setpoint unit |
 |---|---|---|---|
 | Idle | nothing: coasts (phases open) or brakes (phases shorted), as set by `#Brake` or Send_Settings | `#Idle`, Send_Idle, `#Clear`, errors | — |
 | Position | holds and moves to a position with the cascade of position, velocity and current loops | `#P`, Send_data_pack_1 (8 bytes) | encoder ticks |
