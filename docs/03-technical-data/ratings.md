@@ -12,7 +12,7 @@
 | Power, idle | 0.3 W |
 | PWM frequency | 25 kHz |
 | Control loop frequency | 5 kHz |
-| Electrical frequency, practical maximum | about 500 Hz, a tenth of the 5 kHz control loop, which has to run several times per electrical cycle: about 2700 rpm on an 11-pole-pair motor, 4300 rpm on a 7-pole-pair motor |
+| Electrical frequency, maximum | 500 Hz |
 | Current sensing | inline, on two phases |
 | Encoder | 14-bit magnetic, 16384 ticks per revolution, diametrical magnet 1 mm above the chip |
 | UART | 3.3 V, 256000 baud by default (1 000 000 tested) |

@@ -30,7 +30,7 @@ step it belongs to.
 
 <!-- documents-table -->
 
-The STEPFOC stepper driver is built on the Spectral Micro's hardware and firmware; its documentation is at
+The STEPFOC stepper driver has similar hardware and firmware and is run the same way; its documentation is at
 [docs.source-robotics.com/STEPFOC-docs](https://docs.source-robotics.com/STEPFOC-docs/). The SSG-48 gripper, which
 is driven by a Spectral Micro, is documented at
 [docs.source-robotics.com/SSG48-gripper-docs](https://docs.source-robotics.com/SSG48-gripper-docs/).

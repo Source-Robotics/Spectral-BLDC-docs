@@ -3,17 +3,20 @@
 
     python tools/build_model.py --step PATH
 
-Writes docs/assets/models/spectral/: body.glb (the board as two meshes, the PCB and everything mounted on it,
-tessellated from the STEP and decimated for the web) and viewer.json for docs/javascripts/gripper-viewer.js
+Writes docs/assets/models/spectral/: body.glb (the board as two meshes, the green PCB and the black parts on it,
+tessellated from the STEP at a tolerance coarse enough for the web, never decimated, and compressed with gltfpack) and viewer.json for docs/javascripts/gripper-viewer.js
 (no jaws, no colour choice: the board is shown as it is). The board is turned so that its components point up
-(glTF is Y-up) and centred. Needs cadquery's OCP (the Open CASCADE kernel), trimesh with fast-simplification and
-numpy: the workspace's .venv-cad environment, not the docs one. The STEP file lives in the product repository
+(glTF is Y-up) and centred. Needs cadquery's OCP (the Open CASCADE kernel), trimesh and numpy: the workspace's
+.venv-cad environment, not the docs one; and Node.js for gltfpack (optional: without it the file is larger). The STEP file lives in the product repository
 (STEP files/Spectral_micro_STEP.STEP); it is not copied into this one.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -31,9 +34,12 @@ from OCP.TopoDS import TopoDS
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "assets" / "models" / "spectral"
 DEFAULT_STEP = ROOT.parent.parent / "projects" / "Spectral-Micro-BLDC-controller" / "STEP files" / "Spectral_micro_STEP.STEP"
-DEFLECTION_MM = 0.05       # tessellation: the largest gap between the mesh and the true surface
-MAX_FACES = {"pcb": 20000, "parts": 30000}   # the PCB keeps its outline and holes: decimating it bends them
-COLOURS = {"pcb": "#15181c", "parts": "#b9bcc0"}
+# Tessellation: the largest gap between the mesh and the true surface, and the largest angle between neighbouring
+# facets of a curved face. Coarse enough for the web (about 85 000 triangles for the Spectral Micro), and every
+# part keeps its shape: decimating the merged mesh afterwards collapsed the small components.
+DEFLECTION_MM = 0.1
+ANGLE_RAD = 0.5
+COLOURS = {"pcb": "#1e6a32", "parts": "#202020"}     # solder-mask green, black components
 
 
 def read_step(path: Path):
@@ -46,7 +52,7 @@ def read_step(path: Path):
 
 def solid_meshes(shape) -> list[trimesh.Trimesh]:
     """One mesh per solid of the shape, in metres."""
-    BRepMesh_IncrementalMesh(shape, DEFLECTION_MM, False, 0.3, True)
+    BRepMesh_IncrementalMesh(shape, DEFLECTION_MM, False, ANGLE_RAD, True)
     meshes = []
     exp = TopExp_Explorer(shape, TopAbs_SOLID)
     while exp.More():
@@ -73,14 +79,28 @@ def solid_meshes(shape) -> list[trimesh.Trimesh]:
     return meshes
 
 
-def decimate(mesh: trimesh.Trimesh, limit: int) -> trimesh.Trimesh:
-    return mesh.simplify_quadric_decimation(face_count=limit) if len(mesh.faces) > limit else mesh
+def compress(path: Path) -> str:
+    """Meshopt compression with gltfpack (Node.js): the file shrinks to a fraction, the browser decodes it with
+    three.js's MeshoptDecoder. Named nodes are kept (-kn). Without Node.js the file stays as trimesh wrote it,
+    which the viewer reads as well."""
+    exe = os.environ.get("GLTFPACK") or shutil.which("gltfpack")
+    npx = shutil.which("npx")
+    cmd = [exe] if exe else ([npx, "--yes", "gltfpack@1.3.0"] if npx else None)
+    if not cmd:
+        print(f"note: no gltfpack (Node.js); {path.name} left uncompressed")
+        return "uncompressed"
+    packed = path.with_name(path.stem + ".packed.glb")
+    subprocess.run(cmd + ["-i", str(path), "-o", str(packed), "-cc", "-kn"], check=True, capture_output=True)
+    packed.replace(path)
+    return "meshopt"
 
 
 def material(hex_colour: str):
-    rgb = [int(hex_colour[i:i + 2], 16) for i in (1, 3, 5)]
+    # glTF colours are linear: convert the sRGB hex, or the board renders pale (green turns mint, black grey)
+    srgb = [int(hex_colour[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    rgb = [round(255 * (c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4)) for c in srgb]
     return trimesh.visual.TextureVisuals(material=trimesh.visual.material.PBRMaterial(
-        baseColorFactor=rgb + [255], metallicFactor=0.1, roughnessFactor=0.6, doubleSided=True))
+        baseColorFactor=rgb + [255], metallicFactor=0.1, roughnessFactor=0.5, doubleSided=True))
 
 
 def main(argv=None) -> int:
@@ -113,25 +133,24 @@ def main(argv=None) -> int:
     scene = trimesh.Scene()
     sizes = {}
     for name, m in (("pcb", pcb), ("parts", parts)):
-        before = len(m.faces)
-        m = decimate(m, MAX_FACES[name])
         m.apply_translation(offset)
         m.visual = material(COLOURS[name])
         scene.add_geometry(m, node_name=name, geom_name=name)
-        sizes[name] = (before, len(m.faces))
+        sizes[name] = len(m.faces)
     if OUT.exists():
         for old in OUT.iterdir():
             old.unlink()
     OUT.mkdir(parents=True, exist_ok=True)
     scene.export(OUT / "body.glb")
+    packing = compress(OUT / "body.glb")
     config = {
         "body": "body.glb", "jaws": [], "colors": {}, "default": {"body": None, "opening": 0.0},
         "camera": {"azimuth_deg": -35, "polar_deg": 55, "fill": 1.15},
     }
     (OUT / "viewer.json").write_text(json.dumps(config, indent=1) + "\n", encoding="utf-8")
     ext = np.ptp(np.vstack([pcb.bounds, parts.bounds]), axis=0) * 1000
-    print(f"wrote {OUT.relative_to(ROOT)}: body.glb {(OUT / 'body.glb').stat().st_size // 1024} KB; "
-          + ", ".join(f"{k} {a}->{b} faces" for k, (a, b) in sizes.items())
+    print(f"wrote {OUT.relative_to(ROOT)}: body.glb {(OUT / 'body.glb').stat().st_size // 1024} KB ({packing}); "
+          + ", ".join(f"{k} {n} faces" for k, n in sizes.items())
           + f"; {len(meshes)} solids, {ext[0]:.0f} x {ext[1]:.0f} x {ext[2]:.0f} mm")
     return 0
 

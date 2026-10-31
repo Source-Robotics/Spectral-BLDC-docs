@@ -146,8 +146,8 @@
     command ID, and the driver answers with a data frame under the same ID.
 
 **STEPFOC**
-:   Source Robotics' stepper driver, built on the Spectral Micro: the same board, firmware and commands, for
-    two-phase stepper motors.
+:   Source Robotics' stepper driver, the Spectral Micro's sister: similar hardware and firmware and practically
+    the same commands, for two-phase stepper motors.
 
 **Termination**
 :   The 120 Ω resistor the first and the last node of a CAN bus need. The switch on the driver turns it on.

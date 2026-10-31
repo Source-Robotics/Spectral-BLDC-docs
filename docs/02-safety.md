@@ -61,5 +61,5 @@ first. Updating over the bootloader needs no adapter; see [Firmware](07-firmware
 ## Liability
 
 The Spectral Micro is sold as a component for people who build their own machines. Its hardware designs, firmware and this
-documentation are provided as they are, without a warranty, and are under development; they may contain errors.
+documentation are under development and may contain errors.
 Whoever builds a machine with it is responsible for its safe design, assembly and operation.
