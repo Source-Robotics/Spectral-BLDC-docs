@@ -1163,12 +1163,12 @@
 <h1 id="quadruped-robot-guide">Quadruped robot guide<a class="headerlink" href="#quadruped-robot-guide" title="Permanent link">&para;</a></h1>
 <h2 id="intro">Intro<a class="headerlink" href="#intro" title="Permanent link">&para;</a></h2>
 <p>In this guide we will show you how you can control a leg of any quadruped robot using Spectral micro BLDC drivers. <br />If you can control one of them you can control all the rest!<br /></p>
-<p>**After you finish this guide you will be able to do something like this: <a href="https://youtu.be/g9rHJr9-tok">Link</a> **<br /></p>
+<p><strong>After you finish this guide you will be able to do something like this:</strong> <a href="https://youtu.be/g9rHJr9-tok">video</a><br /></p>
 <div class="admonition tip">
 <p class="admonition-title">Python API and toolbox</p>
 <p>This guide leverages <a href="https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main">Spectral BLDC python API</a> and <a href="https://github.com/Source-Robotics/Source-Robotics-Toolbox">Source robotics toolbox</a></p>
 </div>
-<p><a class="glightbox" href="../../assets/LEG_wiring.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="drawing" src="../../assets/LEG_wiring.webp" /></a></p>
+<p><a class="glightbox" href="../../assets/LEG_wiring.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The robot leg: two motors, each with its driver, on one CAN bus" src="../../assets/LEG_wiring.webp" /></a></p>
 <div class="admonition note">
 <p class="admonition-title">Building the LEG</p>
 <p>In this guide we only recommend you the hardware you can use to build the robot you designed. We do not offer already made designs you can build!</p>
@@ -1187,7 +1187,7 @@
 <li>1 x 24V power supply</li>
 <li>A Laptop or raspberry pi</li>
 </ul>
-<p><a class="glightbox" href="../../assets/leg_setup.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="drawing" src="../../assets/leg_setup.webp" /></a></p>
+<p><a class="glightbox" href="../../assets/leg_setup.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC" src="../../assets/leg_setup.webp" /></a></p>
 <p>The setup will be the same for any kind of quadruped leg. You will need to follow the diagram above to wire everything up.</p>
 <ul>
 <li>First you need to calibrate your Spectral BLDC drivers with the motors you are using. </li>
@@ -1196,14 +1196,14 @@
 <li>Connect the power to both drivers. (Use daisy chain)</li>
 </ul>
 <h2 id="leg-kinematics">Leg kinematics<a class="headerlink" href="#leg-kinematics" title="Permanent link">&para;</a></h2>
-<p><a class="glightbox" href="../../assets/robot_leg_dh_table.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="drawing" src="../../assets/robot_leg_dh_table.webp" /></a></p>
+<p><a class="glightbox" href="../../assets/robot_leg_dh_table.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The coordinate frames of the leg and its DH table" src="../../assets/robot_leg_dh_table.webp" /></a></p>
 <p>First you will need to assign coordinate frames to your leg model.
 We already did it but if you want to learn more on how and why check this <a href="https://automaticaddison.com/how-to-assign-denavit-hartenberg-frames-to-robotic-arms/">Link</a><br /></p>
 <p>Now we will need to find DH (Denavit-Hartenberg) table values. You can learn more on how and why we did it <a href="https://automaticaddison.com/how-to-find-denavit-hartenberg-parameter-tables/">Here!</a></p>
 <p>value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / foot of our leg.</p>
 <h2 id="testing-calibrating-the-leg">Testing / Calibrating the leg<a class="headerlink" href="#testing-calibrating-the-leg" title="Permanent link">&para;</a></h2>
 <p>Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. </p>
-<p><a class="glightbox" href="../../assets/leg_terminal.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="drawing" src="../../assets/leg_terminal.webp" /></a></p>
+<p><a class="glightbox" href="../../assets/leg_terminal.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The leg in its reference pose and the positions leg_calib.py prints" src="../../assets/leg_terminal.webp" /></a></p>
 <div class="language-py highlight"><span class="filename">leg_calib.py</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">Spectral_BLDC</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">Spectral</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -1220,7 +1220,7 @@ We already did it but if you want to learn more on how and why check this <a hre
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">Motor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Send_Respond_Encoder_data</span><span class="p">()</span>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">Motor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Send_Respond_Encoder_data</span><span class="p">()</span>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>  <span class="c1"># Loop 9-1=8 to check for received data</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>  <span class="c1"># read up to 6 replies</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        <span class="n">message</span><span class="p">,</span> <span class="n">UnpackedMessageID</span> <span class="o">=</span> <span class="n">Communication1</span><span class="o">.</span><span class="n">receive_can_messages</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_setting</span><span class="p">)</span>
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unpack </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> is: </span><span class="si">{</span><span class="n">UnpackedMessageID</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
@@ -1259,7 +1259,7 @@ We defined that trajectory with our function generate_circle_coords and with par
 <li>speed - Speed of the end-effector in meters per second</li>
 <li>time_var - Elapsed time in seconds</li>
 </ul>
-<p><a class="glightbox" href="../../assets/circ_2.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="drawing" src="../../assets/circ_2.webp" /></a></p>
+<p><a class="glightbox" href="../../assets/circ_2.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The circle the foot follows at a speed of 1 and of 3" src="../../assets/circ_2.webp" /></a></p>
 <p>How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perfectly. With larger speeds the system can't keep up and overshoots. This is due multiple reaseons like:</p>
 <ul>
 <li>Inertia and Momentum: At higher speeds, the inertia and momentum of the robot leg increase, making it harder to change directions quickly and accurately.</li>
@@ -1377,7 +1377,7 @@ We defined that trajectory with our function generate_circle_coords and with par
 </span><span id="__span-1-105"><a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>    <span class="n">Motor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Send_data_pack_1</span><span class="p">(</span><span class="n">Position</span> <span class="o">=</span> <span class="n">Needed_joint_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">Speed</span> <span class="o">=</span> <span class="n">speed_var</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Current</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="__span-1-106"><a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a>
 </span><span id="__span-1-107"><a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a>    <span class="c1"># Handles data we get from the motors</span>
-</span><span id="__span-1-108"><a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>  <span class="c1"># Loop 9-1=8 to check for received data</span>
+</span><span id="__span-1-108"><a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>  <span class="c1"># read up to 2 replies</span>
 </span><span id="__span-1-109"><a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a>        <span class="n">message</span><span class="p">,</span> <span class="n">UnpackedMessageID</span> <span class="o">=</span> <span class="n">Communication1</span><span class="o">.</span><span class="n">receive_can_messages</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout_setting</span><span class="p">)</span>
 </span><span id="__span-1-110"><a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a>        <span class="c1">#print(f"unpack{i} is: {UnpackedMessageID}")</span>
 </span><span id="__span-1-111"><a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a>
@@ -1508,7 +1508,7 @@ We defined that trajectory with our function generate_circle_coords and with par
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 30, 2026 17:46:40 UTC">October 30, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

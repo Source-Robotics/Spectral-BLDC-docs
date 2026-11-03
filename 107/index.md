@@ -8,9 +8,9 @@
 
 **Firmware version:** 107
 
-**Revision:** 2026.A (draft)
+**Revision:** 2026.A
 
-**Published:** —
+**Published:** 2026-11-03
 
 **Applies to:** Spectral Micro driver PCB v2.0, firmware 107
 
@@ -31,7 +31,7 @@ between firmware releases. The text and the images are licensed CC BY-SA 4.0, th
   <div class="gripper-viewer__controls">
     <button type="button" name="reset" class="md-button">Reset view</button>
   </div>
-  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller">repository</a>, the PCB and everything mounted on it.</p>
+  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files">repository</a>, the PCB and everything mounted on it.</p>
 </div>
 
 <div class="grid cards" markdown>

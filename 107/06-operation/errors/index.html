@@ -1366,6 +1366,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-watchdog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The watchdog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#when-the-driver-does-not-answer" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2113,6 +2124,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-watchdog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The watchdog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#when-the-driver-does-not-answer" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2233,12 +2255,13 @@
 
 
 <h1 id="errors-and-recovery">Errors and recovery<a class="headerlink" href="#errors-and-recovery" title="Permanent link">&para;</a></h1>
-<p>When the driver detects a fault it stops the motor, goes to idle, turns the status <abbr title="Light-Emitting Diode">LED</abbr> on steadily and sets the
-error bit in every <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> frame it sends. It stays there until the error is cleared.</p>
+<p>When the driver detects a fault it disables the motor, goes to idle, turns the status <abbr title="Light-Emitting Diode">LED</abbr> on steadily and sets
+the error bit in every <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> frame it sends. A disabled motor coasts, also when <code>#Brake 1</code> is set. The driver stays
+there until the error is cleared.</p>
 <h2 id="seeing-the-error">Seeing the error<a class="headerlink" href="#seeing-the-error" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>The <abbr title="Light-Emitting Diode">LED</abbr></strong>: on and not flashing means error mode (or not calibrated). Three short flashes and a pause is
-  normal operation; flashing every 0.5 s is calibration.</li>
+  normal operation; fast flashing, about 10 times a second, is calibration.</li>
 <li><strong><code>#Error</code></strong> prints <code>In error state!</code> or <code>No errors!</code>, followed by one line per active error.</li>
 <li><strong>Send_Respond_State_of_Errors</strong> returns every flag as a bit; <strong>the error bit</strong> of any frame says whether there
   is one.</li>
@@ -2254,7 +2277,7 @@ error bit in every <abbr title="Controller Area Network, the bus between the hos
 <tbody>
 <tr>
 <td><a class="glightbox" href="../../assets/Normal.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Three short flashes and a pause" src="../../assets/Normal.webp" width="180" /></a></td>
-<td><a class="glightbox" href="../../assets/Calib.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Flashing every 0.5 s" src="../../assets/Calib.webp" width="180" /></a></td>
+<td><a class="glightbox" href="../../assets/Calib.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Fast flashing" src="../../assets/Calib.webp" width="180" /></a></td>
 <td><a class="glightbox" href="../../assets/Error2.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="On, steady" src="../../assets/Error2.webp" width="180" /></a></td>
 </tr>
 </tbody>
@@ -2274,7 +2297,7 @@ error bit in every <abbr title="Controller Area Network, the bus between the hos
 <tr>
 <td>Vbus</td>
 <td><code>Vbus error</code></td>
-<td>the supply voltage is below 9 V or above 29.5 V (<code>#Vmax</code>)</td>
+<td>the supply voltage is below 9 V or above <code>#Vmax</code> (29 V after <code>#Default</code>)</td>
 <td>check the supply and the cable; a decelerating motor can push the voltage up</td>
 </tr>
 <tr>
@@ -2285,15 +2308,15 @@ error bit in every <abbr title="Controller Area Network, the bus between the hos
 </tr>
 <tr>
 <td>Driver</td>
-<td><code>Driver error (undervoltage, thermal shutdown, or overcurrent)</code></td>
-<td>the MOSFET driver's own protection tripped</td>
+<td><code>Drv error</code>, and <code>FAULT pin is HIGH</code> while the fault lasts</td>
+<td>the MOSFET driver's own protection tripped: undervoltage, thermal shutdown or overcurrent</td>
 <td>lower the current limit, cool the driver, check for a short between the motor leads</td>
 </tr>
 <tr>
 <td>Velocity</td>
 <td><code>Velocity error</code></td>
-<td>the speed exceeded the limit</td>
-<td>lower the commanded speed or raise <code>#Vlimit</code></td>
+<td>the measured speed exceeded 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit that <code>#Vlimit</code> does not change</td>
+<td>a runaway or an encoder fault: check the magnet and the encoder, see <a href="../../04-mounting/magnet/">The encoder magnet</a></td>
 </tr>
 <tr>
 <td>Temperature</td>
@@ -2310,8 +2333,8 @@ error bit in every <abbr title="Controller Area Network, the bus between the hos
 <tr>
 <td>Watchdog</td>
 <td><code>Watchdog error</code></td>
-<td>no valid <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> frame within the watchdog time (Send_Watchdog)</td>
-<td>the host stopped sending; fix the host, then clear</td>
+<td>no motion command or status request over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> within the watchdog time (Send_Watchdog)</td>
+<td>the host stopped sending; fix the host, then clear. See <a href="#the-watchdog">The watchdog</a></td>
 </tr>
 <tr>
 <td>Not calibrated</td>
@@ -2332,12 +2355,22 @@ error bit in every <abbr title="Controller Area Network, the bus between the hos
 straight back: a Vbus error at 2 V stays until the supply is right; once the supply is 24 V, one <code>#Clear</code> returns
 the driver to normal operation. The calibration error clears only by calibrating (or, for a motor you know is
 calibrated, <code>#Calibrated 1</code>).</p>
+<h2 id="the-watchdog">The watchdog<a class="headerlink" href="#the-watchdog" title="Permanent link">&para;</a></h2>
+<p>The watchdog is set over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> only, with Send_Watchdog; there is no <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> command for it. It counts the motion
+commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the status requests (the Send_Respond_
+remote frames). Other <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> frames and <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> commands do not reset it. Send_Save_config keeps it over a power cycle,
+like the heartbeat interval.</p>
+<p>A driver with a saved watchdog that is used over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> only, or by a host that sends no motion command, raises a
+watchdog error each time the watchdog time runs out, also right after <code>#Clear</code>. To turn it off, send Send_Watchdog
+with 0 and then Send_Save_config over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>. Without a <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> adapter, <code>#Default</code> turns it off too, but it also erases
+the calibration and the node ID (<a href="../../05-setup/saving/">Saving the configuration</a>).</p>
 <h2 id="when-the-driver-does-not-answer">When the driver does not answer<a class="headerlink" href="#when-the-driver-does-not-answer" title="Permanent link">&para;</a></h2>
 <ul>
 <li>No <abbr title="Light-Emitting Diode">LED</abbr> at all: no power. Check DC+ and DC− and the cable orientation.</li>
 <li><abbr title="Light-Emitting Diode">LED</abbr> on, no answer on <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr>: the baud rate (256000), TX and RX crossed, the adapter's port.</li>
 <li>No answer on <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>: the node ID, the termination (about 60 Ω across the bus, unpowered), 1 Mbit/s on the adapter.</li>
-<li><code>#Info</code> shows <code>-1</code> or nonsense: the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> holds a layout the firmware does not expect; <code>#Default</code>, then
+<li><code>#Info</code> shows <code>-1</code> or nonsense: the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> holds values the firmware does not expect, usually from an older
+  release (see <a href="../../05-setup/saving/#the-check-at-power-up">Saving the configuration</a>); <code>#Default</code>, then
   calibrate again.</li>
 </ul>
 <p><a href="../../08-troubleshooting/">Troubleshooting</a> goes through the symptoms one by one.</p>
@@ -2361,7 +2394,7 @@ calibrated, <code>#Calibrated 1</code>).</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 31, 2026 16:25:06 UTC">October 31, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

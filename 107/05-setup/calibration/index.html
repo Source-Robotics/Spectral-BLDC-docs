@@ -1208,10 +1208,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-save" class="md-nav__link">
+  <a href="#3-set-the-current-limit-and-save" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Save
+        3. Set the current limit and save
       
     </span>
   </a>
@@ -2079,10 +2079,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-save" class="md-nav__link">
+  <a href="#3-set-the-current-limit-and-save" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Save
+        3. Set the current limit and save
       
     </span>
   </a>
@@ -2286,11 +2286,19 @@ of 2 to 24 Ω; change them only for a motor outside that range.</p>
 </tr>
 </tbody>
 </table>
+<p>A seventh setting is not printed: <code>#Iqoffset</code>, 300 mA by default, the current of the angle-offset search and of
+the commutation check. None of the seven is saved; after a power cycle they are back at these defaults.</p>
 <div class="admonition danger">
 <p class="admonition-title">Low-resistance motors</p>
 <p>These voltages are made for motors of 2 Ω and more. On a motor with a much lower resistance, such as a drone
 motor, they drive a destructive current. The Spectral Micro is not made for such motors; if you must try one,
-lower the three voltages and the current limit first.</p>
+lower the three voltages first. Lowering the current limit does not help: calibration sets its own.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Calibration sets its own current limit</p>
+<p>The routine does not use the current limit you set. It raises the limit to 1600 mA, drives the motor with up
+to 1250 mA while it measures Kt and KV and with <code>#Iqoffset</code> while it aligns the encoder, and leaves the limit
+at 1600 mA when it ends. Set the current limit for your motor after calibration and before you save (step 3).</p>
 </div>
 <h2 id="1-restore-the-defaults">1. Restore the defaults<a class="headerlink" href="#1-restore-the-defaults" title="Permanent link">&para;</a></h2>
 <p>The <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> of a new driver, or of one that ran another motor, can hold values that do not fit: another motor's
@@ -2307,8 +2315,8 @@ values.</p>
 </div>
 </div>
 </div>
-<p>This also resets the serial number, hardware version and batch date the driver reports; note what <code>#Info</code> printed
-if you need them. <a href="../saving/">Saving the configuration</a> says what else it does.</p>
+<p>This also sets the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID back to 0 and the hardware version and batch date to factory values; note what
+<code>#Info</code> printed if you need them. <a href="../saving/">Saving the configuration</a> says what else it does.</p>
 <h2 id="2-run-it">2. Run it<a class="headerlink" href="#2-run-it" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Motor GUI</label><label for="__tabbed_2_2">Terminal</label></div>
 <div class="tabbed-content">
@@ -2323,8 +2331,8 @@ flux linkage appear in the settings.</p>
 </div>
 </div>
 </div>
-<p>The <abbr title="Light-Emitting Diode">LED</abbr> flashes every 0.5 s while the routine runs, and the driver prints each step as it goes. The numbers below
-are those of one tested motor; yours will differ:</p>
+<p>The <abbr title="Light-Emitting Diode">LED</abbr> flashes fast, about 10 times a second, while the routine runs, and the driver prints each step as it
+goes. The numbers below are those of one tested motor; yours will differ:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>----------------
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Calibration mode
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>-----Settings-----
@@ -2343,17 +2351,22 @@ are those of one tested motor; yours will differ:</p>
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>Ki_iq = ...
 </span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>Pole pair = 11
 </span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>Dir = 1
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>Phase order = 2
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>Phase order is good!
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>KV is: ...
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>Kt is: ...
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>Flux linkage is: ...
-</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>----------------
-</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>Calibration success!
-</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>Save config with #Save
-</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>Going to idle!
-</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>----------------
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>Calibrating angle offset... stage 1/13, sweep point 0
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>Calibrating angle offset... stage 2/13, sweep point 0
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>...
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>Phase order = 2
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>Phase order is good!
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>KV is: ...
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>Kt is: ...
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>Flux linkage is: ...
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>----------------
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>Calibration success!
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>Save config with #Save
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>Going to idle!
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>----------------
 </span></code></pre></div>
+<p>The <code>Calibrating angle offset...</code> lines come every half second while the encoder is aligned, which can take
+about 40 seconds; the routine has not stopped.</p>
 <p>What the steps are:</p>
 <table>
 <thead>
@@ -2392,7 +2405,7 @@ are those of one tested motor; yours will differ:</p>
 <tr>
 <td>Phase order</td>
 <td>a current command must move the rotor the expected way, and the encoder's zero is aligned to the rotor field (the angle offset, <code>#Offset</code>). A motor that does not respond gets a second try at another angle</td>
-<td><code>Commutation/alignment check failed!</code>, <code>Motor did not respond as expected to a current command...</code> and a line <code>Spin-confirm delta: … ticks (need &gt; …), Vbus: … mV</code> that says how far the motor turned and at what voltage</td>
+<td><code>Commutation/alignment check failed!</code>, <code>Motor did not respond as expected to a current command...</code> and a line <code>Spin-confirm delta: … ticks (need &gt; 8192), Vbus: … mV</code> that says how far the motor turned (half a revolution is needed) and at what voltage</td>
 </tr>
 <tr>
 <td>Kt, KV, flux linkage</td>
@@ -2407,14 +2420,17 @@ are those of one tested motor; yours will differ:</p>
 with it Kt and the flux linkage, can be off by a factor of two or three on cheap motors with uneven windings.
 For the loops this does not matter; for a torque estimate in newton-metres, measure Kt yourself.</p>
 </div>
-<h2 id="3-save">3. Save<a class="headerlink" href="#3-save" title="Permanent link">&para;</a></h2>
+<h2 id="3-set-the-current-limit-and-save">3. Set the current limit and save<a class="headerlink" href="#3-set-the-current-limit-and-save" title="Permanent link">&para;</a></h2>
+<p>Calibration left the current limit at 1600 mA. Set it for your motor first
+(<a href="../tuning/">Current limit and loop tuning</a>), then save, or the 1600 mA are saved with the calibration.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Motor GUI</label><label for="__tabbed_3_2">Terminal</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p><strong>Save</strong>. The GUI marks <em>Unsaved changes</em> until you do.</p>
+<p>Set the current limit in the limits, then <strong>Save</strong>. The GUI marks <em>Unsaved changes</em> until you do.</p>
 </div>
 <div class="tabbed-block">
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>#Save
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>#Ilim 1000
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>#Save
 </span></code></pre></div>
 </div>
 </div>
@@ -2461,7 +2477,7 @@ shaft between calibration and use: fix the magnet and calibrate again.</p>
 </tr>
 <tr>
 <td><code>Commutation/alignment check failed!</code></td>
-<td>the motor did not respond to the current command: a phase open, a current limit at 0, a magnet that slips. Run <code>#Cal</code> again. Firmware 101 printed <code>Phase order is wrong! Switch motor phases and try again!</code> here; since 105 the wiring is compensated and swapping wires does not help</td>
+<td>the motor did not respond to the current command: a phase open, <code>#Iqoffset</code> set too low, a magnet that slips. Run <code>#Cal</code> again. Firmware 101 printed <code>Phase order is wrong! Switch motor phases and try again!</code> here; since 105 the wiring is compensated and swapping wires does not help</td>
 </tr>
 <tr>
 <td>the routine stops in a step and prints nothing more</td>
@@ -2469,7 +2485,7 @@ shaft between calibration and use: fix the magnet and calibrate again.</p>
 </tr>
 <tr>
 <td>success, but the <abbr title="Light-Emitting Diode">LED</abbr> stays on and no error is reported</td>
-<td><code>#Info</code> shows <code>-1</code> somewhere: the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> is not in the firmware's layout; restore the defaults and calibrate again</td>
+<td><code>#Info</code> shows <code>-1</code> somewhere: the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> holds a value from an older release (<a href="../saving/#the-check-at-power-up">The check at power-up</a>); restore the defaults and calibrate again</td>
 </tr>
 <tr>
 <td>the resistance, KV or Kt look wrong</td>
@@ -2498,7 +2514,7 @@ shaft between calibration and use: fix the magnet and calibrate again.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 14:58:51 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

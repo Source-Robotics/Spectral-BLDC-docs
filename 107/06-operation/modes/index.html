@@ -1193,6 +1193,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#braking-in-idle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Braking in idle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#units" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2080,6 +2091,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#braking-in-idle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Braking in idle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#units" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,7 +2283,7 @@ passing through idle; a fault is any of the errors on <a href="../errors/">Error
 <tbody>
 <tr>
 <td>Idle</td>
-<td>nothing: coasts (phases open) or brakes (phases shorted), as set by <code>#Brake</code> or Send_Settings</td>
+<td>nothing: coasts (phases open), or brakes (phases shorted) after <code>#Brake 1</code> or Send_Settings; with an error it always coasts, see <a href="#braking-in-idle">Braking in idle</a></td>
 <td><code>#Idle</code>, Send_Idle, <code>#Clear</code>, errors</td>
 <td>—</td>
 </tr>
@@ -2315,6 +2337,17 @@ passing through idle; a fault is any of the errors on <a href="../errors/">Error
 </tr>
 </tbody>
 </table>
+<h2 id="braking-in-idle">Braking in idle<a class="headerlink" href="#braking-in-idle" title="Permanent link">&para;</a></h2>
+<p><code>#Brake 1</code> (or Send_Settings over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>) makes the idle motor brake: the driver keeps the three phases shorted, so
+the motor resists being turned. <code>#Brake 0</code>, the default, lets it coast. The setting is not saved: every power-up
+starts with coasting. Braking works only in idle without an error; an error or an E-stop disables the driver, and
+the motor coasts.</p>
+<div class="admonition warning">
+<p class="admonition-title">The braking current is not limited</p>
+<p>A motor that is turned while it brakes drives its own back-EMF current through the shorted phases, and the
+current loop does not limit that current. Use braking only on a motor whose resistance keeps the current under
+the driver's 2.8 A at the speeds it turns at.</p>
+</div>
 <h2 id="units">Units<a class="headerlink" href="#units" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Position</strong> is in encoder ticks: 16384 per revolution of the motor shaft, counting up without limit over
@@ -2361,8 +2394,8 @@ the torque as Kt times the current.</p>
 the phases, so the motor turns the same way whichever wire went to which terminal.</p>
 <h2 id="which-mode-am-i-in">Which mode am I in?<a class="headerlink" href="#which-mode-am-i-in" title="Permanent link">&para;</a></h2>
 <p><code>#Mode</code> prints the mode: <code>Idle mode</code>, <code>Position control</code>, <code>Speed control</code>, <code>Current control</code>, <code>PD control</code>,
-<code>Open loop</code>, <code>Gripper mode</code> or <code>Gripper calib mode</code>. The voltage-torque mode has no label of its own in this
-release; <code>#Info</code> and the behaviour of the motor are the check there.</p>
+<code>Open loop</code>, <code>Gripper mode</code> or <code>Gripper calib mode</code>. In voltage-torque mode it prints nothing at all; <code>#Uq</code> then
+prints the voltage setpoint.</p>
 
 
 
@@ -2383,7 +2416,7 @@ release; <code>#Info</code> and the behaviour of the motor are the check there.<
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 31, 2026 16:25:06 UTC">October 31, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

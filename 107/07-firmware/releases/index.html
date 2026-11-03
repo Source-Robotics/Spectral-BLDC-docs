@@ -2194,13 +2194,17 @@ newer release changes what a page says, a new version of the site is published a
 reachable from the selector. The <a href="../../appendix/compatibility/">compatibility table</a> says which releases go with
 which bootloader, Python library and PAR6 runtime.</p>
 <h2 id="the-stepfoc-counterpart">The STEPFOC counterpart<a class="headerlink" href="#the-stepfoc-counterpart" title="Permanent link">&para;</a></h2>
-<p>Each Spectral Micro release has a <a href="https://docs.source-robotics.com/STEPFOC-docs/">STEPFOC</a> release with the same
-changes; the numbers differ by one (Spectral Micro 107 is STEPFOC 108). The compatibility table lists the pairs.</p>
+<p>Most Spectral Micro releases have a <a href="https://docs.source-robotics.com/STEPFOC-docs/">STEPFOC</a> release with the
+same changes. The numbers do not always match: the current pair is Spectral Micro 107 and STEPFOC 108, and the
+<a href="../../appendix/compatibility/">compatibility table</a> lists the others.</p>
 <h2 id="the-two-branches">The two branches<a class="headerlink" href="#the-two-branches" title="Permanent link">&para;</a></h2>
-<p>Releases from 105 on are built from the <code>Bootloader_main</code> branch of the repository, whose firmware is linked
-to run above the bootloader. The <code>main</code> branch holds the firmware of release 104 and earlier, linked to run without a bootloader, and is not
-updated. A board running 101 or 104 is documented by version <code>101</code> of this site (104 differs from 101 only by the
-Send_Voltage_Limit message); to move it to a current release, see <a href="../bootloader/">Installing the bootloader on an older board</a>.</p>
+<p>Releases from 104 on are built from the <code>Bootloader_main</code> branch of the repository, whose firmware is linked to
+run above the bootloader; 104 is the first of them. The <code>main</code> branch holds the firmware linked to run without a
+bootloader: release 101 and earlier, and a few later changes that were never tagged as a release (among them
+the Kt request and the voltage limit message). It is not updated.</p>
+<p>Version <code>101</code> of this site documents a board running 101. It also fits 104, which adds the Send_Respond_Kt
+request, Send_Voltage_Limit (in the release image) and the bootloader. To move a board without a bootloader to a
+current release, see <a href="../bootloader/">Installing the bootloader on an older board</a>.</p>
 
 
 
@@ -2221,7 +2225,7 @@ Send_Voltage_Limit message); to move it to a current release, see <a href="../bo
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 12:48:07 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

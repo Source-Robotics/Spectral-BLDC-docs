@@ -2053,8 +2053,9 @@
 
 
 <h1 id="firmware">Firmware<a class="headerlink" href="#firmware" title="Permanent link">&para;</a></h1>
-<p>The driver's firmware is open source and released as numbered builds. A driver shipped with firmware 105 or newer carries a bootloader and updates itself over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>; an older driver needs the bootloader installed once with
-a programming adapter.</p>
+<p>The driver's firmware is open source and released as numbered builds. Release 104 is the first release built
+for the bootloader: a driver that runs 104 or newer carries a bootloader and updates itself over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>. A
+driver that runs 101 or older needs the bootloader installed once with a programming adapter.</p>
 <h2 id="in-this-chapter">In this chapter<a class="headerlink" href="#in-this-chapter" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="releases/">Releases and versions</a>: how releases are numbered, how to see which one a driver runs, what the
@@ -2062,7 +2063,7 @@ a programming adapter.</p>
 <li><a href="the-bootloader/">The bootloader</a>: what it is, how the driver boots, how it is entered, its protocol and tools</li>
 <li><a href="update/">Updating through the bootloader</a>: the normal update, with Motor GUI, the bootloader's command-line
   tool, or a PAR6 control box</li>
-<li><a href="bootloader/">Installing the bootloader on an older board</a>: for a driver that runs firmware 104 or older</li>
+<li><a href="bootloader/">Installing the bootloader on an older board</a>: for a driver that runs firmware 101 or older</li>
 <li><a href="building/">Building from source</a>: PlatformIO, the memory layout, uploading with a programming adapter</li>
 </ul>
 <p>The release notes of every release up to the one this site describes are in the appendix,
@@ -2087,7 +2088,7 @@ a programming adapter.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 12:48:07 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

@@ -1448,7 +1448,7 @@
 <td><code>#Vmax</code></td>
 <td>Set/Get</td>
 <td>int: voltage in mV</td>
-<td>The supply voltage above which a Vbus error is raised.</td>
+<td>The supply voltage above which a Vbus error is raised: 29000 mV after <code>#Default</code>.</td>
 <td><code>Vmax in mV: N</code></td>
 </tr>
 <tr>
@@ -1462,7 +1462,7 @@
 <td><code>#Reset</code></td>
 <td>Action</td>
 <td></td>
-<td>Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again.</td>
+<td>Resets the driver. From firmware 104 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again.</td>
 <td>nothing</td>
 </tr>
 <tr>
@@ -1476,7 +1476,7 @@
 <td><code>#Default</code></td>
 <td>Action</td>
 <td></td>
-<td>Writes the factory defaults to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, including the serial number, hardware version and batch date, and clears the gripper flag, heartbeat and watchdog. Back those up first.</td>
+<td>Writes the factory defaults to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> and loads them: the calibration is erased (Not calibrated), the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID goes back to 0, the gripper flag, heartbeat and watchdog are cleared, the hardware version and batch date are set to 1 and 24092024, and 1111 is stored as the serial number. Note the values first.</td>
 <td><code>Loaded default config!</code></td>
 </tr>
 <tr>
@@ -1497,7 +1497,7 @@
 <td><code>#Mode</code></td>
 <td>Get</td>
 <td></td>
-<td>Prints the control mode.</td>
+<td>Prints the control mode. In voltage-torque mode (<code>#Uq</code>) it prints nothing.</td>
 <td><code>Idle mode</code>, <code>Position control</code>, <code>Speed control</code>, <code>Current control</code>, <code>PD control</code>, <code>Open loop</code>, <code>Gripper mode</code>, <code>Gripper calib mode</code></td>
 </tr>
 <tr>
@@ -1512,7 +1512,7 @@
 <td>Get</td>
 <td></td>
 <td>Prints which errors are active.</td>
-<td><code>No errors!</code> or <code>In error state!</code> followed by one line per active error</td>
+<td><code>No errors!</code> or <code>In error state!</code>, then one line per active error (see Errors and <abbr title="Light-Emitting Diode">LED</abbr> states), and <code>FAULT pin is HIGH</code> while the driver stage's fault pin is active</td>
 </tr>
 <tr>
 <td><code>#Clear</code></td>
@@ -1526,7 +1526,7 @@
 <td>Get</td>
 <td></td>
 <td>Prints the phase currents.</td>
-<td><code>Ia</code>, <code>Ib</code> in mA</td>
+<td><code>Ia</code>, <code>Ib</code>, <code>Ic</code> in mA</td>
 </tr>
 <tr>
 <td><code>#PWM</code></td>
@@ -1546,7 +1546,7 @@
 <td><code>#Info</code></td>
 <td>Get</td>
 <td></td>
-<td>Prints the driver's identity and state: hardware and firmware version, serial number, motor parameters, calibration, errors.</td>
+<td>Prints the driver's identity and the motor: hardware version, batch date, firmware version, ISR time, <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID, calibrated or not, temperature, Vbus, Dir, phase order, commutation direction, the speeds of the calibration spin, pole pairs, R, L, Kt and KV. The serial number is <code>#SERNUM</code>, the gains <code>#Param</code>, the errors <code>#Error</code>.</td>
 <td>the report</td>
 </tr>
 <tr>
@@ -1561,34 +1561,34 @@
 <td>Set/Get</td>
 <td>int: interval in ms (0 = off)</td>
 <td>Sends position, speed and Iq on its own every interval: <code>$ &lt;position&gt; &lt;speed&gt; &lt;Iq&gt;</code>; for BetterSerialPlotter.</td>
-<td><code>Cyclic disabled</code> when turned off</td>
+<td><code>Cyclic disabled</code> for <code>#Cyc</code> without a number; <code>#Cyc 0</code> stops the output without an answer</td>
 </tr>
 <tr>
 <td><code>#Cyca</code></td>
 <td>Set/Get</td>
 <td>int: interval in ms (0 = off)</td>
 <td>Like Cyc, in the Arduino plotter format <code>Position:x,Speed:y,Iq:z</code>.</td>
-<td><code>Cyclic disabled</code> when turned off</td>
+<td><code>Cyclic disabled</code> for <code>#Cyca</code> without a number; <code>#Cyca 0</code> stops the output without an answer</td>
 </tr>
 <tr>
 <td><code>#CANID</code></td>
 <td>Set/Get</td>
 <td>int: 0 to 13</td>
-<td>The <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>. Setting the ID also sets the bootloader's board ID. Kept over a power cycle after Save.</td>
+<td>The <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>. Kept over a power cycle after Save, which also copies it into the bootloader's board ID.</td>
 <td>the ID, or <code>Invalid CAN ID</code></td>
 </tr>
 <tr>
 <td><code>#SERNUM</code></td>
 <td>Set/Get</td>
 <td>int: number</td>
-<td>The serial number stored in the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>.</td>
+<td>The serial number. Save writes it to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, but the firmware does not read it back at power-up: after a power cycle the driver reports 1.</td>
 <td><code>Serial number is: N</code></td>
 </tr>
 <tr>
 <td><code>#Activate</code></td>
 <td>Action</td>
 <td></td>
-<td>Sets the activated flag.</td>
+<td>Sets the controller's activated flag (bit 6 of byte 1 of Send_Respond_State_of_Errors). It is not the gripper's activate bit, which <code>#Gripact</code> and Send_gripper_data_pack set.</td>
 <td><code>Controller activated</code></td>
 </tr>
 <tr>

@@ -1,7 +1,8 @@
 # API reference
 
-Every CAN message and every UART command of the firmware release this site describes, the defaults the firmware
-starts with, the error flags, and the map from the Python library's calls to the messages they send.
+Every CAN message and every UART command of the firmware release this site describes, the factory defaults of
+its settings and which of them are saved, the error flags, and the map from the Python library's calls to the
+messages they send.
 
 ## Where the facts come from
 

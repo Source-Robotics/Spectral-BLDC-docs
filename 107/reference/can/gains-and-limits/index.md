@@ -23,7 +23,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 17</span><span class="fact">host → driver</span><span class="fact">8 bytes</span><span class="fact">Python: `Send_Current_Gains()`</span></div>
 
-Sets Kp and Ki of the PI current loops (Iq and Id).
+Sets Kp and Ki of the PI current loop of Iq. The Id loop keeps its gains; over UART, `#Kpiq` and `#Kiiq` set both loops.
 
 **8 bytes**
 
@@ -73,7 +73,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 20</span><span class="fact">host → driver</span><span class="fact">8 bytes</span><span class="fact">Python: `Send_Limits()`</span></div>
 
-Sets the speed limit and the current limit the loops may reach. The current limit is clamped by the firmware to the driver's maximum of 2800 mA.
+Sets the speed limit and the current limit the loops may reach. The firmware stores the current limit as it arrives: over CAN it is not clamped to the driver's 2800 mA (only `#Ilim` over UART clamps it). Never send more than 2800 mA, or more than the motor's rating.
 
 **8 bytes**
 
@@ -106,7 +106,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 34</span><span class="fact">host → driver</span><span class="fact">4 bytes</span><span class="fact">Python: `Send_Voltage_Limit()`</span></div>
 
-Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply voltage. Added in firmware 105.
+Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply voltage. In the 104 release image (the source at tag V104 does not have it yet) and in every release from 105.
 
 **4 bytes**
 

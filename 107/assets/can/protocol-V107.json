@@ -243,7 +243,7 @@
       "key": "IN_KIIQ_KPIQ",
       "id": 17,
       "name": "Send_Current_Gains",
-      "description": "Sets Kp and Ki of the PI current loops (Iq and Id).",
+      "description": "Sets Kp and Ki of the PI current loop of Iq. The Id loop keeps its gains; over UART, `#Kpiq` and `#Kiiq` set both loops.",
       "forms": [
         {
           "direction": "host",
@@ -346,7 +346,7 @@
       "key": "IN_LIMITS",
       "id": 20,
       "name": "Send_Limits",
-      "description": "Sets the speed limit and the current limit the loops may reach. The current limit is clamped by the firmware to the driver's maximum of 2800 mA.",
+      "description": "Sets the speed limit and the current limit the loops may reach. The firmware stores the current limit as it arrives: over CAN it is not clamped to the driver's 2800 mA (only `#Ilim` over UART clamps it). Never send more than 2800 mA, or more than the motor's rating.",
       "forms": [
         {
           "direction": "host",
@@ -411,7 +411,7 @@
       "key": "IN_VLIM",
       "id": 34,
       "name": "Send_Voltage_Limit",
-      "description": "Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply voltage. Added in firmware 105.",
+      "description": "Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply voltage. In the 104 release image (the source at tag V104 does not have it yet) and in every release from 105.",
       "forms": [
         {
           "direction": "host",
@@ -563,7 +563,7 @@
               "signed": false,
               "float": false,
               "lsb_first": false,
-              "meaning": "production batch"
+              "meaning": "production batch, the lowest 8 bits of the stored value (24092024 after #Default is sent as 120)"
             },
             {
               "name": "SOFTWARE_VERSION",
@@ -840,7 +840,7 @@
       "key": "OUT_IN_KT",
       "id": 33,
       "name": "Send_Respond_Kt",
-      "description": "Asks for the torque constant Kt the driver uses. Added in firmware 105.",
+      "description": "Asks for the torque constant Kt the driver uses. Added in firmware 104.",
       "forms": [
         {
           "direction": "host",
@@ -889,7 +889,7 @@
       "key": "IN_CAN_ID",
       "id": 11,
       "name": "Send_CAN_ID",
-      "description": "Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15: a driver on one of those cannot be updated over CAN). Setting the ID also sets the bootloader's board ID. The driver answers to the new ID at once; the ID is kept over a power cycle only after Send_Save_config.",
+      "description": "Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15: a driver on one of those cannot be updated over CAN). The driver answers to the new ID at once. The ID is kept over a power cycle only after Send_Save_config, and saving is also what copies it into the bootloader's board ID.",
       "forms": [
         {
           "direction": "host",
@@ -906,7 +906,7 @@
               "signed": false,
               "float": false,
               "lsb_first": false,
-              "meaning": "0 to 15"
+              "meaning": "0 to 13 (14 and 15 are accepted but reserved by the bootloader)"
             }
           ]
         }
@@ -931,7 +931,7 @@
       "key": "IN_IDLE",
       "id": 12,
       "name": "Send_Idle",
-      "description": "Puts the driver in idle mode (the motor coasts or brakes, see Send_Settings).",
+      "description": "Puts the driver in idle mode: the motor coasts, or brakes when Send_Settings or `#Brake 1` asked for it.",
       "forms": [
         {
           "direction": "host",
@@ -946,7 +946,7 @@
       "key": "IN_SAVE_CONFIG",
       "id": 13,
       "name": "Send_Save_config",
-      "description": "Writes the current configuration (gains, limits, calibration, CAN ID, heartbeat, watchdog, gripper flag) to the EEPROM.",
+      "description": "Writes the current configuration (gains, limits, calibration, CAN ID, heartbeat, watchdog, gripper flag) to the EEPROM, and copies the CAN ID into the bootloader's board ID.",
       "forms": [
         {
           "direction": "host",
@@ -961,7 +961,7 @@
       "key": "IN_RESET",
       "id": 14,
       "name": "Send_Reset",
-      "description": "Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again; this is how a firmware update begins.",
+      "description": "Resets the driver. From firmware 104 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again; this is how a firmware update begins.",
       "forms": [
         {
           "direction": "host",
@@ -991,7 +991,7 @@
       "key": "IN_WATCHDOG_TIMEOUT",
       "id": 15,
       "name": "Send_Watchdog",
-      "description": "Sets the watchdog: every valid CAN frame the driver receives resets it; when the time runs out the driver reports a watchdog error and stops. 0 turns it off (the default). The action byte is stored but not acted on by this firmware: the driver always stops into its idle behaviour.",
+      "description": "Sets the watchdog. The motion commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the status requests (the Send_Respond_ remote frames) reset it; the other frames and UART commands do not. When the time runs out the driver reports a watchdog error and disables the motor, which then coasts. 0 turns it off (the default). The action byte is stored but not acted on by this firmware. The setting is kept by Send_Save_config and there is no UART command for it: to turn off a saved watchdog, send 0 over CAN and save, or use `#Default`.",
       "forms": [
         {
           "direction": "host",
@@ -1056,7 +1056,7 @@
       "key": "IN_SETTINGS",
       "id": 35,
       "name": "Send_Settings",
-      "description": "Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1 brake (phases shorted), 0 coast. Added in firmware 107 (STEPFOC 108). The Python library has no call for it yet.",
+      "description": "Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1 brake (phases shorted), 0 coast (the default). The setting is not saved: the driver coasts again after a power cycle. Braking applies only in idle without an error; an error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107 (STEPFOC 107). The Python library has no call for it yet.",
       "forms": [
         {
           "direction": "host",
@@ -1298,7 +1298,7 @@
               "signed": false,
               "float": false,
               "lsb_first": false,
-              "meaning": ""
+              "meaning": "the driver's temperature error"
             },
             {
               "name": "gripper_timeout_error",
@@ -1311,7 +1311,7 @@
               "signed": false,
               "float": false,
               "lsb_first": false,
-              "meaning": ""
+              "meaning": "the driver's watchdog error: the CAN watchdog ran out"
             },
             {
               "name": "gripper_estop_error",

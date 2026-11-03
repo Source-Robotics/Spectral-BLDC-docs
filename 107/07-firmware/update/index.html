@@ -2199,7 +2199,7 @@
 
 
 <h1 id="updating-through-the-bootloader">Updating through the bootloader<a class="headerlink" href="#updating-through-the-bootloader" title="Permanent link">&para;</a></h1>
-<p>A driver with the bootloader (firmware 105 or newer) is updated over the <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> connector or the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> bus: the host
+<p>A driver with the bootloader (firmware 104 or newer) is updated over the <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> connector or the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> bus: the host
 tells the driver to reset, the bootloader waits two seconds for a host, and the host streams the new image into it.
 No programming adapter, and nothing to open.</p>
 <div class="admonition warning">
@@ -2235,8 +2235,9 @@ is the <code>spectral-bldc-firmware-V&lt;number&gt;.bin</code> from the GitHub r
 <div class="admonition note">
 <p class="admonition-title">Board ID and node ID</p>
 <p>The bootloader has its own board ID (0 to 13), kept in its configuration page, separate from the firmware's
-<abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID. The firmware keeps the two in step when the node ID is set (<code>#CANID</code>, Send_CAN_ID), so a driver's
-bootloader ID is normally its node ID.</p>
+<abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID. The firmware copies the node ID into the board ID when the configuration is saved (<code>#Save</code>,
+Send_Save_config), so a saved driver's bootloader ID is its node ID. After <code>#CANID</code> or Send_CAN_ID without a
+save, <code>--board</code> still needs the old ID.</p>
 </div>
 <h2 id="from-a-par6-control-box">From a PAR6 control box<a class="headerlink" href="#from-a-par6-control-box" title="Permanent link">&para;</a></h2>
 <p>A robot built on the Robot Control Box updates every joint from the box itself, over its own <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> bus, from the
@@ -2255,7 +2256,7 @@ dashboard's Firmware tab or with <code>tools/flash_motor_firmware.py</code>; the
 start the firmware and waits for a host. Run the flash again; <code>bl_flash.py list</code> (or a passive scan from the
 control box) finds the board. A board that answers nothing: power-cycle it with the host already polling, to catch
 the two-second window.</p>
-<p>An image linked for <code>0x08000000</code> (a firmware from the <code>main</code> branch, release 104 and earlier) must never be
+<p>An image linked for <code>0x08000000</code> (a firmware from the <code>main</code> branch, release 101 and earlier) must never be
 flashed through the bootloader: it would overwrite the bootloader's own region if the tool did not refuse it.
 The tools validate the image first.</p>
 
@@ -2278,7 +2279,7 @@ The tools validate the image first.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 12:48:07 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

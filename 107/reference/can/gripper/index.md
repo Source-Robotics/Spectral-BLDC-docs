@@ -49,8 +49,8 @@ The driver's answer to Send_gripper_data_pack: position, measured current, and t
 | 3 | 7 | gripper_activated | bit | 1 activated |
 | 3 | 6 | gripper_action_status | bit | 1 going to the position, 0 idle, auto-release or calibrating |
 | 3 | 5-4 | gripper_object_detection | 2 bits | bit 5 is the low bit, bit 4 the high bit: 0 moving, 1 object detected while closing, 2 object detected while opening, 3 at the position |
-| 3 | 3 | gripper_temperature_error | bit |  |
-| 3 | 2 | gripper_timeout_error | bit |  |
+| 3 | 3 | gripper_temperature_error | bit | the driver's temperature error |
+| 3 | 2 | gripper_timeout_error | bit | the driver's watchdog error: the CAN watchdog ran out |
 | 3 | 1 | gripper_estop_error | bit |  |
 | 3 | 0 | gripper_calibrated | bit | 1 calibrated |
 

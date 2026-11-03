@@ -26,7 +26,8 @@ board is mounted.
 !!! danger "Low-resistance motors"
     The calibration routine's default voltages are made for motors of 2 Ω and more. A motor with a much lower
     resistance, such as a drone motor, draws a destructive current at those voltages. Do not calibrate one without
-    lowering the calibration voltages (`#Resv`, `#Openv`, `#Vp`) and the current limit first.
+    lowering the calibration voltages (`#Resv`, `#Openv`, `#Vp`) first. The current limit does not protect it:
+    calibration sets its own, up to 1600 mA.
 
 ## The encoder magnet
 

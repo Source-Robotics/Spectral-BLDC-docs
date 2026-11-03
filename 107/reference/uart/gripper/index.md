@@ -4,7 +4,7 @@
 |---|---|---|---|---|
 | `#Gripper` | Set/Get | int: 0 or 1 | Whether this driver is a gripper. Save it; `#Default` clears it. | the flag |
 | `#Gripcal` | Action |  | Starts the gripper calibration (the jaws find their end stops). Enters **gripper calibration** mode. | `Gripper calibration!` |
-| `#Gripinfo` | Get |  | Prints the gripper state: calibrated, activated, end stops, position, current. | the report |
+| `#Gripinfo` | Get |  | Prints the gripper state: whether the driver is a gripper, calibrated, activated, the position, speed and current setpoints, the E-stop, action and object-detection status, and the end stops. | the report |
 | `#Gripstop` | Set/Get | int: 0 or 1 | The gripper E-stop bit. | the bit |
 | `#Gripact` | Set/Get | int: 0 or 1 | The activate bit. | the bit |
 | `#Gripcur` | Set/Get | int: current in mA | The current limit of gripper moves. The firmware does not clamp it; see the gripper manual for the safe range. | the setpoint |

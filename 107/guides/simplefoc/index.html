@@ -1116,18 +1116,25 @@ The library is intended both for:</p>
 </div>
 <h2 id="how-to-install">How to install<a class="headerlink" href="#how-to-install" title="Permanent link">&para;</a></h2>
 <p>Follow this <a href="https://docs.simplefoc.com/installation">guide</a></p>
+<div class="admonition warning">
+<p class="admonition-title">This replaces the bootloader</p>
+<p>This project has no upload offset, so an upload with the programming adapter writes SimpleFOC at
+<code>0x08000000</code>, over the bootloader. Firmware updates over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> stop working. To go back to the Spectral
+firmware, install the bootloader again as in
+<a href="../../07-firmware/bootloader/">Installing the bootloader on an older board</a>, then flash a release.</p>
+</div>
 <p>Your platformio.ini should look like this:</p>
-<div class="language-C++ highlight"><span class="filename">main.cpp</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">[</span><span class="n">env</span><span class="o">:</span><span class="n">genericSTM32F103CB</span><span class="p">]</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ststm32</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">board</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">genericSTM32F103CB</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">framework</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arduino</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">upload_protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stlink</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">build_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">debug_tool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stlink</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">monitor_speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">115200</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">lib_deps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">askuric</span><span class="o">/</span><span class="n">Simple</span><span class="w"> </span><span class="n">FOC</span><span class="err">@</span><span class="o">^</span><span class="mf">2.3.2</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">lib_archive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span>
+<div class="language-ini highlight"><span class="filename">platformio.ini</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[env:genericSTM32F103CB]</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ststm32</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">board</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">genericSTM32F103CB</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="na">framework</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">arduino</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="na">upload_protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">stlink</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="na">build_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="na">debug_tool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">stlink</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="na">monitor_speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">115200</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="na">lib_deps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="na">askuric/Simple FOC@^2.3.2</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="na">lib_archive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
 </span></code></pre></div>
 <h2 id="simplefoc-guides">SimpleFOC guides<a class="headerlink" href="#simplefoc-guides" title="Permanent link">&para;</a></h2>
 <p>If you want to develop more advanced applications with SimpleFOC you can follow these tutorials:</p>
@@ -1139,7 +1146,8 @@ The library is intended both for:</p>
 <h2 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h2>
 <p>This example will spin the motor in open loop and enable serial monitor.<br />
 Use this code as a base for more advanced code you will develop with SimpleFOC.<br />
-In the github folder we also offer full <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> example!</p>
+The <a href="https://github.com/Source-Robotics/Spectral-Micro-Simple-FOC">Spectral-Micro-Simple-<abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr></a> repository has
+this project and more examples in its <code>examples</code> folder, among them voltage-torque <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> with the encoder.</p>
 <div class="language-C++ highlight"><span class="filename">main.cpp</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"Arduino.h"</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">"SimpleFOC.h"</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -1252,7 +1260,7 @@ In the github folder we also offer full <abbr title="Field-Oriented Control: the
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 18:58:10 UTC">October 22, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

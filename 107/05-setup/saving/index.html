@@ -1231,10 +1231,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#what-is-not-saved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not saved
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-defaults" class="md-nav__link">
     <span class="md-ellipsis">
       
         The defaults
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-check-at-power-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The check at power-up
       
     </span>
   </a>
@@ -2002,10 +2024,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#what-is-not-saved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not saved
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-defaults" class="md-nav__link">
     <span class="md-ellipsis">
       
         The defaults
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-check-at-power-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The check at power-up
       
     </span>
   </a>
@@ -2145,9 +2189,27 @@
 </div>
 </div>
 </div>
-<p>Saving writes the whole configuration to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>: the motor parameters and the calibration, every gain and
-limit, the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID, the heartbeat and watchdog settings, the thermistor and <abbr title="Light-Emitting Diode">LED</abbr> settings and the gripper flag.
-Over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>, Send_Save_config does the same. Save after calibration, after tuning, and after changing the node ID.</p>
+<p>Saving writes the configuration to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>: the motor parameters and the calibration, every gain and limit,
+the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID, the heartbeat and watchdog settings, the thermistor and <abbr title="Light-Emitting Diode">LED</abbr> settings, the temperature and voltage
+limits and the gripper flag. Over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>, Send_Save_config does the same. Saving also copies the node ID into the
+bootloader's board ID (<a href="../../07-firmware/the-bootloader/#the-board-id">The bootloader</a>). Save after calibration,
+after tuning, and after changing the node ID.</p>
+<div class="admonition warning">
+<p class="admonition-title">Set the current limit before you save a calibration</p>
+<p>Calibration leaves the current limit at 1600 mA. Set the limit for your motor (<code>#Ilim</code>) before you save, or the
+1600 mA are saved with the calibration.</p>
+</div>
+<h2 id="what-is-not-saved">What is not saved<a class="headerlink" href="#what-is-not-saved" title="Permanent link">&para;</a></h2>
+<p>These settings are lost at a power cycle, whatever you save. The driver starts with the values in the
+<a href="../../reference/defaults/">Defaults</a> reference:</p>
+<ul>
+<li>the idle behaviour (<code>#Brake</code>, Send_Settings): the driver coasts after every power-up;</li>
+<li>the calibration settings <code>#Cbw</code>, <code>#Resv</code>, <code>#Calpwr</code>, <code>#Openv</code>, <code>#Opens</code>, <code>#Vp</code> and <code>#Iqoffset</code>: set them again
+  before each calibration that needs other values;</li>
+<li>the cyclic output (<code>#Cyc</code>, <code>#Cyca</code>);</li>
+<li>the serial number. Saving writes it, but the firmware does not read it back at power-up: after a power cycle
+  the driver reports 1, and the next save writes that 1 over the stored number.</li>
+</ul>
 <h2 id="the-defaults">The defaults<a class="headerlink" href="#the-defaults" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Motor GUI</label><label for="__tabbed_2_2">Terminal</label></div>
 <div class="tabbed-content">
@@ -2160,18 +2222,28 @@ Over <abbr title="Controller Area Network, the bus between the host and the driv
 </div>
 </div>
 </div>
-<p>Restoring the defaults writes the factory values to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> and reloads them. It also resets the serial
-number, the hardware version and the batch date the driver reports, and clears the gripper flag, the heartbeat
-rate and the watchdog; note what the driver reports before you use it. The defaults are listed in the
-<a href="../../reference/defaults/">Defaults</a> reference.</p>
+<p>Restoring the defaults writes the factory values to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> and loads them. It erases the calibration (the
+driver reports <em>Not calibrated</em>), sets the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID back to 0, clears the gripper flag, the heartbeat rate and
+the watchdog, sets the hardware version to 1 and the batch date to 24092024, and stores 1111 as the serial number.
+Note what the driver reports before you use it, and give a driver on a bus its node ID again afterwards. The
+values are listed in the <a href="../../reference/defaults/">Defaults</a> reference.</p>
 <p>Use it before the first calibration of a motor, after a firmware update when the driver behaves oddly, and when
-the state shows nonsense values (a <code>-1</code>
-where a number should be): the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> then holds a layout the firmware does not expect.</p>
+the state shows nonsense values (a <code>-1</code> where a number should be).</p>
+<h2 id="the-check-at-power-up">The check at power-up<a class="headerlink" href="#the-check-at-power-up" title="Permanent link">&para;</a></h2>
+<p>Since firmware 106 the saved configuration is two blocks, each with its own checksum: the calibration (the
+motor's resistance, inductance, pole pairs, phase order, direction, angle offset, Kt, KV and the current loop
+gains) and the settings (the other gains, the limits, the node ID, the watchdog, the heartbeat and the flags). At
+power-up the driver checks both. A block that fails, after a power loss during a save for instance, is replaced
+by its factory values without a message: a failed settings block puts the driver on node ID 0 with the default
+gains and limits, a failed calibration block leaves it <em>Not calibrated</em>. The other block is kept.</p>
+<p>A board that comes from a release before 106 has no checksums yet: the driver keeps its values once and seals
+them. A value that was already wrong (a <code>-1</code> in <code>#Info</code>, for instance) then stays, and <code>#Default</code> with a new
+calibration is the fix.</p>
 <h2 id="what-the-driver-reports">What the driver reports<a class="headerlink" href="#what-the-driver-reports" title="Permanent link">&para;</a></h2>
-<p>The state Motor GUI shows, and <code>#Info</code> prints, is what is in the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> and what the driver measures: hardware
-and firmware version, serial number, calibration state, resistance, inductance, pole pairs, Kt and KV, the gains
-and limits, the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID, and the active errors. It is the first thing to look at when something is off, and the
-thing to copy into a bug report.</p>
+<p><code>#Info</code> prints the identity and the motor: hardware version, batch date, firmware version, <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID, whether the
+motor is calibrated, temperature, supply voltage, the phase order and direction, the pole pairs, resistance,
+inductance, Kt and KV. <code>#SERNUM</code> prints the serial number, <code>#Param</code> the gains and limits, <code>#Error</code> the active
+errors. They are the first thing to look at when something is off, and the thing to copy into a bug report.</p>
 
 
 
@@ -2192,7 +2264,7 @@ thing to copy into a bug report.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 14:58:51 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

@@ -2210,7 +2210,7 @@
 </tr>
 <tr>
 <td>the firmware update finds no bootloader</td>
-<td>a driver with firmware 104 or older has no bootloader: <a href="../07-firmware/bootloader/">Installing the bootloader on an older board</a></td>
+<td>a driver with firmware 101 or older has no bootloader: <a href="../07-firmware/bootloader/">Installing the bootloader on an older board</a></td>
 </tr>
 </tbody>
 </table>
@@ -2238,8 +2238,8 @@ come back most:</p>
 <td>the motor did not turn: a phase open, the open-loop voltage (<code>#Openv</code>) too low for the motor</td>
 </tr>
 <tr>
-<td><code>Phase order is wrong!</code></td>
-<td>the motor did not respond to the commutation check; wiring, current limit, magnet</td>
+<td><code>Commutation/alignment check failed!</code></td>
+<td>the motor did not respond to the commutation check: a phase open, <code>#Iqoffset</code> too low, a magnet that slips</td>
 </tr>
 <tr>
 <td>calibration succeeds, the motor then runs badly or in the wrong direction</td>
@@ -2247,7 +2247,7 @@ come back most:</p>
 </tr>
 <tr>
 <td>calibration succeeds but the <abbr title="Light-Emitting Diode">LED</abbr> stays on and <code>#Error</code> shows nothing</td>
-<td><code>#Info</code> shows <code>-1</code>: <code>#Default</code>, calibrate again</td>
+<td><code>#Info</code> shows <code>-1</code>, a value from an older release (<a href="../05-setup/saving/#the-check-at-power-up">The check at power-up</a>): <code>#Default</code>, calibrate again</td>
 </tr>
 </tbody>
 </table>
@@ -2282,7 +2282,7 @@ come back most:</p>
 </tr>
 <tr>
 <td>it stops with a velocity error</td>
-<td>the speed limit <code>#Vlimit</code>, or a load that lets the motor overrun</td>
+<td>the measured speed passed the fixed limit of 20,000,000 ticks/s: an encoder fault or a slipping magnet, rarely a real runaway; <code>#Vlimit</code> does not change it</td>
 </tr>
 <tr>
 <td>it falls behind under a load</td>
@@ -2332,7 +2332,7 @@ cooling.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 30, 2026 15:20:16 UTC">October 30, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

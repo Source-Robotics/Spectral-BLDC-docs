@@ -23,7 +23,7 @@ passing through idle; a fault is any of the errors on [Errors and recovery](http
 
 | ControlMode | What the motor does | Entered by | Setpoint unit |
 |---|---|---|---|
-| Idle | nothing: coasts (phases open) or brakes (phases shorted), as set by `#Brake` or Send_Settings | `#Idle`, Send_Idle, `#Clear`, errors | — |
+| Idle | nothing: coasts (phases open), or brakes (phases shorted) after `#Brake 1` or Send_Settings; with an error it always coasts, see [Braking in idle](#braking-in-idle) | `#Idle`, Send_Idle, `#Clear`, errors | — |
 | Position | holds and moves to a position with the cascade of position, velocity and current loops | `#P`, Send_data_pack_1 (8 bytes) | encoder ticks |
 | Velocity | turns at a speed with the velocity and current loops | `#V`, Send_data_pack_1 (5 bytes) | encoder ticks/s |
 | Current (torque) | applies a current, so a torque, with the current loop alone | `#Iq`, Send_data_pack_1 (2 bytes) | mA |
@@ -32,6 +32,18 @@ passing through idle; a fault is any of the errors on [Errors and recovery](http
 | Open loop | turns the stator field at a set electrical speed without the encoder in the loop; the rotor follows it like a stepper | `#Openloop` | electrical speed |
 | Gripper | runs the gripper state machine: move to a jaw position with a speed and a current limit | `#Grippos`, Send_gripper_data_pack (with `#Gripper 1`) | 0 to 255 |
 | Calibration | the calibration routine, or the gripper calibration | `#Cal`, `#Gripcal` | — |
+
+## Braking in idle
+
+`#Brake 1` (or Send_Settings over CAN) makes the idle motor brake: the driver keeps the three phases shorted, so
+the motor resists being turned. `#Brake 0`, the default, lets it coast. The setting is not saved: every power-up
+starts with coasting. Braking works only in idle without an error; an error or an E-stop disables the driver, and
+the motor coasts.
+
+!!! warning "The braking current is not limited"
+    A motor that is turned while it brakes drives its own back-EMF current through the shorted phases, and the
+    current loop does not limit that current. Use braking only on a motor whose resistance keeps the current under
+    the driver's 2.8 A at the speeds it turns at.
 
 ## Units
 
@@ -84,5 +96,5 @@ the phases, so the motor turns the same way whichever wire went to which termina
 ## Which mode am I in?
 
 `#Mode` prints the mode: `Idle mode`, `Position control`, `Speed control`, `Current control`, `PD control`,
-`Open loop`, `Gripper mode` or `Gripper calib mode`. The voltage-torque mode has no label of its own in this
-release; `#Info` and the behaviour of the motor are the check there.
+`Open loop`, `Gripper mode` or `Gripper calib mode`. In voltage-torque mode it prints nothing at all; `#Uq` then
+prints the voltage setpoint.

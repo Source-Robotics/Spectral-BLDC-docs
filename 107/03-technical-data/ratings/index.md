@@ -5,9 +5,9 @@
 | | Value |
 |---|---|
 | Supply voltage | 12 to 29 V DC, 24 V typical; 10 V absolute minimum |
-| Vbus error limits (firmware) | below 9 V or above 29.5 V |
+| Vbus error limits (firmware) | below 9 V or above `#Vmax`, 29 V after `#Default` |
 | Phase current, continuous | 1.5 A typical |
-| Phase current, maximum | 2.8 A, the firmware's limit (`#Ilim` is clamped to 2800 mA); needs good cooling and short bursts |
+| Phase current, maximum | 2.8 A (`#Ilim` is clamped to 2800 mA; Send_Limits over CAN is not, so never send more); needs good cooling and short bursts |
 | Power, maximum | 80 W |
 | Power, idle | 0.3 W |
 | PWM frequency | 25 kHz |
@@ -16,7 +16,7 @@
 | Current sensing | inline, on two phases |
 | Encoder | 14-bit magnetic, 16384 ticks per revolution, diametrical magnet 1 mm above the chip |
 | UART | 3.3 V, 256000 baud by default (1 000 000 tested) |
-| CAN | CAN 2.0, 1 Mbit/s, 11-bit identifiers, node IDs 0 to 15, 120 Ω termination by switch |
+| CAN | CAN 2.0, 1 Mbit/s, 11-bit identifiers, node IDs 0 to 13 (14 and 15 are reserved by the bootloader), 120 Ω termination by switch |
 | Thermistor input | 100 kΩ NTC, 54.9 kΩ pull-down |
 | PIN | analog input or general-purpose input/output, 3.3 V |
 | Driver stage protection | hardware overcurrent (trips at 3 to 5 A), undervoltage lockout (6.3 to 8 V) and thermal shutdown (150 to 180 °C); shown as a driver error |

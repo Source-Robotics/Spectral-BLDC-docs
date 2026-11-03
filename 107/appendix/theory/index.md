@@ -75,7 +75,7 @@ leave the loops to correct what is left, which gives a faster, smoother response
 the whole demand from the error.
 
 An integrator accumulates error over time, and keeps accumulating while the output is at its limit; the overshoot
-this causes when the limit is released is *windup*. The velocity loop's integrator is clamped to the velocity
+this causes when the limit is released is *windup*. The velocity loop's integrator is clamped to the current
 limit, and `#Rstint` resets the integrators on every new setpoint, which suits a host that sends one setpoint
 after another in large steps.
 

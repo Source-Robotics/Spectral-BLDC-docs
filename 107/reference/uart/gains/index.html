@@ -1455,7 +1455,7 @@
 <td><code>#Vlimit</code></td>
 <td>Set/Get</td>
 <td>int: speed in encoder ticks/s</td>
-<td>The speed limit; the velocity integrator is clamped to it.</td>
+<td>The speed limit: the speed the position loop may command, and the largest velocity setpoint. (The velocity integrator is clamped to the current limit.)</td>
 <td>the current limit</td>
 </tr>
 <tr>
@@ -1532,7 +1532,7 @@
 <td><code>#Cbw</code></td>
 <td>Set/Get</td>
 <td>float: bandwidth in Hz</td>
-<td>The current loop bandwidth calibration uses to compute Kpiq and Kiiq.</td>
+<td>The current loop bandwidth calibration uses to compute Kpiq and Kiiq. Not saved: 500 Hz after a power cycle.</td>
 <td>the bandwidth</td>
 </tr>
 <tr>

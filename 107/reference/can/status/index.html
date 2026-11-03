@@ -1790,7 +1790,7 @@
 <td></td>
 <td>BATCH_DATE</td>
 <td>unsigned 8-bit</td>
-<td>production batch</td>
+<td>production batch, the lowest 8 bits of the stored value (24092024 after #Default is sent as 120)</td>
 </tr>
 <tr>
 <td>2</td>
@@ -1975,7 +1975,7 @@
 <div class="cmd-facts">
 <p><span class="fact">ID 33</span><span class="fact">host → driver as a remote frame, driver → host as a data frame</span><span class="fact">remote frame, 0 bytes</span><span class="fact">Python: <code>Send_Respond_Kt()</code></span></p>
 </div>
-<p>Asks for the torque constant Kt the driver uses. Added in firmware 105.</p>
+<p>Asks for the torque constant Kt the driver uses. Added in firmware 104.</p>
 <p><strong>The frame</strong> (4 bytes)</p>
 <table>
 <thead>

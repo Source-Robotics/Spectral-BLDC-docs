@@ -1388,12 +1388,27 @@
 
 
 <h1 id="defaults">Defaults<a class="headerlink" href="#defaults" title="Permanent link">&para;</a></h1>
-<p>The values the firmware starts with, from its source (<code>common.h</code>) at the release this site describes. <code>#Default</code> writes the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> defaults, which are the same unless the firmware comment says otherwise.</p>
+<p>The settings of the firmware, read from its source at the release this site describes. The table leaves out
+the firmware's internal state (counters, flags, scratch variables).</p>
+<ul>
+<li><strong>Start value</strong> is the value in the firmware's structures (<code>common.h</code>). At power-up the firmware loads the saved
+  settings from the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr> over it, so for a setting that <code>#Save</code> keeps the start value only shows until the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>
+  is read.</li>
+<li><strong>After <code>#Default</code></strong> is what the driver runs with after <code>#Default</code>, which writes the factory values to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>
+  and loads them. A fresh board, and a board whose saved configuration fails its check at power-up, gets the same
+  values.</li>
+<li><strong>Kept by <code>#Save</code></strong> says whether the setting survives a power cycle. <em>No</em> means the driver starts with the start
+  value again after every power-up.</li>
+</ul>
+<p><code>#Default</code> also sets the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID to 0 and erases the calibration; see
+<a href="../../05-setup/saving/">Saving the configuration</a>.</p>
 <table>
 <thead>
 <tr>
 <th>Variable</th>
-<th>Default</th>
+<th>Start value</th>
+<th>After <code>#Default</code></th>
+<th>Kept by <code>#Save</code></th>
 <th>Firmware comment</th>
 </tr>
 </thead>
@@ -1401,716 +1416,456 @@
 <tr>
 <td><code>SERIAL_NUMBER</code></td>
 <td>1</td>
+<td>1111 in the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, not read back</td>
+<td>written, not read back</td>
 <td></td>
 </tr>
 <tr>
 <td><code>HARDWARE_VERSION</code></td>
 <td>1</td>
+<td>1</td>
+<td>yes</td>
 <td>Version of the Spectral BLDC driver <abbr title="Printed Circuit Board">PCB</abbr></td>
 </tr>
 <tr>
 <td><code>BATCH_DATE</code></td>
 <td>1</td>
+<td>24092024</td>
+<td>yes</td>
 <td>Date the batch was produced</td>
 </tr>
 <tr>
 <td><code>SOFTWARE_VERSION</code></td>
 <td>1</td>
+<td>107</td>
+<td>no: set by the firmware</td>
 <td>Software release</td>
 </tr>
 <tr>
 <td><code>I_AM_GRIPPER</code></td>
 <td>1</td>
+<td>0</td>
+<td>yes</td>
 <td>Is motor controller gripper (1) or not (0)</td>
 </tr>
 <tr>
 <td><code>LED_ON_OFF</code></td>
 <td>1</td>
+<td>1</td>
+<td>yes</td>
 <td>Use <abbr title="Light-Emitting Diode">LED</abbr> for status indication</td>
-</tr>
-<tr>
-<td><code>interrupt_tick</code></td>
-<td>0</td>
-<td>Ticks of our interrupt routine</td>
-</tr>
-<tr>
-<td><code>TEMP_DEG</code></td>
-<td>23</td>
-<td>Temperature in degrees celsius</td>
 </tr>
 <tr>
 <td><code>theta_offset</code></td>
 <td>0.0f</td>
+<td>0</td>
+<td>yes</td>
 <td>will be determined at calibration</td>
 </tr>
 <tr>
 <td><code>pole_pairs</code></td>
 <td>11</td>
+<td>7</td>
+<td>yes</td>
 <td>Number of pole pairs of your BLDC motor</td>
 </tr>
 <tr>
 <td><code>current_control_bandwidth</code></td>
 <td>500</td>
+<td>—</td>
+<td>no</td>
 <td>default 200 HZ; Will set <abbr title="Proportional-Integral controller">PI</abbr> gains for Q and D current loops based on phase resistance</td>
-</tr>
-<tr>
-<td><code>sleep_pin_state</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>reset_pin_state</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Crossover_frequency</code></td>
-<td>0.0</td>
-<td>Crossover frequency, in Radians per sample</td>
 </tr>
 <tr>
 <td><code>DIR_</code></td>
 <td>1</td>
+<td>0</td>
+<td>yes</td>
 <td>When looking at the magnetic encoder counter-clockwise is POSITIVE rotation.</td>
 </tr>
 <tr>
 <td><code>Phase_order</code></td>
 <td>2</td>
+<td>0</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>commutation_dir</code></td>
 <td>1</td>
+<td>1</td>
+<td>yes</td>
 <td>+1 or -1, auto-detected at calibration so +Iq/+velocity/+rotation map to +encoder rotation</td>
 </tr>
 <tr>
 <td><code>Thermistor_on_off</code></td>
 <td>0</td>
-<td>Are we taking termistor mesurements? 0 is off, 1 is on</td>
-</tr>
-<tr>
-<td><code>Controller_mode</code></td>
 <td>0</td>
-<td>0 -&gt; idle, 1 -&gt; Positon, 2 -&gt; Speed, 3 -&gt; Current, 4 -&gt; <abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr>, 5 -&gt; Open-loop speed, 6 -&gt; Gripper mode, 7-&gt; Calibrate gripper, 8 -&gt; Voltage Torque mode</td>
+<td>yes</td>
+<td>Are we taking termistor mesurements? 0 is off, 1 is on</td>
 </tr>
 <tr>
 <td><code>brake_coast</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td>Idle-mode (Controller_mode == 0) phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage <abbr title="Pulse-Width Modulation">PWM</abbr> vector shorts the phases together)</td>
 </tr>
 <tr>
 <td><code>Resistance</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Resistance of SINGLE PHASE of your BLDC motor</td>
 </tr>
 <tr>
 <td><code>Total_Resistance</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>= 2 * Resistance + 2 * R_sense + 2 *Rdson</td>
 </tr>
 <tr>
 <td><code>Inductance</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Inductance of SINGLE PHASE of your BLDC motor</td>
 </tr>
 <tr>
 <td><code>Kt</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Torque constant of your BLDC motor</td>
 </tr>
 <tr>
 <td><code>flux_linkage</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Flux linkage of your BLDC motor</td>
 </tr>
 <tr>
 <td><code>KV</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Max_temperature</code></td>
 <td>75</td>
+<td>75</td>
+<td>yes</td>
 <td>Max temperature in degrees</td>
 </tr>
 <tr>
 <td><code>Min_temperature</code></td>
 <td>-20</td>
+<td>—</td>
+<td>no</td>
 <td>Min temperature in degrees</td>
 </tr>
 <tr>
 <td><code>Max_Vbus</code></td>
 <td>29500</td>
+<td>29000</td>
+<td>yes</td>
 <td>Max vbus voltage in mV</td>
 </tr>
 <tr>
 <td><code>Min_Vbus</code></td>
 <td>9000</td>
+<td>—</td>
+<td>no</td>
 <td>Min vbus voltage in mV</td>
-</tr>
-<tr>
-<td><code>execution_time</code></td>
-<td>0</td>
-<td>Execution time of our interrupt loops</td>
 </tr>
 <tr>
 <td><code>watchdog_time_ms</code></td>
 <td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>watchdog_reset</code></td>
-<td>1</td>
+<td>0</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>watchdog_action</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Hold position, Idle, brake</td>
 </tr>
 <tr>
 <td><code>Heartbeat_rate_ms</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Motor controller will send data every Heartbeat_rate_ms</td>
-</tr>
-<tr>
-<td><code>Send_heartbeat</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Activated</code></td>
-<td>0</td>
-<td>If controller is activated or not</td>
-</tr>
-<tr>
-<td><code>Error</code></td>
-<td>0</td>
-<td>General error</td>
-</tr>
-<tr>
-<td><code>temperature_error</code></td>
-<td>0</td>
-<td>Termistor reported error</td>
-</tr>
-<tr>
-<td><code>encoder_error</code></td>
-<td>0</td>
-<td>Encoder magnet is not alligned error</td>
-</tr>
-<tr>
-<td><code>Vbus_error</code></td>
-<td>0</td>
-<td>Vbus voltage is too small or too large</td>
-</tr>
-<tr>
-<td><code>Driver_error</code></td>
-<td>0</td>
-<td>Driver reported error. 3 possible conditions: Undervoltage, thermal shutdown, overcurrent</td>
-</tr>
-<tr>
-<td><code>Velocity_error</code></td>
-<td>0</td>
-<td>We are moving too fast</td>
-</tr>
-<tr>
-<td><code>Current_error</code></td>
-<td>0</td>
-<td>We go past max current</td>
-</tr>
-<tr>
-<td><code>ESTOP_error</code></td>
-<td>0</td>
-<td>If we received estop command</td>
-</tr>
-<tr>
-<td><code>Watchdog_error</code></td>
-<td>0</td>
-<td>If we pass watchdog timeout time</td>
-</tr>
-<tr>
-<td><code>CAN_init_error</code></td>
-<td>0</td>
-<td>Set if <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> peripheral failed to initialize; <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> bus is skipped, <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> stays usable</td>
-</tr>
-<tr>
-<td><code>commutation</code></td>
-<td>0</td>
-<td>0 is space vector, 1 is sine</td>
-</tr>
-<tr>
-<td><code>Calibration</code></td>
-<td>0</td>
-<td>0 - outside of calibration, 1 inside of calibration, 2 failed calibration, 3 success calibration</td>
 </tr>
 <tr>
 <td><code>Calibrated</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>0 if motor is not calibrated, 1 if it is calibrated</td>
 </tr>
 <tr>
 <td><code>Resistance_calc_voltage</code></td>
 <td>1000</td>
+<td>—</td>
+<td>no</td>
 <td>Voltage used to calculate resistance //1000</td>
 </tr>
 <tr>
 <td><code>Calibration_power</code></td>
 <td>12</td>
+<td>—</td>
+<td>no</td>
 <td>Max power that can dissipate during inductance test.</td>
-</tr>
-<tr>
-<td><code>Calibration_Inductance_voltage</code></td>
-<td>0</td>
-<td>Calculated from Calibration power and resistance</td>
 </tr>
 <tr>
 <td><code>Open_loop_voltage</code></td>
 <td>5000</td>
+<td>—</td>
+<td>no</td>
 <td>Voltage to use when spinning the motor open loop. In mV</td>
 </tr>
 <tr>
 <td><code>Open_loop_speed</code></td>
 <td>20.0</td>
+<td>—</td>
+<td>no</td>
 <td>Speed to be used when spinning the motor open loop. In RAD/s</td>
-</tr>
-<tr>
-<td><code>Number_of_rotations</code></td>
-<td>8</td>
-<td>Number of open loop electrical rotations during calibration</td>
 </tr>
 <tr>
 <td><code>Phase_voltage</code></td>
 <td>5000</td>
+<td>—</td>
+<td>no</td>
 <td>Max voltage to be used during Kv calculation</td>
-</tr>
-<tr>
-<td><code>Calib_error</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Magnet_cal_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Vbus_cal_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Resistance_cal_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Inductance_cal_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Open_loop_cal_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Kt_cal_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Phase_order_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>KV_status</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>cyclic</code></td>
-<td>0</td>
-<td>If 1 we Periodically send messages without request from host.</td>
-</tr>
-<tr>
-<td><code>cyclic_a</code></td>
-<td>0</td>
-<td>If 1 we Periodically send messages without request from host.</td>
 </tr>
 <tr>
 <td><code>cyclic_period</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td>We send messages every cyclic_period</td>
 </tr>
 <tr>
 <td><code>CAN_ID</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td><abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> id of THIS motor driver! No 2 motor drivers can share the same ID.</td>
-</tr>
-<tr>
-<td><code>Wrong_DL</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>temp</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>temp1</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>temp2</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>handle_can</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>hall_trigger</code></td>
-<td>1</td>
-<td>used to record if hall sensor was triggered or not, normal state of hall is high (1)</td>
-</tr>
-<tr>
-<td><code>trigger_value</code></td>
-<td>0</td>
-<td></td>
 </tr>
 <tr>
 <td><code>calibration_offset_current</code></td>
 <td>300</td>
+<td>—</td>
+<td>no</td>
 <td></td>
-</tr>
-<tr>
-<td><code>temp_var_offset_calib</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>align_state</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>align_counter</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>aligned_angle</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>align_done</code></td>
-<td>false</td>
-<td></td>
-</tr>
-<tr>
-<td><code>calib_done</code></td>
-<td>false</td>
-<td></td>
-</tr>
-<tr>
-<td><code>calib_reset</code></td>
-<td>false</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Velocity_fwd</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Velocity_bwd</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Align_stage</code></td>
-<td>0</td>
-<td>Calibrate_Angle_Offset_Align() progress: state index (0 = not running)</td>
-</tr>
-<tr>
-<td><code>Align_point</code></td>
-<td>0</td>
-<td>sweep index within the current stage</td>
-</tr>
-<tr>
-<td><code>Spin_confirm_delta</code></td>
-<td>0</td>
-<td>diagnostic: encoder ticks moved during the "confirm commutation" spin test, on failure</td>
-</tr>
-<tr>
-<td><code>Spin_confirm_vbus_mV</code></td>
-<td>0</td>
-<td>diagnostic: VBUS_mV sampled at that same failure</td>
-</tr>
-<tr>
-<td><code>microstep</code></td>
-<td>16</td>
-<td></td>
-</tr>
-<tr>
-<td><code>gosteps</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>step_interval</code></td>
-<td>1000</td>
-<td>step interval in microseconds</td>
-</tr>
-<tr>
-<td><code>open_loop_move_done</code></td>
-<td>0</td>
-<td>1 = finished, cleared by user</td>
 </tr>
 <tr>
 <td><code>Voltage_limit</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td>Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used</td>
 </tr>
 <tr>
 <td><code>Reset_integral_accumulator</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Kp_p</code></td>
 <td>11</td>
+<td>11</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Position_setpoint</code></td>
 <td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>P_errSum</code></td>
-<td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Kp_v</code></td>
 <td>0.03</td>
+<td>0.03</td>
+<td>yes</td>
 <td>0.006 basic values that work for most motors but not optimal</td>
 </tr>
 <tr>
 <td><code>Ki_v</code></td>
 <td>0.0003</td>
+<td>0.0003</td>
+<td>yes</td>
 <td>0.0001 basic values that work for most motors but not optimal</td>
-</tr>
-<tr>
-<td><code>V_errSum</code></td>
-<td>0</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Feedforward_speed</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Velocity_setpoint</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td>-1.5</td>
 </tr>
 <tr>
 <td><code>Velocity_limit</code></td>
 <td>800000</td>
+<td>800000</td>
+<td>yes</td>
 <td>Clamp integrals to this  [TICKS/s]</td>
 </tr>
 <tr>
 <td><code>Velocity_limit_error</code></td>
 <td>20000000</td>
+<td>—</td>
+<td>no</td>
 <td>[TICKS/s] ; Velocity when we will report error</td>
-</tr>
-<tr>
-<td><code>Ki</code></td>
-<td>0</td>
-<td>zero location</td>
 </tr>
 <tr>
 <td><code>Kp_id</code></td>
 <td>3</td>
+<td>3</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Ki_id</code></td>
 <td>1.5</td>
+<td>1.5</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Id_setpoint</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Kp_iq</code></td>
 <td>3</td>
+<td>3</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Ki_iq</code></td>
 <td>1.5</td>
+<td>1.5</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Iq_current_limit</code></td>
 <td>1000</td>
+<td>1000</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Id_current_limit</code></td>
 <td>0</td>
+<td>0</td>
+<td>yes</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Feedforward_current</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>KD</code></td>
 <td>0.002800</td>
+<td>0.0028</td>
+<td>yes</td>
 <td>[Nm*s/rad]  KD 0.002800</td>
 </tr>
 <tr>
 <td><code>KP</code></td>
 <td>0.14000</td>
+<td>0.1400</td>
+<td>yes</td>
 <td>[Nm/rad] KP 0.14000</td>
 </tr>
 <tr>
 <td><code>Uq_setpoint</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>Ud_setpoint</code></td>
 <td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>Same_command</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>At_position</code></td>
-<td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>position_setpoint</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>speed_setpoint</code></td>
 <td>20</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>current_setpoint</code></td>
 <td>200</td>
-<td></td>
-</tr>
-<tr>
-<td><code>position</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>speed</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>current</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>calibrated</code></td>
-<td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>action_status</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td>-0 Stopped(or performing activation /automatic release).</td>
 </tr>
 <tr>
 <td><code>activated</code></td>
 <td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>object_detection_status</code></td>
-<td>3</td>
-<td></td>
-</tr>
-<tr>
-<td><code>temperature_error</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>timeout_error</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>estop_error</code></td>
-<td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>release_direction</code></td>
 <td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 <tr>
 <td><code>estop_status</code></td>
 <td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>max_open_position</code></td>
-<td>10329</td>
-<td></td>
-</tr>
-<tr>
-<td><code>max_closed_position</code></td>
-<td>-229</td>
-<td></td>
-</tr>
-<tr>
-<td><code>position_ticks</code></td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td><code>max_speed</code></td>
-<td>80000</td>
-<td></td>
-</tr>
-<tr>
-<td><code>min_speed</code></td>
-<td>40</td>
-<td></td>
-</tr>
-<tr>
-<td><code>In_calibration</code></td>
-<td>0</td>
+<td>—</td>
+<td>no</td>
 <td></td>
 </tr>
 </tbody>
@@ -2135,7 +1890,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 12:48:07 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

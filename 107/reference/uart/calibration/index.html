@@ -1497,7 +1497,7 @@
 <td><code>#Iqoffset</code></td>
 <td>Set/Get</td>
 <td>int: current in mA</td>
-<td>The current used by the angle-offset search.</td>
+<td>The current used by the angle-offset search and the commutation check of Cal, 300 mA by default. Not saved.</td>
 <td>the current value</td>
 </tr>
 <tr>
@@ -1511,7 +1511,7 @@
 <td><code>#Dir</code></td>
 <td>Set/Get</td>
 <td>int: 0 or 1</td>
-<td>The counting direction of the encoder (1 is the default).</td>
+<td>The counting direction of the encoder, set by calibration (0 after <code>#Default</code>).</td>
 <td>the current value</td>
 </tr>
 <tr>
@@ -1525,35 +1525,35 @@
 <td><code>#Resv</code></td>
 <td>Set/Get</td>
 <td>int: voltage in mV</td>
-<td>The voltage the resistance test of Cal starts at; it rises until the power reaches Calpwr.</td>
+<td>The voltage the resistance test of Cal starts at; it rises until the power reaches Calpwr. Not saved.</td>
 <td>the current value</td>
 </tr>
 <tr>
 <td><code>#Calpwr</code></td>
 <td>Set/Get</td>
 <td>float: power in W</td>
-<td>The power the resistance and inductance tests of Cal may dissipate in the motor.</td>
+<td>The power the resistance and inductance tests of Cal may dissipate in the motor. Not saved.</td>
 <td>the current value</td>
 </tr>
 <tr>
 <td><code>#Openv</code></td>
 <td>Set/Get</td>
 <td>int: voltage in mV</td>
-<td>The voltage of the open-loop spin, in calibration and with Openloop.</td>
+<td>The voltage of the open-loop spin, in calibration and with Openloop. Not saved.</td>
 <td>the current value</td>
 </tr>
 <tr>
 <td><code>#Opens</code></td>
 <td>Set/Get</td>
 <td>float: electrical speed in rad/s</td>
-<td>The speed of the open-loop spin in calibration.</td>
+<td>The speed of the open-loop spin in calibration; the same setting as the speed of <code>#Openloop</code>.</td>
 <td>the current value</td>
 </tr>
 <tr>
 <td><code>#Vp</code></td>
 <td>Set/Get</td>
 <td>int: voltage in mV</td>
-<td>The voltage of the phase-order search in calibration.</td>
+<td>The voltage of the phase-order search in calibration. Not saved.</td>
 <td>the current value</td>
 </tr>
 <tr>

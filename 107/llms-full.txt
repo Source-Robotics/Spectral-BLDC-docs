@@ -21,9 +21,9 @@ Full text of every page, in the order of the site's navigation. Source: https://
 
 **Firmware version:** 107
 
-**Revision:** 2026.A (draft)
+**Revision:** 2026.A
 
-**Published:** —
+**Published:** 2026-11-03
 
 **Applies to:** Spectral Micro driver PCB v2.0, firmware 107
 
@@ -44,7 +44,7 @@ between firmware releases. The text and the images are licensed CC BY-SA 4.0, th
   <div class="gripper-viewer__controls">
     <button type="button" name="reset" class="md-button">Reset view</button>
   </div>
-  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller">repository</a>, the PCB and everything mounted on it.</p>
+  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files">repository</a>, the PCB and everything mounted on it.</p>
 </div>
 
 <div class="grid cards" markdown>
@@ -161,7 +161,7 @@ Read in more detail: [Wiring the motor](https://docs.source-robotics.com/Spectra
 
 === "Terminal"
     Open a terminal on the adapter's port, 256000 baud, line ending CR+LF, and type `#Info`. The driver prints its
-    hardware and firmware version and the state of everything.
+    hardware and firmware version, its CAN ID, whether it is calibrated, and the motor's parameters.
 
     Read in more detail: [The serial terminal](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/terminal/).
 
@@ -174,10 +174,10 @@ is covered in [Motor GUI](https://docs.source-robotics.com/Spectral-BLDC-docs/10
 ## 6. Calibrate
 
 First the factory defaults, so that calibration does not start from another motor's values or from junk in the
-EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also resets the serial number the
-driver reports.) Then fix the motor to the bench, nothing on the shaft, 24 V on the supply. There is nothing to
-enter: calibration
-measures the motor's resistance and inductance and finds its pole pairs and phase order by itself.
+EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also sets the CAN node ID back to
+0 and the hardware version and batch date to factory values.) Then fix the motor to the bench, nothing on the
+shaft, 24 V on the supply. There is nothing to enter: calibration measures the motor's resistance and inductance
+and finds its pole pairs and phase order by itself.
 
 === "Motor GUI"
     Start the calibration. The GUI switches to *Calibration mode* and shows the driver's log step by step.
@@ -207,9 +207,9 @@ Read in more detail: [Calibration](https://docs.source-robotics.com/Spectral-BLD
 
 ## 7. Set the current limit and save
 
-The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load. The
-firmware's default of 1000 mA suits the gimbal motors in the tested list; a small 2804 is better at 500 mA, a motor
-rated for more can go up to 2800 mA.
+The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load.
+Calibration leaves it at 1600 mA, so set it now, before you save. 1000 mA suits the gimbal motors in the tested
+list; a small 2804 is better at 500 mA, a motor rated for more can go up to 2800 mA.
 
 === "Motor GUI"
     Set the current limit in the limits, then **Save** (the GUI warns about unsaved changes until you do).
@@ -337,7 +337,7 @@ The text and the images of this documentation are licensed under [CC BY-SA 4.0](
 
 | Revision | Date | Changes |
 |---|---|---|
-| 2026.A (draft) | — | First version in this form: the manual chapters, the generated CAN and UART reference, firmware 107 |
+| 2026.A | 2026-11-03 | First version in this form: the manual chapters, the generated CAN and UART reference, firmware 107 |
 
 
 ---
@@ -418,7 +418,7 @@ E-stop command and on a watchdog that runs out. The status LED and `#Error` tell
 
 - **UART**, a 3.3 V serial port at 256000 baud: human-readable commands such as `#P 16384`, and the only way to
   run the calibration. See [Over UART](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/uart/).
-- **CAN**, 1 Mbit/s, up to 16 drivers on one bus: compact frames for real-time control from a PC with the CANvas
+- **CAN**, 1 Mbit/s, up to 14 drivers on one bus: compact frames for real-time control from a PC with the CANvas
   adapter, a microcontroller or a robot control box. See [Over CAN](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/can/).
 - **Python**, the `Spectral-BLDC` library on top of CAN. See [With Python](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/python/).
 - **Motor GUI**, in the browser, over serial or CAN: the usual tool for setup, testing and tuning. See [Motor GUI](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/motor-gui/).
@@ -428,14 +428,14 @@ E-stop command and on a watchdog that runs out. The status LED and `#Error` tell
 | Pattern | Meaning |
 |---|---|
 | three short flashes and a pause | normal operation: no error, calibrated |
-| flashing every 0.5 s | the calibration routine is running |
+| fast flashing, about 10 times a second | the calibration routine is running |
 | on, not flashing | error mode: at least one error is active, or the motor is not calibrated |
 
 The LED can be turned off with `#LED 0`.
 
 | Normal operation | Calibration | Error mode |
 |---|---|---|
-| ![Three short flashes and a pause](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Normal.webp){ width="180" } | ![Flashing every 0.5 s](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Calib.webp){ width="180" } | ![On, steady](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Error2.webp){ width="180" } |
+| ![Three short flashes and a pause](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Normal.webp){ width="180" } | ![Fast flashing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Calib.webp){ width="180" } | ![On, steady](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Error2.webp){ width="180" } |
 
 
 ---
@@ -454,12 +454,15 @@ What this means in practice:
 
 - **The commands are practically the same.** The CAN messages and UART commands of the API reference exist on both drivers,
   with the same IDs, names and layouts; STEPFOC adds a few that only make sense on a stepper (homing against a
-  sensor, open-loop stepping). A program written for one runs on the other.
-- **The firmware releases go in step.** A Spectral Micro release has a STEPFOC counterpart with the same changes;
-  the [compatibility table](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/) lists the pairs. The numbers differ by one (Spectral
-  Micro 107 is STEPFOC 108).
+  sensor, open-loop stepping). A program written for one runs on the other. The idle behaviour is the exception
+  over UART: the Spectral Micro sets it with `#Brake 0` or `#Brake 1` and coasts by default, STEPFOC has the
+  actions `#Brake` and `#Coast`. Send_Settings over CAN is the same on both.
+- **The firmware releases go in step.** Most Spectral Micro releases have a STEPFOC counterpart with the same changes;
+  the [compatibility table](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/) lists the pairs. The numbers do not always match: the
+  current pair is Spectral Micro 107 and STEPFOC 108.
 - **Calibration differs.** The Spectral Micro measures the motor's resistance and inductance and finds its pole
-  pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first.
+  pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first. See
+  [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/calibration/).
 - **The motor terminals differ.** U, V and W for the three phases, instead of A+, A−, B+, B− for the two coils of
   a stepper.
 - **The grippers differ.** The [SSG-48 gripper](https://docs.source-robotics.com/SSG48-gripper-docs/) is driven by
@@ -501,7 +504,8 @@ board is mounted.
 !!! danger "Low-resistance motors"
     The calibration routine's default voltages are made for motors of 2 Ω and more. A motor with a much lower
     resistance, such as a drone motor, draws a destructive current at those voltages. Do not calibrate one without
-    lowering the calibration voltages (`#Resv`, `#Openv`, `#Vp`) and the current limit first.
+    lowering the calibration voltages (`#Resv`, `#Openv`, `#Vp`) first. The current limit does not protect it:
+    calibration sets its own, up to 1600 mA.
 
 ## The encoder magnet
 
@@ -575,9 +579,10 @@ connect anything; the few rules here are the ones that destroy a driver, a motor
     from the shop.
 
 !!! warning "Supply voltage"
-    12 to 29 V DC. The driver raises a Vbus error outside 9 to 29.5 V, but the hardware limit is 29 V: do not
-    connect a supply that can rise above it, and allow for the voltage a decelerating motor pushes back into the
-    supply. A bench supply with a current limit is the safest way to start.
+    12 to 29 V DC. The driver raises a Vbus error below 9 V and above `#Vmax`, 29 V after `#Default`. 29 V is
+    also the hardware limit: do not connect a supply that can rise above it, and allow for the voltage a
+    decelerating motor pushes back into the supply. A bench supply with a current limit is the safest way to
+    start.
 
 !!! warning "Do not disconnect a running motor"
     Never unplug a motor, or a power cable in the daisy chain, while the driver is powered. The inductive kick of
@@ -648,9 +653,9 @@ tested with the driver.
 | | Value |
 |---|---|
 | Supply voltage | 12 to 29 V DC, 24 V typical; 10 V absolute minimum |
-| Vbus error limits (firmware) | below 9 V or above 29.5 V |
+| Vbus error limits (firmware) | below 9 V or above `#Vmax`, 29 V after `#Default` |
 | Phase current, continuous | 1.5 A typical |
-| Phase current, maximum | 2.8 A, the firmware's limit (`#Ilim` is clamped to 2800 mA); needs good cooling and short bursts |
+| Phase current, maximum | 2.8 A (`#Ilim` is clamped to 2800 mA; Send_Limits over CAN is not, so never send more); needs good cooling and short bursts |
 | Power, maximum | 80 W |
 | Power, idle | 0.3 W |
 | PWM frequency | 25 kHz |
@@ -659,7 +664,7 @@ tested with the driver.
 | Current sensing | inline, on two phases |
 | Encoder | 14-bit magnetic, 16384 ticks per revolution, diametrical magnet 1 mm above the chip |
 | UART | 3.3 V, 256000 baud by default (1 000 000 tested) |
-| CAN | CAN 2.0, 1 Mbit/s, 11-bit identifiers, node IDs 0 to 15, 120 Ω termination by switch |
+| CAN | CAN 2.0, 1 Mbit/s, 11-bit identifiers, node IDs 0 to 13 (14 and 15 are reserved by the bootloader), 120 Ω termination by switch |
 | Thermistor input | 100 kΩ NTC, 54.9 kΩ pull-down |
 | PIN | analog input or general-purpose input/output, 3.3 V |
 | Driver stage protection | hardware overcurrent (trips at 3 to 5 A), undervoltage lockout (6.3 to 8 V) and thermal shutdown (150 to 180 °C); shown as a driver error |
@@ -753,7 +758,7 @@ shaft's axis.
   <div class="gripper-viewer__controls">
     <button type="button" name="reset" class="md-button">Reset view</button>
   </div>
-  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller">repository</a>, the PCB and everything mounted on it.</p>
+  <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files">repository</a>, the PCB and everything mounted on it.</p>
 </div>
 
 <figure markdown="span">
@@ -799,9 +804,9 @@ measures each motor's resistance, inductance and pole pairs, so nothing has to b
 | ![2804 100KV](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/2804_100kv.webp){ width="90" } | 2804 100KV | gimbal motor, 2804 class, 100 KV | [AliExpress](https://s.click.aliexpress.com/e/_DdeNXK1) |
 | ![42BLS40-24-01](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/NEMA17%20format%20BLDC.webp){ width="90" } | 42BLS40-24-01 | NEMA 17-format brushless motor, 24 V, 26 W, 1.8 A, 219 g | [Stepperonline](https://www.omc-stepperonline.com/24v-4000rpm-0-0625nm-26w-1-8a-42x42x40mm-brushless-dc-motor-42bls40-24-01) |
 
-Before the first test, set the current limit for the motor with `#Ilim`: the firmware's default of 1000 mA suits
-the gimbal motors above; a motor rated for more can go up to the driver's 2800 mA. See
-[Current limit and loop tuning](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/tuning/).
+Before the first test, set the current limit for the motor with `#Ilim`: calibration leaves it at 1600 mA. The
+factory default of 1000 mA suits the gimbal motors above; a motor rated for more can go up to the driver's
+2800 mA. See [Current limit and loop tuning](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/tuning/).
 
 !!! tip "Choosing a motor"
     A lower phase resistance and inductance give a higher speed at a given supply voltage; the velocity constant
@@ -943,7 +948,7 @@ reversed.
 ## Soldering
 
 1. Cut the leads to a comfortable length: long enough to reach the pads with the board mounted, short enough not
-   to get into the rotor.
+   to get into the rotor. With firmware older than 105, leave them long enough to swap two of them later.
 2. Tin the leads and solder each to one group of pads, U, V or W. The three pads of a group are one terminal.
 3. Make sure no strand bridges two groups and that nothing touches the rotor or the housing.
 
@@ -960,9 +965,12 @@ motor calibrates identically with any wiring, and positive commands turn the mot
 wiring: counter-clockwise seen from the encoder side of the board, see [Control modes](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/modes/).
 To turn the other way, use negative setpoints.
 
+Firmware older than 105 does not compensate the order: calibration stops with
+`Phase order is wrong! Switch motor phases and try again!`. Swap any two of U, V and W and calibrate again.
+
 If the motor does not respond to the commutation check, calibration says so (`Commutation/alignment check
-failed!`). That means a phase is not connected, the current limit is 0 or the magnet slipped, not that the wires
-are in the wrong order; see [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/calibration/).
+failed!`). That means a phase is not connected, `#Iqoffset` is set too low or the magnet slipped, not that the
+wires are in the wrong order; see [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/calibration/).
 
 
 ---
@@ -987,7 +995,8 @@ feeds the next driver, so a chain of drivers hangs on one supply cable and one C
   same time (three or four with 10 Ω gimbal motors), and feed a longer chain from
   both ends or from several supplies.
 - A motor that decelerates pushes energy back into the supply. A lab supply or a battery absorbs it; a supply that
-  cannot (some switch-mode supplies) sees its voltage rise, and the driver raises a Vbus error above 29.5 V.
+  cannot (some switch-mode supplies) sees its voltage rise, and the driver raises a Vbus error above `#Vmax`
+  (29 V after `#Default`).
 
 ## The cable orientation
 
@@ -1068,7 +1077,8 @@ the bead in place and conducts the heat; keep the leads clear of the rotor.
 ```
 
 `#Temp` then prints the temperature; with the thermistor disabled it prints `Temp Off`. Above the limit the driver
-raises a temperature error and stops; it clears with `#Clear` once the motor has cooled. 75 °C is the default
+raises a temperature error and stops; it clears with `#Clear` once the motor has cooled. Below −20 °C it raises
+the same error, so `#Term 1` without a thermistor, or with a broken lead, stops the driver too. 75 °C is the default
 limit and a safe one for the enamel of most small motors; do not go higher unless the motor is rated for it.
 
 Over CAN, Send_Respond_Temperature returns the temperature, and the temperature error is one of the bits of
@@ -1130,7 +1140,7 @@ browsers have: Chrome, Edge, Brave, Opera. Firefox and Safari cannot open serial
 2. Open [motorgui.com](https://motorgui.com/), choose the connection kind, and **Connect**. The browser asks
    which port; pick the adapter's.
 3. The driver's identity appears: hardware version, firmware version, serial number, batch date, whether it is
-   calibrated and activated, and the active errors — what `#Info` prints in a terminal.
+   calibrated and activated, and the active errors. In a terminal, `#Info`, `#SERNUM` and `#Error` print the same.
 
 If the port is not offered, the browser is not Chromium-based, or another program holds the port (a terminal left
 open, PlatformIO's monitor). If the port opens and nothing appears: the driver is unpowered, or TX and RX are
@@ -1259,8 +1269,9 @@ CR+LF works.
 #Info
 ```
 
-prints the driver's identity: the hardware and firmware version, the serial number, the motor parameters and the
-calibration state. `#Help` (firmware 106 and newer) prints a short command reference, `#Error` the active errors.
+prints the driver's identity: the hardware and firmware version, the CAN ID, the calibration state and the motor
+parameters. `#Help` (firmware 106 and newer) prints a short command reference, `#Error` the active errors,
+`#SERNUM` the serial number and `#Param` the gains.
 
 Every command starts with `#`, and a Set/Get command takes one number after a space: `#P 16384` moves to position
 16384; `#P` alone prints the position. Names are case-sensitive. The whole set is in the
@@ -1301,10 +1312,18 @@ of 2 to 24 Ω; change them only for a motor outside that range.
 | Open loop speed | 20 rad/s | `#Opens` | the electrical speed of that spin |
 | Phase search voltage | 5000 mV | `#Vp` | the voltage of the spin that checks the phase order |
 
+A seventh setting is not printed: `#Iqoffset`, 300 mA by default, the current of the angle-offset search and of
+the commutation check. None of the seven is saved; after a power cycle they are back at these defaults.
+
 !!! danger "Low-resistance motors"
     These voltages are made for motors of 2 Ω and more. On a motor with a much lower resistance, such as a drone
     motor, they drive a destructive current. The Spectral Micro is not made for such motors; if you must try one,
-    lower the three voltages and the current limit first.
+    lower the three voltages first. Lowering the current limit does not help: calibration sets its own.
+
+!!! warning "Calibration sets its own current limit"
+    The routine does not use the current limit you set. It raises the limit to 1600 mA, drives the motor with up
+    to 1250 mA while it measures Kt and KV and with `#Iqoffset` while it aligns the encoder, and leaves the limit
+    at 1600 mA when it ends. Set the current limit for your motor after calibration and before you save (step 3).
 
 ## 1. Restore the defaults
 
@@ -1320,8 +1339,8 @@ values.
     #Default
     ```
 
-This also resets the serial number, hardware version and batch date the driver reports; note what `#Info` printed
-if you need them. [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/) says what else it does.
+This also sets the CAN node ID back to 0 and the hardware version and batch date to factory values; note what
+`#Info` printed if you need them. [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/) says what else it does.
 
 ## 2. Run it
 
@@ -1335,8 +1354,8 @@ if you need them. [Saving the configuration](https://docs.source-robotics.com/Sp
     #Cal
     ```
 
-The LED flashes every 0.5 s while the routine runs, and the driver prints each step as it goes. The numbers below
-are those of one tested motor; yours will differ:
+The LED flashes fast, about 10 times a second, while the routine runs, and the driver prints each step as it
+goes. The numbers below are those of one tested motor; yours will differ:
 
 ```
 ----------------
@@ -1357,6 +1376,9 @@ Kp_iq = ...
 Ki_iq = ...
 Pole pair = 11
 Dir = 1
+Calibrating angle offset... stage 1/13, sweep point 0
+Calibrating angle offset... stage 2/13, sweep point 0
+...
 Phase order = 2
 Phase order is good!
 KV is: ...
@@ -1369,6 +1391,9 @@ Going to idle!
 ----------------
 ```
 
+The `Calibrating angle offset...` lines come every half second while the encoder is aligned, which can take
+about 40 seconds; the routine has not stopped.
+
 What the steps are:
 
 | Step | What happens | Fails with |
@@ -1378,7 +1403,7 @@ What the steps are:
 | Resistance | a rising voltage is put on the windings and the current measured; the motor clicks. The resistance follows from the two | `Resistance test: Failed`: no current flows, a phase is not connected, or the motor is far outside the 2 to 24 Ω range |
 | Inductance | a voltage step and the rate at which the current rises give the inductance. Kp_iq and Ki_iq are computed from R, L and the bandwidth | `Inductance test: Failed` |
 | Open loop | the stator field is turned at the open-loop speed and the encoder watched: the pole pairs are the ratio of electrical to mechanical turns, and the direction the rotor turned is remembered as `Dir` | `Open loop: Failed`: the encoder saw no rotation |
-| Phase order | a current command must move the rotor the expected way, and the encoder's zero is aligned to the rotor field (the angle offset, `#Offset`). A motor that does not respond gets a second try at another angle | `Commutation/alignment check failed!`, `Motor did not respond as expected to a current command...` and a line `Spin-confirm delta: … ticks (need > …), Vbus: … mV` that says how far the motor turned and at what voltage |
+| Phase order | a current command must move the rotor the expected way, and the encoder's zero is aligned to the rotor field (the angle offset, `#Offset`). A motor that does not respond gets a second try at another angle | `Commutation/alignment check failed!`, `Motor did not respond as expected to a current command...` and a line `Spin-confirm delta: … ticks (need > 8192), Vbus: … mV` that says how far the motor turned (half a revolution is needed) and at what voltage |
 | Kt, KV, flux linkage | the motor spins fast for a moment and the constants are computed from the back-EMF | — |
 
 !!! note "The measured values are estimates"
@@ -1386,13 +1411,17 @@ What the steps are:
     with it Kt and the flux linkage, can be off by a factor of two or three on cheap motors with uneven windings.
     For the loops this does not matter; for a torque estimate in newton-metres, measure Kt yourself.
 
-## 3. Save
+## 3. Set the current limit and save
+
+Calibration left the current limit at 1600 mA. Set it for your motor first
+([Current limit and loop tuning](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/tuning/)), then save, or the 1600 mA are saved with the calibration.
 
 === "Motor GUI"
-    **Save**. The GUI marks *Unsaved changes* until you do.
+    Set the current limit in the limits, then **Save**. The GUI marks *Unsaved changes* until you do.
 
 === "Terminal"
     ```
+    #Ilim 1000
     #Save
     ```
 
@@ -1418,9 +1447,9 @@ shaft between calibration and use: fix the magnet and calibrate again.
 | `Resistance test: Failed`, `Inductance test: Failed` | a phase not connected or shorted; a motor far outside the 2 to 24 Ω range |
 | the motor wobbles left and right and the routine fails | one phase is not connected |
 | `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for a high-resistance motor, the supply's current limit set too low |
-| `Commutation/alignment check failed!` | the motor did not respond to the current command: a phase open, a current limit at 0, a magnet that slips. Run `#Cal` again. Firmware 101 printed `Phase order is wrong! Switch motor phases and try again!` here; since 105 the wiring is compensated and swapping wires does not help |
+| `Commutation/alignment check failed!` | the motor did not respond to the current command: a phase open, `#Iqoffset` set too low, a magnet that slips. Run `#Cal` again. Firmware 101 printed `Phase order is wrong! Switch motor phases and try again!` here; since 105 the wiring is compensated and swapping wires does not help |
 | the routine stops in a step and prints nothing more | reset the driver (`#Reset`) and try again |
-| success, but the LED stays on and no error is reported | `#Info` shows `-1` somewhere: the EEPROM is not in the firmware's layout; restore the defaults and calibrate again |
+| success, but the LED stays on and no error is reported | `#Info` shows `-1` somewhere: the EEPROM holds a value from an older release ([The check at power-up](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/#the-check-at-power-up)); restore the defaults and calibrate again |
 | the resistance, KV or Kt look wrong | the supply was not 24 V, or the motor is one of the uneven ones; see the note above |
 
 Calibration runs over the serial connection only: a terminal, or Motor GUI over the serial adapter, not over CAN.
@@ -1439,11 +1468,12 @@ which is what makes tuning quick.
 
 ## The current limit
 
-Set the current limit to the rated phase current of your motor in mA. The firmware's default of 1000 mA suits the
-gimbal motors in [Tested motors](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/tested-motors/); a motor rated for more can go up to the
-driver's 2800 mA. The firmware clamps the limit to the
-driver's 2800 mA and does not trip on phase current by itself; the MOSFET driver's hardware protection only
-catches a hard fault. A limit above the motor's rating overheats the motor.
+Set the current limit to the rated phase current of your motor in mA, after every calibration: calibration
+leaves the limit at 1600 mA. The factory default (`#Default`) of 1000 mA suits the gimbal motors in
+[Tested motors](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/tested-motors/); a motor rated for more can go up to the driver's 2800 mA.
+`#Ilim` clamps the limit to 2800 mA; Send_Limits over CAN does not, so never send more. The firmware does not trip
+on phase current by itself; the MOSFET driver's hardware protection only catches a hard fault. A limit above the
+motor's rating overheats the motor.
 
 === "Motor GUI"
     In the limits set the current limit, then **Save**.
@@ -1547,9 +1577,27 @@ Nothing you set survives a power cycle until you save it.
     #Save
     ```
 
-Saving writes the whole configuration to the EEPROM: the motor parameters and the calibration, every gain and
-limit, the CAN node ID, the heartbeat and watchdog settings, the thermistor and LED settings and the gripper flag.
-Over CAN, Send_Save_config does the same. Save after calibration, after tuning, and after changing the node ID.
+Saving writes the configuration to the EEPROM: the motor parameters and the calibration, every gain and limit,
+the CAN node ID, the heartbeat and watchdog settings, the thermistor and LED settings, the temperature and voltage
+limits and the gripper flag. Over CAN, Send_Save_config does the same. Saving also copies the node ID into the
+bootloader's board ID ([The bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/the-bootloader/#the-board-id)). Save after calibration,
+after tuning, and after changing the node ID.
+
+!!! warning "Set the current limit before you save a calibration"
+    Calibration leaves the current limit at 1600 mA. Set the limit for your motor (`#Ilim`) before you save, or the
+    1600 mA are saved with the calibration.
+
+## What is not saved
+
+These settings are lost at a power cycle, whatever you save. The driver starts with the values in the
+[Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/defaults/) reference:
+
+- the idle behaviour (`#Brake`, Send_Settings): the driver coasts after every power-up;
+- the calibration settings `#Cbw`, `#Resv`, `#Calpwr`, `#Openv`, `#Opens`, `#Vp` and `#Iqoffset`: set them again
+  before each calibration that needs other values;
+- the cyclic output (`#Cyc`, `#Cyca`);
+- the serial number. Saving writes it, but the firmware does not read it back at power-up: after a power cycle
+  the driver reports 1, and the next save writes that 1 over the stored number.
 
 ## The defaults
 
@@ -1561,21 +1609,34 @@ Over CAN, Send_Save_config does the same. Save after calibration, after tuning, 
     #Default
     ```
 
-Restoring the defaults writes the factory values to the EEPROM and reloads them. It also resets the serial
-number, the hardware version and the batch date the driver reports, and clears the gripper flag, the heartbeat
-rate and the watchdog; note what the driver reports before you use it. The defaults are listed in the
-[Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/defaults/) reference.
+Restoring the defaults writes the factory values to the EEPROM and loads them. It erases the calibration (the
+driver reports *Not calibrated*), sets the CAN node ID back to 0, clears the gripper flag, the heartbeat rate and
+the watchdog, sets the hardware version to 1 and the batch date to 24092024, and stores 1111 as the serial number.
+Note what the driver reports before you use it, and give a driver on a bus its node ID again afterwards. The
+values are listed in the [Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/defaults/) reference.
 
 Use it before the first calibration of a motor, after a firmware update when the driver behaves oddly, and when
-the state shows nonsense values (a `-1`
-where a number should be): the EEPROM then holds a layout the firmware does not expect.
+the state shows nonsense values (a `-1` where a number should be).
+
+## The check at power-up
+
+Since firmware 106 the saved configuration is two blocks, each with its own checksum: the calibration (the
+motor's resistance, inductance, pole pairs, phase order, direction, angle offset, Kt, KV and the current loop
+gains) and the settings (the other gains, the limits, the node ID, the watchdog, the heartbeat and the flags). At
+power-up the driver checks both. A block that fails, after a power loss during a save for instance, is replaced
+by its factory values without a message: a failed settings block puts the driver on node ID 0 with the default
+gains and limits, a failed calibration block leaves it *Not calibrated*. The other block is kept.
+
+A board that comes from a release before 106 has no checksums yet: the driver keeps its values once and seals
+them. A value that was already wrong (a `-1` in `#Info`, for instance) then stays, and `#Default` with a new
+calibration is the fix.
 
 ## What the driver reports
 
-The state Motor GUI shows, and `#Info` prints, is what is in the EEPROM and what the driver measures: hardware
-and firmware version, serial number, calibration state, resistance, inductance, pole pairs, Kt and KV, the gains
-and limits, the CAN ID, and the active errors. It is the first thing to look at when something is off, and the
-thing to copy into a bug report.
+`#Info` prints the identity and the motor: hardware version, batch date, firmware version, CAN ID, whether the
+motor is calibrated, temperature, supply voltage, the phase order and direction, the pole pairs, resistance,
+inductance, Kt and KV. `#SERNUM` prints the serial number, `#Param` the gains and limits, `#Error` the active
+errors. They are the first thing to look at when something is off, and the thing to copy into a bug report.
 
 
 ---
@@ -1629,7 +1690,7 @@ passing through idle; a fault is any of the errors on [Errors and recovery](http
 
 | ControlMode | What the motor does | Entered by | Setpoint unit |
 |---|---|---|---|
-| Idle | nothing: coasts (phases open) or brakes (phases shorted), as set by `#Brake` or Send_Settings | `#Idle`, Send_Idle, `#Clear`, errors | — |
+| Idle | nothing: coasts (phases open), or brakes (phases shorted) after `#Brake 1` or Send_Settings; with an error it always coasts, see [Braking in idle](#braking-in-idle) | `#Idle`, Send_Idle, `#Clear`, errors | — |
 | Position | holds and moves to a position with the cascade of position, velocity and current loops | `#P`, Send_data_pack_1 (8 bytes) | encoder ticks |
 | Velocity | turns at a speed with the velocity and current loops | `#V`, Send_data_pack_1 (5 bytes) | encoder ticks/s |
 | Current (torque) | applies a current, so a torque, with the current loop alone | `#Iq`, Send_data_pack_1 (2 bytes) | mA |
@@ -1638,6 +1699,18 @@ passing through idle; a fault is any of the errors on [Errors and recovery](http
 | Open loop | turns the stator field at a set electrical speed without the encoder in the loop; the rotor follows it like a stepper | `#Openloop` | electrical speed |
 | Gripper | runs the gripper state machine: move to a jaw position with a speed and a current limit | `#Grippos`, Send_gripper_data_pack (with `#Gripper 1`) | 0 to 255 |
 | Calibration | the calibration routine, or the gripper calibration | `#Cal`, `#Gripcal` | — |
+
+## Braking in idle
+
+`#Brake 1` (or Send_Settings over CAN) makes the idle motor brake: the driver keeps the three phases shorted, so
+the motor resists being turned. `#Brake 0`, the default, lets it coast. The setting is not saved: every power-up
+starts with coasting. Braking works only in idle without an error; an error or an E-stop disables the driver, and
+the motor coasts.
+
+!!! warning "The braking current is not limited"
+    A motor that is turned while it brakes drives its own back-EMF current through the shorted phases, and the
+    current loop does not limit that current. Use braking only on a motor whose resistance keeps the current under
+    the driver's 2.8 A at the speeds it turns at.
 
 ## Units
 
@@ -1690,8 +1763,8 @@ the phases, so the motor turns the same way whichever wire went to which termina
 ## Which mode am I in?
 
 `#Mode` prints the mode: `Idle mode`, `Position control`, `Speed control`, `Current control`, `PD control`,
-`Open loop`, `Gripper mode` or `Gripper calib mode`. The voltage-torque mode has no label of its own in this
-release; `#Info` and the behaviour of the motor are the check there.
+`Open loop`, `Gripper mode` or `Gripper calib mode`. In voltage-torque mode it prints nothing at all; `#Uq` then
+prints the voltage setpoint.
 
 
 ---
@@ -1718,10 +1791,11 @@ A command is `#`, a name, optionally a space and one number, and a line ending:
 - The line ends with LF (`\n`); a CR before it is accepted. Terminals send CR+LF when you press Enter, with the
   setting described in [The serial terminal](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/terminal/).
 - A **Set/Get** command with a number sets the value and prints it; without a number it only prints it. `#P 16384`
-  moves to position 16384 and prints the position; `#P` prints the position.
+  moves to position 16384 and prints the position; `#P` prints the position. One exception: `#Openloop` without
+  a number starts the motor at the stored open-loop speed.
 - An **action** command takes no number: `#Cal`, `#Save`, `#Idle`.
-- A command the parser does not know is answered with `Unknown command`. A few names the parser
-  accepts have no handler and are answered with nothing; the [UART reference](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/) lists them.
+- A command the parser does not know is answered with `Unknown command`. So are the few names the parser
+  accepts but has no handler for; the [UART reference](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/) lists them.
 - 256000 baud, 8N1, 3.3 V.
 
 ## The driver only answers
@@ -1769,7 +1843,7 @@ Every command is in the [UART reference](https://docs.source-robotics.com/Spectr
 
 # Over CAN
 
-CAN is the interface for running a machine: compact frames, a fixed cost per message, up to 16 drivers on one bus,
+CAN is the interface for running a machine: compact frames, a fixed cost per message, up to 14 drivers on one bus,
 and a host that can be a PC, a microcontroller or a robot control box. The driver answers a motion command with
 its position, speed and current in the same frame exchange, so a control loop on the host needs one frame out and
 one frame back per motor and cycle.
@@ -1810,8 +1884,9 @@ single precision. Flags inside a byte are numbered from the most significant bit
 ## A control loop
 
 Send Send_data_pack_1 at a fixed rate, 100 Hz to 1 kHz, with the setpoint for this cycle; read Respond_data_pack_1
-for the position, speed and current of the last cycle. Every valid frame resets the watchdog, so with
-Send_Watchdog set to a few cycle times the motor stops when the host stops. The heartbeat is the other way round:
+for the position, speed and current of the last cycle. Every motion command (and every status request) resets
+the watchdog, so with Send_Watchdog set to a few cycle times the motor stops when the host stops. Other frames,
+such as gains, limits or Send_Idle, do not reset it, and neither does anything sent over UART. The heartbeat is the other way round:
 Send_Heartbeat_Setup makes the driver send a frame on its own every N ms when it has nothing else to send, so the
 host can see it is alive.
 
@@ -1827,7 +1902,7 @@ sequenceDiagram
         D-->>H: Respond_data_pack_1: position, speed, current, the error bit
     end
     D-->>H: heartbeat, whenever nothing else was sent for N ms
-    Note over D: no valid frame within the watchdog time: watchdog error, the motor stops
+    Note over D: no motion command within the watchdog time: watchdog error, the motor stops
 ```
 
 ## From a PC
@@ -2024,20 +2099,21 @@ the GUI's telemetry stream uses over serial, so do not start it by hand while th
 
 # Errors and recovery
 
-When the driver detects a fault it stops the motor, goes to idle, turns the status LED on steadily and sets the
-error bit in every CAN frame it sends. It stays there until the error is cleared.
+When the driver detects a fault it disables the motor, goes to idle, turns the status LED on steadily and sets
+the error bit in every CAN frame it sends. A disabled motor coasts, also when `#Brake 1` is set. The driver stays
+there until the error is cleared.
 
 ## Seeing the error
 
 - **The LED**: on and not flashing means error mode (or not calibrated). Three short flashes and a pause is
-  normal operation; flashing every 0.5 s is calibration.
+  normal operation; fast flashing, about 10 times a second, is calibration.
 - **`#Error`** prints `In error state!` or `No errors!`, followed by one line per active error.
 - **Send_Respond_State_of_Errors** returns every flag as a bit; **the error bit** of any frame says whether there
   is one.
 
 | Normal operation | Calibration | Error mode |
 |---|---|---|
-| ![Three short flashes and a pause](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Normal.webp){ width="180" } | ![Flashing every 0.5 s](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Calib.webp){ width="180" } | ![On, steady](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Error2.webp){ width="180" } |
+| ![Three short flashes and a pause](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Normal.webp){ width="180" } | ![Fast flashing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Calib.webp){ width="180" } | ![On, steady](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Error2.webp){ width="180" } |
 
 In error mode the LED does not flash: it stays on, as in the photo on the right.
 
@@ -2045,13 +2121,13 @@ In error mode the LED does not flash: it stays on, as in the photo on the right.
 
 | Error | `#Error` line | Cause | What to do |
 |---|---|---|---|
-| Vbus | `Vbus error` | the supply voltage is below 9 V or above 29.5 V (`#Vmax`) | check the supply and the cable; a decelerating motor can push the voltage up |
+| Vbus | `Vbus error` | the supply voltage is below 9 V or above `#Vmax` (29 V after `#Default`) | check the supply and the cable; a decelerating motor can push the voltage up |
 | Encoder | `Encoder error` | the magnet is not detected or the reading is invalid | magnet distance and type, see [The encoder magnet](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/magnet/) |
-| Driver | `Driver error (undervoltage, thermal shutdown, or overcurrent)` | the MOSFET driver's own protection tripped | lower the current limit, cool the driver, check for a short between the motor leads |
-| Velocity | `Velocity error` | the speed exceeded the limit | lower the commanded speed or raise `#Vlimit` |
+| Driver | `Drv error`, and `FAULT pin is HIGH` while the fault lasts | the MOSFET driver's own protection tripped: undervoltage, thermal shutdown or overcurrent | lower the current limit, cool the driver, check for a short between the motor leads |
+| Velocity | `Velocity error` | the measured speed exceeded 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit that `#Vlimit` does not change | a runaway or an encoder fault: check the magnet and the encoder, see [The encoder magnet](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/magnet/) |
 | Temperature | `Temp error` | the thermistor reads more than `#Tlim` (75 °C by default), with `#Term 1` | let the motor cool; lower the current limit |
 | E-stop | `Received ESTOP command` | Send_ESTOP was received | clear it when it is safe |
-| Watchdog | `Watchdog error` | no valid CAN frame within the watchdog time (Send_Watchdog) | the host stopped sending; fix the host, then clear |
+| Watchdog | `Watchdog error` | no motion command or status request over CAN within the watchdog time (Send_Watchdog) | the host stopped sending; fix the host, then clear. See [The watchdog](#the-watchdog) |
 | Not calibrated | `Not calibrated` | the motor has not been calibrated since `#Default`, or the EEPROM is invalid | run `#Cal` and `#Save` |
 | Current | `Current error` | reserved; this firmware never raises it | — |
 
@@ -2062,12 +2138,25 @@ straight back: a Vbus error at 2 V stays until the supply is right; once the sup
 the driver to normal operation. The calibration error clears only by calibrating (or, for a motor you know is
 calibrated, `#Calibrated 1`).
 
+## The watchdog
+
+The watchdog is set over CAN only, with Send_Watchdog; there is no UART command for it. It counts the motion
+commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the status requests (the Send_Respond_
+remote frames). Other CAN frames and UART commands do not reset it. Send_Save_config keeps it over a power cycle,
+like the heartbeat interval.
+
+A driver with a saved watchdog that is used over UART only, or by a host that sends no motion command, raises a
+watchdog error each time the watchdog time runs out, also right after `#Clear`. To turn it off, send Send_Watchdog
+with 0 and then Send_Save_config over CAN. Without a CAN adapter, `#Default` turns it off too, but it also erases
+the calibration and the node ID ([Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/)).
+
 ## When the driver does not answer
 
 - No LED at all: no power. Check DC+ and DC− and the cable orientation.
 - LED on, no answer on UART: the baud rate (256000), TX and RX crossed, the adapter's port.
 - No answer on CAN: the node ID, the termination (about 60 Ω across the bus, unpowered), 1 Mbit/s on the adapter.
-- `#Info` shows `-1` or nonsense: the EEPROM holds a layout the firmware does not expect; `#Default`, then
+- `#Info` shows `-1` or nonsense: the EEPROM holds values the firmware does not expect, usually from an older
+  release (see [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/#the-check-at-power-up)); `#Default`, then
   calibrate again.
 
 [Troubleshooting](https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/) goes through the symptoms one by one.
@@ -2124,8 +2213,10 @@ An empty Send_gripper_data_pack (0 bytes) only asks for the state. Send_gripper_
 gripper E-stop error; `#Gripstop 1` does the same over UART.
 
 !!! warning "Current"
-    The firmware does not limit the current you give a gripper move. The safe range depends on the gripper's mechanics and motor; the
-    [SSG-48 manual](https://docs.source-robotics.com/SSG48-gripper-docs/) gives it for that gripper. The driver's hard limit is 2800 mA.
+    The firmware does not limit the current you give a gripper move. The safe range depends on the gripper's
+    mechanics and motor; the [SSG-48 manual](https://docs.source-robotics.com/SSG48-gripper-docs/) gives it for
+    that gripper. The board is rated for 2800 mA, but nothing enforces it here. A gripper move also replaces the
+    driver's current limit with the move's current, and a later `#Save` keeps that value.
 
 ## Where the details are
 
@@ -2139,8 +2230,9 @@ the [UART reference](https://docs.source-robotics.com/Spectral-BLDC-docs/107/ref
 
 # Firmware
 
-The driver's firmware is open source and released as numbered builds. A driver shipped with firmware 105 or newer carries a bootloader and updates itself over UART or CAN; an older driver needs the bootloader installed once with
-a programming adapter.
+The driver's firmware is open source and released as numbered builds. Release 104 is the first release built
+for the bootloader: a driver that runs 104 or newer carries a bootloader and updates itself over UART or CAN. A
+driver that runs 101 or older needs the bootloader installed once with a programming adapter.
 
 ## In this chapter
 
@@ -2149,7 +2241,7 @@ a programming adapter.
 - [The bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/the-bootloader/): what it is, how the driver boots, how it is entered, its protocol and tools
 - [Updating through the bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/update/): the normal update, with Motor GUI, the bootloader's command-line
   tool, or a PAR6 control box
-- [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/): for a driver that runs firmware 104 or older
+- [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/): for a driver that runs firmware 101 or older
 - [Building from source](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/building/): PlatformIO, the memory layout, uploading with a programming adapter
 
 The release notes of every release up to the one this site describes are in the appendix,
@@ -2187,15 +2279,20 @@ which bootloader, Python library and PAR6 runtime.
 
 ## The STEPFOC counterpart
 
-Each Spectral Micro release has a [STEPFOC](https://docs.source-robotics.com/STEPFOC-docs/) release with the same
-changes; the numbers differ by one (Spectral Micro 107 is STEPFOC 108). The compatibility table lists the pairs.
+Most Spectral Micro releases have a [STEPFOC](https://docs.source-robotics.com/STEPFOC-docs/) release with the
+same changes. The numbers do not always match: the current pair is Spectral Micro 107 and STEPFOC 108, and the
+[compatibility table](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/) lists the others.
 
 ## The two branches
 
-Releases from 105 on are built from the `Bootloader_main` branch of the repository, whose firmware is linked
-to run above the bootloader. The `main` branch holds the firmware of release 104 and earlier, linked to run without a bootloader, and is not
-updated. A board running 101 or 104 is documented by version `101` of this site (104 differs from 101 only by the
-Send_Voltage_Limit message); to move it to a current release, see [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/).
+Releases from 104 on are built from the `Bootloader_main` branch of the repository, whose firmware is linked to
+run above the bootloader; 104 is the first of them. The `main` branch holds the firmware linked to run without a
+bootloader: release 101 and earlier, and a few later changes that were never tagged as a release (among them
+the Kt request and the voltage limit message). It is not updated.
+
+Version `101` of this site documents a board running 101. It also fits 104, which adds the Send_Respond_Kt
+request, Send_Voltage_Limit (in the release image) and the bootloader. To move a board without a bootloader to a
+current release, see [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/).
 
 
 ---
@@ -2204,7 +2301,8 @@ Send_Voltage_Limit message); to move it to a current release, see [Installing th
 
 # The bootloader
 
-Every driver shipped with firmware 105 or newer carries a small bootloader in the first 12 KB of its flash. It
+Every driver that runs firmware 104 or newer (104 is the first release built for the bootloader) carries a small
+bootloader in the first 12 KB of its flash. It
 starts the firmware on a normal boot, and it loads a new firmware over UART or CAN when a host asks, so a driver is
 updated without a programming adapter and without opening anything. The bootloader is open source:
 [stm32f103c-bootloader](https://github.com/Source-Robotics/stm32f103c-bootloader), shared with STEPFOC.
@@ -2236,7 +2334,7 @@ first `0x3000` bytes belong to the bootloader and the firmware never touches the
 
 ## Entering the bootloader
 
-- **From the firmware**: `#Reset` over UART or Send_Reset (command 14) over CAN. Since firmware 105 both reset
+- **From the firmware**: `#Reset` over UART or Send_Reset (command 14) over CAN. Since firmware 104 both reset
   the driver into the bootloader's 2 s window; the host tools send them for you.
 - **At power-on**: the 2 s window after every power-up, if the host is already polling.
 - **Always**, when there is no valid firmware.
@@ -2246,8 +2344,10 @@ first `0x3000` bytes belong to the bootloader and the firmware never touches the
 The bootloader has a board ID of its own, 0 to 13, stored in its configuration page. 14 and 15 do not exist
 for it: its command frame, identifier `0x700`, decodes as node 14 in the firmware's identifier scheme, so those
 two node IDs are reserved. **Give drivers node IDs 0 to 13.** The firmware accepts `#CANID 14` and `15`, but the
-bootloader then keeps its old board ID and a firmware update over CAN cannot reach the driver. The firmware keeps it in step with its CAN node ID: setting the node ID (`#CANID`,
-Send_CAN_ID) writes the bootloader's board ID too, so a driver answers the host tools under its node ID. A
+bootloader then keeps its old board ID and a firmware update over CAN cannot reach the driver. The firmware
+keeps the board ID in step with its CAN node ID when the configuration is saved: `#Save` or Send_Save_config
+writes the node ID into the bootloader's board ID, so a saved driver answers the host tools under its node ID.
+Setting the node ID alone (`#CANID`, Send_CAN_ID) does not: until you save, the bootloader keeps the old ID. A
 replacement board ships as ID 0; two boards with the same ID on one bus corrupt each other's flash stream, so
 give the new board its ID alone on the bus first (`set-id` in the host tool).
 
@@ -2285,7 +2385,7 @@ image linked for `0x08000000` (a firmware from the `main` branch) over the firmw
 
 ## Installing it
 
-Boards shipped with firmware 104 or older have no bootloader. [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/)
+Boards that run firmware 101 or older have no bootloader. [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/)
 puts it there once, with a programming adapter at `0x08000000`; from then on the board updates like any other.
 
 
@@ -2295,7 +2395,7 @@ puts it there once, with a programming adapter at `0x08000000`; from then on the
 
 # Updating through the bootloader
 
-A driver with the bootloader (firmware 105 or newer) is updated over the UART connector or the CAN bus: the host
+A driver with the bootloader (firmware 104 or newer) is updated over the UART connector or the CAN bus: the host
 tells the driver to reset, the bootloader waits two seconds for a host, and the host streams the new image into it.
 No programming adapter, and nothing to open.
 
@@ -2335,8 +2435,9 @@ is the `spectral-bldc-firmware-V<number>.bin` from the GitHub release.
 
 !!! note "Board ID and node ID"
     The bootloader has its own board ID (0 to 13), kept in its configuration page, separate from the firmware's
-    CAN node ID. The firmware keeps the two in step when the node ID is set (`#CANID`, Send_CAN_ID), so a driver's
-    bootloader ID is normally its node ID.
+    CAN node ID. The firmware copies the node ID into the board ID when the configuration is saved (`#Save`,
+    Send_Save_config), so a saved driver's bootloader ID is its node ID. After `#CANID` or Send_CAN_ID without a
+    save, `--board` still needs the old ID.
 
 ## From a PAR6 control box
 
@@ -2359,7 +2460,7 @@ start the firmware and waits for a host. Run the flash again; `bl_flash.py list`
 control box) finds the board. A board that answers nothing: power-cycle it with the host already polling, to catch
 the two-second window.
 
-An image linked for `0x08000000` (a firmware from the `main` branch, release 104 and earlier) must never be
+An image linked for `0x08000000` (a firmware from the `main` branch, release 101 and earlier) must never be
 flashed through the bootloader: it would overwrite the bootloader's own region if the tool did not refuse it.
 The tools validate the image first.
 
@@ -2370,9 +2471,10 @@ The tools validate the image first.
 
 # Installing the bootloader on an older board
 
-A driver running firmware 104 or older has no bootloader: its firmware starts at the beginning of the flash. To
-run any release from 105 on, which is linked to start above the bootloader, the bootloader must be installed
-once, with a programming adapter on the JTAG connector. After that, every update goes over UART or CAN.
+A driver running firmware 101 or older has no bootloader: its firmware starts at the beginning of the flash. To
+run any release from 104 on (104 is the first release built for the bootloader), which is linked to start above
+the bootloader, the bootloader must be installed once, with a programming adapter on the JTAG connector. After
+that, every update goes over UART or CAN.
 
 !!! warning
     Disconnect the motor supply and the UART adapter before connecting the programming adapter. The adapter
@@ -2391,7 +2493,7 @@ once, with a programming adapter on the JTAG connector. After that, every update
 
 <figure markdown="span">
   ![The programming adapter on the JTAG pads](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/FLASHING2-Photoroom.webp){ width="520" }
-  <figcaption>Figure 18: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
+  <figcaption>Figure 17: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
 </figure>
 
 ## Steps
@@ -2404,7 +2506,8 @@ once, with a programming adapter on the JTAG connector. After that, every update
    mode (the LED stays off).
 6. Flash the firmware release through the bootloader, over UART or CAN, as in
    [Updating through the bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/update/).
-7. `#Info` shows the new release. `#Default`, enter the motor parameters, calibrate, `#Save`.
+7. `#Info` shows the new release. `#Default`, then calibrate (`#Cal`), set the current limit (`#Ilim`) and
+   `#Save`; see [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/calibration/).
 
 !!! note "Memory layout"
     `0x08000000`–`0x080022FF` bootloader, `0x08002C00` its configuration page (board ID, the application's CRC),
@@ -2456,7 +2559,7 @@ size fails to link.
 
 <figure markdown="span">
   ![Upload in VS Code](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/VSUPLOAD.png){ width="700" }
-  <figcaption>Figure 19: Build, upload and the serial monitor in PlatformIO's status bar.</figcaption>
+  <figcaption>Figure 18: Build, upload and the serial monitor in PlatformIO's status bar.</figcaption>
 </figure>
 
 ## Where things are
@@ -2481,7 +2584,8 @@ version box names the release.
 
 ## A firmware for a board without a bootloader
 
-The `main` branch builds a firmware linked at `0x08000000` for boards that have no bootloader. It stops at release 104 and is not maintained; install the bootloader instead,
+The `main` branch builds a firmware linked at `0x08000000` for boards that have no bootloader. Its last tagged
+release is 101; it is not maintained. Install the bootloader instead:
 [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/).
 
 
@@ -2528,7 +2632,7 @@ flowchart TD
 | *No connection* on CAN | the CANvas adapter's port; the bus termination; the node ID of the driver; 1 Mbit/s |
 | the calibration does not start | calibration runs over the serial connection only, not over CAN |
 | *Unsaved changes* after a power cycle | the settings were not saved to the driver; Save writes them |
-| the firmware update finds no bootloader | a driver with firmware 104 or older has no bootloader: [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/) |
+| the firmware update finds no bootloader | a driver with firmware 101 or older has no bootloader: [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/) |
 
 ## Calibration
 
@@ -2540,9 +2644,9 @@ come back most:
 | `Magnet test: Failed` | magnet too far, axially magnetised, or missing |
 | the motor wobbles left and right during calibration | one phase is not connected |
 | `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for the motor |
-| `Phase order is wrong!` | the motor did not respond to the commutation check; wiring, current limit, magnet |
+| `Commutation/alignment check failed!` | the motor did not respond to the commutation check: a phase open, `#Iqoffset` too low, a magnet that slips |
 | calibration succeeds, the motor then runs badly or in the wrong direction | the magnet slipped on the shaft; glue it and calibrate again |
-| calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`: `#Default`, calibrate again |
+| calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`, a value from an older release ([The check at power-up](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/#the-check-at-power-up)): `#Default`, calibrate again |
 
 ## The motor
 
@@ -2553,7 +2657,7 @@ come back most:
 | weak torque | `#Ilim` low; the supply's current limit; a calibration run at a low supply voltage (the constants are off) |
 | the motor is hot | lower `#Ilim`, enable the thermistor; a gimbal motor held against a load at its current limit heats quickly |
 | it stops with a Vbus error when decelerating | the supply cannot absorb the returned energy; a different supply, or a brake resistor |
-| it stops with a velocity error | the speed limit `#Vlimit`, or a load that lets the motor overrun |
+| it stops with a velocity error | the measured speed passed the fixed limit of 20,000,000 ticks/s: an encoder fault or a slipping magnet, rarely a real runaway; `#Vlimit` does not change it |
 | it falls behind under a load | the torque limit: raise `#Ilim` within the motor's rating, or a bigger motor |
 | it holds position with a sawtooth noise | the position loop gain; the magnet distance |
 
@@ -2712,10 +2816,10 @@ Which firmware release works with which bootloader, Python library, PAR6 runtime
 
 | Firmware | Released | Bootloader | STEPFOC equivalent | Python library (Spectral-BLDC) | PAR6 runtime | Spectral Micro PCB | Docs |
 |---|---|---|---|---|---|---|---|
-| 107 | 2026-08-26 | required (installed on boards shipped with 105 or newer) | 108 | 1.20 or newer | 0.9 or newer | v2.0 | 107 |
-| 106 | 2026-07-06 | required | 106 and 107 | 1.19 or newer | 0.9 or newer | v2.0 | not published |
-| 105 | 2026-07-05 | required (the first release that needs it) | 105 | 1.19 or newer | 0.9 or newer | v2.0 | not published |
-| 104 | 2026-06-19 | none (flashed with a programming adapter); the last release of the main branch | 104 | 1.19 or newer (1.20 for Send_Voltage_Limit) | 0.9 or newer | v2.0 | 101 applies; 104 adds the Send_Voltage_Limit message |
+| 107 | 2026-08-26 | required | 108 (STEPFOC 107 has the Send_Settings and PD changes of this release, without its calibration fix) | 1.20 or newer | 0.9 or newer | v2.0 | 107 |
+| 106 | 2026-07-06 | required | 106 | 1.19 or newer | 0.9 or newer | v2.0 | not published |
+| 105 | 2026-07-05 | required | 105 | 1.19 or newer | 0.9 or newer | v2.0 | not published |
+| 104 | 2026-06-19 | required (the first release built for the bootloader, from Bootloader_main) | none (STEPFOC has no 104 release) | 1.19 or newer (1.20 for Send_Voltage_Limit) | 0.9 or newer | v2.0 | 101 applies; 104 adds Send_Respond_Kt, Send_Voltage_Limit (in the release image) and the bootloader |
 | 101 | 2025-09-29 | none (flashed with a programming adapter) | 103 | 1.17 or newer | 0.9 or newer | v2.0 | 101 |
 
 `#Info` prints the firmware release a driver runs; `Send_Respond_Device_Info` returns it over CAN.
@@ -2733,10 +2837,10 @@ the silkscreen on the bottom of the board carries the board's name and date.
 
 | Revision | Marked | Changes | Firmware | Manual |
 |---|---|---|---|---|
-| v2.0 | Spectral motor controller micro v2.0, 10.1.2024 | the production board | 101 and newer; 105 and newer ship with the bootloader | this manual |
+| v2.0 | Spectral motor controller micro v2.0, 10.1.2024 | the production board | 101 and newer; 104 and newer run on the bootloader | this manual |
 
-Boards shipped before firmware 105 have no bootloader; [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/)
-brings them to the current firmware.
+A board that runs firmware 101 or older has no bootloader; [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/)
+brings it to the current firmware.
 
 
 ---
@@ -2820,7 +2924,7 @@ leave the loops to correct what is left, which gives a faster, smoother response
 the whole demand from the error.
 
 An integrator accumulates error over time, and keeps accumulating while the output is at its limit; the overshoot
-this causes when the limit is released is *windup*. The velocity loop's integrator is clamped to the velocity
+this causes when the limit is released is *windup*. The velocity loop's integrator is clamped to the current
 limit, and `#Rstint` resets the integrators on every new setpoint, which suits a host that sends one setpoint
 after another in large steps.
 
@@ -2891,8 +2995,9 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
 # Glossary
 
 **Activated**
-:   A flag the driver keeps (`#Activate`, Send_gripper_data_pack). In gripper mode a move is carried out only while
-    the gripper is activated.
+:   Two flags with the same name. The controller's flag is set by `#Activate` and reported in
+    Send_Respond_State_of_Errors; nothing else uses it. The gripper's activate bit is set by `#Gripact`, `#Grippos`
+    and Send_gripper_data_pack; in gripper mode a move is carried out only while it is set.
 
 **Angle offset** (theta offset)
 :   The angle between the encoder's zero and the motor's electrical zero, found by calibration and stored. The
@@ -2903,11 +3008,11 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
     the top speed at a given voltage, and is what calibration measures to find KV, Kt and the flux linkage.
 
 **Board ID**
-:   The bootloader's own address, 0 to 13, stored in its configuration page. The firmware keeps it equal to the CAN
-    node ID.
+:   The bootloader's own address, 0 to 13, stored in its configuration page. The firmware sets it to the CAN node
+    ID when the configuration is saved.
 
 **Bootloader**
-:   The program in the first 12 KB of the driver's flash on boards shipped with firmware 105 or newer. It starts the
+:   The program in the first 12 KB of the driver's flash on boards that run firmware 104 or newer. It starts the
     firmware, and loads a new firmware over UART or CAN. See [The bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/the-bootloader/).
 
 **Calibration**
@@ -2916,8 +3021,9 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
     the encoder to the rotor field and measures Kt, KV and the flux linkage. Its result is kept with `#Save`.
 
 **CAN ID** (node ID)
-:   The address of the driver on the CAN bus, 0 to 15. It occupies bits 10 to 7 of the 11-bit CAN frame identifier;
-    the command ID occupies bits 6 to 1 and the error bit is bit 0.
+:   The address of the driver on the CAN bus, 0 to 13 (the field holds 0 to 15, but the bootloader reserves 14 and
+    15). It occupies bits 10 to 7 of the 11-bit CAN frame identifier; the command ID occupies bits 6 to 1 and the
+    error bit is bit 0.
 
 **CANvas**
 :   Source Robotics' USB-to-CAN adapter. It appears as a serial port and speaks slcan, which `python-can` and Motor
@@ -3047,8 +3153,8 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
     error.
 
 **Watchdog**
-:   A timer the driver resets with every valid CAN frame it receives. When it is set (Send_Watchdog) and runs out,
-    the driver reports a watchdog error and stops.
+:   A timer the driver resets with every motion command and status request it receives over CAN. When it is set
+    (Send_Watchdog) and runs out, the driver reports a watchdog error and stops.
 
 
 ---
@@ -3079,8 +3185,9 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
 
 # API reference
 
-Every CAN message and every UART command of the firmware release this site describes, the defaults the firmware
-starts with, the error flags, and the map from the Python library's calls to the messages they send.
+Every CAN message and every UART command of the firmware release this site describes, the factory defaults of
+its settings and which of them are saved, the error flags, and the map from the Python library's calls to the
+messages they send.
 
 ## Where the facts come from
 
@@ -3411,7 +3518,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 17</span><span class="fact">host → driver</span><span class="fact">8 bytes</span><span class="fact">Python: `Send_Current_Gains()`</span></div>
 
-Sets Kp and Ki of the PI current loops (Iq and Id).
+Sets Kp and Ki of the PI current loop of Iq. The Id loop keeps its gains; over UART, `#Kpiq` and `#Kiiq` set both loops.
 
 **8 bytes**
 
@@ -3461,7 +3568,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 20</span><span class="fact">host → driver</span><span class="fact">8 bytes</span><span class="fact">Python: `Send_Limits()`</span></div>
 
-Sets the speed limit and the current limit the loops may reach. The current limit is clamped by the firmware to the driver's maximum of 2800 mA.
+Sets the speed limit and the current limit the loops may reach. The firmware stores the current limit as it arrives: over CAN it is not clamped to the driver's 2800 mA (only `#Ilim` over UART clamps it). Never send more than 2800 mA, or more than the motor's rating.
 
 **8 bytes**
 
@@ -3494,7 +3601,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 34</span><span class="fact">host → driver</span><span class="fact">4 bytes</span><span class="fact">Python: `Send_Voltage_Limit()`</span></div>
 
-Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply voltage. Added in firmware 105.
+Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply voltage. In the 104 release image (the source at tag V104 does not have it yet) and in every release from 105.
 
 **4 bytes**
 
@@ -3573,7 +3680,7 @@ Asks for the driver's identity: hardware version, batch date and serial number f
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
 | 0 |  | HARDWARE_VERSION | unsigned 8-bit | PCB revision |
-| 1 |  | BATCH_DATE | unsigned 8-bit | production batch |
+| 1 |  | BATCH_DATE | unsigned 8-bit | production batch, the lowest 8 bits of the stored value (24092024 after #Default is sent as 120) |
 | 2 |  | SOFTWARE_VERSION | unsigned 8-bit | firmware release, e.g. 107 |
 | 3-6 |  | SERIAL_NUMBER | unsigned 32-bit | serial number |
 
@@ -3644,7 +3751,7 @@ The driver answers with **Send_Respond_Encoder_data**.
 
 <div class="cmd-facts" markdown><span class="fact">ID 33</span><span class="fact">host → driver as a remote frame, driver → host as a data frame</span><span class="fact">remote frame, 0 bytes</span><span class="fact">Python: `Send_Respond_Kt()`</span></div>
 
-Asks for the torque constant Kt the driver uses. Added in firmware 105.
+Asks for the torque constant Kt the driver uses. Added in firmware 104.
 
 **The frame** (4 bytes)
 
@@ -3682,13 +3789,13 @@ Identity, saving, resetting, errors, the watchdog, the heartbeat and the setting
 
 <div class="cmd-facts" markdown><span class="fact">ID 11</span><span class="fact">host → driver</span><span class="fact">1 bytes</span><span class="fact">Python: `Send_CAN_ID()`</span></div>
 
-Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15: a driver on one of those cannot be updated over CAN). Setting the ID also sets the bootloader's board ID. The driver answers to the new ID at once; the ID is kept over a power cycle only after Send_Save_config.
+Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15: a driver on one of those cannot be updated over CAN). The driver answers to the new ID at once. The ID is kept over a power cycle only after Send_Save_config, and saving is also what copies it into the bootloader's board ID.
 
 **1 bytes**
 
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
-| 0 |  | ID | unsigned 8-bit | 0 to 15 |
+| 0 |  | ID | unsigned 8-bit | 0 to 13 (14 and 15 are accepted but reserved by the bootloader) |
 
 The driver does not answer this command.
 
@@ -3708,7 +3815,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 12</span><span class="fact">host → driver</span><span class="fact">0 bytes</span><span class="fact">Python: `Send_Idle()`</span></div>
 
-Puts the driver in idle mode (the motor coasts or brakes, see Send_Settings).
+Puts the driver in idle mode: the motor coasts, or brakes when Send_Settings or `#Brake 1` asked for it.
 
 The driver does not answer this command.
 
@@ -3718,7 +3825,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 13</span><span class="fact">host → driver</span><span class="fact">0 bytes</span><span class="fact">Python: `Send_Save_config()`</span></div>
 
-Writes the current configuration (gains, limits, calibration, CAN ID, heartbeat, watchdog, gripper flag) to the EEPROM.
+Writes the current configuration (gains, limits, calibration, CAN ID, heartbeat, watchdog, gripper flag) to the EEPROM, and copies the CAN ID into the bootloader's board ID.
 
 The driver does not answer this command.
 
@@ -3728,7 +3835,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 14</span><span class="fact">host → driver</span><span class="fact">0 bytes</span><span class="fact">Python: `Send_Reset()`</span></div>
 
-Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again; this is how a firmware update begins.
+Resets the driver. From firmware 104 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again; this is how a firmware update begins.
 
 The driver does not answer this command.
 
@@ -3748,7 +3855,7 @@ The driver does not answer this command.
 
 <div class="cmd-facts" markdown><span class="fact">ID 15</span><span class="fact">host → driver</span><span class="fact">5 bytes</span><span class="fact">Python: `Send_Watchdog()`</span></div>
 
-Sets the watchdog: every valid CAN frame the driver receives resets it; when the time runs out the driver reports a watchdog error and stops. 0 turns it off (the default). The action byte is stored but not acted on by this firmware: the driver always stops into its idle behaviour.
+Sets the watchdog. The motion commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the status requests (the Send_Respond_ remote frames) reset it; the other frames and UART commands do not. When the time runs out the driver reports a watchdog error and disables the motor, which then coasts. 0 turns it off (the default). The action byte is stored but not acted on by this firmware. The setting is kept by Send_Save_config and there is no UART command for it: to turn off a saved watchdog, send 0 over CAN and save, or use `#Default`.
 
 **5 bytes**
 
@@ -3779,7 +3886,7 @@ Sets the heartbeat interval in ms; 0 turns the heartbeat off (the default). Kept
 
 <div class="cmd-facts" markdown><span class="fact">ID 35</span><span class="fact">host → driver</span><span class="fact">2 bytes</span></div>
 
-Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1 brake (phases shorted), 0 coast. Added in firmware 107 (STEPFOC 108). The Python library has no call for it yet.
+Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1 brake (phases shorted), 0 coast (the default). The setting is not saved: the driver coasts again after a power cycle. Braking applies only in idle without an error; an error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107 (STEPFOC 107). The Python library has no call for it yet.
 
 **2 bytes**
 
@@ -3856,8 +3963,8 @@ The driver's answer to Send_gripper_data_pack: position, measured current, and t
 | 3 | 7 | gripper_activated | bit | 1 activated |
 | 3 | 6 | gripper_action_status | bit | 1 going to the position, 0 idle, auto-release or calibrating |
 | 3 | 5-4 | gripper_object_detection | 2 bits | bit 5 is the low bit, bit 4 the high bit: 0 moving, 1 object detected while closing, 2 object detected while opening, 3 at the position |
-| 3 | 3 | gripper_temperature_error | bit |  |
-| 3 | 2 | gripper_timeout_error | bit |  |
+| 3 | 3 | gripper_temperature_error | bit | the driver's temperature error |
+| 3 | 2 | gripper_timeout_error | bit | the driver's watchdog error: the CAN watchdog ran out |
 | 3 | 1 | gripper_estop_error | bit |  |
 | 3 | 0 | gripper_calibrated | bit | 1 calibrated |
 
@@ -3968,7 +4075,7 @@ hand. [Over UART](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-ope
 | [`#Vmax`](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/utility/) | Set/Get | int | Status and utility |
 | [`#Vp`](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/calibration/) | Set/Get | int | Calibration and motor parameters |
 
-The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `#zz`, which have no handler: the driver answers nothing to them.
+The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `#zz`, which have no handler: the driver answers `Unknown command` to them, as to a name it does not know.
 
 ## By group
 
@@ -3990,16 +4097,16 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 | `#Iq` | Set/Get | float: current setpoint in mA | Current (torque) control with the given Iq setpoint. Enters **current** mode. | the measured Iq in mA |
 | `#Id` | Set/Get | float: current setpoint in mA | Sets the Id setpoint; normally left at 0. | the measured Id in mA |
 | `#Uq` | Set/Get | int: voltage in mV | Voltage-torque mode with the given q-axis voltage (no current loop). Enters **voltage torque** mode. | the Uq setpoint in mV |
-| `#Ud` | Set/Get | int: voltage in mV | The d-axis voltage used in voltage-torque mode; does not change the mode. Enters **gripper** mode. | the Ud setpoint in mV |
+| `#Ud` | Set/Get | int: voltage in mV | The d-axis voltage used in voltage-torque mode; does not change the mode. | the Ud setpoint in mV |
 | `#V` | Set/Get | int: speed setpoint in encoder ticks/s | Velocity control with the given speed. Enters **velocity** mode. | the measured speed in ticks/s |
 | `#P` | Set/Get | int: position setpoint in encoder ticks | Position control to the given position. Enters **position** mode. | the measured position in ticks |
 | `#PD` | Set/Get | int: position setpoint in encoder ticks | Impedance (PD) control around the given position with the gains KP and KD. Enters **PD** mode. | the measured position in ticks |
 | `#PDV` | Set/Get | int: speed setpoint in encoder ticks/s | The speed setpoint of the PD loop. | the PD speed setpoint |
 | `#PDI` | Set/Get | int: current feedforward in mA | The current feedforward of the PD loop. | the PD current feedforward |
 | `#Idle` | Action |  | Goes to idle; the motor coasts or brakes as set by Brake. Enters **idle** mode. | `Idle` |
-| `#Brake` | Set/Get | int: 0 or 1 | What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open). Takes effect once the driver is idle, so send Idle first. Added in firmware 107. | the setting |
+| `#Brake` | Set/Get | int: 0 or 1 | What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open, the default). Takes effect once the driver is idle, so send Idle first. Not saved: the driver coasts again after a power cycle. An error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107. | the setting |
 | `#Close` | Action |  | Leaves open loop and goes back to closed-loop idle. Enters **idle** mode. | nothing |
-| `#Openloop` | Set/Get | float: electrical speed | Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv. Enters **open loop** mode. | the open-loop speed |
+| `#Openloop` | Set/Get | float: electrical speed in rad/s | Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv. Without a number it still starts the motor, at the stored speed: `#Openloop` alone is not a query. The speed is the same setting as `#Opens`. Enters **open loop** mode. | the open-loop speed |
 
 
 ---
@@ -4011,7 +4118,7 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 | Command | Kind | Argument | What it does | Response |
 |---|---|---|---|---|
 | `#Vlim` | Set/Get | int: voltage in mV | The voltage limit of the current loops (Ud and Uq); 0 means use the supply voltage. | the current limit in mV |
-| `#Vlimit` | Set/Get | int: speed in encoder ticks/s | The speed limit; the velocity integrator is clamped to it. | the current limit |
+| `#Vlimit` | Set/Get | int: speed in encoder ticks/s | The speed limit: the speed the position loop may command, and the largest velocity setpoint. (The velocity integrator is clamped to the current limit.) | the current limit |
 | `#Kpp` | Set/Get | float: gain | Kp of the position loop. | the current value |
 | `#KP` | Set/Get | float: gain | KP of the impedance (PD) loop. | the current value |
 | `#KD` | Set/Get | float: gain | KD of the impedance (PD) loop. | the current value |
@@ -4022,7 +4129,7 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 | `#Kiiq` | Set/Get | float: gain | Ki of the Iq current loop; also sets Kiid. | the current value |
 | `#Kiid` | Set/Get | float: gain | Ki of the Id current loop. | the current value |
 | `#Ilim` | Set/Get | int: current in mA | The Iq current limit. Set it to the rated phase current of your motor; the firmware clamps it to 2800 mA. | the current limit |
-| `#Cbw` | Set/Get | float: bandwidth in Hz | The current loop bandwidth calibration uses to compute Kpiq and Kiiq. | the bandwidth |
+| `#Cbw` | Set/Get | float: bandwidth in Hz | The current loop bandwidth calibration uses to compute Kpiq and Kiiq. Not saved: 500 Hz after a power cycle. | the bandwidth |
 | `#Rstint` | Set/Get | int: 0 or 1 | Whether the integral accumulators are reset on every new setpoint. | the setting |
 
 
@@ -4041,15 +4148,15 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 | `#Flux` | Set/Get | float: Wb | The flux linkage, found by calibration. Not reachable over UART: the parser accepts `#flux` (lowercase) but the handler expects `Flux`, so neither spelling works. | the current value |
 | `#Cal` | Action |  | Runs the calibration routine (see Calibration): it measures R and L, finds the pole pairs, the phase order and the angle offset, and measures Kt, KV and the flux linkage. | the calibration log |
 | `#Offset` | Set/Get | float: angle in rad | The angle offset between encoder zero and electrical zero, found by calibration. | the current value |
-| `#Iqoffset` | Set/Get | int: current in mA | The current used by the angle-offset search. | the current value |
+| `#Iqoffset` | Set/Get | int: current in mA | The current used by the angle-offset search and the commutation check of Cal, 300 mA by default. Not saved. | the current value |
 | `#Magnet` | Get |  | Reads the encoder's magnet status. | `Magnet Good` or `Magnet Bad` |
-| `#Dir` | Set/Get | int: 0 or 1 | The counting direction of the encoder (1 is the default). | the current value |
+| `#Dir` | Set/Get | int: 0 or 1 | The counting direction of the encoder, set by calibration (0 after `#Default`). | the current value |
 | `#Phase` | Get |  | Prints the phase order found by calibration. | `Phase order is: N` |
-| `#Resv` | Set/Get | int: voltage in mV | The voltage the resistance test of Cal starts at; it rises until the power reaches Calpwr. | the current value |
-| `#Calpwr` | Set/Get | float: power in W | The power the resistance and inductance tests of Cal may dissipate in the motor. | the current value |
-| `#Openv` | Set/Get | int: voltage in mV | The voltage of the open-loop spin, in calibration and with Openloop. | the current value |
-| `#Opens` | Set/Get | float: electrical speed in rad/s | The speed of the open-loop spin in calibration. | the current value |
-| `#Vp` | Set/Get | int: voltage in mV | The voltage of the phase-order search in calibration. | the current value |
+| `#Resv` | Set/Get | int: voltage in mV | The voltage the resistance test of Cal starts at; it rises until the power reaches Calpwr. Not saved. | the current value |
+| `#Calpwr` | Set/Get | float: power in W | The power the resistance and inductance tests of Cal may dissipate in the motor. Not saved. | the current value |
+| `#Openv` | Set/Get | int: voltage in mV | The voltage of the open-loop spin, in calibration and with Openloop. Not saved. | the current value |
+| `#Opens` | Set/Get | float: electrical speed in rad/s | The speed of the open-loop spin in calibration; the same setting as the speed of `#Openloop`. | the current value |
+| `#Vp` | Set/Get | int: voltage in mV | The voltage of the phase-order search in calibration. Not saved. | the current value |
 | `#Calibrated` | Set/Get | int: 0 or 1 | The calibrated flag. `#Calibrated 1` clears a calibration error without calibrating; the motor may still be uncalibrated. | the flag |
 | `#PP` | Set/Get | int: pole pairs | The motor's pole pairs, found by Cal; they can also be set by hand. | the current value |
 
@@ -4062,27 +4169,27 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 
 | Command | Kind | Argument | What it does | Response |
 |---|---|---|---|---|
-| `#Vmax` | Set/Get | int: voltage in mV | The supply voltage above which a Vbus error is raised. | `Vmax in mV: N` |
+| `#Vmax` | Set/Get | int: voltage in mV | The supply voltage above which a Vbus error is raised: 29000 mV after `#Default`. | `Vmax in mV: N` |
 | `#Save` | Action |  | Writes the configuration to the EEPROM. Do it after calibration and after tuning. | `Save` |
-| `#Reset` | Action |  | Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again. | nothing |
+| `#Reset` | Action |  | Resets the driver. From firmware 104 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again. | nothing |
 | `#Tlim` | Set/Get | int: temperature in °C | The temperature at which the temperature error is raised; 75 by default. | `Temp limit N` |
-| `#Default` | Action |  | Writes the factory defaults to the EEPROM, including the serial number, hardware version and batch date, and clears the gripper flag, heartbeat and watchdog. Back those up first. | `Loaded default config!` |
+| `#Default` | Action |  | Writes the factory defaults to the EEPROM and loads them: the calibration is erased (Not calibrated), the CAN node ID goes back to 0, the gripper flag, heartbeat and watchdog are cleared, the hardware version and batch date are set to 1 and 24092024, and 1111 is stored as the serial number. Note the values first. | `Loaded default config!` |
 | `#Temp` | Get |  | Prints the thermistor temperature. | °C, or `Temp Off` while the thermistor is disabled |
 | `#Term` | Set/Get | int: 0 or 1 | Enables the thermistor measurement and the temperature error (off by default). | the setting |
-| `#Mode` | Get |  | Prints the control mode. | `Idle mode`, `Position control`, `Speed control`, `Current control`, `PD control`, `Open loop`, `Gripper mode`, `Gripper calib mode` |
+| `#Mode` | Get |  | Prints the control mode. In voltage-torque mode (`#Uq`) it prints nothing. | `Idle mode`, `Position control`, `Speed control`, `Current control`, `PD control`, `Open loop`, `Gripper mode`, `Gripper calib mode` |
 | `#Vbus` | Get |  | Prints the supply voltage. | mV |
-| `#Error` | Get |  | Prints which errors are active. | `No errors!` or `In error state!` followed by one line per active error |
+| `#Error` | Get |  | Prints which errors are active. | `No errors!` or `In error state!`, then one line per active error (see Errors and LED states), and `FAULT pin is HIGH` while the driver stage's fault pin is active |
 | `#Clear` | Action |  | Clears the errors and goes to idle. An error whose cause is still present comes straight back; a calibration error is cleared only by calibrating (or `#Calibrated 1`). Enters **idle** mode. | `Clear errors` |
-| `#Iabc` | Get |  | Prints the phase currents. | `Ia`, `Ib` in mA |
+| `#Iabc` | Get |  | Prints the phase currents. | `Ia`, `Ib`, `Ic` in mA |
 | `#PWM` | Get |  | Prints the PWM duty values. | the duties |
 | `#Help` | Action |  | Prints a short command reference. Added in firmware 106. | the reference |
-| `#Info` | Get |  | Prints the driver's identity and state: hardware and firmware version, serial number, motor parameters, calibration, errors. | the report |
+| `#Info` | Get |  | Prints the driver's identity and the motor: hardware version, batch date, firmware version, ISR time, CAN ID, calibrated or not, temperature, Vbus, Dir, phase order, commutation direction, the speeds of the calibration spin, pole pairs, R, L, Kt and KV. The serial number is `#SERNUM`, the gains `#Param`, the errors `#Error`. | the report |
 | `#Param` | Get |  | Prints every gain of every loop. | the gains |
-| `#Cyc` | Set/Get | int: interval in ms (0 = off) | Sends position, speed and Iq on its own every interval: `$ <position> <speed> <Iq>`; for BetterSerialPlotter. | `Cyclic disabled` when turned off |
-| `#Cyca` | Set/Get | int: interval in ms (0 = off) | Like Cyc, in the Arduino plotter format `Position:x,Speed:y,Iq:z`. | `Cyclic disabled` when turned off |
-| `#CANID` | Set/Get | int: 0 to 13 | The CAN node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over CAN. Setting the ID also sets the bootloader's board ID. Kept over a power cycle after Save. | the ID, or `Invalid CAN ID` |
-| `#SERNUM` | Set/Get | int: number | The serial number stored in the EEPROM. | `Serial number is: N` |
-| `#Activate` | Action |  | Sets the activated flag. | `Controller activated` |
+| `#Cyc` | Set/Get | int: interval in ms (0 = off) | Sends position, speed and Iq on its own every interval: `$ <position> <speed> <Iq>`; for BetterSerialPlotter. | `Cyclic disabled` for `#Cyc` without a number; `#Cyc 0` stops the output without an answer |
+| `#Cyca` | Set/Get | int: interval in ms (0 = off) | Like Cyc, in the Arduino plotter format `Position:x,Speed:y,Iq:z`. | `Cyclic disabled` for `#Cyca` without a number; `#Cyca 0` stops the output without an answer |
+| `#CANID` | Set/Get | int: 0 to 13 | The CAN node ID. Use 0 to 13: the firmware accepts 14 and 15, but the bootloader reserves them and a driver on one of those cannot be updated over CAN. Kept over a power cycle after Save, which also copies it into the bootloader's board ID. | the ID, or `Invalid CAN ID` |
+| `#SERNUM` | Set/Get | int: number | The serial number. Save writes it to the EEPROM, but the firmware does not read it back at power-up: after a power cycle the driver reports 1. | `Serial number is: N` |
+| `#Activate` | Action |  | Sets the controller's activated flag (bit 6 of byte 1 of Send_Respond_State_of_Errors). It is not the gripper's activate bit, which `#Gripact` and Send_gripper_data_pack set. | `Controller activated` |
 | `#Pullconfig` | Get |  | Prints the whole configuration on one line, for Motor GUI. | the configuration |
 | `#LED` | Set/Get | int: 0 or 1 | Turns the status LED on or off. | the LED state |
 
@@ -4097,7 +4204,7 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 |---|---|---|---|---|
 | `#Gripper` | Set/Get | int: 0 or 1 | Whether this driver is a gripper. Save it; `#Default` clears it. | the flag |
 | `#Gripcal` | Action |  | Starts the gripper calibration (the jaws find their end stops). Enters **gripper calibration** mode. | `Gripper calibration!` |
-| `#Gripinfo` | Get |  | Prints the gripper state: calibrated, activated, end stops, position, current. | the report |
+| `#Gripinfo` | Get |  | Prints the gripper state: whether the driver is a gripper, calibrated, activated, the position, speed and current setpoints, the E-stop, action and object-detection status, and the end stops. | the report |
 | `#Gripstop` | Set/Get | int: 0 or 1 | The gripper E-stop bit. | the bit |
 | `#Gripact` | Set/Get | int: 0 or 1 | The activate bit. | the bit |
 | `#Gripcur` | Set/Get | int: current in mA | The current limit of gripper moves. The firmware does not clamp it; see the gripper manual for the safe range. | the setpoint |
@@ -4111,153 +4218,88 @@ The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `
 
 # Defaults
 
-The values the firmware starts with, from its source (`common.h`) at the release this site describes. `#Default` writes the EEPROM defaults, which are the same unless the firmware comment says otherwise.
+The settings of the firmware, read from its source at the release this site describes. The table leaves out
+the firmware's internal state (counters, flags, scratch variables).
 
-| Variable | Default | Firmware comment |
-|---|---|---|
-| `SERIAL_NUMBER` | 1 |  |
-| `HARDWARE_VERSION` | 1 | Version of the Spectral BLDC driver PCB |
-| `BATCH_DATE` | 1 | Date the batch was produced |
-| `SOFTWARE_VERSION` | 1 | Software release |
-| `I_AM_GRIPPER` | 1 | Is motor controller gripper (1) or not (0) |
-| `LED_ON_OFF` | 1 | Use LED for status indication |
-| `interrupt_tick` | 0 | Ticks of our interrupt routine |
-| `TEMP_DEG` | 23 | Temperature in degrees celsius |
-| `theta_offset` | 0.0f | will be determined at calibration |
-| `pole_pairs` | 11 | Number of pole pairs of your BLDC motor |
-| `current_control_bandwidth` | 500 | default 200 HZ; Will set PI gains for Q and D current loops based on phase resistance |
-| `sleep_pin_state` | 0 |  |
-| `reset_pin_state` | 0 |  |
-| `Crossover_frequency` | 0.0 | Crossover frequency, in Radians per sample |
-| `DIR_` | 1 | When looking at the magnetic encoder counter-clockwise is POSITIVE rotation. |
-| `Phase_order` | 2 |  |
-| `commutation_dir` | 1 | +1 or -1, auto-detected at calibration so +Iq/+velocity/+rotation map to +encoder rotation |
-| `Thermistor_on_off` | 0 | Are we taking termistor mesurements? 0 is off, 1 is on |
-| `Controller_mode` | 0 | 0 -> idle, 1 -> Positon, 2 -> Speed, 3 -> Current, 4 -> PD, 5 -> Open-loop speed, 6 -> Gripper mode, 7-> Calibrate gripper, 8 -> Voltage Torque mode |
-| `brake_coast` | 0 | Idle-mode (Controller_mode == 0) phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage PWM vector shorts the phases together) |
-| `Resistance` | 0 | Resistance of SINGLE PHASE of your BLDC motor |
-| `Total_Resistance` | 0 | = 2 * Resistance + 2 * R_sense + 2 *Rdson |
-| `Inductance` | 0 | Inductance of SINGLE PHASE of your BLDC motor |
-| `Kt` | 0 | Torque constant of your BLDC motor |
-| `flux_linkage` | 0 | Flux linkage of your BLDC motor |
-| `KV` | 0 |  |
-| `Max_temperature` | 75 | Max temperature in degrees |
-| `Min_temperature` | -20 | Min temperature in degrees |
-| `Max_Vbus` | 29500 | Max vbus voltage in mV |
-| `Min_Vbus` | 9000 | Min vbus voltage in mV |
-| `execution_time` | 0 | Execution time of our interrupt loops |
-| `watchdog_time_ms` | 0 |  |
-| `watchdog_reset` | 1 |  |
-| `watchdog_action` | 0 | Hold position, Idle, brake |
-| `Heartbeat_rate_ms` | 0 | Motor controller will send data every Heartbeat_rate_ms |
-| `Send_heartbeat` | 0 |  |
-| `Activated` | 0 | If controller is activated or not |
-| `Error` | 0 | General error |
-| `temperature_error` | 0 | Termistor reported error |
-| `encoder_error` | 0 | Encoder magnet is not alligned error |
-| `Vbus_error` | 0 | Vbus voltage is too small or too large |
-| `Driver_error` | 0 | Driver reported error. 3 possible conditions: Undervoltage, thermal shutdown, overcurrent |
-| `Velocity_error` | 0 | We are moving too fast |
-| `Current_error` | 0 | We go past max current |
-| `ESTOP_error` | 0 | If we received estop command |
-| `Watchdog_error` | 0 | If we pass watchdog timeout time |
-| `CAN_init_error` | 0 | Set if CAN peripheral failed to initialize; CAN bus is skipped, UART stays usable |
-| `commutation` | 0 | 0 is space vector, 1 is sine |
-| `Calibration` | 0 | 0 - outside of calibration, 1 inside of calibration, 2 failed calibration, 3 success calibration |
-| `Calibrated` | 0 | 0 if motor is not calibrated, 1 if it is calibrated |
-| `Resistance_calc_voltage` | 1000 | Voltage used to calculate resistance //1000 |
-| `Calibration_power` | 12 | Max power that can dissipate during inductance test. |
-| `Calibration_Inductance_voltage` | 0 | Calculated from Calibration power and resistance |
-| `Open_loop_voltage` | 5000 | Voltage to use when spinning the motor open loop. In mV |
-| `Open_loop_speed` | 20.0 | Speed to be used when spinning the motor open loop. In RAD/s |
-| `Number_of_rotations` | 8 | Number of open loop electrical rotations during calibration |
-| `Phase_voltage` | 5000 | Max voltage to be used during Kv calculation |
-| `Calib_error` | 0 |  |
-| `Magnet_cal_status` | 0 |  |
-| `Vbus_cal_status` | 0 |  |
-| `Resistance_cal_status` | 0 |  |
-| `Inductance_cal_status` | 0 |  |
-| `Open_loop_cal_status` | 0 |  |
-| `Kt_cal_status` | 0 |  |
-| `Phase_order_status` | 0 |  |
-| `KV_status` | 0 |  |
-| `cyclic` | 0 | If 1 we Periodically send messages without request from host. |
-| `cyclic_a` | 0 | If 1 we Periodically send messages without request from host. |
-| `cyclic_period` | 0 | We send messages every cyclic_period |
-| `CAN_ID` | 0 | CAN id of THIS motor driver! No 2 motor drivers can share the same ID. |
-| `Wrong_DL` | 0 |  |
-| `temp` | 0 |  |
-| `temp1` | 0 |  |
-| `temp2` | 0 |  |
-| `handle_can` | 0 |  |
-| `hall_trigger` | 1 | used to record if hall sensor was triggered or not, normal state of hall is high (1) |
-| `trigger_value` | 0 |  |
-| `calibration_offset_current` | 300 |  |
-| `temp_var_offset_calib` | 0 |  |
-| `align_state` | 0 |  |
-| `align_counter` | 0 |  |
-| `aligned_angle` | 0 |  |
-| `align_done` | false |  |
-| `calib_done` | false |  |
-| `calib_reset` | false |  |
-| `Velocity_fwd` | 0 |  |
-| `Velocity_bwd` | 0 |  |
-| `Align_stage` | 0 | Calibrate_Angle_Offset_Align() progress: state index (0 = not running) |
-| `Align_point` | 0 | sweep index within the current stage |
-| `Spin_confirm_delta` | 0 | diagnostic: encoder ticks moved during the "confirm commutation" spin test, on failure |
-| `Spin_confirm_vbus_mV` | 0 | diagnostic: VBUS_mV sampled at that same failure |
-| `microstep` | 16 |  |
-| `gosteps` | 0 |  |
-| `step_interval` | 1000 | step interval in microseconds |
-| `open_loop_move_done` | 0 | 1 = finished, cleared by user |
-| `Voltage_limit` | 0 | Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used |
-| `Reset_integral_accumulator` | 0 |  |
-| `Kp_p` | 11 |  |
-| `Position_setpoint` | 0 |  |
-| `P_errSum` | 0 |  |
-| `Kp_v` | 0.03 | 0.006 basic values that work for most motors but not optimal |
-| `Ki_v` | 0.0003 | 0.0001 basic values that work for most motors but not optimal |
-| `V_errSum` | 0 |  |
-| `Feedforward_speed` | 0 |  |
-| `Velocity_setpoint` | 0 | -1.5 |
-| `Velocity_limit` | 800000 | Clamp integrals to this  [TICKS/s] |
-| `Velocity_limit_error` | 20000000 | [TICKS/s] ; Velocity when we will report error |
-| `Ki` | 0 | zero location |
-| `Kp_id` | 3 |  |
-| `Ki_id` | 1.5 |  |
-| `Id_setpoint` | 0 |  |
-| `Kp_iq` | 3 |  |
-| `Ki_iq` | 1.5 |  |
-| `Iq_current_limit` | 1000 |  |
-| `Id_current_limit` | 0 |  |
-| `Feedforward_current` | 0 |  |
-| `KD` | 0.002800 | [Nm*s/rad]  KD 0.002800 |
-| `KP` | 0.14000 | [Nm/rad] KP 0.14000 |
-| `Uq_setpoint` | 0 |  |
-| `Ud_setpoint` | 0 |  |
-| `Same_command` | 0 |  |
-| `At_position` | 0 |  |
-| `position_setpoint` | 0 |  |
-| `speed_setpoint` | 20 |  |
-| `current_setpoint` | 200 |  |
-| `position` | 0 |  |
-| `speed` | 0 |  |
-| `current` | 0 |  |
-| `calibrated` | 0 |  |
-| `action_status` | 0 | -0 Stopped(or performing activation /automatic release). |
-| `activated` | 0 |  |
-| `object_detection_status` | 3 |  |
-| `temperature_error` | 0 |  |
-| `timeout_error` | 0 |  |
-| `estop_error` | 0 |  |
-| `release_direction` | 0 |  |
-| `estop_status` | 0 |  |
-| `max_open_position` | 10329 |  |
-| `max_closed_position` | -229 |  |
-| `position_ticks` | 0 |  |
-| `max_speed` | 80000 |  |
-| `min_speed` | 40 |  |
-| `In_calibration` | 0 |  |
+- **Start value** is the value in the firmware's structures (`common.h`). At power-up the firmware loads the saved
+  settings from the EEPROM over it, so for a setting that `#Save` keeps the start value only shows until the EEPROM
+  is read.
+- **After `#Default`** is what the driver runs with after `#Default`, which writes the factory values to the EEPROM
+  and loads them. A fresh board, and a board whose saved configuration fails its check at power-up, gets the same
+  values.
+- **Kept by `#Save`** says whether the setting survives a power cycle. *No* means the driver starts with the start
+  value again after every power-up.
+
+`#Default` also sets the CAN node ID to 0 and erases the calibration; see
+[Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/107/05-setup/saving/).
+
+| Variable | Start value | After `#Default` | Kept by `#Save` | Firmware comment |
+|---|---|---|---|---|
+| `SERIAL_NUMBER` | 1 | 1111 in the EEPROM, not read back | written, not read back |  |
+| `HARDWARE_VERSION` | 1 | 1 | yes | Version of the Spectral BLDC driver PCB |
+| `BATCH_DATE` | 1 | 24092024 | yes | Date the batch was produced |
+| `SOFTWARE_VERSION` | 1 | 107 | no: set by the firmware | Software release |
+| `I_AM_GRIPPER` | 1 | 0 | yes | Is motor controller gripper (1) or not (0) |
+| `LED_ON_OFF` | 1 | 1 | yes | Use LED for status indication |
+| `theta_offset` | 0.0f | 0 | yes | will be determined at calibration |
+| `pole_pairs` | 11 | 7 | yes | Number of pole pairs of your BLDC motor |
+| `current_control_bandwidth` | 500 | — | no | default 200 HZ; Will set PI gains for Q and D current loops based on phase resistance |
+| `DIR_` | 1 | 0 | yes | When looking at the magnetic encoder counter-clockwise is POSITIVE rotation. |
+| `Phase_order` | 2 | 0 | yes |  |
+| `commutation_dir` | 1 | 1 | yes | +1 or -1, auto-detected at calibration so +Iq/+velocity/+rotation map to +encoder rotation |
+| `Thermistor_on_off` | 0 | 0 | yes | Are we taking termistor mesurements? 0 is off, 1 is on |
+| `brake_coast` | 0 | — | no | Idle-mode (Controller_mode == 0) phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage PWM vector shorts the phases together) |
+| `Resistance` | 0 | 0 | yes | Resistance of SINGLE PHASE of your BLDC motor |
+| `Total_Resistance` | 0 | 0 | yes | = 2 * Resistance + 2 * R_sense + 2 *Rdson |
+| `Inductance` | 0 | 0 | yes | Inductance of SINGLE PHASE of your BLDC motor |
+| `Kt` | 0 | 0 | yes | Torque constant of your BLDC motor |
+| `flux_linkage` | 0 | 0 | yes | Flux linkage of your BLDC motor |
+| `KV` | 0 | 0 | yes |  |
+| `Max_temperature` | 75 | 75 | yes | Max temperature in degrees |
+| `Min_temperature` | -20 | — | no | Min temperature in degrees |
+| `Max_Vbus` | 29500 | 29000 | yes | Max vbus voltage in mV |
+| `Min_Vbus` | 9000 | — | no | Min vbus voltage in mV |
+| `watchdog_time_ms` | 0 | 0 | yes |  |
+| `watchdog_action` | 0 | 0 | yes | Hold position, Idle, brake |
+| `Heartbeat_rate_ms` | 0 | 0 | yes | Motor controller will send data every Heartbeat_rate_ms |
+| `Calibrated` | 0 | 0 | yes | 0 if motor is not calibrated, 1 if it is calibrated |
+| `Resistance_calc_voltage` | 1000 | — | no | Voltage used to calculate resistance //1000 |
+| `Calibration_power` | 12 | — | no | Max power that can dissipate during inductance test. |
+| `Open_loop_voltage` | 5000 | — | no | Voltage to use when spinning the motor open loop. In mV |
+| `Open_loop_speed` | 20.0 | — | no | Speed to be used when spinning the motor open loop. In RAD/s |
+| `Phase_voltage` | 5000 | — | no | Max voltage to be used during Kv calculation |
+| `cyclic_period` | 0 | — | no | We send messages every cyclic_period |
+| `CAN_ID` | 0 | 0 | yes | CAN id of THIS motor driver! No 2 motor drivers can share the same ID. |
+| `calibration_offset_current` | 300 | — | no |  |
+| `Voltage_limit` | 0 | 0 | yes | Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used |
+| `Reset_integral_accumulator` | 0 | 0 | yes |  |
+| `Kp_p` | 11 | 11 | yes |  |
+| `Position_setpoint` | 0 | — | no |  |
+| `Kp_v` | 0.03 | 0.03 | yes | 0.006 basic values that work for most motors but not optimal |
+| `Ki_v` | 0.0003 | 0.0003 | yes | 0.0001 basic values that work for most motors but not optimal |
+| `Feedforward_speed` | 0 | — | no |  |
+| `Velocity_setpoint` | 0 | — | no | -1.5 |
+| `Velocity_limit` | 800000 | 800000 | yes | Clamp integrals to this  [TICKS/s] |
+| `Velocity_limit_error` | 20000000 | — | no | [TICKS/s] ; Velocity when we will report error |
+| `Kp_id` | 3 | 3 | yes |  |
+| `Ki_id` | 1.5 | 1.5 | yes |  |
+| `Id_setpoint` | 0 | — | no |  |
+| `Kp_iq` | 3 | 3 | yes |  |
+| `Ki_iq` | 1.5 | 1.5 | yes |  |
+| `Iq_current_limit` | 1000 | 1000 | yes |  |
+| `Id_current_limit` | 0 | 0 | yes |  |
+| `Feedforward_current` | 0 | — | no |  |
+| `KD` | 0.002800 | 0.0028 | yes | [Nm*s/rad]  KD 0.002800 |
+| `KP` | 0.14000 | 0.1400 | yes | [Nm/rad] KP 0.14000 |
+| `Uq_setpoint` | 0 | — | no |  |
+| `Ud_setpoint` | 0 | — | no |  |
+| `position_setpoint` | 0 | — | no |  |
+| `speed_setpoint` | 20 | — | no |  |
+| `current_setpoint` | 200 | — | no |  |
+| `action_status` | 0 | — | no | -0 Stopped(or performing activation /automatic release). |
+| `activated` | 0 | — | no |  |
+| `release_direction` | 0 | — | no |  |
+| `estop_status` | 0 | — | no |  |
 
 
 ---
@@ -4271,13 +4313,13 @@ The values the firmware starts with, from its source (`common.h`) at the release
 | Pattern | State |
 |---|---|
 | three short flashes, a pause | normal operation: calibrated, no error |
-| flashing every 0.5 s | calibration running |
+| fast flashing, about 10 times a second | calibration running |
 | on, steady | error mode, or not calibrated |
 | off | no power, or `#LED 0` |
 
 | Normal operation | Calibration | Error mode |
 |---|---|---|
-| ![Three short flashes and a pause](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Normal.webp){ width="180" } | ![Flashing every 0.5 s](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Calib.webp){ width="180" } | ![On, steady](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Error2.webp){ width="180" } |
+| ![Three short flashes and a pause](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Normal.webp){ width="180" } | ![Fast flashing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Calib.webp){ width="180" } | ![On, steady](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Error2.webp){ width="180" } |
 
 ## The error flags
 
@@ -4289,22 +4331,23 @@ Send_Respond_State_of_Errors (bits numbered from the most significant).
 | `Error` | `In error state!` | 0, 7 | any of the flags below is set (also the error bit of every CAN identifier) |
 | `temperature_error` | `Temp error` | 0, 6 | the thermistor reads above `#Tlim` (with `#Term 1`) |
 | `encoder_error` | `Encoder error` | 0, 5 | the magnet is not detected or the reading fails its check |
-| `Vbus_error` | `Vbus error` | 0, 4 | the supply is below 9 V or above `#Vmax` (29.5 V by default) |
-| `Driver_error` | `Driver error (undervoltage, thermal shutdown, or overcurrent)` | 0, 3 | the MOSFET driver's fault output is active |
-| `Velocity_error` | `Velocity error` | 0, 2 | the speed exceeds the limit |
+| `Vbus_error` | `Vbus error` | 0, 4 | the supply is below 9 V or above `#Vmax` (29 V after `#Default`) |
+| `Driver_error` | `Drv error` | 0, 3 | the MOSFET driver reported a fault on its fault pin: undervoltage, thermal shutdown or overcurrent. `#Error` also prints `FAULT pin is HIGH` while the fault output is still active |
+| `Velocity_error` | `Velocity error` | 0, 2 | the measured speed exceeds 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit: a runaway or an encoder fault, not `#Vlimit` |
 | `Current_error` | `Current error` | 0, 1 | never in this firmware; reserved |
 | `ESTOP_error` | `Received ESTOP command` | 0, 0 | Send_ESTOP was received |
 | `Calibrated` (0) | `Not calibrated` | 1, 7 (1 = calibrated) | the motor has not been calibrated |
 | `Activated` | — | 1, 6 | the activated flag, not an error |
-| `Watchdog_error` | `Watchdog error` | 1, 5 | the watchdog time passed without a valid CAN frame |
+| `Watchdog_error` | `Watchdog error` | 1, 5 | the watchdog time passed without a motion command or a status request over CAN |
 
-Gripper mode has its own flags in Respond_Gripper_data_pack: a temperature error, a timeout error (the jaw did
-not reach its target in time) and an E-stop error; see the [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/gripper/) reference.
+Gripper mode has its own flags in Respond_Gripper_data_pack: a temperature error (the driver's temperature
+error), a timeout error (the driver's watchdog error: the CAN watchdog ran out) and an E-stop error; see the
+[Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/gripper/) reference.
 
 ## Clearing
 
 `#Clear` and Send_Clear_Error clear every flag except `Calibrated` and go to idle; a flag whose cause persists is
-set again at once. The watchdog, E-stop and velocity errors clear and stay clear; the Vbus, encoder, driver and
+set again at once. While any flag is set the driver disables the motor, which coasts whatever `#Brake` says. The watchdog, E-stop and velocity errors clear and stay clear; the Vbus, encoder, driver and
 temperature errors come back until the cause is gone. Calibration clears the calibration error.
 
 
@@ -4359,7 +4402,6 @@ The `Spectral-BLDC` package ([Spectral-BLDC-Python](https://github.com/Source-Ro
 | Message | Attributes |
 |---|---|
 | Respond_data_pack_1 | `position`, `speed`, `current` |
-
 | Send_Respond_Encoder_data | `position`, `speed` |
 | Send_Respond_Iq_data | `current` |
 | Send_Respond_Temperature | `temperature` |
@@ -4405,8 +4447,6 @@ More examples are in the [Spectral-BLDC-Python examples](https://github.com/Sour
 More examples are in the [Spectral-BLDC-Python examples folder](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples).
 
 ## Examples
-
-Check the examples [here!](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples)
 
 ``` py title="Get_encoder_data.py"
 import Spectral_BLDC as Spectral
@@ -4477,7 +4517,7 @@ What you will need to create a simple mobile robot is:
 
 ## Setup
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/AMR_setup.webp)
+![Two drivers powered from a drill battery, each with a gimbal motor, on one CAN bus with the CAN adapter and a laptop](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/AMR_setup.webp)
 
 The setup will be the same for any kind of mobile robot. You will need to follow the  diagram above to wire everything up.
 
@@ -4487,7 +4527,9 @@ The setup will be the same for any kind of mobile robot. You will need to follow
 * Connect the power to both drivers. You can daisy chain it or use 2 separate wires.
 * You will also need to connect your xbox controller to the PC/laptop via Bluetooth.
 
-The code below is really simple example that drives the robot using the left joystick of the controller.
+The code below is really simple example that drives the robot using the left joystick of the controller. It sets
+a watchdog on both drivers, so the wheels stop if the program or the laptop stops; clear the watchdog error
+(`#Clear` or Send_Clear_Error) before the next run, as the code does at its start.
 
 ``` py title="Spectral_mobile_robot_xbox.py"
 from inputs import get_gamepad
@@ -4502,6 +4544,12 @@ Motor = []
 # We are using 2 motors with IDs 0 and 1
 Motor.append(Spectral.SpectralCAN(node_id=0, communication=Communication1))
 Motor.append(Spectral.SpectralCAN(node_id=1, communication=Communication1))
+
+# Stop the wheels when this program stops sending: a watchdog of 500 ms on each driver.
+# Every Send_data_pack_1 below resets it; if none arrives for 500 ms, the driver stops the motor.
+for m in Motor:
+    m.Send_Clear_Error()
+    m.Send_Watchdog(500)
 
 timeout_setting = 0.00005
 
@@ -4555,7 +4603,7 @@ def control_robot():
         Motor[0].Send_data_pack_1(None,int(left_wheel_speed * 1000000),0)
         Motor[1].Send_data_pack_1(None,int(right_wheel_speed * -1000000),0)
 
-        for i in range(1, 4):  # Loop 9-1=8 to check for received data
+        for i in range(1, 4):  # read up to 3 replies
             message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
             print(f"unpack{i} is: {UnpackedMessageID}")
 
@@ -4582,12 +4630,12 @@ if __name__ == '__main__':
 ## Intro
 In this guide we will show you how you can control a leg of any quadruped robot using Spectral micro BLDC drivers. <br />If you can control one of them you can control all the rest!<br />
 
-**After you finish this guide you will be able to do something like this: [Link](https://youtu.be/g9rHJr9-tok) **<br />
+**After you finish this guide you will be able to do something like this:** [video](https://youtu.be/g9rHJr9-tok)<br />
 
 !!! tip "Python API and toolbox"
     This guide leverages [Spectral BLDC python API](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main) and [Source robotics toolbox](https://github.com/Source-Robotics/Source-Robotics-Toolbox)
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/LEG_wiring.webp)
+![The robot leg: two motors, each with its driver, on one CAN bus](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/LEG_wiring.webp)
 
 !!! note "Building the LEG"
     In this guide we only recommend you the hardware you can use to build the robot you designed. We do not offer already made designs you can build!
@@ -4606,7 +4654,7 @@ What you will need:
 * 1 x 24V power supply
 * A Laptop or raspberry pi
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/leg_setup.webp)
+![Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/leg_setup.webp)
 
 The setup will be the same for any kind of quadruped leg. You will need to follow the diagram above to wire everything up.
 
@@ -4617,7 +4665,7 @@ The setup will be the same for any kind of quadruped leg. You will need to follo
 
 ## Leg kinematics
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/robot_leg_dh_table.webp)
+![The coordinate frames of the leg and its DH table](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/robot_leg_dh_table.webp)
 
 First you will need to assign coordinate frames to your leg model.
 We already did it but if you want to learn more on how and why check this [Link](https://automaticaddison.com/how-to-assign-denavit-hartenberg-frames-to-robotic-arms/)<br />
@@ -4630,7 +4678,7 @@ value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / fo
 
 Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/leg_terminal.webp)
+![The leg in its reference pose and the positions leg_calib.py prints](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/leg_terminal.webp)
 
 ``` py title="leg_calib.py"
 
@@ -4650,7 +4698,7 @@ while True:
     Motor[0].Send_Respond_Encoder_data()
     Motor[1].Send_Respond_Encoder_data()
 
-    for i in range(1, 7):  # Loop 9-1=8 to check for received data
+    for i in range(1, 7):  # read up to 6 replies
         message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
         print(f"unpack {i} is: {UnpackedMessageID}")
 
@@ -4693,7 +4741,7 @@ We defined that trajectory with our function generate_circle_coords and with par
 * speed - Speed of the end-effector in meters per second
 * time_var - Elapsed time in seconds
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/circ_2.webp)
+![The circle the foot follows at a speed of 1 and of 3](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/circ_2.webp)
 
 How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perfectly. With larger speeds the system can't keep up and overshoots. This is due multiple reaseons like:
 
@@ -4816,7 +4864,7 @@ while timer.elapsed_time < 1100000:
     Motor[1].Send_data_pack_1(Position = Needed_joint_pos[1],Speed = speed_var[1], Current = 0)
 
     # Handles data we get from the motors
-    for i in range(1, 3):  # Loop 9-1=8 to check for received data
+    for i in range(1, 3):  # read up to 2 replies
         message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
         #print(f"unpack{i} is: {UnpackedMessageID}")
 
@@ -4954,7 +5002,7 @@ In robotics, a significant portion of motor power is consumed just fighting agai
 
 ## The Approach
 
-In this example, we use the Robotics Toolbox for Python to model a "robotic arm" with a single revolute joint. We compute the required torque using the Recursive Newton-Euler Algorithm (RNEA) and convert this torque into a motor current/torque that the motor controller will command the motor. In this blog post we will explain in short pseudo code snippets how the algorithm works on a single DOF arm.
+In this example, we use the Robotics Toolbox for Python to model a "robotic arm" with a single revolute joint. We compute the required torque using the Recursive Newton-Euler Algorithm (RNEA) and convert this torque into a motor current/torque that the motor controller will command the motor.
 
 For more info check the full guide here:  [https://source-robotics.com/blogs/blog/gravity-compensation-in-robotics](https://source-robotics.com/blogs/blog/gravity-compensation-in-robotics)
 
@@ -4972,7 +5020,7 @@ Bilateral teleoperation is a concept that Involves two-way communication where b
 
 The two grippers are virtually coupled to each other, allowing either to act as the master (the haptic interface) or the slave (the manipulator) in the system. We are not using a force sensor at the grippers but are relying on proprioception.
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/bil_tel.webp)
+![Two motors coupled by bilateral teleoperation: each follows the other and feels its force](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/bil_tel.webp)
 
 Watch these example videos to get a "feel" of the concept:
 
@@ -4998,7 +5046,7 @@ The magic of this setup is done with these 2 simple formulas.
 
 We recommend these items to create a simple test jig:
 
-* 2 x spectral micro BLDC - used for 2 wheels 
+* 2 x spectral micro BLDC - one for each motor or gripper
 * Wires to connect everything up: [CAN wires](https://source-robotics.com/products/spectral-micro-can-cable), [Power wires](https://source-robotics.com/products/spectral-micro-power-cable)
 * 2 x BLDC motors or SSG48 grippers
 * 1 x [CAN adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter)
@@ -5010,7 +5058,7 @@ We recommend these items to create a simple test jig:
 
 Here we are showing you the setup for any 2 motors, for example we are using 2 x [ssg48 grippers](https://source-robotics.com/products/compliant-gripper) that are connected in exactly the same setup.
 
-![drawing](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/leg_setup.webp)
+![Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/leg_setup.webp)
 
 You will need to follow the diagram above to wire everything up.
 
@@ -5026,7 +5074,7 @@ This code will run on your PC and it will communicate with the drivers from the 
 !!! danger "Advanced example"
     More advanced code that allows communication over UDP can be found here: [Link](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples/Advanced/SSG48%20gripper%20bilateral%20teleop) 
 
-``` py title="Spectral_mobile_robot_xbox.py"
+``` py title="bilateral_teleoperation.py"
 import Spectral_BLDC as Spectral
 import SourceRoboticsToolbox as SourceRoboticsToolbox
 import time
@@ -5074,7 +5122,7 @@ while(1):
     Motor[0].Send_data_pack_1(Position = None,Speed = None, Current = int(T0))
     Motor[1].Send_data_pack_1(Position = None,Speed = None, Current = int(T1))
 
-    for i in range(1, 3):  # Loop 9-1=8 to check for received data
+    for i in range(1, 3):  # read up to 2 replies
         message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
         #print(f"unpack{i} is: {UnpackedMessageID}")
 
@@ -5128,9 +5176,15 @@ The library is intended both for:
 
 Follow this [guide](https://docs.simplefoc.com/installation)
 
+!!! warning "This replaces the bootloader"
+    This project has no upload offset, so an upload with the programming adapter writes SimpleFOC at
+    `0x08000000`, over the bootloader. Firmware updates over UART or CAN stop working. To go back to the Spectral
+    firmware, install the bootloader again as in
+    [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/), then flash a release.
+
 Your platformio.ini should look like this:
 
-``` C++ title="main.cpp"
+``` ini title="platformio.ini"
 [env:genericSTM32F103CB]
 platform = ststm32
 board = genericSTM32F103CB
@@ -5155,7 +5209,8 @@ If you want to develop more advanced applications with SimpleFOC you can follow 
 
 This example will spin the motor in open loop and enable serial monitor.<br />
 Use this code as a base for more advanced code you will develop with SimpleFOC.<br />
-In the github folder we also offer full FOC example!
+The [Spectral-Micro-Simple-FOC](https://github.com/Source-Robotics/Spectral-Micro-Simple-FOC) repository has
+this project and more examples in its `examples` folder, among them voltage-torque FOC with the encoder.
 
 ``` C++ title="main.cpp"
 #include "Arduino.h"
@@ -5280,8 +5335,8 @@ Open an issue in the [firmware repository](https://github.com/Source-Robotics/Sp
 for the driver and its firmware, or in [Spectral-BLDC-Python](https://github.com/Source-Robotics/Spectral-BLDC-Python/issues)
 for the Python library. Include:
 
-1. **The output of `#Info`**, copied from the terminal. It carries the hardware and firmware version, the motor
-   parameters, the calibration state and the errors.
+1. **The output of `#Info`, `#Error` and `#Param`**, copied from the terminal. They carry the hardware and
+   firmware version, the motor parameters, the calibration state, the errors and the gains.
 2. **The motor**: type, and the resistance, inductance and pole pairs calibration found (`#Info` prints them).
 3. **The supply**: voltage, and whether it has a current limit.
 4. **What you did and what happened**: the commands, in order, and the driver's answers; the calibration log if it

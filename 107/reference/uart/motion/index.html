@@ -1469,7 +1469,7 @@
 <td><code>#Ud</code></td>
 <td>Set/Get</td>
 <td>int: voltage in mV</td>
-<td>The d-axis voltage used in voltage-torque mode; does not change the mode. Enters <strong>gripper</strong> mode.</td>
+<td>The d-axis voltage used in voltage-torque mode; does not change the mode.</td>
 <td>the Ud setpoint in mV</td>
 </tr>
 <tr>
@@ -1518,7 +1518,7 @@
 <td><code>#Brake</code></td>
 <td>Set/Get</td>
 <td>int: 0 or 1</td>
-<td>What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open). Takes effect once the driver is idle, so send Idle first. Added in firmware 107.</td>
+<td>What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open, the default). Takes effect once the driver is idle, so send Idle first. Not saved: the driver coasts again after a power cycle. An error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107.</td>
 <td>the setting</td>
 </tr>
 <tr>
@@ -1531,8 +1531,8 @@
 <tr>
 <td><code>#Openloop</code></td>
 <td>Set/Get</td>
-<td>float: electrical speed</td>
-<td>Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv. Enters <strong>open loop</strong> mode.</td>
+<td>float: electrical speed in rad/s</td>
+<td>Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv. Without a number it still starts the motor, at the stored speed: <code>#Openloop</code> alone is not a query. The speed is the same setting as <code>#Opens</code>. Enters <strong>open loop</strong> mode.</td>
 <td>the open-loop speed</td>
 </tr>
 </tbody>

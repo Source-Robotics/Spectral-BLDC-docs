@@ -25,12 +25,17 @@ which bootloader, Python library and PAR6 runtime.
 
 ## The STEPFOC counterpart
 
-Each Spectral Micro release has a [STEPFOC](https://docs.source-robotics.com/STEPFOC-docs/) release with the same
-changes; the numbers differ by one (Spectral Micro 107 is STEPFOC 108). The compatibility table lists the pairs.
+Most Spectral Micro releases have a [STEPFOC](https://docs.source-robotics.com/STEPFOC-docs/) release with the
+same changes. The numbers do not always match: the current pair is Spectral Micro 107 and STEPFOC 108, and the
+[compatibility table](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/) lists the others.
 
 ## The two branches
 
-Releases from 105 on are built from the `Bootloader_main` branch of the repository, whose firmware is linked
-to run above the bootloader. The `main` branch holds the firmware of release 104 and earlier, linked to run without a bootloader, and is not
-updated. A board running 101 or 104 is documented by version `101` of this site (104 differs from 101 only by the
-Send_Voltage_Limit message); to move it to a current release, see [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/).
+Releases from 104 on are built from the `Bootloader_main` branch of the repository, whose firmware is linked to
+run above the bootloader; 104 is the first of them. The `main` branch holds the firmware linked to run without a
+bootloader: release 101 and earlier, and a few later changes that were never tagged as a release (among them
+the Kt request and the voltage limit message). It is not updated.
+
+Version `101` of this site documents a board running 101. It also fits 104, which adds the Send_Respond_Kt
+request, Send_Voltage_Limit (in the release image) and the bootloader. To move a board without a bootloader to a
+current release, see [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/).

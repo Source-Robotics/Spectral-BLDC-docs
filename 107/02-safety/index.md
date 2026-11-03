@@ -20,9 +20,10 @@ connect anything; the few rules here are the ones that destroy a driver, a motor
     from the shop.
 
 !!! warning "Supply voltage"
-    12 to 29 V DC. The driver raises a Vbus error outside 9 to 29.5 V, but the hardware limit is 29 V: do not
-    connect a supply that can rise above it, and allow for the voltage a decelerating motor pushes back into the
-    supply. A bench supply with a current limit is the safest way to start.
+    12 to 29 V DC. The driver raises a Vbus error below 9 V and above `#Vmax`, 29 V after `#Default`. 29 V is
+    also the hardware limit: do not connect a supply that can rise above it, and allow for the voltage a
+    decelerating motor pushes back into the supply. A bench supply with a current limit is the safest way to
+    start.
 
 !!! warning "Do not disconnect a running motor"
     Never unplug a motor, or a power cable in the daisy chain, while the driver is powered. The inductive kick of

@@ -2155,9 +2155,10 @@
 
 
 <h1 id="installing-the-bootloader-on-an-older-board">Installing the bootloader on an older board<a class="headerlink" href="#installing-the-bootloader-on-an-older-board" title="Permanent link">&para;</a></h1>
-<p>A driver running firmware 104 or older has no bootloader: its firmware starts at the beginning of the flash. To
-run any release from 105 on, which is linked to start above the bootloader, the bootloader must be installed
-once, with a programming adapter on the JTAG connector. After that, every update goes over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>.</p>
+<p>A driver running firmware 101 or older has no bootloader: its firmware starts at the beginning of the flash. To
+run any release from 104 on (104 is the first release built for the bootloader), which is linked to start above
+the bootloader, the bootloader must be installed once, with a programming adapter on the JTAG connector. After
+that, every update goes over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Disconnect the motor supply and the <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> adapter before connecting the programming adapter. The adapter
@@ -2177,7 +2178,7 @@ powers the board at 3.3 V.</p>
 <figure>
   <a class="glightbox" href="../../assets/FLASHING2-Photoroom.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The programming adapter on the JTAG pads" src="../../assets/FLASHING2-Photoroom.webp" width="520" /></a>
 <br />
-<figcaption>Figure 18: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
+<figcaption>Figure 17: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
 </figure>
 <h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
 <ol>
@@ -2189,7 +2190,8 @@ powers the board at 3.3 V.</p>
    mode (the <abbr title="Light-Emitting Diode">LED</abbr> stays off).</li>
 <li>Flash the firmware release through the bootloader, over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>, as in
    <a href="../update/">Updating through the bootloader</a>.</li>
-<li><code>#Info</code> shows the new release. <code>#Default</code>, enter the motor parameters, calibrate, <code>#Save</code>.</li>
+<li><code>#Info</code> shows the new release. <code>#Default</code>, then calibrate (<code>#Cal</code>), set the current limit (<code>#Ilim</code>) and
+   <code>#Save</code>; see <a href="../../05-setup/calibration/">Calibration</a>.</li>
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Memory layout</p>
@@ -2236,7 +2238,7 @@ settings dialog:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 30, 2026 17:46:40 UTC">October 30, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

@@ -4,8 +4,6 @@ More examples are in the [Spectral-BLDC-Python examples folder](https://github.c
 
 ## Examples
 
-Check the examples [here!](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples)
-
 ``` py title="Get_encoder_data.py"
 import Spectral_BLDC as Spectral
 import time

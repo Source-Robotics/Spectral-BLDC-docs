@@ -60,7 +60,7 @@ Asks for the driver's identity: hardware version, batch date and serial number f
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
 | 0 |  | HARDWARE_VERSION | unsigned 8-bit | PCB revision |
-| 1 |  | BATCH_DATE | unsigned 8-bit | production batch |
+| 1 |  | BATCH_DATE | unsigned 8-bit | production batch, the lowest 8 bits of the stored value (24092024 after #Default is sent as 120) |
 | 2 |  | SOFTWARE_VERSION | unsigned 8-bit | firmware release, e.g. 107 |
 | 3-6 |  | SERIAL_NUMBER | unsigned 32-bit | serial number |
 
@@ -131,7 +131,7 @@ The driver answers with **Send_Respond_Encoder_data**.
 
 <div class="cmd-facts" markdown><span class="fact">ID 33</span><span class="fact">host → driver as a remote frame, driver → host as a data frame</span><span class="fact">remote frame, 0 bytes</span><span class="fact">Python: `Send_Respond_Kt()`</span></div>
 
-Asks for the torque constant Kt the driver uses. Added in firmware 105.
+Asks for the torque constant Kt the driver uses. Added in firmware 104.
 
 **The frame** (4 bytes)
 

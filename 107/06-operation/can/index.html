@@ -2255,7 +2255,7 @@
 
 
 <h1 id="over-can">Over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr><a class="headerlink" href="#over-can" title="Permanent link">&para;</a></h1>
-<p><abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> is the interface for running a machine: compact frames, a fixed cost per message, up to 16 drivers on one bus,
+<p><abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> is the interface for running a machine: compact frames, a fixed cost per message, up to 14 drivers on one bus,
 and a host that can be a PC, a microcontroller or a robot control box. The driver answers a motion command with
 its position, speed and current in the same frame exchange, so a control loop on the host needs one frame out and
 one frame back per motor and cycle.</p>
@@ -2291,8 +2291,9 @@ single precision. Flags inside a byte are numbered from the most significant bit
 </ul>
 <h2 id="a-control-loop">A control loop<a class="headerlink" href="#a-control-loop" title="Permanent link">&para;</a></h2>
 <p>Send Send_data_pack_1 at a fixed rate, 100 Hz to 1 kHz, with the setpoint for this cycle; read Respond_data_pack_1
-for the position, speed and current of the last cycle. Every valid frame resets the watchdog, so with
-Send_Watchdog set to a few cycle times the motor stops when the host stops. The heartbeat is the other way round:
+for the position, speed and current of the last cycle. Every motion command (and every status request) resets
+the watchdog, so with Send_Watchdog set to a few cycle times the motor stops when the host stops. Other frames,
+such as gains, limits or Send_Idle, do not reset it, and neither does anything sent over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr>. The heartbeat is the other way round:
 Send_Heartbeat_Setup makes the driver send a frame on its own every N ms when it has nothing else to send, so the
 host can see it is alive.</p>
 <pre class="mermaid"><code>sequenceDiagram
@@ -2306,7 +2307,7 @@ host can see it is alive.</p>
         D--&gt;&gt;H: Respond_data_pack_1: position, speed, current, the error bit
     end
     D--&gt;&gt;H: heartbeat, whenever nothing else was sent for N ms
-    Note over D: no valid frame within the watchdog time: watchdog error, the motor stops</code></pre>
+    Note over D: no motion command within the watchdog time: watchdog error, the motor stops</code></pre>
 <h2 id="from-a-pc">From a PC<a class="headerlink" href="#from-a-pc" title="Permanent link">&para;</a></h2>
 <p>The <a href="https://source-robotics.com/products/canvas-usb-to-can-adapter">CANvas adapter</a> shows up as a serial port and
 speaks slcan; <code>python-can</code> opens it with <code>bustype='slcan'</code>. The Python library wraps the whole protocol, see
@@ -2335,7 +2336,7 @@ daisy chain as in <a href="../../04-mounting/power-and-can/">Power and the <abbr
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 30, 2026 15:20:16 UTC">October 30, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

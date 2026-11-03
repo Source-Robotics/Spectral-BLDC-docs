@@ -45,8 +45,10 @@ An empty Send_gripper_data_pack (0 bytes) only asks for the state. Send_gripper_
 gripper E-stop error; `#Gripstop 1` does the same over UART.
 
 !!! warning "Current"
-    The firmware does not limit the current you give a gripper move. The safe range depends on the gripper's mechanics and motor; the
-    [SSG-48 manual](https://docs.source-robotics.com/SSG48-gripper-docs/) gives it for that gripper. The driver's hard limit is 2800 mA.
+    The firmware does not limit the current you give a gripper move. The safe range depends on the gripper's
+    mechanics and motor; the [SSG-48 manual](https://docs.source-robotics.com/SSG48-gripper-docs/) gives it for
+    that gripper. The board is rated for 2800 mA, but nothing enforces it here. A gripper move also replaces the
+    driver's current limit with the move's current, and a later `#Save` keeps that value.
 
 ## Where the details are
 

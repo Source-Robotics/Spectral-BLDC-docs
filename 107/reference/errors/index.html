@@ -1513,7 +1513,7 @@
 <td>normal operation: calibrated, no error</td>
 </tr>
 <tr>
-<td>flashing every 0.5 s</td>
+<td>fast flashing, about 10 times a second</td>
 <td>calibration running</td>
 </tr>
 <tr>
@@ -1537,7 +1537,7 @@
 <tbody>
 <tr>
 <td><a class="glightbox" href="../../assets/Normal.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Three short flashes and a pause" src="../../assets/Normal.webp" width="180" /></a></td>
-<td><a class="glightbox" href="../../assets/Calib.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Flashing every 0.5 s" src="../../assets/Calib.webp" width="180" /></a></td>
+<td><a class="glightbox" href="../../assets/Calib.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Fast flashing" src="../../assets/Calib.webp" width="180" /></a></td>
 <td><a class="glightbox" href="../../assets/Error2.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="On, steady" src="../../assets/Error2.webp" width="180" /></a></td>
 </tr>
 </tbody>
@@ -1577,19 +1577,19 @@ Send_Respond_State_of_Errors (bits numbered from the most significant).</p>
 <td><code>Vbus_error</code></td>
 <td><code>Vbus error</code></td>
 <td>0, 4</td>
-<td>the supply is below 9 V or above <code>#Vmax</code> (29.5 V by default)</td>
+<td>the supply is below 9 V or above <code>#Vmax</code> (29 V after <code>#Default</code>)</td>
 </tr>
 <tr>
 <td><code>Driver_error</code></td>
-<td><code>Driver error (undervoltage, thermal shutdown, or overcurrent)</code></td>
+<td><code>Drv error</code></td>
 <td>0, 3</td>
-<td>the MOSFET driver's fault output is active</td>
+<td>the MOSFET driver reported a fault on its fault pin: undervoltage, thermal shutdown or overcurrent. <code>#Error</code> also prints <code>FAULT pin is HIGH</code> while the fault output is still active</td>
 </tr>
 <tr>
 <td><code>Velocity_error</code></td>
 <td><code>Velocity error</code></td>
 <td>0, 2</td>
-<td>the speed exceeds the limit</td>
+<td>the measured speed exceeds 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit: a runaway or an encoder fault, not <code>#Vlimit</code></td>
 </tr>
 <tr>
 <td><code>Current_error</code></td>
@@ -1619,15 +1619,16 @@ Send_Respond_State_of_Errors (bits numbered from the most significant).</p>
 <td><code>Watchdog_error</code></td>
 <td><code>Watchdog error</code></td>
 <td>1, 5</td>
-<td>the watchdog time passed without a valid <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> frame</td>
+<td>the watchdog time passed without a motion command or a status request over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr></td>
 </tr>
 </tbody>
 </table>
-<p>Gripper mode has its own flags in Respond_Gripper_data_pack: a temperature error, a timeout error (the jaw did
-not reach its target in time) and an E-stop error; see the <a href="../can/gripper/">Gripper</a> reference.</p>
+<p>Gripper mode has its own flags in Respond_Gripper_data_pack: a temperature error (the driver's temperature
+error), a timeout error (the driver's watchdog error: the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> watchdog ran out) and an E-stop error; see the
+<a href="../can/gripper/">Gripper</a> reference.</p>
 <h2 id="clearing">Clearing<a class="headerlink" href="#clearing" title="Permanent link">&para;</a></h2>
 <p><code>#Clear</code> and Send_Clear_Error clear every flag except <code>Calibrated</code> and go to idle; a flag whose cause persists is
-set again at once. The watchdog, E-stop and velocity errors clear and stay clear; the Vbus, encoder, driver and
+set again at once. While any flag is set the driver disables the motor, which coasts whatever <code>#Brake</code> says. The watchdog, E-stop and velocity errors clear and stay clear; the Vbus, encoder, driver and
 temperature errors come back until the cause is gone. Calibration clears the calibration error.</p>
 
 
@@ -1649,7 +1650,7 @@ temperature errors come back until the cause is gone. Calibration clears the cal
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 30, 2026 17:46:40 UTC">October 30, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

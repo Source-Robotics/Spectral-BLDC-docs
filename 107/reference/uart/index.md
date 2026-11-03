@@ -98,7 +98,7 @@ hand. [Over UART](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-ope
 | [`#Vmax`](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/utility/) | Set/Get | int | Status and utility |
 | [`#Vp`](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/uart/calibration/) | Set/Get | int | Calibration and motor parameters |
 
-The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `#zz`, which have no handler: the driver answers nothing to them.
+The parser also accepts `#Calangle`, `#EN`, `#SIN`, `#SPWM`, `#Vmin`, `#flux`, `#zz`, which have no handler: the driver answers `Unknown command` to them, as to a name it does not know.
 
 ## By group
 

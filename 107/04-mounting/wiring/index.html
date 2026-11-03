@@ -2140,7 +2140,7 @@ reversed.</p>
 <h2 id="soldering">Soldering<a class="headerlink" href="#soldering" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Cut the leads to a comfortable length: long enough to reach the pads with the board mounted, short enough not
-   to get into the rotor.</li>
+   to get into the rotor. With firmware older than 105, leave them long enough to swap two of them later.</li>
 <li>Tin the leads and solder each to one group of pads, U, V or W. The three pads of a group are one terminal.</li>
 <li>Make sure no strand bridges two groups and that nothing touches the rotor or the housing.</li>
 </ol>
@@ -2155,9 +2155,11 @@ rotor the expected way. With firmware 105 and newer, the order of the phases is 
 motor calibrates identically with any wiring, and positive commands turn the motor the same way whatever the
 wiring: counter-clockwise seen from the encoder side of the board, see <a href="../../06-operation/modes/">Control modes</a>.
 To turn the other way, use negative setpoints.</p>
+<p>Firmware older than 105 does not compensate the order: calibration stops with
+<code>Phase order is wrong! Switch motor phases and try again!</code>. Swap any two of U, V and W and calibrate again.</p>
 <p>If the motor does not respond to the commutation check, calibration says so (<code>Commutation/alignment check
-failed!</code>). That means a phase is not connected, the current limit is 0 or the magnet slipped, not that the wires
-are in the wrong order; see <a href="../../05-setup/calibration/">Calibration</a>.</p>
+failed!</code>). That means a phase is not connected, <code>#Iqoffset</code> is set too low or the magnet slipped, not that the
+wires are in the wrong order; see <a href="../../05-setup/calibration/">Calibration</a>.</p>
 
 
 
@@ -2178,7 +2180,7 @@ are in the wrong order; see <a href="../../05-setup/calibration/">Calibration</a
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 12:48:07 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

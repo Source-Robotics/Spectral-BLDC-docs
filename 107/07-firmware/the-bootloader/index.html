@@ -2265,7 +2265,8 @@
 
 
 <h1 id="the-bootloader">The bootloader<a class="headerlink" href="#the-bootloader" title="Permanent link">&para;</a></h1>
-<p>Every driver shipped with firmware 105 or newer carries a small bootloader in the first 12 KB of its flash. It
+<p>Every driver that runs firmware 104 or newer (104 is the first release built for the bootloader) carries a small
+bootloader in the first 12 KB of its flash. It
 starts the firmware on a normal boot, and it loads a new firmware over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> when a host asks, so a driver is
 updated without a programming adapter and without opening anything. The bootloader is open source:
 <a href="https://github.com/Source-Robotics/stm32f103c-bootloader">stm32f103c-bootloader</a>, shared with STEPFOC.</p>
@@ -2313,7 +2314,7 @@ first <code>0x3000</code> bytes belong to the bootloader and the firmware never 
 </ol>
 <h2 id="entering-the-bootloader">Entering the bootloader<a class="headerlink" href="#entering-the-bootloader" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>From the firmware</strong>: <code>#Reset</code> over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or Send_Reset (command 14) over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>. Since firmware 105 both reset
+<li><strong>From the firmware</strong>: <code>#Reset</code> over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> or Send_Reset (command 14) over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>. Since firmware 104 both reset
   the driver into the bootloader's 2 s window; the host tools send them for you.</li>
 <li><strong>At power-on</strong>: the 2 s window after every power-up, if the host is already polling.</li>
 <li><strong>Always</strong>, when there is no valid firmware.</li>
@@ -2322,8 +2323,10 @@ first <code>0x3000</code> bytes belong to the bootloader and the firmware never 
 <p>The bootloader has a board ID of its own, 0 to 13, stored in its configuration page. 14 and 15 do not exist
 for it: its command frame, identifier <code>0x700</code>, decodes as node 14 in the firmware's identifier scheme, so those
 two node IDs are reserved. <strong>Give drivers node IDs 0 to 13.</strong> The firmware accepts <code>#CANID 14</code> and <code>15</code>, but the
-bootloader then keeps its old board ID and a firmware update over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> cannot reach the driver. The firmware keeps it in step with its <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID: setting the node ID (<code>#CANID</code>,
-Send_CAN_ID) writes the bootloader's board ID too, so a driver answers the host tools under its node ID. A
+bootloader then keeps its old board ID and a firmware update over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> cannot reach the driver. The firmware
+keeps the board ID in step with its <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID when the configuration is saved: <code>#Save</code> or Send_Save_config
+writes the node ID into the bootloader's board ID, so a saved driver answers the host tools under its node ID.
+Setting the node ID alone (<code>#CANID</code>, Send_CAN_ID) does not: until you save, the bootloader keeps the old ID. A
 replacement board ships as ID 0; two boards with the same ID on one bus corrupt each other's flash stream, so
 give the new board its ID alone on the bus first (<code>set-id</code> in the host tool).</p>
 <h2 id="transports-and-protocol">Transports and protocol<a class="headerlink" href="#transports-and-protocol" title="Permanent link">&para;</a></h2>
@@ -2372,7 +2375,7 @@ not lost: flash again. A board that answers nothing at all: power-cycle it with 
 the 2 s window. The one thing the tools refuse, and that would need a programming adapter to undo, is flashing an
 image linked for <code>0x08000000</code> (a firmware from the <code>main</code> branch) over the firmware region.</p>
 <h2 id="installing-it">Installing it<a class="headerlink" href="#installing-it" title="Permanent link">&para;</a></h2>
-<p>Boards shipped with firmware 104 or older have no bootloader. <a href="../bootloader/">Installing the bootloader on an older board</a>
+<p>Boards that run firmware 101 or older have no bootloader. <a href="../bootloader/">Installing the bootloader on an older board</a>
 puts it there once, with a programming adapter at <code>0x08000000</code>; from then on the board updates like any other.</p>
 
 
@@ -2394,7 +2397,7 @@ puts it there once, with a programming adapter at <code>0x08000000</code>; from 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 14:58:51 UTC">October 29, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     

@@ -1703,7 +1703,7 @@
 <div class="cmd-facts">
 <p><span class="fact">ID 11</span><span class="fact">host → driver</span><span class="fact">1 bytes</span><span class="fact">Python: <code>Send_CAN_ID()</code></span></p>
 </div>
-<p>Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15: a driver on one of those cannot be updated over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>). Setting the ID also sets the bootloader's board ID. The driver answers to the new ID at once; the ID is kept over a power cycle only after Send_Save_config.</p>
+<p>Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the bootloader reserves 14 and 15: a driver on one of those cannot be updated over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>). The driver answers to the new ID at once. The ID is kept over a power cycle only after Send_Save_config, and saving is also what copies it into the bootloader's board ID.</p>
 <p><strong>1 bytes</strong></p>
 <table>
 <thead>
@@ -1721,7 +1721,7 @@
 <td></td>
 <td>ID</td>
 <td>unsigned 8-bit</td>
-<td>0 to 15</td>
+<td>0 to 13 (14 and 15 are accepted but reserved by the bootloader)</td>
 </tr>
 </tbody>
 </table>
@@ -1738,21 +1738,21 @@
 <div class="cmd-facts">
 <p><span class="fact">ID 12</span><span class="fact">host → driver</span><span class="fact">0 bytes</span><span class="fact">Python: <code>Send_Idle()</code></span></p>
 </div>
-<p>Puts the driver in idle mode (the motor coasts or brakes, see Send_Settings).</p>
+<p>Puts the driver in idle mode: the motor coasts, or brakes when Send_Settings or <code>#Brake 1</code> asked for it.</p>
 <p>The driver does not answer this command.</p>
 <hr />
 <h3 id="send_save_config">Send_Save_config<a class="headerlink" href="#send_save_config" title="Permanent link">&para;</a></h3>
 <div class="cmd-facts">
 <p><span class="fact">ID 13</span><span class="fact">host → driver</span><span class="fact">0 bytes</span><span class="fact">Python: <code>Send_Save_config()</code></span></p>
 </div>
-<p>Writes the current configuration (gains, limits, calibration, <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID, heartbeat, watchdog, gripper flag) to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>.</p>
+<p>Writes the current configuration (gains, limits, calibration, <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID, heartbeat, watchdog, gripper flag) to the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, and copies the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID into the bootloader's board ID.</p>
 <p>The driver does not answer this command.</p>
 <hr />
 <h3 id="send_reset">Send_Reset<a class="headerlink" href="#send_reset" title="Permanent link">&para;</a></h3>
 <div class="cmd-facts">
 <p><span class="fact">ID 14</span><span class="fact">host → driver</span><span class="fact">0 bytes</span><span class="fact">Python: <code>Send_Reset()</code></span></p>
 </div>
-<p>Resets the driver. From firmware 105 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again; this is how a firmware update begins.</p>
+<p>Resets the driver. From firmware 104 the reset lands in the bootloader, which waits 2 s for a flashing host and then starts the firmware again; this is how a firmware update begins.</p>
 <p>The driver does not answer this command.</p>
 <hr />
 <h3 id="send_clear_error">Send_Clear_Error<a class="headerlink" href="#send_clear_error" title="Permanent link">&para;</a></h3>
@@ -1766,7 +1766,7 @@
 <div class="cmd-facts">
 <p><span class="fact">ID 15</span><span class="fact">host → driver</span><span class="fact">5 bytes</span><span class="fact">Python: <code>Send_Watchdog()</code></span></p>
 </div>
-<p>Sets the watchdog: every valid <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> frame the driver receives resets it; when the time runs out the driver reports a watchdog error and stops. 0 turns it off (the default). The action byte is stored but not acted on by this firmware: the driver always stops into its idle behaviour.</p>
+<p>Sets the watchdog. The motion commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the status requests (the Send_Respond_ remote frames) reset it; the other frames and <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> commands do not. When the time runs out the driver reports a watchdog error and disables the motor, which then coasts. 0 turns it off (the default). The action byte is stored but not acted on by this firmware. The setting is kept by Send_Save_config and there is no <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> command for it: to turn off a saved watchdog, send 0 over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> and save, or use <code>#Default</code>.</p>
 <p><strong>5 bytes</strong></p>
 <table>
 <thead>
@@ -1828,7 +1828,7 @@
 <div class="cmd-facts">
 <p><span class="fact">ID 35</span><span class="fact">host → driver</span><span class="fact">2 bytes</span></p>
 </div>
-<p>Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1 brake (phases shorted), 0 coast. Added in firmware 107 (STEPFOC 108). The Python library has no call for it yet.</p>
+<p>Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1 brake (phases shorted), 0 coast (the default). The setting is not saved: the driver coasts again after a power cycle. Braking applies only in idle without an error; an error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107 (STEPFOC 107). The Python library has no call for it yet.</p>
 <p><strong>2 bytes</strong></p>
 <table>
 <thead>

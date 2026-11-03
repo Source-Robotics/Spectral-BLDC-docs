@@ -2194,7 +2194,7 @@ a Chromium browser).</p>
 </div>
 <div class="tabbed-block">
 <p>Open a terminal on the adapter's port, 256000 baud, line ending CR+LF, and type <code>#Info</code>. The driver prints its
-hardware and firmware version and the state of everything.</p>
+hardware and firmware version, its <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> ID, whether it is calibrated, and the motor's parameters.</p>
 <p>Read in more detail: <a href="../05-setup/terminal/">The serial terminal</a>.</p>
 </div>
 </div>
@@ -2205,10 +2205,10 @@ hardware and firmware version and the state of everything.</p>
 is covered in <a href="../05-setup/motor-gui/#opening-the-port">Motor GUI</a> or <a href="../08-troubleshooting/">Troubleshooting</a>.</p>
 <h2 id="6-calibrate">6. Calibrate<a class="headerlink" href="#6-calibrate" title="Permanent link">&para;</a></h2>
 <p>First the factory defaults, so that calibration does not start from another motor's values or from junk in the
-<abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>: <em>Default</em> in the Motor GUI settings, or <code>#Default</code> in the terminal. (It also resets the serial number the
-driver reports.) Then fix the motor to the bench, nothing on the shaft, 24 V on the supply. There is nothing to
-enter: calibration
-measures the motor's resistance and inductance and finds its pole pairs and phase order by itself.</p>
+<abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>: <em>Default</em> in the Motor GUI settings, or <code>#Default</code> in the terminal. (It also sets the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID back to
+0 and the hardware version and batch date to factory values.) Then fix the motor to the bench, nothing on the
+shaft, 24 V on the supply. There is nothing to enter: calibration measures the motor's resistance and inductance
+and finds its pole pairs and phase order by itself.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Motor GUI</label><label for="__tabbed_2_2">Terminal</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2233,9 +2233,9 @@ means the motor did not respond: check the three wires, the supply, and that the
 <p><strong>Check:</strong> the calibration log ends with <code>Calibration success!</code>. If it does not, use the failed step in
 <a href="../05-setup/calibration/#troubleshooting">Calibration troubleshooting</a>; do not treat a stopped motor as success.</p>
 <h2 id="7-set-the-current-limit-and-save">7. Set the current limit and save<a class="headerlink" href="#7-set-the-current-limit-and-save" title="Permanent link">&para;</a></h2>
-<p>The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load. The
-firmware's default of 1000 mA suits the gimbal motors in the tested list; a small 2804 is better at 500 mA, a motor
-rated for more can go up to 2800 mA.</p>
+<p>The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load.
+Calibration leaves it at 1600 mA, so set it now, before you save. 1000 mA suits the gimbal motors in the tested
+list; a small 2804 is better at 500 mA, a motor rated for more can go up to 2800 mA.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Motor GUI</label><label for="__tabbed_3_2">Terminal</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2340,7 +2340,7 @@ that does not follow needs <a href="../08-troubleshooting/">Troubleshooting</a> 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 31, 2026 19:58:17 UTC">October 31, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
   </span>
 
     
