@@ -28,8 +28,8 @@ manuals:
     number: SR-5002
     title: Spectral Micro Manual
     revision: 2026.A
-    status: draft
-    published: null
+    status: published
+    published: 2026-11-03
     firmware: true
     applies_to: Spectral Micro driver PCB v2.0
     covers: "the Spectral Micro BLDC driver: quick start, safety, technical data, mounting, setup with Motor GUI or a terminal, operation, firmware; the API reference; guides"

@@ -45,4 +45,4 @@ The text and the images of this documentation are licensed under [CC BY-SA 4.0](
 
 | Revision | Date | Changes |
 |---|---|---|
-| 2026.A (draft) | — | First version in this form: the manual chapters, the generated CAN and UART reference, firmware 107 |
+| 2026.A | 2026-11-03 | First version in this form: the manual chapters, the generated CAN and UART reference, firmware 107 |
