@@ -7,11 +7,12 @@ which is what makes tuning quick.
 
 ## The current limit
 
-Set the current limit to the rated phase current of your motor in mA. The firmware's default of 1000 mA suits the
-gimbal motors in [Tested motors](../03-technical-data/tested-motors.md); a motor rated for more can go up to the
-driver's 2800 mA. The firmware clamps the limit to the
-driver's 2800 mA and does not trip on phase current by itself; the MOSFET driver's hardware protection only
-catches a hard fault. A limit above the motor's rating overheats the motor.
+Set the current limit to the rated phase current of your motor in mA, after every calibration: calibration
+leaves the limit at 1600 mA. The factory default (`#Default`) of 1000 mA suits the gimbal motors in
+[Tested motors](../03-technical-data/tested-motors.md); a motor rated for more can go up to the driver's 2800 mA.
+`#Ilim` clamps the limit to 2800 mA; Send_Limits over CAN does not, so never send more. The firmware does not trip
+on phase current by itself; the MOSFET driver's hardware protection only catches a hard fault. A limit above the
+motor's rating overheats the motor.
 
 === "Motor GUI"
     In the limits set the current limit, then **Save**.

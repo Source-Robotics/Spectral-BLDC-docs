@@ -156,6 +156,66 @@ if loaded:
     sec = pages.can_section(answered, d["can"]["commands"][answered], d)
     check("B12 a command section: facts strip, the accepted lengths, the answer",
           "cmd-facts" in sec and "bytes" in sec and ("Respond_" in sec or not facts["can"]["handlers"].get(answered, {}).get("responds")), sec[:200])
+    dt = pages.defaults_table(d)
+    internal = [x["name"] for x in facts["defaults"] if not x.get("setting")]
+    shown = [x["name"] for x in facts["defaults"] if x.get("setting")]
+    check("B13 the defaults table: what #Default sets and #Save keeps, the settings only, no internal state",
+          "After `#Default`" in dt and "Kept by `#Save`" in dt and bool(shown) and bool(internal)
+          and all(f"| `{n}` |" in dt for n in shown) and not any(f"| `{n}` |" in dt for n in internal if n not in shown),
+          dt[:200])
+
+# ---------------------------------------------------------------- the sync tool, on fixtures
+sync = load_module("sync_firmware", ROOT / "tools" / "sync_firmware.py")
+sync.MODE_NAMES.update({2: "velocity", 5: "open loop", 6: "gripper"})
+UART_FIXTURE = """
+            if (strcmp(command, "Ud") == 0)
+            {
+                PID.Ud_setpoint = atoi(argument);
+                // controller.Controller_mode = 6;
+                /* controller.Controller_mode = 5; */
+            }
+            else if (strcmp(command, "V") == 0)
+            {
+                PID.Velocity_setpoint = atoi(argument);
+                controller.Controller_mode = 2; // velocity mode
+            }
+"""
+modes = {h["name"]: h["mode"] for h in sync.uart_handlers(UART_FIXTURE)}
+check("C1 a commented-out Controller_mode assignment is not a mode the command enters",
+      modes == {"Ud": "", "V": "velocity"}, str(modes))
+COMMON_FIXTURE = """
+    volatile int CAN_ID = 0; // node ID
+    volatile int cyclic_period = 0; // ms
+    volatile int interrupt_tick = 0; // ISR ticks
+"""
+EEPROM_FIXTURE = """
+static void Load_settings_from_eeprom()
+{
+  controller.CAN_ID = readInt(CAN_ID_EEPROM);
+}
+void read_config()
+{
+  Load_settings_from_eeprom();
+}
+void Write_config()
+{
+  writeInt(CAN_ID_EEPROM, controller.CAN_ID);
+}
+static void Set_Default_settings_block()
+{
+  writeInt(CAN_ID_EEPROM, 0);
+}
+void Set_Default_config()
+{
+  Set_Default_settings_block();
+}
+"""
+dfl = {x["name"]: x for x in sync.defaults(COMMON_FIXTURE, EEPROM_FIXTURE, "",
+                                          "controller.cyclic_period = atoi(argument);", "", "")}
+check("C2 the defaults: a saved setting with its #Default value, a RAM-only setting, internal state left out",
+      dfl["CAN_ID"]["setting"] and dfl["CAN_ID"]["after_default"] == "0" and dfl["CAN_ID"]["saved"] == "yes"
+      and dfl["cyclic_period"]["setting"] and dfl["cyclic_period"]["saved"] == "no"
+      and not dfl["interrupt_tick"]["setting"], str(dfl))
 
 print(f"\n{len(fails)} failure(s)" if fails else "\nall checks passed")
 sys.exit(1 if fails else 0)

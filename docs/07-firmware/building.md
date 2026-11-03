@@ -26,7 +26,7 @@ size fails to link.
 
 <figure markdown="span">
   ![Upload in VS Code](../assets/VSUPLOAD.png){ width="700" }
-  <figcaption>Figure 19: Build, upload and the serial monitor in PlatformIO's status bar.</figcaption>
+  <figcaption>Figure 18: Build, upload and the serial monitor in PlatformIO's status bar.</figcaption>
 </figure>
 
 ## Where things are
@@ -51,5 +51,6 @@ version box names the release.
 
 ## A firmware for a board without a bootloader
 
-The `main` branch builds a firmware linked at `0x08000000` for boards that have no bootloader. It stops at release 104 and is not maintained; install the bootloader instead,
+The `main` branch builds a firmware linked at `0x08000000` for boards that have no bootloader. Its last tagged
+release is 101; it is not maintained. Install the bootloader instead:
 [Installing the bootloader on an older board](bootloader.md).

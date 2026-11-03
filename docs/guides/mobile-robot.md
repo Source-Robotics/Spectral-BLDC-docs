@@ -23,7 +23,7 @@ What you will need to create a simple mobile robot is:
 
 ## Setup
 
-![drawing](../assets/AMR_setup.webp)
+![Two drivers powered from a drill battery, each with a gimbal motor, on one CAN bus with the CAN adapter and a laptop](../assets/AMR_setup.webp)
 
 The setup will be the same for any kind of mobile robot. You will need to follow the  diagram above to wire everything up.
 
@@ -33,7 +33,9 @@ The setup will be the same for any kind of mobile robot. You will need to follow
 * Connect the power to both drivers. You can daisy chain it or use 2 separate wires.
 * You will also need to connect your xbox controller to the PC/laptop via Bluetooth.
 
-The code below is really simple example that drives the robot using the left joystick of the controller.
+The code below is really simple example that drives the robot using the left joystick of the controller. It sets
+a watchdog on both drivers, so the wheels stop if the program or the laptop stops; clear the watchdog error
+(`#Clear` or Send_Clear_Error) before the next run, as the code does at its start.
 
 ``` py title="Spectral_mobile_robot_xbox.py"
 from inputs import get_gamepad
@@ -48,6 +50,12 @@ Motor = []
 # We are using 2 motors with IDs 0 and 1
 Motor.append(Spectral.SpectralCAN(node_id=0, communication=Communication1))
 Motor.append(Spectral.SpectralCAN(node_id=1, communication=Communication1))
+
+# Stop the wheels when this program stops sending: a watchdog of 500 ms on each driver.
+# Every Send_data_pack_1 below resets it; if none arrives for 500 ms, the driver stops the motor.
+for m in Motor:
+    m.Send_Clear_Error()
+    m.Send_Watchdog(500)
 
 timeout_setting = 0.00005
 
@@ -101,7 +109,7 @@ def control_robot():
         Motor[0].Send_data_pack_1(None,int(left_wheel_speed * 1000000),0)
         Motor[1].Send_data_pack_1(None,int(right_wheel_speed * -1000000),0)
 
-        for i in range(1, 4):  # Loop 9-1=8 to check for received data
+        for i in range(1, 4):  # read up to 3 replies
             message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
             print(f"unpack{i} is: {UnpackedMessageID}")
 

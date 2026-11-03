@@ -18,10 +18,11 @@ A command is `#`, a name, optionally a space and one number, and a line ending:
 - The line ends with LF (`\n`); a CR before it is accepted. Terminals send CR+LF when you press Enter, with the
   setting described in [The serial terminal](../05-setup/terminal.md).
 - A **Set/Get** command with a number sets the value and prints it; without a number it only prints it. `#P 16384`
-  moves to position 16384 and prints the position; `#P` prints the position.
+  moves to position 16384 and prints the position; `#P` prints the position. One exception: `#Openloop` without
+  a number starts the motor at the stored open-loop speed.
 - An **action** command takes no number: `#Cal`, `#Save`, `#Idle`.
-- A command the parser does not know is answered with `Unknown command`. A few names the parser
-  accepts have no handler and are answered with nothing; the [UART reference](../reference/uart/index.md) lists them.
+- A command the parser does not know is answered with `Unknown command`. So are the few names the parser
+  accepts but has no handler for; the [UART reference](../reference/uart/index.md) lists them.
 - 256000 baud, 8N1, 3.3 V.
 
 ## The driver only answers

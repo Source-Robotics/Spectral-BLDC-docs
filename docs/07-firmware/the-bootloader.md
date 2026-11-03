@@ -1,6 +1,7 @@
 # The bootloader
 
-Every driver shipped with firmware 105 or newer carries a small bootloader in the first 12 KB of its flash. It
+Every driver that runs firmware 104 or newer (104 is the first release built for the bootloader) carries a small
+bootloader in the first 12 KB of its flash. It
 starts the firmware on a normal boot, and it loads a new firmware over UART or CAN when a host asks, so a driver is
 updated without a programming adapter and without opening anything. The bootloader is open source:
 [stm32f103c-bootloader](https://github.com/Source-Robotics/stm32f103c-bootloader), shared with STEPFOC.
@@ -32,7 +33,7 @@ first `0x3000` bytes belong to the bootloader and the firmware never touches the
 
 ## Entering the bootloader
 
-- **From the firmware**: `#Reset` over UART or Send_Reset (command 14) over CAN. Since firmware 105 both reset
+- **From the firmware**: `#Reset` over UART or Send_Reset (command 14) over CAN. Since firmware 104 both reset
   the driver into the bootloader's 2 s window; the host tools send them for you.
 - **At power-on**: the 2 s window after every power-up, if the host is already polling.
 - **Always**, when there is no valid firmware.
@@ -42,8 +43,10 @@ first `0x3000` bytes belong to the bootloader and the firmware never touches the
 The bootloader has a board ID of its own, 0 to 13, stored in its configuration page. 14 and 15 do not exist
 for it: its command frame, identifier `0x700`, decodes as node 14 in the firmware's identifier scheme, so those
 two node IDs are reserved. **Give drivers node IDs 0 to 13.** The firmware accepts `#CANID 14` and `15`, but the
-bootloader then keeps its old board ID and a firmware update over CAN cannot reach the driver. The firmware keeps it in step with its CAN node ID: setting the node ID (`#CANID`,
-Send_CAN_ID) writes the bootloader's board ID too, so a driver answers the host tools under its node ID. A
+bootloader then keeps its old board ID and a firmware update over CAN cannot reach the driver. The firmware
+keeps the board ID in step with its CAN node ID when the configuration is saved: `#Save` or Send_Save_config
+writes the node ID into the bootloader's board ID, so a saved driver answers the host tools under its node ID.
+Setting the node ID alone (`#CANID`, Send_CAN_ID) does not: until you save, the bootloader keeps the old ID. A
 replacement board ships as ID 0; two boards with the same ID on one bus corrupt each other's flash stream, so
 give the new board its ID alone on the bus first (`set-id` in the host tool).
 
@@ -81,5 +84,5 @@ image linked for `0x08000000` (a firmware from the `main` branch) over the firmw
 
 ## Installing it
 
-Boards shipped with firmware 104 or older have no bootloader. [Installing the bootloader on an older board](bootloader.md)
+Boards that run firmware 101 or older have no bootloader. [Installing the bootloader on an older board](bootloader.md)
 puts it there once, with a programming adapter at `0x08000000`; from then on the board updates like any other.

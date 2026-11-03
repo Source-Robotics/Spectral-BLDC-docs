@@ -5,7 +5,7 @@ Bilateral teleoperation is a concept that Involves two-way communication where b
 
 The two grippers are virtually coupled to each other, allowing either to act as the master (the haptic interface) or the slave (the manipulator) in the system. We are not using a force sensor at the grippers but are relying on proprioception.
 
-![drawing](../assets/bil_tel.webp)
+![Two motors coupled by bilateral teleoperation: each follows the other and feels its force](../assets/bil_tel.webp)
 
 Watch these example videos to get a "feel" of the concept:
 
@@ -31,7 +31,7 @@ The magic of this setup is done with these 2 simple formulas.
 
 We recommend these items to create a simple test jig:
 
-* 2 x spectral micro BLDC - used for 2 wheels 
+* 2 x spectral micro BLDC - one for each motor or gripper
 * Wires to connect everything up: [CAN wires](https://source-robotics.com/products/spectral-micro-can-cable), [Power wires](https://source-robotics.com/products/spectral-micro-power-cable)
 * 2 x BLDC motors or SSG48 grippers
 * 1 x [CAN adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter)
@@ -43,7 +43,7 @@ We recommend these items to create a simple test jig:
 
 Here we are showing you the setup for any 2 motors, for example we are using 2 x [ssg48 grippers](https://source-robotics.com/products/compliant-gripper) that are connected in exactly the same setup.
 
-![drawing](../assets/leg_setup.webp)
+![Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC](../assets/leg_setup.webp)
 
 You will need to follow the diagram above to wire everything up.
 
@@ -59,7 +59,7 @@ This code will run on your PC and it will communicate with the drivers from the 
 !!! danger "Advanced example"
     More advanced code that allows communication over UDP can be found here: [Link](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main/examples/Advanced/SSG48%20gripper%20bilateral%20teleop) 
 
-``` py title="Spectral_mobile_robot_xbox.py"
+``` py title="bilateral_teleoperation.py"
 import Spectral_BLDC as Spectral
 import SourceRoboticsToolbox as SourceRoboticsToolbox
 import time
@@ -107,7 +107,7 @@ while(1):
     Motor[0].Send_data_pack_1(Position = None,Speed = None, Current = int(T0))
     Motor[1].Send_data_pack_1(Position = None,Speed = None, Current = int(T1))
 
-    for i in range(1, 3):  # Loop 9-1=8 to check for received data
+    for i in range(1, 3):  # read up to 2 replies
         message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
         #print(f"unpack{i} is: {UnpackedMessageID}")
 

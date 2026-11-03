@@ -1,6 +1,6 @@
 # Updating through the bootloader
 
-A driver with the bootloader (firmware 105 or newer) is updated over the UART connector or the CAN bus: the host
+A driver with the bootloader (firmware 104 or newer) is updated over the UART connector or the CAN bus: the host
 tells the driver to reset, the bootloader waits two seconds for a host, and the host streams the new image into it.
 No programming adapter, and nothing to open.
 
@@ -40,8 +40,9 @@ is the `spectral-bldc-firmware-V<number>.bin` from the GitHub release.
 
 !!! note "Board ID and node ID"
     The bootloader has its own board ID (0 to 13), kept in its configuration page, separate from the firmware's
-    CAN node ID. The firmware keeps the two in step when the node ID is set (`#CANID`, Send_CAN_ID), so a driver's
-    bootloader ID is normally its node ID.
+    CAN node ID. The firmware copies the node ID into the board ID when the configuration is saved (`#Save`,
+    Send_Save_config), so a saved driver's bootloader ID is its node ID. After `#CANID` or Send_CAN_ID without a
+    save, `--board` still needs the old ID.
 
 ## From a PAR6 control box
 
@@ -64,6 +65,6 @@ start the firmware and waits for a host. Run the flash again; `bl_flash.py list`
 control box) finds the board. A board that answers nothing: power-cycle it with the host already polling, to catch
 the two-second window.
 
-An image linked for `0x08000000` (a firmware from the `main` branch, release 104 and earlier) must never be
+An image linked for `0x08000000` (a firmware from the `main` branch, release 101 and earlier) must never be
 flashed through the bootloader: it would overwrite the bootloader's own region if the tool did not refuse it.
 The tools validate the image first.

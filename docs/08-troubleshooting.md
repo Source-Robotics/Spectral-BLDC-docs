@@ -37,7 +37,7 @@ flowchart TD
 | *No connection* on CAN | the CANvas adapter's port; the bus termination; the node ID of the driver; 1 Mbit/s |
 | the calibration does not start | calibration runs over the serial connection only, not over CAN |
 | *Unsaved changes* after a power cycle | the settings were not saved to the driver; Save writes them |
-| the firmware update finds no bootloader | a driver with firmware 104 or older has no bootloader: [Installing the bootloader on an older board](07-firmware/bootloader.md) |
+| the firmware update finds no bootloader | a driver with firmware 101 or older has no bootloader: [Installing the bootloader on an older board](07-firmware/bootloader.md) |
 
 ## Calibration
 
@@ -49,9 +49,9 @@ come back most:
 | `Magnet test: Failed` | magnet too far, axially magnetised, or missing |
 | the motor wobbles left and right during calibration | one phase is not connected |
 | `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for the motor |
-| `Phase order is wrong!` | the motor did not respond to the commutation check; wiring, current limit, magnet |
+| `Commutation/alignment check failed!` | the motor did not respond to the commutation check: a phase open, `#Iqoffset` too low, a magnet that slips |
 | calibration succeeds, the motor then runs badly or in the wrong direction | the magnet slipped on the shaft; glue it and calibrate again |
-| calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`: `#Default`, calibrate again |
+| calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`, a value from an older release ([The check at power-up](05-setup/saving.md#the-check-at-power-up)): `#Default`, calibrate again |
 
 ## The motor
 
@@ -62,7 +62,7 @@ come back most:
 | weak torque | `#Ilim` low; the supply's current limit; a calibration run at a low supply voltage (the constants are off) |
 | the motor is hot | lower `#Ilim`, enable the thermistor; a gimbal motor held against a load at its current limit heats quickly |
 | it stops with a Vbus error when decelerating | the supply cannot absorb the returned energy; a different supply, or a brake resistor |
-| it stops with a velocity error | the speed limit `#Vlimit`, or a load that lets the motor overrun |
+| it stops with a velocity error | the measured speed passed the fixed limit of 20,000,000 ticks/s: an encoder fault or a slipping magnet, rarely a real runaway; `#Vlimit` does not change it |
 | it falls behind under a load | the torque limit: raise `#Ilim` within the motor's rating, or a bigger motor |
 | it holds position with a sawtooth noise | the position loop gain; the magnet distance |
 

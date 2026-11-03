@@ -14,7 +14,9 @@ It reads the firmware repository with `git show <tag>:<file>` and writes, into d
                                 handler accepts and the response it sends, every frame the driver transmits with
                                 its length, every UART command the parser accepts and every UART handler with its
                                 kind (Set/Get, Get, Action), argument type, the mode it enters and the response it
-                                prints, the defaults of the controller and PID structures
+                                prints, the start values of the controller, PID and gripper structures with
+                                what #Default sets and #Save keeps (EEPROM.cpp), each marked as a setting or
+                                internal state
     firmware_release_notes.md   the GitHub Release notes of every release up to docs_version (the release body is
                                 the firmware's changelog, see the firmware repository's release_guide.md)
 
@@ -70,6 +72,13 @@ def git_show(repo: Path, tag: str, path: str) -> str:
 STRCMP = re.compile(r'strcmp\(\s*command\s*,\s*"(\w+)"\s*\)\s*==\s*0')
 PRINT = re.compile(r'Serialport\.print(?:ln)?\(\s*"([^"]*)"')
 MODE = re.compile(r"Controller_mode\s*=\s*(\d+)")
+BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
+LINE_COMMENT = re.compile(r"//[^\n]*")
+
+
+def strip_comments(code: str) -> str:
+    """The code without its comments: a commented-out `// controller.Controller_mode = 6;` is not a fact."""
+    return LINE_COMMENT.sub("", BLOCK_COMMENT.sub("", code))
 ASSIGN = re.compile(r"^\s*(?:controller|PID|Gripper|FOC|parser)\.\w+\s*=\s*[^=]", re.M)
 # Controller_mode number -> name, from firmware.modes in versions.yml (the numbering differs between firmwares).
 MODE_NAMES: dict[int, str] = {}
@@ -105,7 +114,7 @@ def uart_handlers(communication_cpp: str) -> list[dict]:
         prints = [p for p in PRINT.findall(block) if p.strip()]
         has_arg = "strlen(argument)" in block
         arg_type = "float" if "atof(argument)" in block else "int" if "atoi(argument)" in block else ""
-        mode = MODE.search(block)
+        mode = MODE.search(strip_comments(block))
         # a handler that changes state is an action: it enters a mode, assigns a variable, or calls a function
         # (Write_config(), Set_Default_config(), Bootloader_ResetIntoBootloader(), ...; prints do not count)
         calls = [c for c in re.findall(r"\b([A-Z]\w+)\s*\(", block) if c not in ("Serialport",)]
@@ -178,10 +187,114 @@ def firmware_version(constants_h: str, tag: str) -> str:
 # ---------------------------------------------------------------- defaults and errors
 
 FIELD = re.compile(r"^[ \t]*volatile[ \t]+(?:unsigned[ \t]+)?(?:int|float|bool|uint\d+_t|int\d+_t)[ \t]+(\w+)[ \t]*=[ \t]*([^;]+);[ \t]*(?://[ \t]*(.*))?$", re.M)
+STRUCT_SET = re.compile(r"\b(?:controller|PID|Gripper)\.(\w+)\s*=\s*([^;=][^;]*);")
+READ_KEY = re.compile(r"^read(?:Int|Float)\(\s*(\w+)\s*\)$")
+READ_TERNARY = re.compile(r"^\(\s*read(?:Int|Float)\(\s*(\w+)\s*\)\s*==\s*(-?\d+)\s*\)\s*\?\s*(-?\d+)\s*:\s*(-?\d+)$")
+WRITE_KEY = re.compile(r"\bwrite(?:Int|Float)\(\s*(\w+)\s*,\s*([^;]+?)\)\s*;")
+LIMIT = re.compile(r"[<>]=?\s*-?\s*(?:controller|PID)\.(\w+)")
+# The words that mark a value set from outside: a UART argument, or the data of a CAN frame.
+FROM_UART = ("argument", "var", "temp_var")
+FROM_CAN = ("CAN_RX_msg", "temp_buffer", "temp_buffer1", "temp_buffer2", "bitArray", "value", "new_can_id")
 
 
-def defaults(common_h: str) -> list[dict]:
-    return [{"name": n, "value": v.strip(), "comment": (c or "").strip()} for n, v, c in FIELD.findall(common_h)]
+def function_body(code: str, name: str) -> str:
+    """The body of the C function `name` (between its braces), or "" when the code has none."""
+    m = re.search(rf"\b{re.escape(name)}\s*\([^;{{)]*\)\s*\{{", code)
+    if not m:
+        return ""
+    depth, i = 1, m.end()
+    while i < len(code) and depth:
+        depth += {"{": 1, "}": -1}.get(code[i], 0)
+        i += 1
+    return code[m.end():i - 1]
+
+
+def eeprom_facts(eeprom_cpp: str, constants_h: str) -> tuple[dict, dict, dict]:
+    """What EEPROM.cpp does with each field: where it is loaded from at power-up (field -> key, or a constant),
+    what #Default writes (key -> value), and what #Save writes (field -> key)."""
+    code = strip_comments(eeprom_cpp)
+    loads: dict[str, dict] = {}
+    for fn in ("read_config", "Load_calibration_from_eeprom", "Load_settings_from_eeprom"):
+        for field, rhs in STRUCT_SET.findall(function_body(code, fn)):
+            rhs = rhs.strip()
+            if field in loads:
+                continue
+            m, t = READ_KEY.match(rhs), READ_TERNARY.match(rhs)
+            if m:
+                loads[field] = {"key": m.group(1)}
+            elif t:
+                loads[field] = {"key": t.group(1), "if": int(t.group(2)), "then": t.group(3), "else": t.group(4)}
+            elif re.fullmatch(r"[A-Z_][A-Z0-9_]*", rhs):
+                c = re.search(rf"^#define[ \t]+{rhs}[ \t]+(\S+)", constants_h, re.M)
+                if c:
+                    loads[field] = {"value": c.group(1)}
+    written: dict[str, str] = {}
+    for fn in ("Set_Default_config", "Set_Default_calibration_block", "Set_Default_settings_block"):
+        for key, value in WRITE_KEY.findall(function_body(code, fn)):
+            written[key] = value.strip()
+    saved: dict[str, str] = {}
+    for key, value in WRITE_KEY.findall(function_body(code, "Write_config")):
+        f = re.search(r"\b(?:controller|PID|Gripper)\.(\w+)", value)
+        if f:
+            saved.setdefault(f.group(1), key)
+    return loads, written, saved
+
+
+def set_from_outside(communication_cpp: str, communication_can_cpp: str) -> set[str]:
+    """The fields a UART command or a CAN frame sets from its own data (not the flags they reset to a constant)."""
+    names = set()
+    for code, words in ((communication_cpp, FROM_UART), (communication_can_cpp, FROM_CAN)):
+        for field, rhs in STRUCT_SET.findall(strip_comments(code)):
+            if any(re.search(rf"\b{w}\b", rhs) for w in words):
+                names.add(field)
+    return names
+
+
+def after_default(field: str, loads: dict, written: dict, saved: dict) -> str:
+    """The value the driver runs with after #Default (which writes the EEPROM and reads it back)."""
+    ld = loads.get(field)
+    if ld and "value" in ld:
+        return ld["value"]
+    if ld:
+        v = written.get(ld["key"])
+        if v is None:
+            return ""
+        if "if" in ld:
+            try:
+                return ld["then"] if int(v) == ld["if"] else ld["else"]
+            except ValueError:
+                return v
+        return v
+    if field in saved and saved[field] in written:
+        return f"{written[saved[field]]} in the EEPROM, not read back"
+    return "—"
+
+
+def kept_by_save(field: str, loads: dict, saved: dict) -> str:
+    ld = loads.get(field)
+    if field in saved and ld and "key" in ld:
+        return "yes"
+    if ld and "value" in ld:
+        return "no: set by the firmware"
+    if field in saved:
+        return "written, not read back"
+    return "no"
+
+
+def defaults(common_h: str, eeprom_cpp: str = "", constants_h: str = "", communication_cpp: str = "",
+             communication_can_cpp: str = "", motor_control_cpp: str = "") -> list[dict]:
+    """Every field with a start value in common.h. `setting` marks the ones a user meets: stored in the EEPROM, set
+    by a UART command or a CAN frame, or a limit the control code compares against; the rest is internal state."""
+    loads, written, saved = eeprom_facts(eeprom_cpp, constants_h)
+    outside = set_from_outside(communication_cpp, communication_can_cpp)
+    limits = set(LIMIT.findall(strip_comments(motor_control_cpp)))
+    out = []
+    for n, v, c in FIELD.findall(common_h):
+        out.append({"name": n, "value": v.strip(), "comment": (c or "").strip(),
+                    "setting": n in loads or n in saved or n in outside or n in limits,
+                    "after_default": after_default(n, loads, written, saved),
+                    "saved": kept_by_save(n, loads, saved)})
+    return out
 
 
 # ---------------------------------------------------------------- tables (--print)
@@ -213,9 +326,11 @@ def table_can(facts: dict) -> str:
 
 
 def table_defaults(facts: dict) -> str:
-    rows = ["| Variable | Default | Firmware comment |", "|---|---|---|"]
+    rows = ["| Variable | Start value | After #Default | Kept by #Save | Setting | Firmware comment |",
+            "|---|---|---|---|---|---|"]
     for d in facts["defaults"]:
-        rows.append(f"| `{d['name']}` | {esc(d['value'])} | {esc(d['comment'])} |")
+        rows.append(f"| `{d['name']}` | {esc(d['value'])} | {esc(d.get('after_default'))} | {esc(d.get('saved'))} | "
+                    f"{'yes' if d.get('setting') else ''} | {esc(d['comment'])} |")
     return "\n".join(rows) + "\n"
 
 
@@ -252,7 +367,8 @@ def facts_for(repo: Path, tag: str) -> dict:
         "tag": tag, "version": firmware_version(constants, tag), "commit": commit[:12],
         "can": {"ids": can_ids(constants), "handlers": can_handlers(can_cpp), "tx": can_tx(can_cpp)},
         "uart": {"accepted": uart_whitelist(read("SerialPacketParser.cpp")), "handlers": uart_handlers(comm_cpp)},
-        "defaults": defaults(read("common.h")),
+        "defaults": defaults(read("common.h"), read("EEPROM.cpp"), constants, comm_cpp, can_cpp,
+                             read("motor_control.cpp")),
     }
 
 

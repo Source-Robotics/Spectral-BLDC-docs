@@ -221,14 +221,27 @@ def uart_overview(d: dict) -> str:
     text = "\n".join(rows) + "\n"
     if orphans and not d["uart"].get("partial"):
         text += ("\nThe parser also accepts " + ", ".join(f"`#{n}`" for n in orphans) +
-                 ", which have no handler: the driver answers nothing to them.\n")
+                 ", which have no handler: the driver answers `Unknown command` to them, as to a name it does not "
+                 "know.\n")
     return text
 
 
 def defaults_table(d: dict) -> str:
-    rows = ["| Variable | Default | Firmware comment |", "|---|---|---|"]
-    for x in d["facts"]["defaults"]:
-        rows.append(f"| `{x['name']}` | {esc(x['value'])} | {esc(x['comment'])} |")
+    """The settings of the firmware structures: the start value in common.h, what #Default sets, whether #Save
+    keeps it. Internal state (flags, counters, scratch variables) is left out; facts without the EEPROM columns
+    (an older sync tool) give the old two-column table."""
+    entries = d["facts"]["defaults"]
+    if not any("after_default" in x for x in entries):
+        rows = ["| Variable | Default | Firmware comment |", "|---|---|---|"]
+        for x in entries:
+            rows.append(f"| `{x['name']}` | {esc(x['value'])} | {esc(x['comment'])} |")
+        return "\n".join(rows) + "\n"
+    rows = ["| Variable | Start value | After `#Default` | Kept by `#Save` | Firmware comment |", "|---|---|---|---|---|"]
+    for x in entries:
+        if not x.get("setting"):
+            continue
+        rows.append(f"| `{x['name']}` | {esc(x['value'])} | {esc(x['after_default'])} | {esc(x['saved'])} | "
+                    f"{esc(x['comment'])} |")
     return "\n".join(rows) + "\n"
 
 

@@ -17,7 +17,6 @@ The `Spectral-BLDC` package ([Spectral-BLDC-Python](https://github.com/Source-Ro
 | Message | Attributes |
 |---|---|
 | Respond_data_pack_1 | `position`, `speed`, `current` |
-
 | Send_Respond_Encoder_data | `position`, `speed` |
 | Send_Respond_Iq_data | `current` |
 | Send_Respond_Temperature | `temperature` |

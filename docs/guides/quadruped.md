@@ -3,12 +3,12 @@
 ## Intro
 In this guide we will show you how you can control a leg of any quadruped robot using Spectral micro BLDC drivers. <br />If you can control one of them you can control all the rest!<br />
 
-**After you finish this guide you will be able to do something like this: [Link](https://youtu.be/g9rHJr9-tok) **<br />
+**After you finish this guide you will be able to do something like this:** [video](https://youtu.be/g9rHJr9-tok)<br />
 
 !!! tip "Python API and toolbox"
     This guide leverages [Spectral BLDC python API](https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main) and [Source robotics toolbox](https://github.com/Source-Robotics/Source-Robotics-Toolbox)
 
-![drawing](../assets/LEG_wiring.webp)
+![The robot leg: two motors, each with its driver, on one CAN bus](../assets/LEG_wiring.webp)
 
 !!! note "Building the LEG"
     In this guide we only recommend you the hardware you can use to build the robot you designed. We do not offer already made designs you can build!
@@ -27,7 +27,7 @@ What you will need:
 * 1 x 24V power supply
 * A Laptop or raspberry pi
 
-![drawing](../assets/leg_setup.webp)
+![Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC](../assets/leg_setup.webp)
 
 The setup will be the same for any kind of quadruped leg. You will need to follow the diagram above to wire everything up.
 
@@ -38,7 +38,7 @@ The setup will be the same for any kind of quadruped leg. You will need to follo
 
 ## Leg kinematics
 
-![drawing](../assets/robot_leg_dh_table.webp)
+![The coordinate frames of the leg and its DH table](../assets/robot_leg_dh_table.webp)
 
 First you will need to assign coordinate frames to your leg model.
 We already did it but if you want to learn more on how and why check this [Link](https://automaticaddison.com/how-to-assign-denavit-hartenberg-frames-to-robotic-arms/)<br />
@@ -51,7 +51,7 @@ value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / fo
 
 Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
 
-![drawing](../assets/leg_terminal.webp)
+![The leg in its reference pose and the positions leg_calib.py prints](../assets/leg_terminal.webp)
 
 ``` py title="leg_calib.py"
 
@@ -71,7 +71,7 @@ while True:
     Motor[0].Send_Respond_Encoder_data()
     Motor[1].Send_Respond_Encoder_data()
 
-    for i in range(1, 7):  # Loop 9-1=8 to check for received data
+    for i in range(1, 7):  # read up to 6 replies
         message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
         print(f"unpack {i} is: {UnpackedMessageID}")
 
@@ -114,7 +114,7 @@ We defined that trajectory with our function generate_circle_coords and with par
 * speed - Speed of the end-effector in meters per second
 * time_var - Elapsed time in seconds
 
-![drawing](../assets/circ_2.webp)
+![The circle the foot follows at a speed of 1 and of 3](../assets/circ_2.webp)
 
 How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perfectly. With larger speeds the system can't keep up and overshoots. This is due multiple reaseons like:
 
@@ -237,7 +237,7 @@ while timer.elapsed_time < 1100000:
     Motor[1].Send_data_pack_1(Position = Needed_joint_pos[1],Speed = speed_var[1], Current = 0)
 
     # Handles data we get from the motors
-    for i in range(1, 3):  # Loop 9-1=8 to check for received data
+    for i in range(1, 3):  # read up to 2 replies
         message, UnpackedMessageID = Communication1.receive_can_messages(timeout=timeout_setting)
         #print(f"unpack{i} is: {UnpackedMessageID}")
 

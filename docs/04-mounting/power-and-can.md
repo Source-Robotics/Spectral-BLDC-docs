@@ -16,7 +16,8 @@ feeds the next driver, so a chain of drivers hangs on one supply cable and one C
   same time (three or four with 10 Ω gimbal motors), and feed a longer chain from
   both ends or from several supplies.
 - A motor that decelerates pushes energy back into the supply. A lab supply or a battery absorbs it; a supply that
-  cannot (some switch-mode supplies) sees its voltage rise, and the driver raises a Vbus error above 29.5 V.
+  cannot (some switch-mode supplies) sees its voltage rise, and the driver raises a Vbus error above `#Vmax`
+  (29 V after `#Default`).
 
 ## The cable orientation
 

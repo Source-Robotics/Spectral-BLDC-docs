@@ -51,7 +51,7 @@ E-stop command and on a watchdog that runs out. The status LED and `#Error` tell
 
 - **UART**, a 3.3 V serial port at 256000 baud: human-readable commands such as `#P 16384`, and the only way to
   run the calibration. See [Over UART](../06-operation/uart.md).
-- **CAN**, 1 Mbit/s, up to 16 drivers on one bus: compact frames for real-time control from a PC with the CANvas
+- **CAN**, 1 Mbit/s, up to 14 drivers on one bus: compact frames for real-time control from a PC with the CANvas
   adapter, a microcontroller or a robot control box. See [Over CAN](../06-operation/can.md).
 - **Python**, the `Spectral-BLDC` library on top of CAN. See [With Python](../06-operation/python.md).
 - **Motor GUI**, in the browser, over serial or CAN: the usual tool for setup, testing and tuning. See [Motor GUI](../05-setup/motor-gui.md).
@@ -61,12 +61,12 @@ E-stop command and on a watchdog that runs out. The status LED and `#Error` tell
 | Pattern | Meaning |
 |---|---|
 | three short flashes and a pause | normal operation: no error, calibrated |
-| flashing every 0.5 s | the calibration routine is running |
+| fast flashing, about 10 times a second | the calibration routine is running |
 | on, not flashing | error mode: at least one error is active, or the motor is not calibrated |
 
 The LED can be turned off with `#LED 0`.
 
 | Normal operation | Calibration | Error mode |
 |---|---|---|
-| ![Three short flashes and a pause](../assets/Normal.webp){ width="180" } | ![Flashing every 0.5 s](../assets/Calib.webp){ width="180" } | ![On, steady](../assets/Error2.webp){ width="180" } |
+| ![Three short flashes and a pause](../assets/Normal.webp){ width="180" } | ![Fast flashing](../assets/Calib.webp){ width="180" } | ![On, steady](../assets/Error2.webp){ width="180" } |
 

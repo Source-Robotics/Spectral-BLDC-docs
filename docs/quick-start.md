@@ -65,7 +65,7 @@ Read in more detail: [Wiring the motor](04-mounting/wiring.md).
 
 === "Terminal"
     Open a terminal on the adapter's port, 256000 baud, line ending CR+LF, and type `#Info`. The driver prints its
-    hardware and firmware version and the state of everything.
+    hardware and firmware version, its CAN ID, whether it is calibrated, and the motor's parameters.
 
     Read in more detail: [The serial terminal](05-setup/terminal.md).
 
@@ -78,10 +78,10 @@ is covered in [Motor GUI](05-setup/motor-gui.md#opening-the-port) or [Troublesho
 ## 6. Calibrate
 
 First the factory defaults, so that calibration does not start from another motor's values or from junk in the
-EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also resets the serial number the
-driver reports.) Then fix the motor to the bench, nothing on the shaft, 24 V on the supply. There is nothing to
-enter: calibration
-measures the motor's resistance and inductance and finds its pole pairs and phase order by itself.
+EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also sets the CAN node ID back to
+0 and the hardware version and batch date to factory values.) Then fix the motor to the bench, nothing on the
+shaft, 24 V on the supply. There is nothing to enter: calibration measures the motor's resistance and inductance
+and finds its pole pairs and phase order by itself.
 
 === "Motor GUI"
     Start the calibration. The GUI switches to *Calibration mode* and shows the driver's log step by step.
@@ -111,9 +111,9 @@ Read in more detail: [Calibration](05-setup/calibration.md), with the whole log 
 
 ## 7. Set the current limit and save
 
-The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load. The
-firmware's default of 1000 mA suits the gimbal motors in the tested list; a small 2804 is better at 500 mA, a motor
-rated for more can go up to 2800 mA.
+The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load.
+Calibration leaves it at 1600 mA, so set it now, before you save. 1000 mA suits the gimbal motors in the tested
+list; a small 2804 is better at 500 mA, a motor rated for more can go up to 2800 mA.
 
 === "Motor GUI"
     Set the current limit in the limits, then **Save** (the GUI warns about unsaved changes until you do).

@@ -1,8 +1,9 @@
 # Installing the bootloader on an older board
 
-A driver running firmware 104 or older has no bootloader: its firmware starts at the beginning of the flash. To
-run any release from 105 on, which is linked to start above the bootloader, the bootloader must be installed
-once, with a programming adapter on the JTAG connector. After that, every update goes over UART or CAN.
+A driver running firmware 101 or older has no bootloader: its firmware starts at the beginning of the flash. To
+run any release from 104 on (104 is the first release built for the bootloader), which is linked to start above
+the bootloader, the bootloader must be installed once, with a programming adapter on the JTAG connector. After
+that, every update goes over UART or CAN.
 
 !!! warning
     Disconnect the motor supply and the UART adapter before connecting the programming adapter. The adapter
@@ -21,7 +22,7 @@ once, with a programming adapter on the JTAG connector. After that, every update
 
 <figure markdown="span">
   ![The programming adapter on the JTAG pads](../assets/FLASHING2-Photoroom.webp){ width="520" }
-  <figcaption>Figure 18: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
+  <figcaption>Figure 17: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
 </figure>
 
 ## Steps
@@ -34,7 +35,8 @@ once, with a programming adapter on the JTAG connector. After that, every update
    mode (the LED stays off).
 6. Flash the firmware release through the bootloader, over UART or CAN, as in
    [Updating through the bootloader](update.md).
-7. `#Info` shows the new release. `#Default`, enter the motor parameters, calibrate, `#Save`.
+7. `#Info` shows the new release. `#Default`, then calibrate (`#Cal`), set the current limit (`#Ilim`) and
+   `#Save`; see [Calibration](../05-setup/calibration.md).
 
 !!! note "Memory layout"
     `0x08000000`–`0x080022FF` bootloader, `0x08002C00` its configuration page (board ID, the application's CRC),

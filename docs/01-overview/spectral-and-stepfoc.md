@@ -10,12 +10,15 @@ What this means in practice:
 
 - **The commands are practically the same.** The CAN messages and UART commands of the API reference exist on both drivers,
   with the same IDs, names and layouts; STEPFOC adds a few that only make sense on a stepper (homing against a
-  sensor, open-loop stepping). A program written for one runs on the other.
-- **The firmware releases go in step.** A Spectral Micro release has a STEPFOC counterpart with the same changes;
-  the [compatibility table](../appendix/compatibility.md) lists the pairs. The numbers differ by one (Spectral
-  Micro 107 is STEPFOC 108).
+  sensor, open-loop stepping). A program written for one runs on the other. The idle behaviour is the exception
+  over UART: the Spectral Micro sets it with `#Brake 0` or `#Brake 1` and coasts by default, STEPFOC has the
+  actions `#Brake` and `#Coast`. Send_Settings over CAN is the same on both.
+- **The firmware releases go in step.** Most Spectral Micro releases have a STEPFOC counterpart with the same changes;
+  the [compatibility table](../appendix/compatibility.md) lists the pairs. The numbers do not always match: the
+  current pair is Spectral Micro 107 and STEPFOC 108.
 - **Calibration differs.** The Spectral Micro measures the motor's resistance and inductance and finds its pole
-  pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first.
+  pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first. See
+  [Calibration](../05-setup/calibration.md).
 - **The motor terminals differ.** U, V and W for the three phases, instead of A+, A−, B+, B− for the two coils of
   a stepper.
 - **The grippers differ.** The [SSG-48 gripper](https://docs.source-robotics.com/SSG48-gripper-docs/) is driven by

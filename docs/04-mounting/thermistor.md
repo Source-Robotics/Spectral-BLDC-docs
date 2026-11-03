@@ -38,7 +38,8 @@ the bead in place and conducts the heat; keep the leads clear of the rotor.
 ```
 
 `#Temp` then prints the temperature; with the thermistor disabled it prints `Temp Off`. Above the limit the driver
-raises a temperature error and stops; it clears with `#Clear` once the motor has cooled. 75 °C is the default
+raises a temperature error and stops; it clears with `#Clear` once the motor has cooled. Below −20 °C it raises
+the same error, so `#Term 1` without a thermistor, or with a broken lead, stops the driver too. 75 °C is the default
 limit and a safe one for the enamel of most small motors; do not go higher unless the motor is rated for it.
 
 Over CAN, Send_Respond_Temperature returns the temperature, and the temperature error is one of the bits of

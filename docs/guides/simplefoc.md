@@ -21,9 +21,15 @@ The library is intended both for:
 
 Follow this [guide](https://docs.simplefoc.com/installation)
 
+!!! warning "This replaces the bootloader"
+    This project has no upload offset, so an upload with the programming adapter writes SimpleFOC at
+    `0x08000000`, over the bootloader. Firmware updates over UART or CAN stop working. To go back to the Spectral
+    firmware, install the bootloader again as in
+    [Installing the bootloader on an older board](../07-firmware/bootloader.md), then flash a release.
+
 Your platformio.ini should look like this:
 
-``` C++ title="main.cpp"
+``` ini title="platformio.ini"
 [env:genericSTM32F103CB]
 platform = ststm32
 board = genericSTM32F103CB
@@ -48,7 +54,8 @@ If you want to develop more advanced applications with SimpleFOC you can follow 
 
 This example will spin the motor in open loop and enable serial monitor.<br />
 Use this code as a base for more advanced code you will develop with SimpleFOC.<br />
-In the github folder we also offer full FOC example!
+The [Spectral-Micro-Simple-FOC](https://github.com/Source-Robotics/Spectral-Micro-Simple-FOC) repository has
+this project and more examples in its `examples` folder, among them voltage-torque FOC with the encoder.
 
 ``` C++ title="main.cpp"
 #include "Arduino.h"

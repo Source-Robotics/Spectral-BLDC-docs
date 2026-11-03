@@ -1,8 +1,9 @@
 <!-- One shared glossary, included by the Glossary page. Keep entries alphabetical. -->
 
 **Activated**
-:   A flag the driver keeps (`#Activate`, Send_gripper_data_pack). In gripper mode a move is carried out only while
-    the gripper is activated.
+:   Two flags with the same name. The controller's flag is set by `#Activate` and reported in
+    Send_Respond_State_of_Errors; nothing else uses it. The gripper's activate bit is set by `#Gripact`, `#Grippos`
+    and Send_gripper_data_pack; in gripper mode a move is carried out only while it is set.
 
 **Angle offset** (theta offset)
 :   The angle between the encoder's zero and the motor's electrical zero, found by calibration and stored. The
@@ -13,11 +14,11 @@
     the top speed at a given voltage, and is what calibration measures to find KV, Kt and the flux linkage.
 
 **Board ID**
-:   The bootloader's own address, 0 to 13, stored in its configuration page. The firmware keeps it equal to the CAN
-    node ID.
+:   The bootloader's own address, 0 to 13, stored in its configuration page. The firmware sets it to the CAN node
+    ID when the configuration is saved.
 
 **Bootloader**
-:   The program in the first 12 KB of the driver's flash on boards shipped with firmware 105 or newer. It starts the
+:   The program in the first 12 KB of the driver's flash on boards that run firmware 104 or newer. It starts the
     firmware, and loads a new firmware over UART or CAN. See [The bootloader](07-firmware/the-bootloader.md).
 
 **Calibration**
@@ -26,8 +27,9 @@
     the encoder to the rotor field and measures Kt, KV and the flux linkage. Its result is kept with `#Save`.
 
 **CAN ID** (node ID)
-:   The address of the driver on the CAN bus, 0 to 15. It occupies bits 10 to 7 of the 11-bit CAN frame identifier;
-    the command ID occupies bits 6 to 1 and the error bit is bit 0.
+:   The address of the driver on the CAN bus, 0 to 13 (the field holds 0 to 15, but the bootloader reserves 14 and
+    15). It occupies bits 10 to 7 of the 11-bit CAN frame identifier; the command ID occupies bits 6 to 1 and the
+    error bit is bit 0.
 
 **CANvas**
 :   Source Robotics' USB-to-CAN adapter. It appears as a serial port and speaks slcan, which `python-can` and Motor
@@ -157,5 +159,5 @@
     error.
 
 **Watchdog**
-:   A timer the driver resets with every valid CAN frame it receives. When it is set (Send_Watchdog) and runs out,
-    the driver reports a watchdog error and stops.
+:   A timer the driver resets with every motion command and status request it receives over CAN. When it is set
+    (Send_Watchdog) and runs out, the driver reports a watchdog error and stops.

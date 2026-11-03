@@ -14,8 +14,8 @@ columns:
 rows:
   - firmware: "107"
     date: 2026-08-26
-    bootloader: required (installed on boards shipped with 105 or newer)
-    stepfoc: "108"
+    bootloader: required
+    stepfoc: 108 (STEPFOC 107 has the Send_Settings and PD changes of this release, without its calibration fix)
     python: 1.20 or newer
     runtime: 0.9 or newer
     pcb: v2.0
@@ -23,14 +23,14 @@ rows:
   - firmware: "106"
     date: 2026-07-06
     bootloader: required
-    stepfoc: 106 and 107
+    stepfoc: "106"
     python: 1.19 or newer
     runtime: 0.9 or newer
     pcb: v2.0
     docs: not published
   - firmware: "105"
     date: 2026-07-05
-    bootloader: required (the first release that needs it)
+    bootloader: required
     stepfoc: "105"
     python: 1.19 or newer
     runtime: 0.9 or newer
@@ -38,12 +38,12 @@ rows:
     docs: not published
   - firmware: "104"
     date: 2026-06-19
-    bootloader: none (flashed with a programming adapter); the last release of the main branch
-    stepfoc: "104"
+    bootloader: required (the first release built for the bootloader, from Bootloader_main)
+    stepfoc: none (STEPFOC has no 104 release)
     python: 1.19 or newer (1.20 for Send_Voltage_Limit)
     runtime: 0.9 or newer
     pcb: v2.0
-    docs: "101 applies; 104 adds the Send_Voltage_Limit message"
+    docs: "101 applies; 104 adds Send_Respond_Kt, Send_Voltage_Limit (in the release image) and the bootloader"
   - firmware: "101"
     date: 2025-09-29
     bootloader: none (flashed with a programming adapter)

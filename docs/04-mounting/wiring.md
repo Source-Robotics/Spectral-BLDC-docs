@@ -8,7 +8,7 @@ reversed.
 ## Soldering
 
 1. Cut the leads to a comfortable length: long enough to reach the pads with the board mounted, short enough not
-   to get into the rotor.
+   to get into the rotor. With firmware older than 105, leave them long enough to swap two of them later.
 2. Tin the leads and solder each to one group of pads, U, V or W. The three pads of a group are one terminal.
 3. Make sure no strand bridges two groups and that nothing touches the rotor or the housing.
 
@@ -25,6 +25,9 @@ motor calibrates identically with any wiring, and positive commands turn the mot
 wiring: counter-clockwise seen from the encoder side of the board, see [Control modes](../06-operation/modes.md).
 To turn the other way, use negative setpoints.
 
+Firmware older than 105 does not compensate the order: calibration stops with
+`Phase order is wrong! Switch motor phases and try again!`. Swap any two of U, V and W and calibrate again.
+
 If the motor does not respond to the commutation check, calibration says so (`Commutation/alignment check
-failed!`). That means a phase is not connected, the current limit is 0 or the magnet slipped, not that the wires
-are in the wrong order; see [Calibration](../05-setup/calibration.md).
+failed!`). That means a phase is not connected, `#Iqoffset` is set too low or the magnet slipped, not that the
+wires are in the wrong order; see [Calibration](../05-setup/calibration.md).

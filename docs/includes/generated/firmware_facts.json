@@ -450,718 +450,1147 @@
  "commit": "2e7febc4de63",
  "defaults": [
   {
+   "after_default": "1111 in the EEPROM, not read back",
    "comment": "",
    "name": "SERIAL_NUMBER",
+   "saved": "written, not read back",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "1",
    "comment": "Version of the Spectral BLDC driver PCB",
    "name": "HARDWARE_VERSION",
+   "saved": "yes",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "24092024",
    "comment": "Date the batch was produced",
    "name": "BATCH_DATE",
+   "saved": "yes",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "107",
    "comment": "Software release",
    "name": "SOFTWARE_VERSION",
+   "saved": "no: set by the firmware",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "0",
    "comment": "Is motor controller gripper (1) or not (0)",
    "name": "I_AM_GRIPPER",
+   "saved": "yes",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "1",
    "comment": "Use LED for status indication",
    "name": "LED_ON_OFF",
+   "saved": "yes",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "\u2014",
    "comment": "Ticks of our interrupt routine",
    "name": "interrupt_tick",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Temperature in degrees celsius",
    "name": "TEMP_DEG",
+   "saved": "no",
+   "setting": false,
    "value": "23"
   },
   {
+   "after_default": "0",
    "comment": "will be determined at calibration",
    "name": "theta_offset",
+   "saved": "yes",
+   "setting": true,
    "value": "0.0f"
   },
   {
+   "after_default": "7",
    "comment": "Number of pole pairs of your BLDC motor",
    "name": "pole_pairs",
+   "saved": "yes",
+   "setting": true,
    "value": "11"
   },
   {
+   "after_default": "\u2014",
    "comment": "default 200 HZ; Will set PI gains for Q and D current loops based on phase resistance",
    "name": "current_control_bandwidth",
+   "saved": "no",
+   "setting": true,
    "value": "500"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "sleep_pin_state",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "reset_pin_state",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Crossover frequency, in Radians per sample",
    "name": "Crossover_frequency",
+   "saved": "no",
+   "setting": false,
    "value": "0.0"
   },
   {
+   "after_default": "0",
    "comment": "When looking at the magnetic encoder counter-clockwise is POSITIVE rotation.",
    "name": "DIR_",
+   "saved": "yes",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "0",
    "comment": "",
    "name": "Phase_order",
+   "saved": "yes",
+   "setting": true,
    "value": "2"
   },
   {
+   "after_default": "1",
    "comment": "+1 or -1, auto-detected at calibration so +Iq/+velocity/+rotation map to +encoder rotation",
    "name": "commutation_dir",
+   "saved": "yes",
+   "setting": true,
    "value": "1"
   },
   {
+   "after_default": "0",
    "comment": "Are we taking termistor mesurements? 0 is off, 1 is on",
    "name": "Thermistor_on_off",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "0 -> idle, 1 -> Positon, 2 -> Speed, 3 -> Current, 4 -> PD, 5 -> Open-loop speed, 6 -> Gripper mode, 7-> Calibrate gripper, 8 -> Voltage Torque mode",
    "name": "Controller_mode",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Idle-mode (Controller_mode == 0) phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage PWM vector shorts the phases together)",
    "name": "brake_coast",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "Resistance of SINGLE PHASE of your BLDC motor",
    "name": "Resistance",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "= 2 * Resistance + 2 * R_sense + 2 *Rdson",
    "name": "Total_Resistance",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "Inductance of SINGLE PHASE of your BLDC motor",
    "name": "Inductance",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "Torque constant of your BLDC motor",
    "name": "Kt",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "Flux linkage of your BLDC motor",
    "name": "flux_linkage",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "",
    "name": "KV",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "75",
    "comment": "Max temperature in degrees",
    "name": "Max_temperature",
+   "saved": "yes",
+   "setting": true,
    "value": "75"
   },
   {
+   "after_default": "\u2014",
    "comment": "Min temperature in degrees",
    "name": "Min_temperature",
+   "saved": "no",
+   "setting": true,
    "value": "-20"
   },
   {
+   "after_default": "29000",
    "comment": "Max vbus voltage in mV",
    "name": "Max_Vbus",
+   "saved": "yes",
+   "setting": true,
    "value": "29500"
   },
   {
+   "after_default": "\u2014",
    "comment": "Min vbus voltage in mV",
    "name": "Min_Vbus",
+   "saved": "no",
+   "setting": true,
    "value": "9000"
   },
   {
+   "after_default": "\u2014",
    "comment": "Execution time of our interrupt loops",
    "name": "execution_time",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "",
    "name": "watchdog_time_ms",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "watchdog_reset",
+   "saved": "no",
+   "setting": false,
    "value": "1"
   },
   {
+   "after_default": "0",
    "comment": "Hold position, Idle, brake",
    "name": "watchdog_action",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "Motor controller will send data every Heartbeat_rate_ms",
    "name": "Heartbeat_rate_ms",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Send_heartbeat",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "If controller is activated or not",
    "name": "Activated",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "General error",
    "name": "Error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Termistor reported error",
    "name": "temperature_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Encoder magnet is not alligned error",
    "name": "encoder_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Vbus voltage is too small or too large",
    "name": "Vbus_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Driver reported error. 3 possible conditions: Undervoltage, thermal shutdown, overcurrent",
    "name": "Driver_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "We are moving too fast",
    "name": "Velocity_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "We go past max current",
    "name": "Current_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "If we received estop command",
    "name": "ESTOP_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "If we pass watchdog timeout time",
    "name": "Watchdog_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Set if CAN peripheral failed to initialize; CAN bus is skipped, UART stays usable",
    "name": "CAN_init_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "0 is space vector, 1 is sine",
    "name": "commutation",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "0 - outside of calibration, 1 inside of calibration, 2 failed calibration, 3 success calibration",
    "name": "Calibration",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "0 if motor is not calibrated, 1 if it is calibrated",
    "name": "Calibrated",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Voltage used to calculate resistance //1000",
    "name": "Resistance_calc_voltage",
+   "saved": "no",
+   "setting": true,
    "value": "1000"
   },
   {
+   "after_default": "\u2014",
    "comment": "Max power that can dissipate during inductance test.",
    "name": "Calibration_power",
+   "saved": "no",
+   "setting": true,
    "value": "12"
   },
   {
+   "after_default": "\u2014",
    "comment": "Calculated from Calibration power and resistance",
    "name": "Calibration_Inductance_voltage",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Voltage to use when spinning the motor open loop. In mV",
    "name": "Open_loop_voltage",
+   "saved": "no",
+   "setting": true,
    "value": "5000"
   },
   {
+   "after_default": "\u2014",
    "comment": "Speed to be used when spinning the motor open loop. In RAD/s",
    "name": "Open_loop_speed",
+   "saved": "no",
+   "setting": true,
    "value": "20.0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Number of open loop electrical rotations during calibration",
    "name": "Number_of_rotations",
+   "saved": "no",
+   "setting": false,
    "value": "8"
   },
   {
+   "after_default": "\u2014",
    "comment": "Max voltage to be used during Kv calculation",
    "name": "Phase_voltage",
+   "saved": "no",
+   "setting": true,
    "value": "5000"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Calib_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Magnet_cal_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Vbus_cal_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Resistance_cal_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Inductance_cal_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Open_loop_cal_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Kt_cal_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Phase_order_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "KV_status",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "If 1 we Periodically send messages without request from host.",
    "name": "cyclic",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "If 1 we Periodically send messages without request from host.",
    "name": "cyclic_a",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "We send messages every cyclic_period",
    "name": "cyclic_period",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "CAN id of THIS motor driver! No 2 motor drivers can share the same ID.",
    "name": "CAN_ID",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Wrong_DL",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "temp",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "temp1",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "temp2",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "handle_can",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "used to record if hall sensor was triggered or not, normal state of hall is high (1)",
    "name": "hall_trigger",
+   "saved": "no",
+   "setting": false,
    "value": "1"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "trigger_value",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "calibration_offset_current",
+   "saved": "no",
+   "setting": true,
    "value": "300"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "temp_var_offset_calib",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "align_state",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "align_counter",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "aligned_angle",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "align_done",
+   "saved": "no",
+   "setting": false,
    "value": "false"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "calib_done",
+   "saved": "no",
+   "setting": false,
    "value": "false"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "calib_reset",
+   "saved": "no",
+   "setting": false,
    "value": "false"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Velocity_fwd",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Velocity_bwd",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "Calibrate_Angle_Offset_Align() progress: state index (0 = not running)",
    "name": "Align_stage",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "sweep index within the current stage",
    "name": "Align_point",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "diagnostic: encoder ticks moved during the \"confirm commutation\" spin test, on failure",
    "name": "Spin_confirm_delta",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "diagnostic: VBUS_mV sampled at that same failure",
    "name": "Spin_confirm_vbus_mV",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "microstep",
+   "saved": "no",
+   "setting": false,
    "value": "16"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "gosteps",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "step interval in microseconds",
    "name": "step_interval",
+   "saved": "no",
+   "setting": false,
    "value": "1000"
   },
   {
+   "after_default": "\u2014",
    "comment": "1 = finished, cleared by user",
    "name": "open_loop_move_done",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used",
    "name": "Voltage_limit",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0",
    "comment": "",
    "name": "Reset_integral_accumulator",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "11",
    "comment": "",
    "name": "Kp_p",
+   "saved": "yes",
+   "setting": true,
    "value": "11"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Position_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "P_errSum",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "0.03",
    "comment": "0.006 basic values that work for most motors but not optimal",
    "name": "Kp_v",
+   "saved": "yes",
+   "setting": true,
    "value": "0.03"
   },
   {
+   "after_default": "0.0003",
    "comment": "0.0001 basic values that work for most motors but not optimal",
    "name": "Ki_v",
+   "saved": "yes",
+   "setting": true,
    "value": "0.0003"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "V_errSum",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Feedforward_speed",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "-1.5",
    "name": "Velocity_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "800000",
    "comment": "Clamp integrals to this  [TICKS/s]",
    "name": "Velocity_limit",
+   "saved": "yes",
+   "setting": true,
    "value": "800000"
   },
   {
+   "after_default": "\u2014",
    "comment": "[TICKS/s] ; Velocity when we will report error",
    "name": "Velocity_limit_error",
+   "saved": "no",
+   "setting": true,
    "value": "20000000"
   },
   {
+   "after_default": "\u2014",
    "comment": "zero location",
    "name": "Ki",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "3",
    "comment": "",
    "name": "Kp_id",
+   "saved": "yes",
+   "setting": true,
    "value": "3"
   },
   {
+   "after_default": "1.5",
    "comment": "",
    "name": "Ki_id",
+   "saved": "yes",
+   "setting": true,
    "value": "1.5"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Id_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "3",
    "comment": "",
    "name": "Kp_iq",
+   "saved": "yes",
+   "setting": true,
    "value": "3"
   },
   {
+   "after_default": "1.5",
    "comment": "",
    "name": "Ki_iq",
+   "saved": "yes",
+   "setting": true,
    "value": "1.5"
   },
   {
+   "after_default": "1000",
    "comment": "",
    "name": "Iq_current_limit",
+   "saved": "yes",
+   "setting": true,
    "value": "1000"
   },
   {
+   "after_default": "0",
    "comment": "",
    "name": "Id_current_limit",
+   "saved": "yes",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Feedforward_current",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "0.0028",
    "comment": "[Nm*s/rad]  KD 0.002800",
    "name": "KD",
+   "saved": "yes",
+   "setting": true,
    "value": "0.002800"
   },
   {
+   "after_default": "0.1400",
    "comment": "[Nm/rad] KP 0.14000",
    "name": "KP",
+   "saved": "yes",
+   "setting": true,
    "value": "0.14000"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Uq_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Ud_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "Same_command",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "At_position",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "position_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "speed_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "20"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "current_setpoint",
+   "saved": "no",
+   "setting": true,
    "value": "200"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "position",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "speed",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "current",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "calibrated",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "-0 Stopped(or performing activation /automatic release).",
    "name": "action_status",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "activated",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "object_detection_status",
+   "saved": "no",
+   "setting": false,
    "value": "3"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "temperature_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "timeout_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "estop_error",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "release_direction",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "estop_status",
+   "saved": "no",
+   "setting": true,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "max_open_position",
+   "saved": "no",
+   "setting": false,
    "value": "10329"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "max_closed_position",
+   "saved": "no",
+   "setting": false,
    "value": "-229"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "position_ticks",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "max_speed",
+   "saved": "no",
+   "setting": false,
    "value": "80000"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "min_speed",
+   "saved": "no",
+   "setting": false,
    "value": "40"
   },
   {
+   "after_default": "\u2014",
    "comment": "",
    "name": "In_calibration",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   }
  ],
@@ -1288,7 +1717,7 @@
     "arg": "int",
     "comment": "Set Ud voltage setpoint Does not place motor in the voltage torque mode",
     "kind": "Set/Get",
-    "mode": "gripper",
+    "mode": "",
     "name": "Ud",
     "response": "Ud"
    },

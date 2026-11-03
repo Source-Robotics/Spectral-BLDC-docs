@@ -27,7 +27,7 @@ browsers have: Chrome, Edge, Brave, Opera. Firefox and Safari cannot open serial
 2. Open [motorgui.com](https://motorgui.com/), choose the connection kind, and **Connect**. The browser asks
    which port; pick the adapter's.
 3. The driver's identity appears: hardware version, firmware version, serial number, batch date, whether it is
-   calibrated and activated, and the active errors — what `#Info` prints in a terminal.
+   calibrated and activated, and the active errors. In a terminal, `#Info`, `#SERNUM` and `#Error` print the same.
 
 If the port is not offered, the browser is not Chromium-based, or another program holds the port (a terminal left
 open, PlatformIO's monitor). If the port opens and nothing appears: the driver is unpowered, or TX and RX are
