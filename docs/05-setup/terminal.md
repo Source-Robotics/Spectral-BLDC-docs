@@ -7,10 +7,7 @@ the terminal shows the driver's answers exactly as it prints them, which is usef
 The driver talks on its UART connector at 256000 baud, 8N1, 3.3 V. Any terminal that sends a line ending in
 CR+LF works.
 
-<figure markdown="span">
-  ![The UART connector and the adapter](../assets/UART connection.webp){ width="700" }
-  <figcaption>Figure 12: The UART connector. TX of the driver goes to RX of the adapter and RX to TX.</figcaption>
-</figure>
+![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART%20connection.webp){ width="700" }
 
 ## Connecting
 
@@ -50,7 +47,7 @@ CR+LF works.
     Select the adapter's port under *Tools*, any board (the monitor does not care), open the serial monitor, set
     256000 baud and *Both NL & CR* as the line ending.
 
-    ![Arduino serial monitor](../assets/Arduino3.PNG){ width="420" }
+    ![The Arduino serial monitor at 256000 baud, with Both NL & CR as the line ending](../assets/Arduino3.PNG){ width="420" }
 
 ## The first commands
 

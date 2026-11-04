@@ -20,10 +20,7 @@ that, every update goes over UART or CAN.
 - The bootloader binary from the [bootloader repository's `bin/` folder](https://github.com/Source-Robotics/stm32f103c-bootloader/tree/main/bin);
   its `README.md` names the current file.
 
-<figure markdown="span">
-  ![The programming adapter on the JTAG pads](../assets/FLASHING2-Photoroom.webp){ width="520" }
-  <figcaption>Figure 17: The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.</figcaption>
-</figure>
+![The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.](../assets/FLASHING2-Photoroom.webp){ width="520" }
 
 ## Steps
 

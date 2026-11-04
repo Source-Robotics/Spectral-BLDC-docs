@@ -24,10 +24,7 @@ size fails to link.
   bootloader must already be on the board; the upload does not touch it. The serial monitor (the plug icon) opens
   the UART at 256000 with `send_on_enter`, so you can type commands to the driver from the same window.
 
-<figure markdown="span">
-  ![Upload in VS Code](../assets/VSUPLOAD.png){ width="700" }
-  <figcaption>Figure 18: Build, upload and the serial monitor in PlatformIO's status bar.</figcaption>
-</figure>
+![Build, upload and the serial monitor in PlatformIO's status bar.](../assets/VSUPLOAD.png){ width="700" }
 
 ## Where things are
 

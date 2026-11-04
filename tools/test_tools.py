@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -216,6 +217,32 @@ check("C2 the defaults: a saved setting with its #Default value, a RAM-only sett
       dfl["CAN_ID"]["setting"] and dfl["CAN_ID"]["after_default"] == "0" and dfl["CAN_ID"]["saved"] == "yes"
       and dfl["cyclic_period"]["setting"] and dfl["cyclic_period"]["saved"] == "no"
       and not dfl["interrupt_tick"]["setting"], str(dfl))
+
+# ---------------------------------------------------------------- E. the figures hook
+fig = load_module("figures_hook", ROOT / "hooks" / "figures.py")
+pair = "\n".join(["Text.", "", '![A board](a.webp#only-light){ width="9" }',
+                  '![A board](a_dark.webp#only-dark){ width="9" }', "", "More."])
+out, n = fig.transform(pair, 1, "3.")
+check("E1 a light and a dark picture are one figure, numbered on from the chapter's count, alt text as caption",
+      n == 1 and out.count("<figure") == 1 and "<figcaption>Figure 3.2: A board.</figcaption>" in out, out)
+inline = "\n".join(["A line of text", "![A board](a.webp)", "", "![Hero](h.webp){ .hero }", ""])
+out, n = fig.transform(inline, 0, "")
+check("E2 a picture inside a paragraph and a hero picture are left alone", n == 0 and "<figure" not in out, out)
+check("E3 numbered chapters count across pages, other pages on their own",
+      fig.chapter("03-technical-data/connectors.md") == ("03-technical-data", "3.")
+      and fig.chapter("02-safety.md") == ("02-safety.md", "2.")
+      and fig.chapter("guides/quadruped.md") == ("guides/quadruped.md", ""))
+shot = "\n".join(['![Before](b.webp)', "", '<figure class="gui-shot" markdown="1">', '<div markdown="1">', "",
+                  '![A screen](s.jpg){ width="9" }', "", "</div>",
+                  '<figcaption markdown="1">Figure 7: **1. Port:** pick it.</figcaption>', "</figure>", "",
+                  '![After](c.webp)', ""])
+out, n = fig.transform(shot, 0, "5.")
+check("E4 an HTML figure is numbered in sequence, a typed number replaced, the picture inside it left alone",
+      n == 3 and out.count("<figure") == 3 and '<figcaption markdown="1">Figure 5.2: **1. Port:** pick it.' in out
+      and "Figure 5.1: Before." in out and "Figure 5.3: After." in out and "Figure 7" not in out, out)
+typed = [str(p.relative_to(ROOT)) for p in (ROOT / "docs").rglob("*.md")
+         if "generated" not in p.parts and re.search(r"<figcaption[^>]*>\s*Figure\s+\d", p.read_text(encoding="utf-8"))]
+check("E5 no caption carries a number typed by hand (the hook numbers them)", not typed, "; ".join(typed))
 
 print(f"\n{len(fails)} failure(s)" if fails else "\nall checks passed")
 sys.exit(1 if fails else 0)

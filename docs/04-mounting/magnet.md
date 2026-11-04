@@ -4,10 +4,7 @@ The encoder reads a diametrically magnetised magnet on the end of the motor shaf
 the shaft's axis, parallel to the board, about **1 mm** above the encoder chip, and it must not move. Every
 calibration problem that is not a wiring problem comes from this magnet.
 
-<figure markdown="span">
-  ![Magnet distance to the encoder](../assets/mag_dist.webp){ width="700" }
-  <figcaption>Figure 6: About 1 mm between the magnet and the encoder chip in the middle of the board.</figcaption>
-</figure>
+![About 1 mm between the magnet and the encoder chip in the middle of the board.](../assets/mag_dist.webp){ width="700" }
 
 ## The magnet
 
