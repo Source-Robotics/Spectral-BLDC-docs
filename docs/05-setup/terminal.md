@@ -17,7 +17,26 @@ CR+LF works.
 2. Connect the motor supply. The adapter's 3.3 V powers the driver's logic, so the driver answers over UART with
    only the adapter plugged in, but it reports a Vbus error and refuses calibration and every motion command
    until the 12 to 29 V supply is on.
-3. Find the adapter's port: `COM…` on Windows, `/dev/ttyUSB…` or `/dev/ttyACM…` on Linux and macOS.
+3. Find the adapter's port:
+
+=== "Windows"
+    The adapter is `COM` and a number. Device Manager lists it under **Ports (COM & LPT)**: the entry that
+    disappears when you unplug the adapter is yours. An adapter that shows a warning sign there instead needs the
+    driver of its USB chip (on most 3.3 V adapters a CP210x or a CH340) from the chip maker.
+
+=== "Linux"
+    The serial adapter is `/dev/ttyUSB0` on most adapters, the CANvas adapter `/dev/ttyACM0`;
+    `ls /dev/ttyUSB* /dev/ttyACM*` lists them. To open them without root, join the `dialout` group once, then
+    log out and in again:
+
+    ```
+    sudo usermod -aG dialout $USER
+    ```
+
+=== "macOS"
+    The serial adapter is `/dev/cu.usbserial-` and a few characters on most adapters, the CANvas adapter
+    `/dev/cu.usbmodem` and a number; `ls /dev/cu.*` lists them. Use the `cu.` name, not the `tty.` one, in a
+    terminal or a script.
 
 !!! danger
     5 V on the UART pins destroys the board.
@@ -58,6 +77,11 @@ CR+LF works.
 prints the driver's identity: the hardware and firmware version, the CAN ID, the calibration state and the motor
 parameters. `#Help` (firmware 106 and newer) prints a short command reference, `#Error` the active errors,
 `#SERNUM` the serial number and `#Param` the gains.
+
+!!! success "Check"
+    `#Info` answers with the driver's identity, the hardware and firmware version first. If nothing comes back:
+    the baud rate, the CR+LF line ending, TX and RX, see
+    [The driver does not answer](../08-troubleshooting.md#the-driver-does-not-answer).
 
 Every command starts with `#`, and a Set/Get command takes one number after a space: `#P 16384` moves to position
 16384; `#P` alone prints the position. Names are case-sensitive. The whole set is in the

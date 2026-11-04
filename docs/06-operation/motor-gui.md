@@ -68,4 +68,6 @@ the GUI's telemetry stream uses over serial, so do not start it by hand while th
 <figcaption markdown="1">**1. Errors state:** a fault is active. **2. Errors tab:** inspect individual flags. **3. E-stop error:** 1 identifies the latched fault in this simulation. **4. Clear errors:** clear it after removing its cause; a persistent cause returns on the next update. Screenshot captured from **Mock CAN (demo)**.</figcaption>
 </figure>
 
-**Check:** after recovery the fault flag returns to 0 and the state shows No errors. If it returns, stop and follow [Errors and recovery](errors.md).
+!!! success "Check"
+    After recovery the fault flag returns to 0 and the state shows *No errors*. If it returns, stop and follow
+    [Errors and recovery](errors.md).

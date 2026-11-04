@@ -22,16 +22,42 @@ the SHA-256, resets the driver into its bootloader and flashes it. This is the w
 The [bootloader repository](https://github.com/Source-Robotics/stm32f103c-bootloader) has `host_tools/bl_flash.py`,
 which flashes an image over CAN (slcan or candleLight/gs_usb adapters) or over UART:
 
-```
-cd host_tools
-pip install -r requirements.txt
+=== "Windows"
+    ```
+    cd host_tools
+    pip install -r requirements.txt
 
-# over CAN with a CANvas (slcan) adapter on COM6, driver with board ID 0
-python bl_flash.py --transport can --can-interface slcan --channel COM6 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    # over CAN with a CANvas (slcan) adapter on COM6, driver with board ID 0
+    python bl_flash.py --transport can --can-interface slcan --channel COM6 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
 
-# over UART on COM7
-python bl_flash.py --transport uart --port COM7 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
-```
+    # over UART on COM7
+    python bl_flash.py --transport uart --port COM7 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    ```
+
+=== "Linux"
+    ```
+    cd host_tools
+    pip install -r requirements.txt
+
+    # over CAN with a CANvas (slcan) adapter, driver with board ID 0
+    python3 bl_flash.py --transport can --can-interface slcan --channel /dev/ttyACM0 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+
+    # over UART with the serial adapter
+    python3 bl_flash.py --transport uart --port /dev/ttyUSB0 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    ```
+    Your user needs the `dialout` group for both ports ([Motor GUI: the port](../05-setup/motor-gui.md#opening-the-port)).
+
+=== "macOS"
+    ```
+    cd host_tools
+    pip install -r requirements.txt
+
+    # over CAN with a CANvas (slcan) adapter, driver with board ID 0; ls /dev/cu.usbmodem* gives the name
+    python3 bl_flash.py --transport can --can-interface slcan --channel /dev/cu.usbmodem1101 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+
+    # over UART with the serial adapter; ls /dev/cu.usbserial* gives the name
+    python3 bl_flash.py --transport uart --port /dev/cu.usbserial-0001 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    ```
 
 The tool sends the reset command to the running firmware (`#Reset` over UART, Send_Reset over CAN), catches the
 bootloader's two-second window, erases the application pages and streams the image page by page, each page
@@ -43,6 +69,11 @@ is the `spectral-bldc-firmware-V<number>.bin` from the GitHub release.
     CAN node ID. The firmware copies the node ID into the board ID when the configuration is saved (`#Save`,
     Send_Save_config), so a saved driver's bootloader ID is its node ID. After `#CANID` or Send_CAN_ID without a
     save, `--board` still needs the old ID.
+
+!!! success "Check"
+    After the flash, from Motor GUI or the tool, the driver starts the new firmware: `#Info` prints the release
+    you flashed as `Software version`, and Motor GUI shows it in the driver's identity. If the driver does not
+    answer, see [When it fails](#when-it-fails).
 
 ## From a PAR6 control box
 

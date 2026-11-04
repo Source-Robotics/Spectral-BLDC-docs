@@ -20,6 +20,17 @@ that, every update goes over UART or CAN.
 - The bootloader binary from the [bootloader repository's `bin/` folder](https://github.com/Source-Robotics/stm32f103c-bootloader/tree/main/bin);
   its `README.md` names the current file.
 
+=== "Windows"
+    STM32CubeProgrammer or the ST-LINK Utility, and the ST-LINK USB driver (STSW-LINK009) for the adapter.
+
+=== "Linux"
+    STM32CubeProgrammer; the ST-LINK Utility runs on Windows only. The adapter needs no driver, but your user
+    needs access to its USB device: install the udev rules that come with STM32CubeProgrammer, or run it with
+    `sudo`.
+
+=== "macOS"
+    STM32CubeProgrammer; the ST-LINK Utility runs on Windows only. The adapter needs no driver.
+
 ![The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.](../assets/FLASHING2-Photoroom.webp){ width="520" }
 
 ## Steps
@@ -34,6 +45,11 @@ that, every update goes over UART or CAN.
    [Updating through the bootloader](update.md).
 7. `#Info` shows the new release. `#Default`, then calibrate (`#Cal`), set the current limit (`#Ilim`) and
    `#Save`; see [Calibration](../05-setup/calibration.md).
+
+!!! success "Check"
+    `#Info` prints the release you flashed, and a driver powered up while `bl_flash.py list` or Motor GUI's
+    *Scan bootloaders* is polling answers in its first two seconds: the bootloader is there. If the firmware does
+    not start, see [Updating through the bootloader: when it fails](update.md#when-it-fails).
 
 !!! note "Memory layout"
     `0x08000000`–`0x080022FF` bootloader, `0x08002C00` its configuration page (board ID, the application's CRC),

@@ -15,7 +15,15 @@ The project is linked for the bootloader: `VECT_TAB_OFFSET=0x3000`, the linker s
 the upload offset `0x08003000` and a maximum size of 118784 bytes, in `platformio.ini`. A build that exceeds the
 size fails to link.
 
+!!! success "Check"
+    PlatformIO ends the build with `SUCCESS`, and `.pio/build/genericSTM32F103CB/firmware.bin` is there. If it
+    fails, the first error above the summary names the cause.
+
 ## Uploading
+
+PlatformIO runs on Windows, Linux and macOS alike. On Linux, an upload with the programming adapter also needs
+PlatformIO's udev rules (`99-platformio-udev.rules`, in the PlatformIO documentation), and a serial port the
+`dialout` group.
 
 - **Through the bootloader**: flash the built `firmware.bin` with `bl_flash.py` or Motor GUI as in
   [Updating through the bootloader](update.md). This is how a release is installed, and works on any driver with

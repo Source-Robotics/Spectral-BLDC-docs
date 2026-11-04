@@ -33,6 +33,10 @@ usual cause of a calibration that "succeeds" and a motor that then runs badly.
 
 Read in more detail: [The encoder magnet](04-mounting/magnet.md).
 
+!!! success "Check"
+    The magnet sits centred on the shaft, and once the glue has set it does not move when you push it with a
+    finger. If it does: [The encoder magnet](04-mounting/magnet.md).
+
 ## 3. Mount the board
 
 Bolt the bracket to the bottom of the motor and the board to the bracket, with the encoder chip (the bottom of the
@@ -41,11 +45,19 @@ gap: 1 mm, not touching.
 
 Read in more detail: [Mounting on the motor](04-mounting/mounting.md).
 
+!!! success "Check"
+    The board sits parallel to the motor, about 1 mm from the magnet, and the rotor turns by hand without the
+    magnet touching the chip. If not: [Mounting on the motor](04-mounting/mounting.md).
+
 ## 4. Wire the motor
 
 Solder the motor's three wires to **U, V and W**. The order does not matter: calibration detects it.
 
 Read in more detail: [Wiring the motor](04-mounting/wiring.md).
+
+!!! success "Check"
+    With the driver unpowered, a multimeter shows about the same resistance between U and V, V and W, and W
+    and U, and no strand bridges two pads. If not: [Wiring the motor](04-mounting/wiring.md).
 
 ## 5. Connect power and the PC
 
@@ -72,8 +84,9 @@ Read in more detail: [Wiring the motor](04-mounting/wiring.md).
 Read in more detail: [Power and the CAN daisy chain](04-mounting/power-and-can.md) ·
 [Connectors and pinout](03-technical-data/connectors.md).
 
-**Check:** the driver's identity and live state appear before you change settings. A missing connection
-is covered in [Motor GUI](05-setup/motor-gui.md#opening-the-port) or [Troubleshooting](08-troubleshooting.md).
+!!! success "Check"
+    The driver's identity and live state appear before you change settings. A missing connection is covered in
+    [Motor GUI](05-setup/motor-gui.md#opening-the-port) or [Troubleshooting](08-troubleshooting.md).
 
 ## 6. Calibrate
 
@@ -106,8 +119,10 @@ means the motor did not respond: check the three wires, the supply, and that the
 
 Read in more detail: [Calibration](05-setup/calibration.md), with the whole log and every message.
 
-**Check:** the calibration log ends with `Calibration success!`. If it does not, use the failed step in
-[Calibration troubleshooting](05-setup/calibration.md#troubleshooting); do not treat a stopped motor as success.
+!!! success "Check"
+    The calibration log ends with `Calibration success!`. If it does not, use the failed step in
+    [Calibration troubleshooting](05-setup/calibration.md#troubleshooting); do not treat a stopped motor as
+    success.
 
 ## 7. Set the current limit and save
 
@@ -130,8 +145,9 @@ pause: normal operation.
 Read in more detail: [Current limit and loop tuning](05-setup/tuning.md) ·
 [Saving the configuration](05-setup/saving.md).
 
-**Check:** after **Save**, Motor GUI no longer marks unsaved changes. [Saving](05-setup/saving.md) explains
-which settings are kept.
+!!! success "Check"
+    After **Save**, Motor GUI no longer marks unsaved changes, and after a power cycle `#Info` prints
+    `Calibrated`. [Saving](05-setup/saving.md) explains which settings are kept.
 
 ## 8. Move it
 
@@ -154,8 +170,9 @@ or whines, lower the current limit or tune the loops.
 
 Read in more detail: [Control modes](06-operation/modes.md) · [Current limit and loop tuning](05-setup/tuning.md).
 
-**Check:** the position/speed feedback follows the request, and **Idle** stops driving the motor. A motor
-that does not follow needs [Troubleshooting](08-troubleshooting.md) before a load is attached.
+!!! success "Check"
+    The position and speed feedback follow the request, and **Idle** stops driving the motor. A motor that
+    does not follow needs [Troubleshooting](08-troubleshooting.md) before a load is attached.
 
 ## 9. Where to go next
 

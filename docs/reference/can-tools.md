@@ -41,8 +41,9 @@ one of its documented forms. To inspect a reply, enter its identifier and data b
 
 <!-- can-tool -->
 
-**Check:** the example decodes to the values above. Change the identifier to `0x1FA` to see the same command
-addressed to node 3. An invalid length or out-of-range field produces an explanation instead of a frame.
+!!! success "Check"
+    The example decodes to the values above. Change the identifier to `0x1FA` to see the same command
+    addressed to node 3. An invalid length or out-of-range field produces an explanation instead of a frame.
 
 For wiring, termination, host timing and recovery, use [Over CAN](../06-operation/can.md). To look up a
 message's purpose and accepted lengths, use the [CAN reference](can/index.md).

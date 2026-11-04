@@ -144,6 +144,10 @@ Without it the calibration is gone at the next power cycle. The driver goes to i
 operation; `#Info` shows *Calibrated*, the pole pairs, the resistance and inductance, Kt and KV, the phase order
 and the commutation direction.
 
+!!! success "Check"
+    After a power cycle `#Info` still prints `Calibrated`, and Motor GUI shows *Calibrated*. `Not calibrated`
+    means the save did not happen: calibrate and save again.
+
 ## When to calibrate again
 
 - After changing the motor, the magnet or the wiring.
