@@ -7,10 +7,7 @@ the way a servo drive does. The motor can be commanded in position, speed, curre
 position at standstill, reports where it is, and runs quietly and efficiently. It is made for robot joints, legs,
 arms and grippers.
 
-<figure markdown="span">
-  ![The Spectral Micro driver](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/spectral-Photoroom.webp){ width="520" }
-  <figcaption>Figure 1: The Spectral Micro driver, 39 × 39 mm, with the encoder chip in the middle of the board.</figcaption>
-</figure>
+![The Spectral Micro driver, 39 × 39 mm, with the encoder chip in the middle of the board.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/spectral-Photoroom.webp){ width="520" }
 
 ## What is on the board
 

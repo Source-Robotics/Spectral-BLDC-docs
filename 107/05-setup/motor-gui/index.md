@@ -30,8 +30,29 @@ browsers have: Chrome, Edge, Brave, Opera. Firefox and Safari cannot open serial
    calibrated and activated, and the active errors. In a terminal, `#Info`, `#SERNUM` and `#Error` print the same.
 
 If the port is not offered, the browser is not Chromium-based, or another program holds the port (a terminal left
-open, PlatformIO's monitor). If the port opens and nothing appears: the driver is unpowered, or TX and RX are
-crossed on an adapter that is not the Source Robotics one.
+open, PlatformIO's monitor), or the operating system does not give the browser the port:
+
+=== "Windows"
+    The adapter is `COM` and a number. Device Manager lists it under **Ports (COM & LPT)**: the entry that
+    disappears when you unplug the adapter is yours. An adapter that shows a warning sign there instead needs the
+    driver of its USB chip (on most 3.3 V adapters a CP210x or a CH340) from the chip maker.
+
+=== "Linux"
+    The serial adapter is `/dev/ttyUSB0` on most adapters, the CANvas adapter `/dev/ttyACM0`;
+    `ls /dev/ttyUSB* /dev/ttyACM*` lists them. To open them without root, join the `dialout` group once, then
+    log out and in again:
+
+    ```
+    sudo usermod -aG dialout $USER
+    ```
+
+=== "macOS"
+    The serial adapter is `/dev/cu.usbserial-` and a few characters on most adapters, the CANvas adapter
+    `/dev/cu.usbmodem` and a number; `ls /dev/cu.*` lists them. Use the `cu.` name, not the `tty.` one, in a
+    terminal or a script.
+
+The browser's port picker lists the same adapters. If the port opens and nothing appears: the driver is
+unpowered, or TX and RX are crossed on an adapter that is not the Source Robotics one.
 
 ## What is on the screen
 
@@ -79,7 +100,9 @@ crossed on an adapter that is not the Source Robotics one.
 <figcaption markdown="1">**1. Connection and node:** confirm the intended driver. **2. State:** calibration, activation and faults. **3. Command mode:** setpoints and jog controls. **4. Live telemetry:** measured position, speed and current. This screenshot uses **Mock CAN (demo)**, not physical hardware.</figcaption>
 </figure>
 
-**Check:** after connecting real hardware, the state and identity belong to your driver. If they do not appear, check the transport, selected port, supply and TX/RX wiring before trying to move.
+!!! success "Check"
+    After connecting real hardware, the state and identity belong to your driver. If they do not appear, check
+    the transport, the selected port, the supply and the TX/RX wiring before trying to move.
 
 ## Try it without hardware
 

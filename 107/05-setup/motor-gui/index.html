@@ -1474,9 +1474,37 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../08-troubleshooting/" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../08-troubleshooting/" class="md-nav__link">
+      
   
   
   <span class="md-ellipsis">
@@ -1490,7 +1518,13 @@
   
   
 
-      </a>
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
     </li>
   
 
@@ -1796,7 +1830,7 @@
   <span class="md-ellipsis">
     
   
-    CAD and downloads
+    Downloads and files
   
 
     
@@ -2285,8 +2319,30 @@ browsers have: Chrome, Edge, Brave, Opera. Firefox and Safari cannot open serial
    calibrated and activated, and the active errors. In a terminal, <code>#Info</code>, <code>#SERNUM</code> and <code>#Error</code> print the same.</li>
 </ol>
 <p>If the port is not offered, the browser is not Chromium-based, or another program holds the port (a terminal left
-open, PlatformIO's monitor). If the port opens and nothing appears: the driver is unpowered, or TX and RX are
-crossed on an adapter that is not the Source Robotics one.</p>
+open, PlatformIO's monitor), or the operating system does not give the browser the port:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">Linux</label><label for="__tabbed_1_3">macOS</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>The adapter is <code>COM</code> and a number. Device Manager lists it under <strong>Ports (COM &amp; LPT)</strong>: the entry that
+disappears when you unplug the adapter is yours. An adapter that shows a warning sign there instead needs the
+driver of its USB chip (on most 3.3 V adapters a CP210x or a CH340) from the chip maker.</p>
+</div>
+<div class="tabbed-block">
+<p>The serial adapter is <code>/dev/ttyUSB0</code> on most adapters, the CANvas adapter <code>/dev/ttyACM0</code>;
+<code>ls /dev/ttyUSB* /dev/ttyACM*</code> lists them. To open them without root, join the <code>dialout</code> group once, then
+log out and in again:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo usermod -aG dialout $USER
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>The serial adapter is <code>/dev/cu.usbserial-</code> and a few characters on most adapters, the CANvas adapter
+<code>/dev/cu.usbmodem</code> and a number; <code>ls /dev/cu.*</code> lists them. Use the <code>cu.</code> name, not the <code>tty.</code> one, in a
+terminal or a script.</p>
+</div>
+</div>
+</div>
+<p>The browser's port picker lists the same adapters. If the port opens and nothing appears: the driver is
+unpowered, or TX and RX are crossed on an adapter that is not the Source Robotics one.</p>
 <h2 id="what-is-on-the-screen">What is on the screen<a class="headerlink" href="#what-is-on-the-screen" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>State</strong>: the identity above, the control mode the driver is in, the errors, and <strong>Clear errors</strong>.</li>
@@ -2313,7 +2369,7 @@ crossed on an adapter that is not the Source Robotics one.</p>
 <span class="gui-shot__mark" style="left:23%;top:20%" aria-hidden="true">3</span></p>
 </div>
 <figcaption>
-<p><strong>1. Transport:</strong> choose <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> for the serial adapter. <strong>2. Baud:</strong> 256000 for a stock driver. <strong>3. Connect:</strong> choose the adapter in the browser's port picker.</p>
+<p>Figure 5.1: <strong>1. Transport:</strong> choose <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> for the serial adapter. <strong>2. Baud:</strong> 256000 for a stock driver. <strong>3. Connect:</strong> choose the adapter in the browser's port picker.</p>
 </figcaption>
 </figure>
 <figure class="gui-shot">
@@ -2325,10 +2381,14 @@ crossed on an adapter that is not the Source Robotics one.</p>
 <span class="gui-shot__mark" style="left:88%;top:17%" aria-hidden="true">4</span></p>
 </div>
 <figcaption>
-<p><strong>1. Connection and node:</strong> confirm the intended driver. <strong>2. State:</strong> calibration, activation and faults. <strong>3. Command mode:</strong> setpoints and jog controls. <strong>4. Live telemetry:</strong> measured position, speed and current. This screenshot uses <strong>Mock <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> (demo)</strong>, not physical hardware.</p>
+<p>Figure 5.2: <strong>1. Connection and node:</strong> confirm the intended driver. <strong>2. State:</strong> calibration, activation and faults. <strong>3. Command mode:</strong> setpoints and jog controls. <strong>4. Live telemetry:</strong> measured position, speed and current. This screenshot uses <strong>Mock <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> (demo)</strong>, not physical hardware.</p>
 </figcaption>
 </figure>
-<p><strong>Check:</strong> after connecting real hardware, the state and identity belong to your driver. If they do not appear, check the transport, selected port, supply and TX/RX wiring before trying to move.</p>
+<div class="admonition success">
+<p class="admonition-title">Check</p>
+<p>After connecting real hardware, the state and identity belong to your driver. If they do not appear, check
+the transport, the selected port, the supply and the TX/RX wiring before trying to move.</p>
+</div>
 <h2 id="try-it-without-hardware">Try it without hardware<a class="headerlink" href="#try-it-without-hardware" title="Permanent link">&para;</a></h2>
 <p>Open <a href="https://motorgui.com/">Motor GUI</a>, choose <strong>Mock <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> (demo)</strong>, and press <strong>Connect</strong>. The motor and gripper panels run in the browser without a port picker. Motor calibration (<code>#Cal</code>) still requires a real <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> connection; the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> demo does not perform it.</p>
 <h2 id="what-next">What next<a class="headerlink" href="#what-next" title="Permanent link">&para;</a></h2>
@@ -2355,7 +2415,7 @@ several motors on a bus.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 4, 2026 08:38:51 UTC">November 4, 2026</span>
   </span>
 
     
@@ -2604,17 +2664,6 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
     
     <a href="https://discord.gg/prjUvjmGpZ" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
-    </a>
-  
-    
-    
-    
-    
-      
-      
-    
-    <a href="https://www.patreon.com/PCrnjak" target="_blank" rel="noopener" title="www.patreon.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M490 153.8c-.1-65.4-51-119-110.7-138.3-74.2-24-172-20.5-242.9 12.9C50.6 68.9 23.6 157.7 22.6 246.2 21.8 319 29 510.6 137.2 512c80.3 1 92.3-102.5 129.5-152.3 26.4-35.5 60.5-45.5 102.4-55.9 72-17.8 121.1-74.7 121-150z"/></svg>
     </a>
   
 </div>

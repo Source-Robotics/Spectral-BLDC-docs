@@ -1,9 +1,6 @@
 # Connectors and pinout
 
-<figure markdown="span">
-  ![The connectors of the Spectral Micro](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/con2.webp){ width="900" }
-  <figcaption>Figure 2: The connectors. The motor phases go to U, V, W; the supply to DC+ and DC−.</figcaption>
-</figure>
+![The connectors. The motor phases go to U, V, W; the supply to DC+ and DC−.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/con2.webp){ width="900" }
 
 | Connector | Pins | Type | Cable |
 |---|---|---|---|
@@ -16,10 +13,7 @@
 | PIN | GND, PIN, 3V3 | solder pads | your own signal: an analog input or a digital input/output, 3.3 V |
 | HALL | 5V, GND, HALL1, HALL2, HALL3 | solder pads | hall sensors: not implemented in the firmware, see the note below |
 
-<figure markdown="span">
-  ![The pinout of both sides of the board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/PINOUT1.webp){ width="900" }
-  <figcaption>Figure 3: The pinout. Left the top of the board with the CAN connectors, the motor pads and the termination switch; right the bottom with the UART connector, the power connectors, the thermistor pads and the encoder chip.</figcaption>
-</figure>
+![The pinout. Left the top of the board with the CAN connectors, the motor pads and the termination switch; right the bottom with the UART connector, the power connectors, the thermistor pads and the encoder chip.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/PINOUT1.webp){ width="900" }
 
 !!! note "Hall sensors are not implemented"
     The HALL header and the twelve resistor pads above it are on the board for hall-sensor commutation, but the

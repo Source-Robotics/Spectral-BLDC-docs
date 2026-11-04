@@ -1271,7 +1271,7 @@
               "signed": false,
               "float": false,
               "lsb_first": false,
-              "meaning": "1 going to the position, 0 idle, auto-release or calibrating"
+              "meaning": "the action bit of the last Send_gripper_data_pack (1 after #Grippos); the driver never clears it, so it stays 1 after the move ends: the object detection tells when the move has ended"
             },
             {
               "name": "gripper_object_detection",

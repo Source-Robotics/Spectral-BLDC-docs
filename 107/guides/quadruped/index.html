@@ -1168,7 +1168,11 @@
 <p class="admonition-title">Python API and toolbox</p>
 <p>This guide leverages <a href="https://github.com/Source-Robotics/Spectral-BLDC-Python/tree/main">Spectral BLDC python API</a> and <a href="https://github.com/Source-Robotics/Source-Robotics-Toolbox">Source robotics toolbox</a></p>
 </div>
-<p><a class="glightbox" href="../../assets/LEG_wiring.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The robot leg: two motors, each with its driver, on one CAN bus" src="../../assets/LEG_wiring.webp" /></a></p>
+<figure>
+  <a class="glightbox" href="../../assets/LEG_wiring.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The robot leg: two motors, each with its driver, on one CAN bus" src="../../assets/LEG_wiring.webp" /></a>
+<br />
+<figcaption>Figure 1: The robot leg: two motors, each with its driver, on one CAN bus.</figcaption>
+</figure>
 <div class="admonition note">
 <p class="admonition-title">Building the LEG</p>
 <p>In this guide we only recommend you the hardware you can use to build the robot you designed. We do not offer already made designs you can build!</p>
@@ -1187,7 +1191,11 @@
 <li>1 x 24V power supply</li>
 <li>A Laptop or raspberry pi</li>
 </ul>
-<p><a class="glightbox" href="../../assets/leg_setup.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC" src="../../assets/leg_setup.webp" /></a></p>
+<figure>
+  <a class="glightbox" href="../../assets/leg_setup.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC" src="../../assets/leg_setup.webp" /></a>
+<br />
+<figcaption>Figure 2: Two drivers daisy-chained on power and CAN, with the CAN adapter to the PC.</figcaption>
+</figure>
 <p>The setup will be the same for any kind of quadruped leg. You will need to follow the diagram above to wire everything up.</p>
 <ul>
 <li>First you need to calibrate your Spectral BLDC drivers with the motors you are using. </li>
@@ -1196,14 +1204,22 @@
 <li>Connect the power to both drivers. (Use daisy chain)</li>
 </ul>
 <h2 id="leg-kinematics">Leg kinematics<a class="headerlink" href="#leg-kinematics" title="Permanent link">&para;</a></h2>
-<p><a class="glightbox" href="../../assets/robot_leg_dh_table.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The coordinate frames of the leg and its DH table" src="../../assets/robot_leg_dh_table.webp" /></a></p>
+<figure>
+  <a class="glightbox" href="../../assets/robot_leg_dh_table.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The coordinate frames of the leg and its DH table" src="../../assets/robot_leg_dh_table.webp" /></a>
+<br />
+<figcaption>Figure 3: The coordinate frames of the leg and its DH table.</figcaption>
+</figure>
 <p>First you will need to assign coordinate frames to your leg model.
 We already did it but if you want to learn more on how and why check this <a href="https://automaticaddison.com/how-to-assign-denavit-hartenberg-frames-to-robotic-arms/">Link</a><br /></p>
 <p>Now we will need to find DH (Denavit-Hartenberg) table values. You can learn more on how and why we did it <a href="https://automaticaddison.com/how-to-find-denavit-hartenberg-parameter-tables/">Here!</a></p>
 <p>value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / foot of our leg.</p>
 <h2 id="testing-calibrating-the-leg">Testing / Calibrating the leg<a class="headerlink" href="#testing-calibrating-the-leg" title="Permanent link">&para;</a></h2>
 <p>Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. </p>
-<p><a class="glightbox" href="../../assets/leg_terminal.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The leg in its reference pose and the positions leg_calib.py prints" src="../../assets/leg_terminal.webp" /></a></p>
+<figure>
+  <a class="glightbox" href="../../assets/leg_terminal.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The leg in its reference pose and the positions leg_calib.py prints" src="../../assets/leg_terminal.webp" /></a>
+<br />
+<figcaption>Figure 4: The leg in its reference pose and the positions leg_calib.py prints.</figcaption>
+</figure>
 <div class="language-py highlight"><span class="filename">leg_calib.py</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">Spectral_BLDC</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">Spectral</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -1259,7 +1275,11 @@ We defined that trajectory with our function generate_circle_coords and with par
 <li>speed - Speed of the end-effector in meters per second</li>
 <li>time_var - Elapsed time in seconds</li>
 </ul>
-<p><a class="glightbox" href="../../assets/circ_2.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The circle the foot follows at a speed of 1 and of 3" src="../../assets/circ_2.webp" /></a></p>
+<figure>
+  <a class="glightbox" href="../../assets/circ_2.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The circle the foot follows at a speed of 1 and of 3" src="../../assets/circ_2.webp" /></a>
+<br />
+<figcaption>Figure 5: The circle the foot follows at a speed of 1 and of 3.</figcaption>
+</figure>
 <p>How precise you follow the trajectory depends on the speed you set. With low speeds you can track the circle perfectly. With larger speeds the system can't keep up and overshoots. This is due multiple reaseons like:</p>
 <ul>
 <li>Inertia and Momentum: At higher speeds, the inertia and momentum of the robot leg increase, making it harder to change directions quickly and accurately.</li>
@@ -1757,17 +1777,6 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
     
     <a href="https://discord.gg/prjUvjmGpZ" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
-    </a>
-  
-    
-    
-    
-    
-      
-      
-    
-    <a href="https://www.patreon.com/PCrnjak" target="_blank" rel="noopener" title="www.patreon.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M490 153.8c-.1-65.4-51-119-110.7-138.3-74.2-24-172-20.5-242.9 12.9C50.6 68.9 23.6 157.7 22.6 246.2 21.8 319 29 510.6 137.2 512c80.3 1 92.3-102.5 129.5-152.3 26.4-35.5 60.5-45.5 102.4-55.9 72-17.8 121.1-74.7 121-150z"/></svg>
     </a>
   
 </div>

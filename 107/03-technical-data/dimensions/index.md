@@ -12,19 +12,14 @@ shaft's axis.
   <p class="gripper-viewer__hint">Drag to turn the board, scroll to zoom. The model is the board's STEP file from the <a href="https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files">repository</a>, the PCB and everything mounted on it.</p>
 </div>
 
-<figure markdown="span">
-  ![Dimensions of the board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/micro_dimensions.webp){ width="600" }
-  <figcaption>Figure 4: Board dimensions and hole pattern.</figcaption>
-</figure>
+![Board dimensions and hole pattern.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/micro_dimensions.webp){ width="600" }
+![Board dimensions and hole pattern.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/micro_dimensions_dark.webp){ width="600" }
 
-<figure markdown="span">
-  ![The STEP model of the driver](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/bldc_step.webp){ width="520" }
-  <figcaption>Figure 5: The STEP model.</figcaption>
-</figure>
+![The STEP model.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/bldc_step.webp){ width="520" }
 
 The STEP files of the board and of an example mounting bracket are in the firmware repository, in
 [STEP files](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files):
 `Spectral_micro_STEP.STEP` is the board, `Spectral_micro_bracket.STEP` the bracket to adapt to your motor
 ([Mounting on the motor](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/mounting/)).
 
-[CAD and downloads](https://docs.source-robotics.com/Spectral-BLDC-docs/107/cad-files/) lists everything that can be downloaded.
+[Downloads and files](https://docs.source-robotics.com/Spectral-BLDC-docs/107/cad-files/) lists everything that can be downloaded.

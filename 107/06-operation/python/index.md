@@ -6,9 +6,36 @@ over slcan.
 
 ## Installing
 
-```
-pip install Spectral-BLDC
-```
+In a virtual environment:
+
+=== "Windows"
+    ```
+    py -m venv .venv
+    .venv\Scripts\activate
+    pip install Spectral-BLDC
+    ```
+    The CANvas adapter is `COM` and a number (Device Manager, **Ports (COM & LPT)**): `channel='COM41'`.
+
+=== "Linux"
+    ```
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install Spectral-BLDC
+    sudo usermod -aG dialout $USER     # access to the serial port; log out and in again once
+    ```
+    The CANvas adapter is `/dev/ttyACM0` (`ls /dev/ttyACM*` lists it): `channel='/dev/ttyACM0'`.
+
+=== "macOS"
+    ```
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install Spectral-BLDC
+    ```
+    The CANvas adapter is `/dev/cu.usbmodem` and a number (`ls /dev/cu.usbmodem*` lists it):
+    `channel='/dev/cu.usbmodem1101'`, with your number.
+
+!!! success "Check"
+    `python -c "import Spectral_BLDC"` returns without an error message.
 
 The source and the examples are in [Spectral-BLDC-Python](https://github.com/Source-Robotics/Spectral-BLDC-Python).
 For joints with a gear ratio and an offset, the [Source Robotics Toolbox](https://github.com/Source-Robotics/Source-Robotics-Toolbox)
@@ -59,6 +86,11 @@ error bit of the identifier; `UnpackData` decodes the message into the attribute
 setpoint at 50 Hz for five seconds, prints only matching motion feedback, and puts the motor in idle when it
 ends. Idle releases torque: support any attached mechanism before running it. A missing reply is reported
 without claiming that a move finished. Configure and calibrate the driver first ([Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/107/quick-start/)).
+
+!!! success "Check"
+    The program prints a line of position, speed, current and error bit for each cycle, the position moves to
+    16384 and the error bit stays 0. `No motion feedback in this cycle` means no answer came back: the port, the
+    node ID and the bus, see [Over CAN](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/can/).
 
 ## What is where
 

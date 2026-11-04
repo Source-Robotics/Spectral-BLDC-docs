@@ -60,8 +60,9 @@ one of its documented forms. To inspect a reply, enter its identifier and data b
   <noscript>Enable JavaScript for the frame tool, or use the reference tables and downloads above.</noscript>
 </div>
 
-**Check:** the example decodes to the values above. Change the identifier to `0x1FA` to see the same command
-addressed to node 3. An invalid length or out-of-range field produces an explanation instead of a frame.
+!!! success "Check"
+    The example decodes to the values above. Change the identifier to `0x1FA` to see the same command
+    addressed to node 3. An invalid length or out-of-range field produces an explanation instead of a frame.
 
 For wiring, termination, host timing and recovery, use [Over CAN](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/can/). To look up a
 message's purpose and accepted lengths, use the [CAN reference](https://docs.source-robotics.com/Spectral-BLDC-docs/107/reference/can/).

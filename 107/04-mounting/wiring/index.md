@@ -1,6 +1,6 @@
 # Wiring the motor
 
-A three-phase brushless motor has three wires. They go to the terminals **U, V and W** on the board (Figure 2 in
+A three-phase brushless motor has three wires. They go to the terminals **U, V and W** on the board (see
 [Connectors and pinout](https://docs.source-robotics.com/Spectral-BLDC-docs/107/03-technical-data/connectors/)), in any order: calibration finds the order of the
 phases. Firmware 105 and newer compensates it in software; firmware 101 asks you to swap two wires when it is
 reversed.

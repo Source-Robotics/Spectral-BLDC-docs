@@ -1,6 +1,8 @@
 # Troubleshooting
 
-By symptom. The error flags and what clears them are in [Errors and recovery](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/errors/).
+By symptom. The error flags and what clears them are in [Errors and recovery](https://docs.source-robotics.com/Spectral-BLDC-docs/107/06-operation/errors/); the
+faults of the firmware that are known and not yet fixed, with what to do until they are, in
+[Known issues](https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/known-issues/).
 
 ## The motor does not move
 
@@ -37,7 +39,7 @@ flowchart TD
 | *No connection* on CAN | the CANvas adapter's port; the bus termination; the node ID of the driver; 1 Mbit/s |
 | the calibration does not start | calibration runs over the serial connection only, not over CAN |
 | *Unsaved changes* after a power cycle | the settings were not saved to the driver; Save writes them |
-| the firmware update finds no bootloader | a driver with firmware 101 or older has no bootloader: [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/) |
+| the firmware update finds no bootloader | power-cycle the driver while the GUI scans, to catch the bootloader's 2 s window. A driver with firmware 101 or older has no bootloader (one that reports 101 may have it: [Drivers that report 101](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/releases/#drivers-that-report-101)): [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/) |
 
 ## Calibration
 

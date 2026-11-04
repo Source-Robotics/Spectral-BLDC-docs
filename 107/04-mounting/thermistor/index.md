@@ -10,10 +10,7 @@ standstill, which heats one winding without any movement to show it.
     overheat and burn its windings without any warning. With the thermistor fitted and enabled, the driver stops
     first. The starter kit includes one.
 
-<figure markdown="span">
-  ![The thermistor soldered to the board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/TERM1-Photoroom.webp){ width="520" }
-  <figcaption>Figure 11: The thermistor on the TERM and 3V3 pads.</figcaption>
-</figure>
+![The thermistor on the TERM and 3V3 pads.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/TERM1-Photoroom.webp){ width="520" }
 
 ## Fitting it
 

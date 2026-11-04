@@ -1452,9 +1452,37 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../08-troubleshooting/" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../08-troubleshooting/" class="md-nav__link">
+      
   
   
   <span class="md-ellipsis">
@@ -1468,7 +1496,13 @@
   
   
 
-      </a>
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
     </li>
   
 
@@ -1774,7 +1808,7 @@
   <span class="md-ellipsis">
     
   
-    CAD and downloads
+    Downloads and files
   
 
     
@@ -2219,6 +2253,9 @@ the SHA-256, resets the driver into its bootloader and flashes it. This is the w
 <h2 id="with-the-bootloaders-command-line-tool">With the bootloader's command-line tool<a class="headerlink" href="#with-the-bootloaders-command-line-tool" title="Permanent link">&para;</a></h2>
 <p>The <a href="https://github.com/Source-Robotics/stm32f103c-bootloader">bootloader repository</a> has <code>host_tools/bl_flash.py</code>,
 which flashes an image over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> (slcan or candleLight/gs_usb adapters) or over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr>:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">Linux</label><label for="__tabbed_1_3">macOS</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cd host_tools
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip install -r requirements.txt
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -2228,6 +2265,32 @@ which flashes an image over <abbr title="Controller Area Network, the bus betwee
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a># over UART on COM7
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>python bl_flash.py --transport uart --port COM7 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
 </span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cd host_tools
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip install -r requirements.txt
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a># over CAN with a CANvas (slcan) adapter, driver with board ID 0
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>python3 bl_flash.py --transport can --can-interface slcan --channel /dev/ttyACM0 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a># over UART with the serial adapter
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>python3 bl_flash.py --transport uart --port /dev/ttyUSB0 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+</span></code></pre></div>
+Your user needs the <code>dialout</code> group for both ports (<a href="../../05-setup/motor-gui/#opening-the-port">Motor GUI: the port</a>).</p>
+</div>
+<div class="tabbed-block">
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cd host_tools
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip install -r requirements.txt
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a># over CAN with a CANvas (slcan) adapter, driver with board ID 0; ls /dev/cu.usbmodem* gives the name
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>python3 bl_flash.py --transport can --can-interface slcan --channel /dev/cu.usbmodem1101 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a># over UART with the serial adapter; ls /dev/cu.usbserial* gives the name
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>python3 bl_flash.py --transport uart --port /dev/cu.usbserial-0001 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+</span></code></pre></div>
+</div>
+</div>
+</div>
 <p>The tool sends the reset command to the running firmware (<code>#Reset</code> over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr>, Send_Reset over <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr>), catches the
 bootloader's two-second window, erases the application pages and streams the image page by page, each page
 verified by a <abbr title="Cyclic Redundancy Check">CRC</abbr>; <code>list</code> shows the boards in bootloader mode, <code>set-id</code> changes a board's bootloader ID. The image
@@ -2238,6 +2301,12 @@ is the <code>spectral-bldc-firmware-V&lt;number&gt;.bin</code> from the GitHub r
 <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> node ID. The firmware copies the node ID into the board ID when the configuration is saved (<code>#Save</code>,
 Send_Save_config), so a saved driver's bootloader ID is its node ID. After <code>#CANID</code> or Send_CAN_ID without a
 save, <code>--board</code> still needs the old ID.</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title">Check</p>
+<p>After the flash, from Motor GUI or the tool, the driver starts the new firmware: <code>#Info</code> prints the release
+you flashed as <code>Software version</code>, and Motor GUI shows it in the driver's identity. If the driver does not
+answer, see <a href="#when-it-fails">When it fails</a>.</p>
 </div>
 <h2 id="from-a-par6-control-box">From a PAR6 control box<a class="headerlink" href="#from-a-par6-control-box" title="Permanent link">&para;</a></h2>
 <p>A robot built on the Robot Control Box updates every joint from the box itself, over its own <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> bus, from the
@@ -2279,7 +2348,7 @@ The tools validate the image first.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2026 14:51:55 UTC">November 3, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 4, 2026 08:38:51 UTC">November 4, 2026</span>
   </span>
 
     
@@ -2528,17 +2597,6 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
     
     <a href="https://discord.gg/prjUvjmGpZ" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
-    </a>
-  
-    
-    
-    
-    
-      
-      
-    
-    <a href="https://www.patreon.com/PCrnjak" target="_blank" rel="noopener" title="www.patreon.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M490 153.8c-.1-65.4-51-119-110.7-138.3-74.2-24-172-20.5-242.9 12.9C50.6 68.9 23.6 157.7 22.6 246.2 21.8 319 29 510.6 137.2 512c80.3 1 92.3-102.5 129.5-152.3 26.4-35.5 60.5-45.5 102.4-55.9 72-17.8 121.1-74.7 121-150z"/></svg>
     </a>
   
 </div>

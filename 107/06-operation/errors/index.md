@@ -24,7 +24,7 @@ In error mode the LED does not flash: it stays on, as in the photo on the right.
 |---|---|---|---|
 | Vbus | `Vbus error` | the supply voltage is below 9 V or above `#Vmax` (29 V after `#Default`) | check the supply and the cable; a decelerating motor can push the voltage up |
 | Encoder | `Encoder error` | the magnet is not detected or the reading is invalid | magnet distance and type, see [The encoder magnet](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/magnet/) |
-| Driver | `Drv error`, and `FAULT pin is HIGH` while the fault lasts | the MOSFET driver's own protection tripped: undervoltage, thermal shutdown or overcurrent | lower the current limit, cool the driver, check for a short between the motor leads |
+| Driver | `Drv error`, and `FAULT pin is HIGH` while the fault lasts (the pin is low then: the text names the wrong level) | the MOSFET driver's own protection tripped: undervoltage, thermal shutdown or overcurrent | lower the current limit, cool the driver, check for a short between the motor leads |
 | Velocity | `Velocity error` | the measured speed exceeded 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit that `#Vlimit` does not change | a runaway or an encoder fault: check the magnet and the encoder, see [The encoder magnet](https://docs.source-robotics.com/Spectral-BLDC-docs/107/04-mounting/magnet/) |
 | Temperature | `Temp error` | the thermistor reads more than `#Tlim` (75 °C by default), with `#Term 1` | let the motor cool; lower the current limit |
 | E-stop | `Received ESTOP command` | Send_ESTOP was received | clear it when it is safe |

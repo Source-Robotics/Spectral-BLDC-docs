@@ -46,13 +46,14 @@ Every page of this site is also available as Markdown at its address followed by
 - [Updating through the bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/update/index.md): A driver with the bootloader (firmware 104 or newer) is updated over the UART connector or the CAN bus: the host tells the driver to reset, the bootloader waits two seconds for a host, and the host streams the new image
 - [Installing the bootloader on an older board](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/bootloader/index.md): A driver running firmware 101 or older has no bootloader: its firmware starts at the beginning of the flash.
 - [Building from source](https://docs.source-robotics.com/Spectral-BLDC-docs/107/07-firmware/building/index.md): The firmware is a PlatformIO project for the Arduino core on the STM32F103CB, in the Spectral BLDC Firmware folder of the firmware repository on the Bootloadermain branch.
-- [8. Troubleshooting](https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/index.md): By symptom. The error flags and what clears them are in Errors and recovery.
+- [Troubleshooting](https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/index.md): By symptom. The error flags and what clears them are in Errors and recovery; the faults of the firmware that are known and not yet fixed, with what to do until they are, in Known issues.
+- [Known issues](https://docs.source-robotics.com/Spectral-BLDC-docs/107/08-troubleshooting/known-issues/index.md): The faults in the Spectral Micro firmware that are known and not yet fixed, and what to do until they are.
 - [Firmware release notes](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/firmware-release-notes/index.md): What changed in each firmware release, from the release notes in the firmware repository, up to the release this site describes.
 - [Versions and compatibility](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/compatibility/index.md): Which firmware release works with which bootloader, Python library, PAR6 runtime and board revision.
 - [Hardware revisions](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/hardware-revisions/index.md): What changed in each revision of the Spectral Micro board, and which firmware and which revision of this manual go with it.
 - [Theory corner](https://docs.source-robotics.com/Spectral-BLDC-docs/107/appendix/theory/index.md): The control concepts behind the driver's modes, for readers who want to know why a setting does what it does.
 - [Glossary](https://docs.source-robotics.com/Spectral-BLDC-docs/107/terminology/index.md)
-- [CAD and downloads](https://docs.source-robotics.com/Spectral-BLDC-docs/107/cad-files/index.md)
+- [Downloads and files](https://docs.source-robotics.com/Spectral-BLDC-docs/107/cad-files/index.md): Everything to download for the Spectral Micro, at the versions these pages describe.
 
 ## API reference
 

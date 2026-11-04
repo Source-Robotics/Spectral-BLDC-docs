@@ -3,10 +3,7 @@
 Each driver has two power connectors (JST XH) and two CAN connectors (JST ZH). The second connector of each pair
 feeds the next driver, so a chain of drivers hangs on one supply cable and one CAN cable.
 
-<figure markdown="span">
-  ![A daisy chain of drivers](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Daisy_chain-Photoroom.webp){ width="700" }
-  <figcaption>Figure 8: Power and CAN pass from driver to driver. The first and the last node on the bus have their termination switch on.</figcaption>
-</figure>
+![Power and CAN pass from driver to driver. The first and the last node on the bus have their termination switch on.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Daisy_chain-Photoroom.webp){ width="700" }
 
 ## Power
 
@@ -26,10 +23,7 @@ feeds the next driver, so a chain of drivers hangs on one supply cable and one C
     ways, and the wrong way puts DC+ on DC−. Every cable must run as in the picture below, the same way at both
     ends. A wrong cable destroys the driver at the moment it is powered.
 
-<figure markdown="span">
-  ![Cable orientation](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Orientation.webp){ width="600" }
-  <figcaption>Figure 9: The orientation of the daisy-chain cables. The picture shows a generic 4-pin cable; the rule is the same for the 2-pin CAN and power cables.</figcaption>
-</figure>
+![The orientation of the daisy-chain cables. The picture shows a generic 4-pin cable; the rule is the same for the 2-pin CAN and power cables.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/Orientation.webp){ width="600" }
 
 The cables from the shop are made this way: [CAN cable](https://source-robotics.com/products/spectral-micro-can-cable),
 [power cable](https://source-robotics.com/products/spectral-micro-power-cable), and all of them under
@@ -48,7 +42,4 @@ The cables from the shop are made this way: [CAN cable](https://source-robotics.
 - A PC joins the bus with the [CANvas adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter),
   which has its own termination.
 
-<figure markdown="span">
-  ![The CAN termination switch](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/TERM.webp){ width="520" }
-  <figcaption>Figure 10: The termination switch, ON for the first and the last node.</figcaption>
-</figure>
+![The termination switch, ON for the first and the last node.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/TERM.webp){ width="520" }

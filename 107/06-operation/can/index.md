@@ -10,10 +10,8 @@ one frame back per motor and cycle.
 CAN 2.0 data frames with 11-bit identifiers at 1 Mbit/s. The identifier carries the node, the command and the
 error state:
 
-<figure markdown="span">
-  ![The CAN identifier](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/CANID.PNG){ width="600" }
-  <figcaption>Figure 16: Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.</figcaption>
-</figure>
+![Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/CANID.PNG){ width="600" }
+![Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/CANID_dark.webp){ width="600" }
 
 - **Node ID**, bits 10 to 7: which driver, 0 to 15. A driver acts only on frames with its own node ID and sends
   with it. Set it with `#CANID` or Send_CAN_ID and save; every driver ships as node 0. Use 0 to 13: the

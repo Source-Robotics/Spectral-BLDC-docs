@@ -27,10 +27,7 @@ Crunching and whining sounds at speed usually mean the current limit, or the cur
 
 ## The loops
 
-<figure markdown="span">
-  ![The cascaded loops](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/cascadeloop.webp){ width="800" }
-  <figcaption>Figure 13: The position loop commands the velocity loop, which commands the current loop.</figcaption>
-</figure>
+![The position loop commands the velocity loop, which commands the current loop.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/cascadeloop.webp){ width="800" }
 
 Tune from the inside out: the current loop first, then velocity, then position. Before you start:
 
@@ -80,10 +77,7 @@ Run the motor over the whole range of speeds and loads it will see, with a load 
 
 ## Impedance (PD) mode
 
-<figure markdown="span">
-  ![The PD loop](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/PDloop.webp){ width="800" }
-  <figcaption>Figure 14: The impedance loop: a spring (KP) and a damper (KD) around the position setpoint, plus a current feedforward.</figcaption>
-</figure>
+![The impedance loop: a spring (KP) and a damper (KD) around the position setpoint, plus a current feedforward.](https://docs.source-robotics.com/Spectral-BLDC-docs/107/assets/PDloop.webp){ width="800" }
 
 In PD mode the motor behaves like a spring and a damper: the torque is `KP × (setpoint − position) + KD × (speed
 setpoint − speed) + feedforward current`. Set `KP` and `KD` (the gains, or `#KP`, `#KD`, or Send_PD_Gains), then
