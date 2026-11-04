@@ -22,4 +22,4 @@ The STEP files of the board and of an example mounting bracket are in the firmwa
 `Spectral_micro_STEP.STEP` is the board, `Spectral_micro_bracket.STEP` the bracket to adapt to your motor
 ([Mounting on the motor](../04-mounting/mounting.md)).
 
-[CAD and downloads](../cad-files.md) lists everything that can be downloaded.
+[Downloads and files](../cad-files.md) lists everything that can be downloaded.

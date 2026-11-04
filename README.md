@@ -16,7 +16,7 @@ The firmware and hardware files are in
 | `docs/includes/` | text shared by pages (glossary, symbols, abbreviations) and the data the reference pages are built from |
 | `docs/includes/can_commands.yml`, `uart_commands.yml` | the hand-written descriptions of every CAN message and UART command |
 | `docs/includes/generated/` | written by `tools/sync_firmware.py` from the firmware's release tag: `firmware_facts.json`, `firmware_release_notes.md`. Never edit |
-| `versions.yml` | every version fact: the firmware release the site describes, the manual's number and revision |
+| `versions.yml` | every version fact: the firmware release the site describes and its date, the Python library and bootloader versions the downloads page links, the manual's number and revision |
 | `compatibility.yml` | which firmware release works with which bootloader, Python library, PAR6 runtime and board |
 | `known_issues.yml` | the firmware's known issues, what the user sees and what to do; `hooks/known_issues.py` writes them into Troubleshooting > Known issues |
 | `hooks/` | `versions.py` writes the version facts into the pages; `firmware_pages.py` builds the reference pages; `known_issues.py` writes the known issues table; `llms.py` writes the Markdown twin of every page, `llms.txt` and `llms-full.txt`; `figures.py` numbers the figures and writes their captions |

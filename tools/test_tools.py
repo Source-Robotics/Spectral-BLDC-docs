@@ -94,6 +94,37 @@ check("A9 every placeholder in the docs names a manual of versions.yml",
       all(k in shipped["manuals"]
           for p in (ROOT / "docs").rglob("*.md") for k in hook.META_RE.findall(p.read_text(encoding="utf-8"))))
 
+URLS = GOOD.replace("firmware: {repository: x, tag: V108}",
+                    "firmware: {repository: x, tag: V108, released: 2026-08-26}\nsoftware:\n  lib: {repository: y, tag: v1.20}")
+udata, err = load_text(URLS)
+page = hook.URL_RE.sub(lambda m: hook.version_url(m.group(1), m.group(2), m.group(3), udata),
+                       "[f](<!-- version-url: firmware -->/src) <!-- version-link: software.lib -->") if udata else err
+check("A10 version-url is the files at the tag, version-link a link to them with the version as text",
+      page == "[f](x/tree/V108/src) [1.20](y/tree/v1.20)", page)
+check("A11 version-link adds the release date when there is one, version-release is the GitHub release",
+      udata is not None and hook.version_url("link", "firmware", None, udata) == "[108](x/tree/V108) (2026-08-26)"
+      and hook.version_url("release", "firmware", None, udata) == "x/releases/tag/V108")
+cdata, err = load_text(URLS.replace("lib: {repository: y, tag: v1.20}", "lib: {repository: y, tag: abc123, version: \"1.20\"}"))
+check("A11b a component whose tag is a commit is named by its version",
+      cdata is not None and hook.version_url("link", "software", "lib", cdata) == "[1.20](y/tree/abc123)", err)
+for bad in (("url", "software", None), ("link", "software", "nope")):
+    try:
+        hook.version_url(bad[0], bad[1], bad[2], udata)
+        check(f"A12 {bad} stops the build", False, "no error")
+    except PluginError:
+        check(f"A12 a version placeholder without a known component stops the build: {bad[1]}.{bad[2]}", True)
+used = sorted({f"{m.group(2)}{'.' + m.group(3) if m.group(3) else ''}" for p in (ROOT / "docs").rglob("*.md")
+               for m in hook.URL_RE.finditer(p.read_text(encoding="utf-8"))})
+missing = []
+for name in used:
+    g, _, k = name.partition(".")
+    try:
+        hook.component(g, k or None, shipped)
+    except PluginError:
+        missing.append(name)
+check("A13 every version placeholder in the docs names a component of the shipped versions.yml", not missing,
+      ", ".join(missing))
+
 # ---------------------------------------------------------------- the firmware pages
 try:
     d = pages.load()

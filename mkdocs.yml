@@ -317,7 +317,7 @@ nav:
           - Theory corner: appendix/theory.md
       - Resources:
           - Glossary: terminology.md
-          - CAD and downloads: cad-files.md
+          - Downloads and files: cad-files.md
 
   - API reference:
       - reference/index.md

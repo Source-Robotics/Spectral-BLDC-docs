@@ -19,6 +19,25 @@ firmware:
   src: Spectral BLDC Firmware/src
   modes: {0: idle, 1: position, 2: velocity, 3: current, 4: PD, 5: open loop, 6: gripper, 7: gripper calibration,
           8: voltage torque}
+  # The date of the GitHub release of that tag (the downloads page writes it beside the version).
+  released: 2026-08-26
+
+# The other software the pages describe, at the version they describe. The downloads page links each at its tag
+# (<!-- version-link: software.KEY -->); the compatibility table says which versions work with which firmware.
+software:
+  python_library:
+    name: Spectral-BLDC Python library
+    repository: https://github.com/Source-Robotics/Spectral-BLDC-Python
+    # 1.20 has no tag on GitHub: the link goes to the commit that made it 1.20 ("bump to 1.20"), the version PyPI
+    # has published since 2026-06-19. Use the tag here once it is pushed.
+    tag: ef30bbe4fdd1e9a93544f7f356bbaeedeaa3b459
+    version: "1.20"
+    released: 2026-06-19
+  bootloader:
+    name: stm32f103c-bootloader
+    repository: https://github.com/Source-Robotics/stm32f103c-bootloader
+    tag: V0.1
+    released: 2026-06-05
 
 # One entry per document. revision: YEAR.LETTER, a new letter for every published revision of that document.
 # status: draft until the document is published; published: the date of the revision's publication, or null.
