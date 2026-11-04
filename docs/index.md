@@ -41,7 +41,7 @@ between firmware releases. The text and the images are licensed CC BY-SA 4.0, th
 
     [Safety](02-safety.md), [Technical data](03-technical-data/index.md), [Mounting and wiring](04-mounting/index.md),
     [First setup](05-setup/index.md), [Operation](06-operation/index.md), [Firmware](07-firmware/index.md),
-    [Troubleshooting](08-troubleshooting.md).
+    [Troubleshooting](08-troubleshooting/index.md).
 
 -   :material-monitor-dashboard:{ .lg .middle } **Motor GUI**
 

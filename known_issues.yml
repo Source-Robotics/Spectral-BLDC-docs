@@ -1,0 +1,195 @@
+# The known issues of the Spectral Micro firmware, in ONE place. hooks/known_issues.py writes them into the Known
+# issues page (<!-- known-issues -->, all of them) and wherever <!-- known-issues: COMPONENT --> stands (one
+# component). tools/test_tools.py checks the file. The same format as PAROL-docs' known_issues.yml.
+#
+# An issue stays here when it is fixed: set status: fixed and fixed_in to the release that fixes it, and the page
+# moves it to "Fixed". Never renumber: the id is how people refer to an issue.
+#
+#   id          KI-<number>, never reused
+#   component   a key under components:
+#   summary     what happens, in one or two sentences, as the user sees it
+#   workaround  what to do until it is fixed
+#   page        the docs page that describes it (path under docs/, an #anchor allowed), and title, its link text
+#   status      open or fixed; fixed_in: the release that fixes it (when fixed)
+#   since       the date the issue was recorded
+#
+# Seeded 2026-11-04 from the final docs review (2026-11-03), each checked against the firmware at tag V107
+# (Bootloader_main branch). STEPFOC has most of them too: STEPFOC-docs' known_issues.yml.
+
+components:
+  firmware: {name: Spectral Micro firmware, version: "107"}
+  release_104: {name: Release 104, version: "the image of the GitHub release V104"}
+
+issues:
+  - id: KI-1
+    component: firmware
+    summary: The current limit of Send_Limits over CAN is used as sent, also above the driver's 2800 mA; only `#Ilim`
+      over UART clamps it.
+    workaround: Keep the current limit your host sends within the motor's rating and 2800 mA.
+    page: reference/can/gains-and-limits.md#send_limits
+    title: Send_Limits
+    status: open
+    since: 2026-11-04
+
+  - id: KI-2
+    component: firmware
+    summary: Calibration sets the current limit to 1600 mA and leaves it there, whatever it was before; a `#Save`
+      right after calibration stores the 1600 mA.
+    workaround: After every calibration set `#Ilim` for your motor, then `#Save`.
+    page: 05-setup/calibration.md#3-set-the-current-limit-and-save
+    title: "Calibration: current limit and save"
+    status: open
+    since: 2026-11-04
+
+  - id: KI-3
+    component: firmware
+    summary: The serial number is not read back from the EEPROM at power-up, so `#SERNUM`, Motor GUI and
+      Send_Respond_Device_Info report 1, and every `#Save` writes that 1 over the stored number.
+    workaround: Tell drivers apart by their CAN node ID. To keep a serial number stored, set it with `#SERNUM` before
+      every `#Save`.
+    page: 05-setup/saving.md#what-is-not-saved
+    title: "Saving: what is not saved"
+    status: open
+    since: 2026-11-04
+
+  - id: KI-4
+    component: firmware
+    summary: For anyone reading or changing the source, the start values in `common.h` are not the factory defaults
+      (the gripper flag starts at 1, the pole pairs at 11, `Max_Vbus` at 29500 mV). The EEPROM replaces them at
+      power-up, so a running driver does not show them.
+    workaround: Take the defaults from the Defaults page, which lists what `#Default` writes, or from
+      `Set_Default_config()` in `EEPROM.cpp`.
+    page: reference/defaults.md
+    title: Defaults
+    status: open
+    since: 2026-11-04
+
+  - id: KI-5
+    component: firmware
+    summary: While the E-stop bit of the last Send_gripper_data_pack (or `#Gripstop 1`) is 1, the driver raises the
+      gripper E-stop error again on every control cycle, so Send_Clear_Error or `#Clear` alone does not clear it.
+    workaround: Send a gripper frame with the E-stop bit 0 (or `#Gripstop 0`) first, then clear the error.
+    page: 06-operation/gripper-mode.md#moving
+    title: "Gripper mode: moving"
+    status: open
+    since: 2026-11-04
+
+  - id: KI-6
+    component: firmware
+    summary: The answer to a 5-byte Send_gripper_data_pack goes out before the driver has acted on the command, so its
+      object detection and error bits are those of the moment before, for example 3 (position reached) from the
+      previous move.
+    workaround: Judge the new move by the answers to later frames, or poll with an empty Send_gripper_data_pack.
+    page: 06-operation/gripper-mode.md#moving
+    title: "Gripper mode: moving"
+    status: open
+    since: 2026-11-04
+
+  - id: KI-7
+    component: firmware
+    summary: A 5-byte Send_gripper_data_pack, Send_Clear_Error or `#Clear` during the gripper calibration stops it
+      without a message and leaves its counters as they were, so the next calibration starts part way through; it
+      may skip the opening or give up early.
+    workaround: Send only empty status polls while the gripper calibrates (up to about 30 s). After an interrupted
+      calibration, switch the driver off and on before you calibrate again.
+    page: 06-operation/gripper-mode.md#calibrating-the-gripper
+    title: "Gripper mode: calibrating"
+    status: open
+    since: 2026-11-04
+
+  - id: KI-8
+    component: firmware
+    summary: The action bit in Respond_Gripper_data_pack is a copy of the last command's action bit; the driver never
+      clears it, so it stays 1 after the move has ended.
+    workaround: Tell the end of a move by the object detection, 3 position reached, 1 or 2 stopped on an object.
+    page: reference/can/gripper.md#respond_gripper_data_pack
+    title: Respond_Gripper_data_pack
+    status: open
+    since: 2026-11-04
+
+  - id: KI-9
+    component: firmware
+    summary: Open loop (`#Openloop`) puts the voltage `#Openv` (5000 mV by default) on the phases without a current
+      limit; `#Ilim` does not apply, so a low-resistance motor draws far more than its limit.
+    workaround: Lower `#Openv` before you run a low-resistance motor in open loop, and keep the test short.
+    page: 06-operation/modes.md
+    title: Control modes
+    status: open
+    since: 2026-11-04
+
+  - id: KI-10
+    component: firmware
+    summary: The velocity error trips only above a fixed 20,000,000 ticks/s, about 1220 revolutions per second and far
+      above the speeds the driver can follow; `#Vlimit` does not change it, so it does not catch a motor that runs
+      away.
+    workaround: Watch the speed in your host and send Send_Idle or Send_ESTOP when it is wrong.
+    page: 06-operation/errors.md
+    title: Errors and recovery
+    status: open
+    since: 2026-11-04
+
+  - id: KI-11
+    component: firmware
+    summary: Only motion frames and answered status requests reset the watchdog. Setting frames (gains, limits, Idle,
+      Clear, Save) and UART commands do not, so a host that only configures the driver, or a terminal session with
+      a saved watchdog, ends in a watchdog error.
+    workaround: While the watchdog runs, send a status request such as Send_Respond_Encoder_data within every watchdog
+      period. Before you work over UART alone, set the watchdog to 0 over CAN and save.
+    page: 06-operation/errors.md#the-watchdog
+    title: The watchdog
+    status: open
+    since: 2026-11-04
+
+  - id: KI-12
+    component: firmware
+    summary: The current a turned motor drives through its shorted phases while the driver brakes in idle (`#Brake 1`)
+      is not limited.
+    workaround: Brake only a motor whose resistance keeps that current under 2.8 A at the speeds it is turned at, and
+      do not let a load drive a braking motor fast.
+    page: 06-operation/modes.md#braking-in-idle
+    title: Braking in idle
+    status: open
+    since: 2026-11-04
+
+  - id: KI-13
+    component: firmware
+    summary: "`#Save` does not keep the idle behaviour: after every power-up the driver coasts in idle again, whatever
+      `#Brake` or Send_Settings set before."
+    workaround: Send `#Brake 1` (or Send_Settings) after every power-up when the motor must brake in idle.
+    page: 06-operation/modes.md#braking-in-idle
+    title: Braking in idle
+    status: open
+    since: 2026-11-04
+
+  - id: KI-14
+    component: firmware
+    summary: Send_Respond_Device_Info carries the batch date in one byte, its lowest 8 bits, so a host reading it over
+      CAN gets 120 for the 24092024 that `#Default` stores.
+    workaround: Read the batch date with `#Info` over UART, which prints the whole number.
+    page: reference/can/status.md#send_respond_device_info
+    title: Send_Respond_Device_Info
+    status: open
+    since: 2026-11-04
+
+  - id: KI-15
+    component: firmware
+    summary: "`#Error` prints `FAULT pin is HIGH` while the driver stage reports a fault, which is when that pin is
+      low: the text names the wrong level."
+    workaround: Read the line as "the driver stage reports a fault"; the Driver row of Errors and recovery says what to
+      do.
+    page: 06-operation/errors.md
+    title: Errors and recovery
+    status: open
+    since: 2026-11-04
+
+  - id: KI-16
+    component: release_104
+    summary: For anyone who builds or reads the source of release 104, the tag `V104` is not what its image was built
+      from. The image comes from commit `20765c9` on `Bootloader_main`, which adds Send_Voltage_Limit; the tag lacks
+      it.
+    workaround: Check out `20765c9` to see or rebuild the 104 image's source; better, update the board to the current
+      release.
+    page: 07-firmware/releases.md#the-two-branches
+    title: "Releases: the two branches"
+    status: open
+    since: 2026-11-04

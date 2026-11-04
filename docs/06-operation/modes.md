@@ -29,7 +29,7 @@ passing through idle; a fault is any of the errors on [Errors and recovery](erro
 | Current (torque) | applies a current, so a torque, with the current loop alone | `#Iq`, Send_data_pack_1 (2 bytes) | mA |
 | PD (impedance) | behaves like a spring and a damper around a position, with `KP` and `KD` | `#PD`, Send_data_pack_PD | encoder ticks |
 | Voltage torque | applies a voltage on the q axis directly, without the current loop | `#Uq` | mV |
-| Open loop | turns the stator field at a set electrical speed without the encoder in the loop; the rotor follows it like a stepper | `#Openloop` | electrical speed |
+| Open loop | turns the stator field at a set electrical speed without the encoder in the loop; the rotor follows it like a stepper. It applies the voltage `#Openv` (5000 mV by default), not a current: `#Ilim` does not apply, and a low-resistance motor draws far more than its limit | `#Openloop` | electrical speed |
 | Gripper | runs the gripper state machine: move to a jaw position with a speed and a current limit | `#Grippos`, Send_gripper_data_pack (with `#Gripper 1`) | 0 to 255 |
 | Calibration | the calibration routine, or the gripper calibration | `#Cal`, `#Gripcal` | — |
 

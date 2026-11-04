@@ -37,5 +37,7 @@ bootloader: release 101 and earlier, and a few later changes that were never tag
 the Kt request and the voltage limit message). It is not updated.
 
 Version `101` of this site documents a board running 101. It also fits 104, which adds the Send_Respond_Kt
-request, Send_Voltage_Limit (in the release image) and the bootloader. To move a board without a bootloader to a
+request, Send_Voltage_Limit (in the release image) and the bootloader. The 104 release image was built from
+commit `20765c9` on `Bootloader_main`, not from the source at the tag `V104`, which does not have
+Send_Voltage_Limit yet. To move a board without a bootloader to a
 current release, see [Installing the bootloader on an older board](bootloader.md).

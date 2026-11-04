@@ -20,6 +20,11 @@ After every power-up the gripper has to find its end stops: `#Gripcal` or Send_g
 to both ends; the positions become 0 (open) and 255 (closed). The motor itself must be calibrated (`#Cal`) and
 saved before that, once.
 
+While the gripper calibrates, send only empty status polls. A 5-byte Send_gripper_data_pack, Send_Clear_Error
+or `#Clear` stops the calibration without a message, and the next one then starts part way through, where the
+stopped one left off: switch the driver off and on before you calibrate again
+([known issue KI-7](../08-troubleshooting/known-issues.md)).
+
 ## Moving
 
 Over UART:
@@ -41,8 +46,14 @@ and the object detection:
 | 2 | an object was detected while opening |
 | 3 | the position was reached |
 
-An empty Send_gripper_data_pack (0 bytes) only asks for the state. Send_gripper_data_pack's E-stop bit raises the
-gripper E-stop error; `#Gripstop 1` does the same over UART.
+An empty Send_gripper_data_pack (0 bytes) only asks for the state. The answer to a 5-byte command goes out
+before the driver acts on it, so its object detection and error bits are still those of the moment before
+(KI-6); the answers to the next frames show the new move. The action bit in the answer is a copy of the last
+command's action bit and stays 1 after the move ends (KI-8): the object detection tells when it has ended.
+
+Send_gripper_data_pack's E-stop bit raises the gripper E-stop error; `#Gripstop 1` does the same over UART. The
+error stays: while the E-stop bit is 1 the driver raises it again on every control cycle (KI-5). To recover,
+clear the bit (`#Gripstop 0`, or a Send_gripper_data_pack with the bit 0), then `#Clear` or Send_Clear_Error.
 
 !!! warning "Current"
     The firmware does not limit the current you give a gripper move. The safe range depends on the gripper's

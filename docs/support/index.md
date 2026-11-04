@@ -8,5 +8,5 @@
   [Contributing](contributing.md).
 - **Orders and hardware**: [source-robotics.com](https://source-robotics.com/).
 
-Before you ask, [Troubleshooting](../08-troubleshooting.md) goes through the common symptoms, and `#Info` tells
+Before you ask, [Troubleshooting](../08-troubleshooting/index.md) goes through the common symptoms, and `#Info` tells
 most of what anyone will ask you for.

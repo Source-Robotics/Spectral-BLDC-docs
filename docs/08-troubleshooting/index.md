@@ -1,6 +1,8 @@
 # Troubleshooting
 
-By symptom. The error flags and what clears them are in [Errors and recovery](06-operation/errors.md).
+By symptom. The error flags and what clears them are in [Errors and recovery](../06-operation/errors.md); the
+faults of the firmware that are known and not yet fixed, with what to do until they are, in
+[Known issues](known-issues.md).
 
 ## The motor does not move
 
@@ -25,7 +27,7 @@ flowchart TD
 | LED on, nothing on the terminal | 256000 baud; TX to RX and RX to TX; the adapter's port; 3.3 V adapter; the line ending CR+LF |
 | LED on, nothing on CAN | the node ID; 1 Mbit/s on the adapter; termination (about 60 Ω across CAN H and CAN L with everything unpowered); the CAN cable's orientation |
 | `Unknown command` | the name's spelling and case: `#Kpiq`, not `#kpiq` |
-| the LED is off and nothing works after a firmware update | the bootloader has no valid firmware: flash again, see [Updating through the bootloader](07-firmware/update.md) |
+| the LED is off and nothing works after a firmware update | the bootloader has no valid firmware: flash again, see [Updating through the bootloader](../07-firmware/update.md) |
 
 ## Motor GUI
 
@@ -37,11 +39,11 @@ flowchart TD
 | *No connection* on CAN | the CANvas adapter's port; the bus termination; the node ID of the driver; 1 Mbit/s |
 | the calibration does not start | calibration runs over the serial connection only, not over CAN |
 | *Unsaved changes* after a power cycle | the settings were not saved to the driver; Save writes them |
-| the firmware update finds no bootloader | a driver with firmware 101 or older has no bootloader: [Installing the bootloader on an older board](07-firmware/bootloader.md) |
+| the firmware update finds no bootloader | a driver with firmware 101 or older has no bootloader: [Installing the bootloader on an older board](../07-firmware/bootloader.md) |
 
 ## Calibration
 
-The messages and their causes are in [Calibration](05-setup/calibration.md). The ones that
+The messages and their causes are in [Calibration](../05-setup/calibration.md). The ones that
 come back most:
 
 | Symptom | Cause |
@@ -51,14 +53,14 @@ come back most:
 | `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for the motor |
 | `Commutation/alignment check failed!` | the motor did not respond to the commutation check: a phase open, `#Iqoffset` too low, a magnet that slips |
 | calibration succeeds, the motor then runs badly or in the wrong direction | the magnet slipped on the shaft; glue it and calibrate again |
-| calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`, a value from an older release ([The check at power-up](05-setup/saving.md#the-check-at-power-up)): `#Default`, calibrate again |
+| calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`, a value from an older release ([The check at power-up](../05-setup/saving.md#the-check-at-power-up)): `#Default`, calibrate again |
 
 ## The motor
 
 | Symptom | Cause |
 |---|---|
 | crunching or whining at speed | the current limit or the current loop gains too high; lower `#Ilim`, lower `#Cbw` and calibrate again, or lower `#Kpiq` |
-| humming, oscillating at rest | `#Kpv` or `#Kpp` too high; see [Current limit and loop tuning](05-setup/tuning.md) |
+| humming, oscillating at rest | `#Kpv` or `#Kpp` too high; see [Current limit and loop tuning](../05-setup/tuning.md) |
 | weak torque | `#Ilim` low; the supply's current limit; a calibration run at a low supply voltage (the constants are off) |
 | the motor is hot | lower `#Ilim`, enable the thermistor; a gimbal motor held against a load at its current limit heats quickly |
 | it stops with a Vbus error when decelerating | the supply cannot absorb the returned energy; a different supply, or a brake resistor |
@@ -69,7 +71,7 @@ come back most:
 ## Low-quality motors
 
 Motors with visibly bad windings, an uneven back-EMF or a resistance that differs between the phases calibrate
-poorly and run rough. The [tested motors](03-technical-data/tested-motors.md) are known good.
+poorly and run rough. The [tested motors](../03-technical-data/tested-motors.md) are known good.
 
 ## The magnet and the encoder
 
@@ -90,4 +92,4 @@ cooling.
 
 ## Getting help
 
-[Support](support/index.md) says where to ask and what to include; `#Info`'s output is the first thing.
+[Support](../support/index.md) says where to ask and what to include; `#Info`'s output is the first thing.

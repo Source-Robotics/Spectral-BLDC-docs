@@ -244,5 +244,41 @@ typed = [str(p.relative_to(ROOT)) for p in (ROOT / "docs").rglob("*.md")
          if "generated" not in p.parts and re.search(r"<figcaption[^>]*>\s*Figure\s+\d", p.read_text(encoding="utf-8"))]
 check("E5 no caption carries a number typed by hand (the hook numbers them)", not typed, "; ".join(typed))
 
+# ---------------------------------------------------------------- F. the known issues hook
+ki = load_module("known_issues_hook", ROOT / "hooks" / "known_issues.py")
+DOCS = ROOT / "docs"
+try:
+    shipped_ki, err = ki.load(ROOT / "known_issues.yml", DOCS), None
+except PluginError as exc:
+    shipped_ki, err = None, str(exc)
+check("F1 known_issues.yml loads, and every issue's page exists", shipped_ki is not None, err)
+check("F2 an issue's link is relative to the page it lands on",
+      ki.link({"page": "06-operation/gripper-mode.md#moving", "title": "T"}, "08-troubleshooting/known-issues.md")
+      == "[T](../06-operation/gripper-mode.md#moving)")
+ISSUE = {"id": "KI-1", "component": "c", "summary": "s", "workaround": "w", "page": "index.md", "title": "t",
+         "status": "open", "since": "2026-11-04"}
+
+
+def load_issues(issues):
+    text = yaml.safe_dump({"components": {"c": {"name": "C", "version": "1"}}, "issues": issues})
+    with tempfile.NamedTemporaryFile("w", suffix=".yml", delete=False) as f:
+        f.write(text.replace("'2026-11-04'", "2026-11-04"))
+    try:
+        return ki.load(f.name, DOCS), None
+    except PluginError as exc:
+        return None, str(exc)
+    finally:
+        Path(f.name).unlink()
+
+
+_, err = load_issues([dict(ISSUE, component="x")])
+check("F3 an unknown component stops the build", err is not None and "not under components" in err, err)
+_, err = load_issues([ISSUE, dict(ISSUE)])
+check("F4 a repeated id stops the build", err is not None and "twice" in err, err)
+kdata, err = load_issues([ISSUE, dict(ISSUE, id="KI-2", status="fixed", fixed_in="109")])
+out = ki.all_issues(kdata, "08-troubleshooting/known-issues.md") if kdata else ""
+check("F5 open issues are listed by component, fixed ones under Fixed with their release",
+      "### C" in out and "### Fixed" in out and "| KI-2 | s | 109 |" in out and "| KI-1 | s | w |" in out, err or out)
+
 print(f"\n{len(fails)} failure(s)" if fails else "\nall checks passed")
 sys.exit(1 if fails else 0)

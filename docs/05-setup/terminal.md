@@ -81,7 +81,7 @@ parameters. `#Help` (firmware 106 and newer) prints a short command reference, `
 !!! success "Check"
     `#Info` answers with the driver's identity, the hardware and firmware version first. If nothing comes back:
     the baud rate, the CR+LF line ending, TX and RX, see
-    [The driver does not answer](../08-troubleshooting.md#the-driver-does-not-answer).
+    [The driver does not answer](../08-troubleshooting/index.md#the-driver-does-not-answer).
 
 Every command starts with `#`, and a Set/Get command takes one number after a space: `#P 16384` moves to position
 16384; `#P` alone prints the position. Names are case-sensitive. The whole set is in the

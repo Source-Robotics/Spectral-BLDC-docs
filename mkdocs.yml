@@ -84,7 +84,7 @@ plugins:
         apage7_can.md: reference/can/index.md
         apage9_3_tested_motors.md: 03-technical-data/tested-motors.md
         apage9_4_theory_corner.md: appendix/theory.md
-        apage9_5_troublestooting.md: 08-troubleshooting.md
+        apage9_5_troublestooting.md: 08-troubleshooting/index.md
         Guides/Mobile robot guide.md: guides/mobile-robot.md
         Guides/Python guide.md: guides/python.md
         Guides/Quadruped guide.md: guides/quadruped.md
@@ -110,6 +110,7 @@ hooks:
   - hooks/versions.py
   - hooks/firmware_pages.py
   - hooks/can_tools.py     # versioned CAN downloads and the offline frame tool
+  - hooks/known_issues.py   # the known issues table from known_issues.yml
   - hooks/llms.py          # the Markdown twins, llms.txt and llms-full.txt from the content hooks' output
   - hooks/figures.py       # captions: standalone pictures become numbered figures (after llms.py: twins keep plain pictures)
   - hooks/pdf.py           # the PDF of the manual, from the print-site page, when DOCS_PDF is set
@@ -306,7 +307,9 @@ nav:
               - Updating through the bootloader: 07-firmware/update.md
               - Installing the bootloader on an older board: 07-firmware/bootloader.md
               - Building from source: 07-firmware/building.md
-          - 8. Troubleshooting: 08-troubleshooting.md
+          - 8. Troubleshooting:
+              - 08-troubleshooting/index.md
+              - Known issues: 08-troubleshooting/known-issues.md
       - Appendix:
           - Firmware release notes: appendix/firmware-release-notes.md
           - Versions and compatibility: appendix/compatibility.md
