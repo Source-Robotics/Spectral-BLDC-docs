@@ -20,8 +20,8 @@ that last restored the defaults, not necessarily the one running: 101 and 104 bo
 ### Drivers that report 101
 
 A driver that reports 101 runs either release 101 from the `main` branch, without a bootloader, or release 104
-(or an earlier build of `Bootloader_main`), which also writes 101 and runs above the bootloader. Which image the
-drivers shipped with the bootloader before release 105 carry was not recorded.
+(or an earlier build of `Bootloader_main`), which also writes 101 and runs above the bootloader. Drivers sold before
+release 105 shipped with firmware 101 or 103.
 
 To tell whether yours has the bootloader, power it up while `bl_flash.py list` or Motor GUI's *Scan bootloaders*
 is polling: a driver with the bootloader answers in its first two seconds. With the bootloader, update it to the
