@@ -2,7 +2,8 @@
 
 The driver's firmware is open source and released as numbered builds. Release 104 is the first release built
 for the bootloader: a driver that runs 104 or newer carries a bootloader and updates itself over UART or CAN. A
-driver that runs 101 or older needs the bootloader installed once with a programming adapter.
+driver that runs 101 or older needs the bootloader installed once with a programming adapter. A driver that
+reports 101 can be either ([Drivers that report 101](releases.md#drivers-that-report-101) says how to tell).
 
 ## In this chapter
 

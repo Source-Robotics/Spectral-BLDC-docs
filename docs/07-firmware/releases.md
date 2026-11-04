@@ -12,9 +12,21 @@ the commit it was built from, and the release notes. The notes are the firmware'
 #Info
 ```
 
-prints `Software version: <number>` among the rest. Over CAN, Send_Respond_Device_Info returns it as the third
-byte. From firmware 105 the number is the build's own version; before that it was read from the EEPROM and could
-be stale after an update until `#Default`.
+prints `Software version: <number>` among the rest; Motor GUI shows the same number in the driver's identity, and
+over CAN Send_Respond_Device_Info returns it as the third byte. From firmware 105 the number is the build's own
+version. Before that it was read from the EEPROM, where the last `#Default` wrote it, so it names the firmware
+that last restored the defaults, not necessarily the one running: 101 and 104 both write 101.
+
+### Drivers that report 101
+
+A driver that reports 101 runs either release 101 from the `main` branch, without a bootloader, or release 104
+(or an earlier build of `Bootloader_main`), which also writes 101 and runs above the bootloader. Which image the
+drivers shipped with the bootloader before release 105 carry was not recorded.
+
+To tell whether yours has the bootloader, power it up while `bl_flash.py list` or Motor GUI's *Scan bootloaders*
+is polling: a driver with the bootloader answers in its first two seconds. With the bootloader, update it to the
+current release as in [Updating through the bootloader](update.md); the release it ran before does not matter
+then. Without one, install it first: [Installing the bootloader on an older board](bootloader.md).
 
 ## Which release does this site describe?
 

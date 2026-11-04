@@ -39,7 +39,7 @@ flowchart TD
 | *No connection* on CAN | the CANvas adapter's port; the bus termination; the node ID of the driver; 1 Mbit/s |
 | the calibration does not start | calibration runs over the serial connection only, not over CAN |
 | *Unsaved changes* after a power cycle | the settings were not saved to the driver; Save writes them |
-| the firmware update finds no bootloader | a driver with firmware 101 or older has no bootloader: [Installing the bootloader on an older board](../07-firmware/bootloader.md) |
+| the firmware update finds no bootloader | power-cycle the driver while the GUI scans, to catch the bootloader's 2 s window. A driver with firmware 101 or older has no bootloader (one that reports 101 may have it: [Drivers that report 101](../07-firmware/releases.md#drivers-that-report-101)): [Installing the bootloader on an older board](../07-firmware/bootloader.md) |
 
 ## Calibration
 

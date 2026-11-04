@@ -1,6 +1,8 @@
 # Installing the bootloader on an older board
 
-A driver running firmware 101 or older has no bootloader: its firmware starts at the beginning of the flash. To
+A driver running firmware 101 or older has no bootloader: its firmware starts at the beginning of the flash. A
+driver that reports 101 may run 104 and have the bootloader all the same; check first, as in
+[Drivers that report 101](releases.md#drivers-that-report-101). To
 run any release from 104 on (104 is the first release built for the bootloader), which is linked to start above
 the bootloader, the bootloader must be installed once, with a programming adapter on the JTAG connector. After
 that, every update goes over UART or CAN.
