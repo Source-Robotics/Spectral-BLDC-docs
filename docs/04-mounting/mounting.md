@@ -28,4 +28,5 @@ magnet height, the board on the spacer with the chip towards the magnet, and lon
 !!! warning "The board is bare"
     Nothing on the board may touch the motor's housing or a metal bracket. Keep the bracket clear of the
     components on both sides of the board (the connectors on the bottom need room), and keep metal swarf and
-    screws away from the board while you work.
+    screws away from the board while you work. Touch earthed metal before you pick the
+    board up and hold it by its edges: static electricity damages its chips.

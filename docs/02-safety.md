@@ -29,11 +29,23 @@ connect anything; the few rules here are the ones that destroy a driver, a motor
     Never unplug a motor, or a power cable in the daisy chain, while the driver is powered. The inductive kick of
     the windings and the arcing at the connector damage the driver stage.
 
+!!! warning "Static electricity"
+    Static electricity damages the microcontroller, the encoder chip and the driver stage. Unplug the supply and
+    touch earthed metal before you handle the board, and hold it by its edges, away from the chips and the pads.
+
 ## Mechanical
 
 !!! danger "Moving parts"
-    A calibrating or running motor turns without warning, in both directions, and a motor in position mode pushes back hard against a hand. Keep fingers, hair and cables away from the shaft and whatever is mounted on
+    A calibrating or running motor turns without warning, in both directions, and a motor in position mode
+    pushes back hard against a hand. Keep fingers, hair and cables away from the shaft and whatever is mounted on
     it, fix the motor to the bench before the first test, and test without a load on the shaft.
+
+!!! danger "A powered motor can move with nobody at it"
+    The driver moves its motor whenever a command arrives, over UART or from any host on the CAN bus, and keeps
+    following the last one. A speed command goes on turning the motor after the program that sent it has crashed
+    or its cable has come out, unless the watchdog is set ([Stopping the motor](#stopping-the-motor)). Before you
+    reach for the motor or the mechanism it drives, put the driver in idle (`#Idle`, Send_Idle) or switch the
+    supply off.
 
 !!! warning "The encoder magnet"
     The magnet sits about 1 mm above the encoder chip. A magnet that touches the chip, or sits far too close, can
@@ -41,9 +53,12 @@ connect anything; the few rules here are the ones that destroy a driver, a motor
     [The encoder magnet](04-mounting/magnet.md).
 
 !!! warning "Hot motor and driver"
-    A motor running at its rated current gets hot enough to burn. Set the current limit for your motor
-    ([Current limit and loop tuning](05-setup/tuning.md)), use the thermistor, and give the driver airflow when it
-    runs near 2.8 A.
+    A motor running at its rated current gets hot enough to burn, and so do the driver's chips and the board
+    around them. Switch off and let both cool for a few minutes before you touch them. Set the current limit for
+    your motor ([Current limit and loop tuning](05-setup/tuning.md)), use the thermistor, and give the driver
+    airflow when it runs near 2.8 A. `#Ilim` is clamped to 2800 mA, but the current limit of Send_Limits over CAN
+    and the current of a gripper move are used as sent: a host must keep them within the motor's rating and
+    2800 mA.
 
 ## Stopping the motor
 
