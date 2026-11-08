@@ -57,7 +57,7 @@ that does not fit the frame.
 python tools/sync_firmware.py            # write docs/includes/generated/ from firmware.tag in versions.yml
 python tools/sync_firmware.py --check    # exit 1 if they are out of date
 python tools/sync_firmware.py --print uart --tag v101   # look at another release's commands
-python tools/sync_firmware.py --prerelease 596a166 --no-network   # before the tag exists: read that commit
+python tools/sync_firmware.py --prerelease 260c774 --no-network   # before the tag exists: read that commit
 ```
 
 `--prerelease` lets the pages of a coming release be written before it is tagged. The facts then say which commit
@@ -65,7 +65,8 @@ they came from, and `tools/test_tools.py` fails until the tool has been run agai
 is never published. The parameter numbers (`PARAM_*` in `constants.h`) are read like the command IDs; their
 descriptions are in `docs/includes/parameters.yml`, and the build fails when the two do not name the same
 parameters. A UART command whose handler exists but whose name the serial parser does not accept is marked on
-the UART pages as answered `Unknown command`.
+the UART pages as answered `Unknown command` (only firmware 107 and older kept such a list in the parser; from 109
+the facts' `uart.accepted` is empty and nothing is marked).
 
 The tool needs a clone of the firmware repository with its tags, next to this repository or named by
 `--firmware PATH` / `FIRMWARE_DIR`, and the network for the release notes (`--no-network` keeps the file

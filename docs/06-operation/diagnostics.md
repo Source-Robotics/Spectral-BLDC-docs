@@ -119,6 +119,15 @@ Trigger 2 records up to an error instead: armed with a pre-trigger, it keeps the
 watchdog's included, and the time after it. The capture calls (`Send_Parameter`, `Send_Get_Parameter`,
 `Send_Buffer_Read`) need the release of the Spectral-BLDC library after 1.20.
 
+## Memory
+
+The drive's microcontroller has 128 KB of flash, of which the bootloader takes 12 KB, and 20 KB of RAM. Firmware
+109 uses about 91.5 % of the 116 KB application flash and 65 % of the RAM for fixed data, which leaves about
+7 KB for the stack and the heap. Parameter 83 (`#Par 83`, or Send_Get_Parameter(83)) is the margin check: the
+bytes of that RAM the stack has never reached since start-up. The stack needs about 1.5 to 2 KB; read parameter 83
+after the drive has run its hardest work (a calibration, the encoder table, the anti-cogging, sound) and see that
+plenty is left.
+
 ## A histogram
 
 The histogram adds one signal into 256 bins over the electrical angle or over one motor turn, every control loop,

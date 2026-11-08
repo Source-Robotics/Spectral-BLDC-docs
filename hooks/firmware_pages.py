@@ -271,6 +271,8 @@ def refused(d: dict) -> list[str]:
     if d["uart"].get("partial"):
         return []
     accepted = set(d["facts"]["uart"]["accepted"])
+    if not accepted:   # from firmware 109 the parser keeps no list: UART_protocol answers "Unknown command" itself
+        return []
     return sorted({h["name"] for h in d["facts"]["uart"]["handlers"]} - accepted, key=str.lower)
 
 

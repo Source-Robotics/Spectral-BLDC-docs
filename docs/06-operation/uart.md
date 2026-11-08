@@ -22,8 +22,8 @@ A command is `#`, a name, optionally a space and one number, and a line ending:
   moves to position 16384 and prints the position; `#P` prints the position. One exception: `#Openloop` without
   a number starts the motor at the stored open-loop speed.
 - An **action** command takes no number: `#Cal`, `#Save`, `#Idle`.
-- A command the parser does not know is answered with `Unknown command`. So are the few names the parser
-  accepts but has no handler for; the [UART reference](../reference/uart/index.md) lists them.
+- A name the driver does not know is answered with `Unknown command`; firmware 107 and older answered so also
+  the few names its parser accepted but had no handler for.
 - 256000 baud, 8N1, 3.3 V.
 
 ## The driver only answers

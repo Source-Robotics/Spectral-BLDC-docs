@@ -211,14 +211,18 @@ if loaded:
         except PluginError:
             refused = True
         check("B15 a parameter the firmware has but parameters.yml lacks stops the build", refused)
-    # a UART handler the serial parser does not accept is flagged in the overview and in its group's table
+    # a UART handler the serial parser does not accept is flagged in the overview and in its group's table; a
+    # parser without a list of its own (firmware 109 and newer) refuses nothing
     fake = json.loads(json.dumps({k: d[k] for k in ("facts", "uart")}))
-    name = next(n for n in fake["uart"]["commands"] if n in fake["facts"]["uart"]["accepted"])
+    fake["facts"]["uart"]["accepted"] = [h["name"] for h in fake["facts"]["uart"]["handlers"]]
+    name = next(iter(fake["uart"]["commands"]))
     fake["facts"]["uart"]["accepted"].remove(name)
     group = fake["uart"]["commands"][name]["group"]
     check("B16 a command the parser does not accept is flagged as answered Unknown command",
           f"`#{name}`" in pages.uart_overview(fake).split("does not accept")[0].rsplit("handler for", 1)[-1]
           and "does not accept the name" in pages.uart_group(group, fake))
+    fake["facts"]["uart"]["accepted"] = []
+    check("B16b a parser without a command list flags nothing", not pages.refused(fake))
 
 
 # ---------------------------------------------------------------- the sync tool, on fixtures

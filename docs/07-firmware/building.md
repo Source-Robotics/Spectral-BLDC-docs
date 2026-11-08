@@ -42,7 +42,7 @@ PlatformIO's udev rules (`99-platformio-udev.rules`, in the PlatformIO documenta
 | `src/common.h` | the controller and PID structures with their defaults |
 | `src/communication.cpp` | the UART command handlers |
 | `src/communication_CAN.cpp` | the CAN receive switch and the transmit functions |
-| `src/SerialPacketParser.cpp` | the UART parser and the list of names it accepts |
+| `src/SerialPacketParser.cpp` | the UART parser: it splits a line into the command and its argument (up to 107 it also kept the list of names it accepted) |
 | `src/motor_control.cpp` | the control loops, the calibration routine, the gripper state machine |
 | `src/bootloader_config.cpp` | the vector table offset and the reset into the bootloader |
 | `release_guide.md` | how a release is cut: version bump, build, tag, GitHub release with `firmware.json` |

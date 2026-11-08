@@ -11,7 +11,7 @@
 #   description  what it is
 #
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
-# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 596a166, the code of release 109. The Spectral Micro has
+# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 260c774, the code of release 109. The Spectral Micro has
 # the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
 # and ranges differ (a 5000 Hz control loop).
 
@@ -570,3 +570,12 @@ params:
     value: bits, see What is in force
     saved: "—"
     description: What is in force and what is running, one bit each.
+  PARAM_STACK_UNUSED:
+    group: status
+    access: r
+    value: "bytes; -1 if it was not measured"
+    saved: "—"
+    description: >
+      The stack margin: RAM between the heap and the stack that the stack has not used since start-up (setup()
+      fills it with a pattern at its end, and this counts the bytes the pattern is still in). The stack needs
+      about 1.5 to 2 KB of the about 7 KB there are; a value far below that means the drive is short of RAM.
