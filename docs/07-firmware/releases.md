@@ -38,9 +38,10 @@ which bootloader, Python library and PAR6 runtime.
 ## The STEPFOC counterpart
 
 Most Spectral Micro releases have a [STEPFOC](https://docs.source-robotics.com/STEPFOC-docs/) release with the
-same changes. The numbers do not always match: the current pair is Spectral Micro 108 and STEPFOC 109 (107 went
-with 108), and the
-[compatibility table](../appendix/compatibility.md) lists the others.
+same changes. From release 109 the two drivers share their version numbers and are released together: the
+Spectral Micro went from 107 straight to 109, so there is no Spectral Micro 108. Before that the numbers did not
+always match (Spectral Micro 107 went with STEPFOC 108); the
+[compatibility table](../appendix/compatibility.md) lists the pairs.
 
 ## The two branches
 

@@ -8,7 +8,7 @@ which is what makes tuning quick.
 ## The current limit
 
 Set the current limit to the rated phase current of your motor in mA. Calibration uses its own 1600 mA for its
-steps and, from firmware 108, puts your limit back when it ends (107 and older left 1600 mA: set it again after
+steps and, from firmware 109, puts your limit back when it ends (107 and older left 1600 mA: set it again after
 calibrating there). The factory default (`#Default`) of 1000 mA suits the gimbal motors in
 [Tested motors](../03-technical-data/tested-motors.md); a motor rated for more can go up to the driver's 2800 mA.
 `#Ilim` clamps the limit to 2800 mA; Send_Limits over CAN does not, so never send more. The firmware does not trip
@@ -52,7 +52,7 @@ The current loop is a PI controller that turns a current request into a voltage.
 follow from the motor's resistance R, its inductance L (both measured by calibration) and one number, the
 bandwidth: Kp = ω·L and Ki = ω·R, with ω = 2π × the bandwidth. The PI then cancels the coil's own lag, and the
 current follows a request like a first-order filter at that bandwidth. Calibration computes them this way at
-160 Hz, the default from firmware 108; so does setting the bandwidth:
+160 Hz, the default from firmware 109; so does setting the bandwidth:
 
 === "Terminal"
     ```
@@ -70,7 +70,7 @@ then tells which bandwidth they amount to.
 
 !!! note "Drives calibrated with older firmware"
     Firmware 107 and older computed the gains for 500 Hz on the 5000 Hz loop, which is fast for that loop rate.
-    Their saved gains stay as they are after an update to 108: parameter 49 reads about 500 Hz until the drive is
+    Their saved gains stay as they are after an update to 109: parameter 49 reads about 500 Hz until the drive is
     calibrated again, or `#Cbw 160` and `#Save` are sent. 160 Hz was chosen on the STEPFOC bench; on the Spectral
     Micro it is not yet tested. See [Upgrading from older firmware](../07-firmware/upgrading.md).
 
@@ -97,7 +97,7 @@ Run the motor over the whole range of speeds and loads it will see, with a load 
 
 ## The speed estimate
 
-The velocity loop needs the speed, which the driver estimates from the encoder count. From firmware 108 parameter
+The velocity loop needs the speed, which the driver estimates from the encoder count. From firmware 109 parameter
 50 picks how:
 
 | Parameter 50 | Estimate | How it behaves |

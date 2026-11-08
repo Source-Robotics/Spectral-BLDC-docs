@@ -7,7 +7,7 @@ status: new
 The watchdog stops the motor when the host stops talking: a host program that crashes, a cable that comes out,
 a USB adapter that hangs. It is a timer in the driver. Every valid motion frame and every request the driver
 answers starts it again; when it runs out, the driver raises the watchdog error and does what its **action**
-says. From firmware 108 the action can hold the position, brake, coast, or let a joint down slowly; before, the
+says. From firmware 109 the action can hold the position, brake, coast, or let a joint down slowly; before, the
 driver always disabled the motor, which then coasted.
 
 ## Setting it

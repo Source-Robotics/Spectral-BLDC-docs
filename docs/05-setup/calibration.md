@@ -4,7 +4,7 @@ Calibration teaches the driver its motor: it checks the magnet and the supply, m
 resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find
 the pole pairs and the direction, checks the order of the phases and aligns the encoder to the rotor field, and
 measures the motor constants Kt, KV and the flux linkage. Nothing about the motor has to be entered first. It
-runs once per motor; the result is kept by saving. Firmware 108 can follow it with two more runs, the
+runs once per motor; the result is kept by saving. Firmware 109 can follow it with two more runs, the
 [encoder table and the anti-cogging](anti-cogging.md); by default it does not.
 
 !!! danger "The motor turns"
@@ -39,7 +39,7 @@ current gains the bandwidth gives are saved with the calibration.
 
 !!! warning "Calibration sets its own current limit"
     The routine does not use the current limit you set. It raises the limit to 1600 mA, and drives the motor with
-    up to 1250 mA while it measures Kt and KV and with `#Iqoffset` while it aligns the encoder. From firmware 108 it
+    up to 1250 mA while it measures Kt and KV and with `#Iqoffset` while it aligns the encoder. From firmware 109 it
     puts the limit that was in force back when it ends; firmware 107 and older left 1600 mA in force (known issue
     KI-2).
 
@@ -58,7 +58,7 @@ values.
     ```
 
 This also sets the hardware version and batch date to factory values, and clears an encoder table and an
-anti-cogging set from another motor; note what `#Info` printed if you need them. From firmware 108 the CAN node
+anti-cogging set from another motor; note what `#Info` printed if you need them. From firmware 109 the CAN node
 ID is kept. [Saving the configuration](saving.md) says what else it does.
 
 ## 2. Run it

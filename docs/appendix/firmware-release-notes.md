@@ -2,9 +2,10 @@
 
 What changed in each firmware release, from the release notes in the firmware repository, up to the release this site describes.
 
-!!! note "Release 108, not published yet"
-    Its notes on GitHub come with the release; until then, a summary of what it brings over 107, each item with
-    the page that describes it:
+!!! note "Release 109, not published yet"
+    There is no release 108 for the Spectral Micro: from 109 it shares its version numbers with STEPFOC, and goes
+    from 107 straight to 109. The notes on GitHub come with the release; until then, a summary of what it brings
+    over 107, each item with the page that describes it:
 
     - Settings in blocks with their own checksums; a reset keeps the CAN ID; flashing never touches them
       ([Saving the configuration](../05-setup/saving.md)).

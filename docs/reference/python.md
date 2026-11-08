@@ -8,7 +8,7 @@ The `Spectral-BLDC` package ([Spectral-BLDC-Python](https://github.com/Source-Ro
 
 <!-- python-calls -->
 
-The calls for the messages added in firmware 108 (Send_Parameter, Send_Get_Parameter, Send_Respond_Identity,
+The calls for the messages added in firmware 109 (Send_Parameter, Send_Get_Parameter, Send_Respond_Identity,
 Send_Respond_Telemetry, Send_Buffer_Read, Send_Cogging_Harmonic, Send_Cogging_Table, Send_Sound, Send_Samples), and the actions 'Coast' and
 'Descend' of Send_Watchdog, come with the library's release after 1.20. It also adds calls built on the
 parameters, among them Send_Watchdog_Fallback, Send_Tool_ID, Send_Cogging_Mode, Send_Capture_Setup,

@@ -12,7 +12,7 @@
 **Anti-cogging**
 :   A current added to the current setpoint, a function of the electrical angle, that cancels the motor's own
     torque ripple (the pull of its magnets towards the stator's teeth and the ripple of current-sensing errors).
-    Identified on the driver (`#Cogcal`, parameter 43; firmware 108 and newer).
+    Identified on the driver (`#Cogcal`, parameter 43; firmware 109 and newer).
 
 **Back-EMF**
 :   The voltage a turning motor generates in its own windings, proportional to speed. It opposes the supply, limits
@@ -64,10 +64,10 @@
 
 **Current loop bandwidth** (`#Cbw`, parameter 49)
 :   How fast the current loop follows a change of its setpoint, in Hz. The current loop gains follow from it and
-    the motor's resistance and inductance: Kp = ω·L, Ki = ω·R. 160 Hz by default from firmware 108 (500 Hz before).
+    the motor's resistance and inductance: Kp = ω·L, Ki = ω·R. 160 Hz by default from firmware 109 (500 Hz before).
 
 **Current-sense zero**
-:   The reading of a current sensor with no current flowing. From firmware 108 the driver measures it at every
+:   The reading of a current sensor with no current flowing. From firmware 109 the driver measures it at every
     start-up and subtracts it.
 
 **Daisy chain**
@@ -87,7 +87,7 @@
 
 **Encoder table**
 :   A correction of the encoder's small angle error around the turn, measured on the driver (`#Encal`, parameter
-    52) and saved with the configuration (firmware 108 and newer).
+    52) and saved with the configuration (firmware 109 and newer).
 
 **Encoder ticks**
 :   The unit of position: the 14-bit magnetic encoder gives 16384 ticks per revolution of the motor shaft, counted
@@ -150,7 +150,7 @@
 
 **Parameter**
 :   A setting reached by its number through Send_Parameter and Send_Get_Parameter (CAN 36 to 38) or `#Par`
-    (firmware 108 and newer). The numbers are permanent.
+    (firmware 109 and newer). The numbers are permanent.
 
 **Phase order**
 :   The order in which the motor's three phases are connected to U, V and W. Firmware 105 and newer learns it during
@@ -162,7 +162,7 @@
 
 **PLL (speed estimate)**
 :   A phase-locked loop that follows the encoder count and gives the speed with less lag than a moving average
-    (parameter 50, firmware 108 and newer; the moving average stays the Spectral Micro's default).
+    (parameter 50, firmware 109 and newer; the moving average stays the Spectral Micro's default).
 
 **Pole pairs**
 :   The number of electrical cycles per mechanical revolution, half the number of rotor magnets: 7 for a typical
@@ -170,7 +170,7 @@
 
 **Product lock**
 :   The stamp in the EEPROM of the product that calibrated a board. A firmware that finds the other product's
-    stamp drives nothing (firmware 108 and newer).
+    stamp drives nothing (firmware 109 and newer).
 
 **Remote frame**
 :   A CAN frame with the RTR bit set and no data: a request. The host asks for data with a remote frame under a
@@ -178,7 +178,7 @@
 
 **Sound** (`#Tone`, CAN 44 and 45)
 :   Tones, a queue of notes and recorded samples the driver adds to its output voltage while it holds or moves, so
-    the motor plays them (firmware 108 and newer).
+    the motor plays them (firmware 109 and newer).
 
 **STEPFOC**
 :   Source Robotics' stepper driver, the Spectral Micro's sister: similar hardware and firmware and practically
@@ -196,5 +196,5 @@
 
 **Watchdog**
 :   A timer the driver resets with every motion command and status request it receives over CAN. When it is set
-    (Send_Watchdog) and runs out, the driver reports a watchdog error and stops; from firmware 108 it holds,
+    (Send_Watchdog) and runs out, the driver reports a watchdog error and stops; from firmware 109 it holds,
     brakes, coasts or descends as the watchdog's action says.

@@ -15,13 +15,13 @@
 #
 # Seeded 2026-11-04 from the final docs review (2026-11-03), each checked against the firmware at tag V107
 # (Bootloader_main branch). STEPFOC has most of them too: STEPFOC-docs' known_issues.yml.
-# 2026-11-08: KI-1 to KI-15 spot-checked against firmware 108 (commit 199b6a2 of the hardening branch): KI-2 is
-# fixed in 108, the others are still there. KI-19 is new in 108. KI-17 and KI-18 were given to two faults found and
-# fixed before 108 was released (the serial parser refused #Calonly and #Par; #Cogcal did not name states 7 to 11);
+# 2026-11-08: KI-1 to KI-15 spot-checked against firmware 109 (commit 596a166 of the hardening branch): KI-2 is
+# fixed in 109, the others are still there. KI-19 is new in 109. KI-17 and KI-18 were given to two faults found and
+# fixed before 109 was released (the serial parser refused #Calonly and #Par; #Cogcal did not name states 7 to 11);
 # no release had them, so they are not listed, and the two ids are never used again.
 
 components:
-  firmware: {name: Spectral Micro firmware, version: "108"}
+  firmware: {name: Spectral Micro firmware, version: "109"}
   release_104: {name: Release 104, version: "the image of the GitHub release V104"}
 
 issues:
@@ -43,7 +43,7 @@ issues:
     page: 05-setup/calibration.md#3-set-the-current-limit-and-save
     title: "Calibration: current limit and save"
     status: fixed
-    fixed_in: "108: calibration puts back the current limit that was in force when it started"
+    fixed_in: "109: calibration puts back the current limit that was in force when it started"
     since: 2026-11-04
 
   - id: KI-3

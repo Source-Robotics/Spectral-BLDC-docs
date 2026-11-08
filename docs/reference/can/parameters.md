@@ -1,6 +1,6 @@
 # Parameters and buffers
 
-From firmware 108 a setting that has no command of its own is a **parameter**: a number from 1 to 79 behind one
+From firmware 109 a setting that has no command of its own is a **parameter**: a number from 1 to 79 behind one
 pair of commands, Send_Parameter (ID 36) to set it and Send_Get_Parameter (ID 37) to read it, answered with
 Respond_Parameter (ID 38). The identifier has room for only 64 command IDs, so new settings no longer use them up.
 Parameter numbers are permanent: a number is never given a new meaning. Number 73 is not used and stays free.

@@ -92,7 +92,7 @@ Read in more detail: [Power and the CAN daisy chain](04-mounting/power-and-can.m
 
 First the factory defaults, so that calibration does not start from another motor's values or from junk in the
 EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also sets the hardware version and
-batch date to factory values; from firmware 108 it keeps the CAN node ID.) Then fix the motor to the bench, nothing on the
+batch date to factory values; from firmware 109 it keeps the CAN node ID.) Then fix the motor to the bench, nothing on the
 shaft, 24 V on the supply. There is nothing to enter: calibration measures the motor's resistance and inductance
 and finds its pole pairs and phase order by itself.
 
@@ -127,7 +127,7 @@ Read in more detail: [Calibration](05-setup/calibration.md), with the whole log 
 ## 7. Set the current limit and save
 
 The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load.
-From firmware 108 calibration puts back the limit that was in force (107 and older left 1600 mA), so check it now,
+From firmware 109 calibration puts back the limit that was in force (107 and older left 1600 mA), so check it now,
 before you save. 1000 mA suits the gimbal motors in the tested
 list; a small 2804 is better at 500 mA, a motor rated for more can go up to 2800 mA.
 

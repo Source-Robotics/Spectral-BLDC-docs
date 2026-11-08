@@ -65,7 +65,7 @@ is a PI controller: its output is a current demand, limited by the current limit
 steady-state error a load would otherwise leave. The current loop is the innermost and fastest. Each loop must be
 slower than the one inside it, by a factor of five to ten, for the inner loop to look like an ideal actuator to the
 outer one; that is why the loops are tuned from the inside out, and why a current loop bandwidth of 160 Hz (the
-default from firmware 108) leaves room for a velocity loop of a few tens of hertz and a position loop below that.
+default from firmware 109) leaves room for a velocity loop of a few tens of hertz and a position loop below that.
 
 A command picks where the cascade is entered: a current setpoint uses the current loop alone, a speed setpoint
 the two inner loops, a position setpoint all three. The *feedforward* terms the CAN motion frames carry are added

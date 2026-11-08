@@ -20,7 +20,7 @@ measures each motor's resistance, inductance and pole pairs, so nothing has to b
 | ![42BLS40-24-01](../assets/NEMA17%20format%20BLDC.webp){ width="90" } | 42BLS40-24-01 | NEMA 17-format brushless motor, 24 V, 26 W, 1.8 A, 219 g | [Stepperonline](https://www.omc-stepperonline.com/24v-4000rpm-0-0625nm-26w-1-8a-42x42x40mm-brushless-dc-motor-42bls40-24-01) |
 
 Before the first test, set the current limit for the motor with `#Ilim` (firmware 107 and older leave 1600 mA
-after a calibration; from 108 calibration puts your limit back). The
+after a calibration; from 109 calibration puts your limit back). The
 factory default of 1000 mA suits the gimbal motors above; a motor rated for more can go up to the driver's
 2800 mA. See [Current limit and loop tuning](../05-setup/tuning.md).
 

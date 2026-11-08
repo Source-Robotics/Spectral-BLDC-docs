@@ -4,10 +4,13 @@ status: new
 
 # Upgrading from older firmware
 
-Firmware 108 adds more to the Spectral Micro than any release before it: parameters, the watchdog actions, the
+Firmware 109 adds more to the Spectral Micro than any release before it: parameters, the watchdog actions, the
 identity and telemetry frames, captures, the current loop from one bandwidth, a choice of speed estimates, and the
-encoder table and anti-cogging. This page says what a driver keeps when it is updated to 108, what works at once,
+encoder table and anti-cogging. This page says what a driver keeps when it is updated to 109, what works at once,
 what can be run, and how to go back. [Updating through the bootloader](update.md) is how to flash it.
+
+There is no firmware 108 for the Spectral Micro: from 109 the Spectral Micro and STEPFOC share their version
+numbers, so a Spectral Micro goes from 107 straight to 109.
 
 ## What is kept
 
@@ -19,7 +22,7 @@ with everything it had:
 - the CAN ID, the gains, the limits, the watchdog, the heartbeat, the thermistor and the gripper settings.
 
 A driver from 101 to 105, saved before the configuration had checksums, is trusted and sealed at its first start
-of 108 when it was ever saved; a blank EEPROM gets the defaults. Release 101 and older from the `main` branch have
+of 109 when it was ever saved; a blank EEPROM gets the defaults. Release 101 and older from the `main` branch have
 no bootloader: such a board needs the programming adapter once
 ([Installing the bootloader on an older board](bootloader.md)).
 
@@ -28,7 +31,7 @@ legacy, parameter 56 = 0.
 
 ## What works at once
 
-These need no measurement and are on from the first start of 108:
+These need no measurement and are on from the first start of 109:
 
 - the **current-sense zero**, measured at every start-up with the driver asleep: on the bench the current read
   3.9 mA with nothing flowing, where it read −20 to +19 mA before, depending on the rotor's position;
@@ -54,14 +57,14 @@ not yet tested on its bench:
 
 ## What does not change by itself
 
-- **The current gains.** The saved Kpiq and Kiiq stay as they are: on a driver calibrated before 108 they were
+- **The current gains.** The saved Kpiq and Kiiq stay as they are: on a driver calibrated before 109 they were
   computed for 500 Hz (parameter 49 reads about 500). A calibration computes them again at 160 Hz; so does
   `#Cbw 160` (or parameter 49 = 160), then `#Save`. 160 Hz is the new default; it was chosen on the STEPFOC bench.
 - **The velocity gains** stay as they are; their defaults, Kpv 0.03 and Kiv 0.0003, did not change.
 
 ## The whole upgrade
 
-1. Flash 108 ([Updating through the bootloader](update.md)). `#Info` prints the new firmware version and ends with
+1. Flash 109 ([Updating through the bootloader](update.md)). `#Info` prints the new firmware version and ends with
    `In force:`.
 2. Calibrate, with the shaft free: `#Cal`, so that the current gains come from the new formula; or keep the
    calibration and send `#Cbw 160`.
@@ -74,9 +77,9 @@ gains, so a preset applied after the calibration puts its current gains back.
 
 ## Going back
 
-Flashing 107 or older over 108 is safe for the configuration: the calibration and the first settings block are
-unchanged, and older firmware ignores everything 108 saved from byte 256 on (tool id, fallback, anti-cogging,
-encoder table). Flash 108 again and they are all still there.
+Flashing 107 or older over 109 is safe for the configuration: the calibration and the first settings block are
+unchanged, and older firmware ignores everything 109 saved from byte 256 on (tool id, fallback, anti-cogging,
+encoder table). Flash 109 again and they are all still there.
 
 !!! note "Not yet tested on the bench"
     A downgrade, and the encoder table, the anti-cogging, the PLL speed estimate, the 160 Hz current loop, the

@@ -90,9 +90,9 @@ cooling.
 
 ## After a firmware update
 
-`#Info` shows the new release. If the values look wrong or the LED stays on: `#Default`, `#Cal`, `#Save`. A release note says when an update clears the calibration. After an update to 108, [Upgrading from older firmware](../07-firmware/upgrading.md) says what changes.
+`#Info` shows the new release. If the values look wrong or the LED stays on: `#Default`, `#Cal`, `#Save`. A release note says when an update clears the calibration. After an update to 109, [Upgrading from older firmware](../07-firmware/upgrading.md) says what changes.
 
-A Vbus error right after power-up, cleared by `#Clear`, was the supply ramping up; from firmware 108 a low supply is
+A Vbus error right after power-up, cleared by `#Clear`, was the supply ramping up; from firmware 109 a low supply is
 not checked in the first 500 ms.
 
 ## Getting help

@@ -57,7 +57,7 @@ commands:
           - {bytes: "0-1", name: Current setpoint, type: signed 16-bit, meaning: mA}
     notes: >
       Every form resets the watchdog. With `Rstint` set, the integral accumulators are cleared on each new setpoint.
-      From firmware 108 a position or speed frame that follows another mode (idle, current, PD, a watchdog trip)
+      From firmware 109 a position or speed frame that follows another mode (idle, current, PD, a watchdog trip)
       starts the velocity integral from zero, so a release from a wound-up mode does not kick; one that follows
       position or velocity mode keeps it. The new setpoint, the mode change and the driver's wake-up reach the
       control loop together, so the first frame after Idle is followed.
@@ -235,7 +235,7 @@ commands:
       - {bytes: "1", bit: 7, name: calibrated, type: bit, meaning: the motor is calibrated}
       - {bytes: "1", bit: 6, name: activated, type: bit, meaning: the controller is activated, _shared: true}
       - {bytes: "1", bit: 5, name: watchdog_error, type: bit, meaning: the watchdog ran out, _shared: true}
-      - {bytes: "1", bit: 4, name: wrong_product, type: bit, meaning: "from firmware 108: this firmware is on the other product's board (the product lock) and drives nothing", _shared: true}
+      - {bytes: "1", bit: 4, name: wrong_product, type: bit, meaning: "from firmware 109: this firmware is on the other product's board (the product lock) and drives nothing", _shared: true}
   OUT_IN_IQ:
     name: Send_Respond_Iq_data
     group: status
@@ -265,12 +265,12 @@ commands:
     description: >
       Asks what the drive is: the product, the tool it is built into, the firmware release, the hardware version,
       the pole pairs, whether it is calibrated, and eight flags. A host can check it before it commands or flashes
-      a drive. Added in firmware 108. Python attributes `product_id`, `product_name`, `tool_id`,
+      a drive. Added in firmware 109. Python attributes `product_id`, `product_name`, `tool_id`,
       `firmware_version`, `identity_hardware_version`, `pole_pairs`, `identity_calibrated`, `identity_flags`.
     response_fields:
       - {bytes: "0", name: product, type: unsigned 8-bit, meaning: "1 STEPFOC, 2 Spectral Micro: the firmware that answers"}
       - {bytes: "1", name: tool_id, type: unsigned 8-bit, meaning: "parameter 1: 0 none, 1 SSG-48, 11-33 MSG, 200-254 your own"}
-      - {bytes: "2-3", name: firmware_version, type: unsigned 16-bit, meaning: "the release, e.g. 108"}
+      - {bytes: "2-3", name: firmware_version, type: unsigned 16-bit, meaning: "the release, e.g. 109"}
       - {bytes: "4", name: hardware_version, type: unsigned 8-bit, meaning: PCB revision from the EEPROM}
       - {bytes: "5", name: pole_pairs, type: unsigned 8-bit, meaning: "the motor's pole pairs; 0 if outside 0-255"}
       - {bytes: "6", name: calibrated, type: unsigned 8-bit, meaning: "1 calibrated, 0 not"}
@@ -291,7 +291,7 @@ commands:
     python: Send_Respond_Telemetry()
     description: >
       Asks for the temperature, the supply voltage, both error bytes and the current in one frame, all from the
-      same moment: one request instead of four. Added in firmware 108. The Python library fills the same
+      same moment: one request instead of four. Added in firmware 109. The Python library fills the same
       attributes as the four separate answers.
     response_fields:
       - {bytes: "0-1", name: temperature, type: signed 16-bit, meaning: "°C (meaningful with the thermistor enabled)"}
@@ -339,7 +339,7 @@ commands:
     python: Send_Save_config()
     description: >
       Writes the current configuration (gains, limits, calibration, CAN ID, heartbeat, watchdog, gripper flag) to
-      the EEPROM, and copies the CAN ID into the bootloader's board ID. From firmware 108 it also writes the tool id
+      the EEPROM, and copies the CAN ID into the bootloader's board ID. From firmware 109 it also writes the tool id
       and the watchdog fallback (settings block 2), the anti-cogging set with its mode and scale, and the encoder
       table with its on/off flag, parameter 56 and the current-sense zero trims, each block with its own checksum;
       of the two large blocks only the 16-byte pages that changed are written. Not kept: the idle behaviour of
@@ -367,7 +367,7 @@ commands:
       Sets the watchdog. The motion commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the
       requests the driver answers (the Send_Respond_ remote frames, Send_Get_Parameter, Send_Buffer_Read) reset it;
       the other frames (Send_Parameter among them) and UART commands do not. When the time runs out the driver
-      reports a watchdog error and does what the action byte says. 0 turns it off (the default). From firmware 108
+      reports a watchdog error and does what the action byte says. 0 turns it off (the default). From firmware 109
       the driver acts on the action byte, but only when the watchdog is the only active error: any other error
       gets the legacy response, the motor disabled and coasting. Hold and descend run for the fallback time
       (parameter 2, 2 s by default), then the after-action (parameter 5); they start only if the driver was in
@@ -418,7 +418,7 @@ commands:
     group: parameters
     python: Send_Parameter()
     description: >
-      Sets one parameter by its number (the [parameter table](#every-parameter)). Firmware 108 gives new settings
+      Sets one parameter by its number (the [parameter table](#every-parameter)). Firmware 109 gives new settings
       a parameter number instead of a command ID of their own, since the identifier has room for only 64 command
       IDs. A value outside a parameter's range is clamped, replaced or refused as the table says; a number the
       firmware does not know, or a read-only one, is ignored. The driver does not answer: read the value back with
@@ -519,7 +519,7 @@ commands:
       velocity, current or PD mode); idle or an error stops all of it. Up to 4 tones sound at once (channels 0 to 3),
       from 20 Hz to below 2500 Hz, half the control-loop rate. Loudness is given as a current: the driver turns it into
       a voltage with the coil's impedance at that pitch, so low and high notes sound alike. The total voltage is
-      limited to parameter 81 (2000 mV by default; 0 refuses sound). Added in firmware 108. The driver does
+      limited to parameter 81 (2000 mV by default; 0 refuses sound). Added in firmware 109. The driver does
       not answer; parameter 80 says what plays. The Python library wraps the operations as Send_Tone,
       Send_Sound_Stop, Send_Sound_Event, Send_Sound_Play, Send_Sound_Clear, Send_Samples_Play and
       Send_Samples_Stop.
@@ -545,7 +545,7 @@ commands:
     description: >
       Appends 1 to 8 samples (signed 8-bit, one per byte, −127 to 127 = full scale) to the driver's 1024-place
       sample buffer, which holds 1023 samples. Samples that do not fit are dropped; parameter 80 says how many are
-      buffered. Send_Sound with operation 4 plays them. Added in firmware 108. The driver does not answer.
+      buffered. Send_Sound with operation 4 plays them. Added in firmware 109. The driver does not answer.
     forms:
       - length: 8
         title: eight samples; a shorter frame carries fewer

@@ -4,7 +4,7 @@ status: new
 
 # Sound
 
-From firmware 108 the driver plays sound through its motor: tones, chords, tunes from a queue it plays by itself,
+From firmware 109 the driver plays sound through its motor: tones, chords, tunes from a queue it plays by itself,
 and recorded sound such as speech. A current at an audio frequency in the windings makes a small force at that
 frequency, and the motor, and above all whatever it is fixed to, radiate it as sound.
 

@@ -13,10 +13,11 @@ What this means in practice:
   sensor, open-loop stepping). A program written for one runs on the other. The idle behaviour is the exception
   over UART: the Spectral Micro sets it with `#Brake 0` or `#Brake 1` and coasts by default, STEPFOC has the
   actions `#Brake` and `#Coast`. Send_Settings over CAN is the same on both.
-- **The firmware releases go in step.** Most Spectral Micro releases have a STEPFOC counterpart with the same changes;
-  the [compatibility table](../appendix/compatibility.md) lists the pairs. The numbers do not always match: the
-  current pair is Spectral Micro 108 and STEPFOC 109. In this pair some new features were tested on the STEPFOC
-  bench first, so the Spectral Micro keeps its earlier defaults for them (the speed estimate, the delay
+- **The firmware releases go in step, and from 109 share their numbers.** From release 109 the two drivers are
+  released together under the same version number; the Spectral Micro went from 107 straight to 109, so there is
+  no Spectral Micro 108. Before, the numbers did not always match (Spectral Micro 107 went with STEPFOC 108); the
+  [compatibility table](../appendix/compatibility.md) lists the pairs. In 109 some new features were tested on the
+  STEPFOC bench first, so the Spectral Micro keeps its earlier defaults for them (the speed estimate, the delay
   compensation, the runs after a calibration) until they are measured on it.
 - **Calibration differs.** The Spectral Micro measures the motor's resistance and inductance and finds its pole
   pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first. See

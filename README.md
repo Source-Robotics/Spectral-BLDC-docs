@@ -14,7 +14,7 @@ The firmware and hardware files are in
 |---|---|
 | `docs/` | the pages: the manual chapters at the top level, `reference/`, `guides/`, `support/`, `appendix/` |
 | `docs/includes/` | text shared by pages (glossary, symbols, abbreviations) and the data the reference pages are built from |
-| `docs/includes/can_commands.yml`, `uart_commands.yml`, `parameters.yml` | the hand-written descriptions of every CAN message, UART command and parameter (CAN 36-38, firmware 108 and newer) |
+| `docs/includes/can_commands.yml`, `uart_commands.yml`, `parameters.yml` | the hand-written descriptions of every CAN message, UART command and parameter (CAN 36-38, firmware 109 and newer) |
 | `docs/includes/generated/` | written by `tools/sync_firmware.py` from the firmware's release tag: `firmware_facts.json`, `firmware_release_notes.md`. Never edit |
 | `versions.yml` | every version fact: the firmware release the site describes and its date, the Python library and bootloader versions the downloads page links, the manual's number and revision |
 | `compatibility.yml` | which firmware release works with which bootloader, Python library, PAR6 runtime and board |
@@ -57,7 +57,7 @@ that does not fit the frame.
 python tools/sync_firmware.py            # write docs/includes/generated/ from firmware.tag in versions.yml
 python tools/sync_firmware.py --check    # exit 1 if they are out of date
 python tools/sync_firmware.py --print uart --tag v101   # look at another release's commands
-python tools/sync_firmware.py --prerelease 199b6a2 --no-network   # before the tag exists: read that commit
+python tools/sync_firmware.py --prerelease 596a166 --no-network   # before the tag exists: read that commit
 ```
 
 `--prerelease` lets the pages of a coming release be written before it is tagged. The facts then say which commit

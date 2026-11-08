@@ -4,7 +4,7 @@ status: new
 
 # Encoder table and anti-cogging
 
-Firmware 108 can measure two corrections on the drive itself, with nothing but the motor on the bench: the
+Firmware 109 can measure two corrections on the drive itself, with nothing but the motor on the bench: the
 **encoder table**, which corrects the small error of the encoder's angle reading, and the **anti-cogging**, a
 current that cancels the motor's own torque ripple. The same routines run on the sister driver STEPFOC, where
 they follow every calibration. On the Spectral Micro they are ported but not yet tested on its bench, so nothing
@@ -61,7 +61,7 @@ experiments; 100 % is as identified. The identification records the current the 
 little on the gains: after a large change of the current or velocity gains, identify it again.
 
 The STEPFOC firmware can also correct the current-sense zeros from the anti-cogging's once-per-turn part (the
-**zero trim**, 43 = 4 or 5). The Spectral Micro firmware 108 skips that step until the map of its current channels
+**zero trim**, 43 = 4 or 5). The Spectral Micro firmware 109 skips that step until the map of its current channels
 is measured: 4 and 5 identify like 1 and 2, and the trims (parameters 59 and 60) change only when written.
 
 ## Running them

@@ -1162,7 +1162,7 @@
    }
   }
  },
- "commit": "199b6a25f887",
+ "commit": "596a16669405",
  "defaults": [
   {
    "after_default": "1111 in the EEPROM, not read back",
@@ -1189,7 +1189,7 @@
    "value": "1"
   },
   {
-   "after_default": "107",
+   "after_default": "109",
    "comment": "Software release",
    "name": "SOFTWARE_VERSION",
    "saved": "no: set by the firmware",
@@ -2558,11 +2558,11 @@
   }
  ],
  "prerelease": {
-  "commit": "199b6a25f887",
-  "firmware_version_in_source": "107",
-  "ref": "199b6a2"
+  "commit": "596a16669405",
+  "firmware_version_in_source": "109",
+  "ref": "596a166"
  },
- "tag": "V108",
+ "tag": "V109",
  "uart": {
   "accepted": [
    "Iq",
@@ -3331,5 +3331,5 @@
    }
   ]
  },
- "version": "108"
+ "version": "109"
 }

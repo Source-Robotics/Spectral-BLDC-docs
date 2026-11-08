@@ -11,7 +11,7 @@
 #   description  what it is
 #
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
-# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 199b6a2, the code of release 108. The Spectral Micro has
+# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 596a166, the code of release 109. The Spectral Micro has
 # the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
 # and ranges differ (a 5000 Hz control loop).
 
@@ -277,7 +277,7 @@ params:
     saved: yes, encoder block
     description: >
       The trim added to the zero of channel 1 measured at every start-up; writing it moves the zero in use at
-      once. The Spectral Micro firmware 108 skips the trim step of the anti-cogging identification, so only a
+      once. The Spectral Micro firmware 109 skips the trim step of the anti-cogging identification, so only a
       write sets it.
   PARAM_ZERO_TRIM2:
     group: current

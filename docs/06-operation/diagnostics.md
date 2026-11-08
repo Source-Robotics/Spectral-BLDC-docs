@@ -4,7 +4,7 @@ status: new
 
 # Status and diagnostics
 
-What the driver tells about itself, from firmware 108: what is in force, who it is, its state in one frame, how
+What the driver tells about itself, from firmware 109: what is in force, who it is, its state in one frame, how
 long its control loop takes, and recordings of its own signals made inside the control loop. The error flags and
 what to do about each are on [Errors and recovery](errors.md).
 
@@ -28,7 +28,7 @@ Before that section `#Info` prints, beside what it printed before:
 
 - `CAN RX overruns` and `CAN TX dropped`: frames the driver lost because its receive buffer was full, and answers
   it gave up after waiting 1 ms for a free transmit mailbox. Both should stay 0; they count from power-up. From
-  firmware 108 the CAN controller passes only the frames addressed to the driver's own node ID, and the driver
+  firmware 109 the CAN controller passes only the frames addressed to the driver's own node ID, and the driver
   sends from all three transmit mailboxes, so a busy bus costs it less.
 - `Product:` this firmware, Spectral Micro.
 - `Current sense zero:` the zeros in use, in ADC counts from 2048, measured at start-up with the bridge off (one
@@ -60,7 +60,7 @@ and the current, all from the same moment: one request instead of four, for a ho
 
 STEPFOC and the Spectral Micro use the same bootloader and the same file name for their firmware, and each
 firmware drives the other board wrongly: the Spectral Micro firmware on a STEPFOC drove a coil at about 1.7 A in
-every mode on the bench. From firmware 108 a board remembers which product calibrated it, a stamp in the EEPROM
+every mode on the bench. From firmware 109 a board remembers which product calibrated it, a stamp in the EEPROM
 written at the first start-up of a calibrated board and at every save. A firmware that finds the other product's
 stamp, or no stamp but a calibration its own product cannot make (the Spectral Micro firmware treats 50 pole pairs
 or more as a STEPFOC calibration), reads and writes nothing more, drives no pin (its gate driver is enabled only
@@ -74,7 +74,7 @@ identity, and a warning in `#Info`. Flash the right firmware and the board runs 
 ## How long the control loop takes
 
 The control loop runs every 200 µs (5000 Hz) and has to finish inside that. `#Info` prints the last loop's time.
-On the bench an early build of firmware 108 took about 80 µs of the 200; anti-cogging and the commutation delay
+On the bench an early build of firmware 109 took about 80 µs of the 200; anti-cogging and the commutation delay
 compensation each add some 10 µs (measured on STEPFOC). The section timing and the register fast paths of the
 STEPFOC firmware (its parameters 66 to 72) are not in the Spectral Micro firmware.
 
