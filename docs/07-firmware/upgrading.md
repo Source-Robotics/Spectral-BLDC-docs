@@ -39,8 +39,8 @@ These need no measurement and are on from the first start of 108:
 - `#Default` and a settings reset **keep the CAN ID**;
 - the first motion frame after Idle is followed (the driver's wake-up now comes with it), and a position or speed
   frame after another mode no longer kicks with a stale velocity integral;
-- the product lock, the new CAN commands and parameters, the identity frame, telemetry, the capture, and `#Info`'s
-  `In force:`.
+- the product lock, the new CAN commands and parameters, the identity frame, telemetry, the capture, `#Info`'s
+  `In force:`, and [sound through the motor](../06-operation/sound.md) (not yet tested on a Spectral Micro).
 
 ## What can be run or switched on
 
@@ -65,7 +65,8 @@ not yet tested on its bench:
    `In force:`.
 2. Calibrate, with the shaft free: `#Cal`, so that the current gains come from the new formula; or keep the
    calibration and send `#Cbw 160`.
-3. Set the current limit for your motor (`#Ilim`; calibration leaves it at 1600 mA), then `#Save`.
+3. Check that the current limit suits your motor (`#Ilim`; calibration puts back the limit that was in force),
+   then `#Save`.
 4. If you want them, run the encoder table and the anti-cogging with the shaft free (`#Encal all`) and check them.
 
 With Motor GUI's presets: apply the preset first, then calibrate. A preset writes its own current and velocity
@@ -78,7 +79,8 @@ unchanged, and older firmware ignores everything 108 saved from byte 256 on (too
 encoder table). Flash 108 again and they are all still there.
 
 !!! note "Not yet tested on the bench"
-    A downgrade, and the encoder table, the anti-cogging, the PLL speed estimate, the 160 Hz current loop and the
-    delay compensation on a Spectral Micro, had not been tested on the bench when this page was written. The
+    A downgrade, and the encoder table, the anti-cogging, the PLL speed estimate, the 160 Hz current loop, the
+    delay compensation and the sound on a Spectral Micro, had not been tested on the bench when this page was
+    written. The
     identity, settings block 2, the watchdog actions, the current-sense zero, the Vbus start-up grace, the product
     lock, the capture and `#Default` keeping the CAN ID were.

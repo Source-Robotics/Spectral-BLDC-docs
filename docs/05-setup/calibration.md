@@ -38,9 +38,10 @@ current gains the bandwidth gives are saved with the calibration.
     lower the three voltages first. Lowering the current limit does not help: calibration sets its own.
 
 !!! warning "Calibration sets its own current limit"
-    The routine does not use the current limit you set. It raises the limit to 1600 mA, drives the motor with up
-    to 1250 mA while it measures Kt and KV and with `#Iqoffset` while it aligns the encoder, and leaves the limit
-    at 1600 mA when it ends. Set the current limit for your motor after calibration and before you save (step 3).
+    The routine does not use the current limit you set. It raises the limit to 1600 mA, and drives the motor with
+    up to 1250 mA while it measures Kt and KV and with `#Iqoffset` while it aligns the encoder. From firmware 108 it
+    puts the limit that was in force back when it ends; firmware 107 and older left 1600 mA in force (known issue
+    KI-2).
 
 ## 1. Restore the defaults
 
@@ -113,8 +114,7 @@ The `Calibrating angle offset...` lines come every half second while the encoder
 about 40 seconds; the routine has not stopped.
 
 `#Calonly` runs the same calibration without anything of parameter 56 after it; with parameter 56 at 0, the
-default, `#Cal` does the same. (In the build this page describes, the serial parser does not accept `#Calonly`:
-known issue KI-17.)
+default, `#Cal` does the same.
 
 What the steps are:
 
@@ -141,12 +141,13 @@ With 1 or 2 the driver saves everything when they succeed, and the log says `Nex
 `Save config with #Save`. On STEPFOC 2 is the default; on the Spectral Micro the runs are not yet tested on its
 bench, so they stay off until you set 56 (Send_Parameter(56, 2), then Send_Save_config).
 [Encoder table and anti-cogging](anti-cogging.md) explains both, and why the encoder table needs a current limit
-set for the motor first (known issue KI-19).
+set for the motor first: it runs at 80 % of the limit, which calibration puts back before the runs (known issue
+KI-19).
 
 ## 3. Set the current limit and save
 
-Calibration left the current limit at 1600 mA. Set it for your motor first
-([Current limit and loop tuning](tuning.md)), then save, or the 1600 mA are saved with the calibration.
+Calibration puts back the current limit that was in force when it started (firmware 107 and older left
+1600 mA). If that is not your motor's yet, set it now ([Current limit and loop tuning](tuning.md)), then save.
 
 === "Motor GUI"
     Set the current limit in the limits, then **Save**. The GUI marks *Unsaved changes* until you do.

@@ -129,8 +129,10 @@ def check(facts: dict, can: dict, uart: dict) -> None:
             size = sum(field_size(f) for f in form["fields"])
             if size != form["length"]:
                 raise PluginError(f"can_commands.yml: {name} form of {form['length']} bytes lists {size} bytes of fields")
-            if h and h["lengths"] and form["length"] not in h["lengths"]:
+            if h and h["lengths"] and form["length"] not in h["lengths"] and form["length"] < h.get("min_length", 9):
                 raise PluginError(f"can_commands.yml: {name} has a {form['length']}-byte form, the firmware accepts {h['lengths']}")
+            if h and not h["lengths"] and form["length"] < h.get("min_length", 0):
+                raise PluginError(f"can_commands.yml: {name} has a {form['length']}-byte form, the firmware needs {h['min_length']} or more")
         if c.get("response_fields") is not None:
             size = sum(field_size(f) for f in c["response_fields"])
             want = tx_len.get(name)
@@ -186,6 +188,8 @@ def can_section(name: str, c: dict, d: dict) -> str:
         chips.append(f"{tx_len.get(name, '?')} bytes")
     elif h and h["lengths"]:
         chips.append(" or ".join(str(x) for x in h["lengths"]) + " bytes")
+    elif h and h.get("min_length") is not None:
+        chips.append(f"{h['min_length']} to 8 bytes")
     elif h and not h["empty"]:
         chips.append("0 bytes")
     if c.get("python"):
@@ -229,6 +233,8 @@ def can_overview(d: dict) -> str:
             length = str(tx_len.get(e["name"], "—"))
         elif h is None or h["empty"]:
             length = "not implemented"
+        elif not h["lengths"] and h.get("min_length") is not None:
+            length = f"{h['min_length']} to 8"
         else:
             length = ", ".join(str(x) for x in h["lengths"]) or "0"
         g = can["groups"][c["group"]]

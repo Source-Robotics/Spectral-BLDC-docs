@@ -11,7 +11,7 @@
 #   description  what it is
 #
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
-# scope.cpp, encal.cpp, cogcal.cpp, EEPROM.cpp) at commit 7b7b195, the code of release 108. The Spectral Micro has
+# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 199b6a2, the code of release 108. The Spectral Micro has
 # the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
 # and ranges differ (a 5000 Hz control loop).
 
@@ -51,6 +51,10 @@ groups:
       control interrupt's time (µs), 14 the anti-cogging feedforward (mA), 15 the Iq setpoint without the
       anti-cogging (mA), 16 the Uq setpoint (mV), 17 and 18 the d and q voltage the output transform received (mV).
       None of these settings is saved.
+  sound:
+    title: Sound
+    intro: >
+      None of the sound settings is saved; see [Sound](../../06-operation/sound.md).
   status:
     title: Status
 
@@ -536,6 +540,28 @@ params:
     value: "1024"
     saved: "—"
     description: The samples per channel a capture holds.
+
+  # ------------------------------------------------------------ sound
+  PARAM_SOUND_STATE:
+    group: sound
+    access: r
+    value: "bits 0-7 events queued, 8-18 samples buffered, 24 a tone sounds, 25 the queue plays, 26 samples play, 27 the samples ran dry"
+    saved: "—"
+    description: What the sound is doing; a host that refills the queue or the sample buffer reads it.
+  PARAM_SOUND_LIMIT_MV:
+    group: sound
+    access: rw
+    value: "mV, 0-6000 (outside: refused). Default 2000; 0 refuses sound and stops what plays"
+    saved: "no: 2000 at every start-up"
+    description: The sound's voltage at most, all tones and samples together.
+  PARAM_SOUND_AXIS:
+    group: sound
+    access: rw
+    value: "1 the q axis (default), 0 the d axis (outside: refused)"
+    saved: "no: 1 at every start-up"
+    description: >
+      Which axis carries the sound. The q axis makes torque, a small ripple at the tone's pitch, and was much
+      louder on the bench; the d axis makes no torque and is quieter.
 
   # ------------------------------------------------------------ status
   PARAM_FEATURES:

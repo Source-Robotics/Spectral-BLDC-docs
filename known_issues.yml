@@ -15,8 +15,10 @@
 #
 # Seeded 2026-11-04 from the final docs review (2026-11-03), each checked against the firmware at tag V107
 # (Bootloader_main branch). STEPFOC has most of them too: STEPFOC-docs' known_issues.yml.
-# 2026-11-08: KI-1 to KI-15 spot-checked against firmware 108 (commit 7b7b195 of the hardening branch): still
-# there. KI-17 to KI-19 are new in 108.
+# 2026-11-08: KI-1 to KI-15 spot-checked against firmware 108 (commit 199b6a2 of the hardening branch): KI-2 is
+# fixed in 108, the others are still there. KI-19 is new in 108. KI-17 and KI-18 were given to two faults found and
+# fixed before 108 was released (the serial parser refused #Calonly and #Par; #Cogcal did not name states 7 to 11);
+# no release had them, so they are not listed, and the two ids are never used again.
 
 components:
   firmware: {name: Spectral Micro firmware, version: "108"}
@@ -40,7 +42,8 @@ issues:
     workaround: After every calibration set `#Ilim` for your motor, then `#Save`.
     page: 05-setup/calibration.md#3-set-the-current-limit-and-save
     title: "Calibration: current limit and save"
-    status: open
+    status: fixed
+    fixed_in: "108: calibration puts back the current limit that was in force when it started"
     since: 2026-11-04
 
   - id: KI-3
@@ -196,35 +199,13 @@ issues:
     status: open
     since: 2026-11-04
 
-  - id: KI-17
-    component: firmware
-    summary: "`#Calonly` and `#Par` answer `Unknown command`: the firmware has their handlers, but its serial parser
-      does not list the two names, so it drops them before a handler sees them."
-    workaround: "`#Cal` does the same as `#Calonly` while parameter 56 is 0, the default. Read or set parameters over
-      CAN with Send_Get_Parameter and Send_Parameter instead of `#Par`. `#Info` shows what is in force."
-    page: reference/uart/index.md
-    title: UART commands
-    status: open
-    since: 2026-11-08
-
-  - id: KI-18
-    component: firmware
-    summary: "`#Cogcal` prints `idle` for the anti-cogging states 7 to 11 (the combined run's encoder table, its
-      failure, switched off, done without the trim), and lists the harmonics only after state 3."
-    workaround: Read parameter 43 over CAN for the state, and `#Info` (`In force:`) for whether the anti-cogging is
-      on and saved.
-    page: 05-setup/anti-cogging.md#checking-them
-    title: "Encoder table and anti-cogging: checking them"
-    status: open
-    since: 2026-11-08
-
   - id: KI-19
     component: firmware
-    summary: The encoder table holds a field current of 80 % of the current limit for about 20 s, and calibration
-      leaves the limit at 1600 mA (KI-2). With parameter 56 set to 2, the run that follows a calibration therefore
-      puts about 1.3 A through the motor, more than a small gimbal motor is rated for.
-    workaround: Leave parameter 56 at 0 (the default); after the calibration set `#Ilim` for the motor and `#Save`,
-      then run `#Encal all`.
+    summary: The encoder table holds a field current of 80 % of the current limit for about 20 s, also when parameter
+      56 starts it after a calibration. With a limit above the motor's rating (1000 mA after `#Default`), the run is
+      above the rating too.
+    workaround: Set `#Ilim` for the motor before the encoder table runs, or before `#Cal` when parameter 56 is 1 or 2
+      (calibration puts the limit that was in force back before the runs that follow).
     page: 05-setup/anti-cogging.md#running-them
     title: "Encoder table and anti-cogging: running them"
     status: open

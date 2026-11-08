@@ -73,8 +73,9 @@ Bit 0 is the least significant.
 | 21 | the encoder table is being measured |
 | 22 | the anti-cogging is being identified |
 | 23 | the runs after a calibration are about to start |
+| 24 | sound is playing ([Sound](../../06-operation/sound.md)) |
 
-Bits 18, 19 and 24 to 31 are 0.
+Bits 18, 19 and 25 to 31 are 0.
 
 ## Reading the capture
 

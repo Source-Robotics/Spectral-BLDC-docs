@@ -127,7 +127,8 @@ Read in more detail: [Calibration](05-setup/calibration.md), with the whole log 
 ## 7. Set the current limit and save
 
 The current limit is the current the motor may draw, in mA; it is also the grip of the motor against a load.
-Calibration leaves it at 1600 mA, so set it now, before you save. 1000 mA suits the gimbal motors in the tested
+From firmware 108 calibration puts back the limit that was in force (107 and older left 1600 mA), so check it now,
+before you save. 1000 mA suits the gimbal motors in the tested
 list; a small 2804 is better at 500 mA, a motor rated for more can go up to 2800 mA.
 
 === "Motor GUI"

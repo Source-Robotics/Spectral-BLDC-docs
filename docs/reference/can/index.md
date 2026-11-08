@@ -28,6 +28,7 @@ numbered from the most significant bit (bit 7 first).
 - [System](system.md): node ID, E-stop, idle, save, reset, clear, watchdog, heartbeat setup, settings
 - [Parameters and buffers](parameters.md): the parameters behind Send_Parameter and Send_Get_Parameter, every one
   of them, and the buffers: capture, histogram, anti-cogging, encoder table
+- [Sound](sound.md): tones, the queue and samples through the motor
 - [Gripper](gripper.md): the gripper command, calibration and the gripper state
 
 ## The Python library

@@ -301,6 +301,7 @@ nav:
               - Working in Motor GUI: 06-operation/motor-gui.md
               - Errors and recovery: 06-operation/errors.md
               - Status and diagnostics: 06-operation/diagnostics.md
+              - Sound: 06-operation/sound.md
               - Gripper mode: 06-operation/gripper-mode.md
           - 7. Firmware:
               - 07-firmware/index.md
@@ -332,6 +333,7 @@ nav:
           - Status requests: reference/can/status.md
           - System: reference/can/system.md
           - Parameters and buffers: reference/can/parameters.md
+          - Sound: reference/can/sound.md
           - Gripper: reference/can/gripper.md
       - UART commands:
           - reference/uart/index.md

@@ -9,11 +9,14 @@ The `Spectral-BLDC` package ([Spectral-BLDC-Python](https://github.com/Source-Ro
 <!-- python-calls -->
 
 The calls for the messages added in firmware 108 (Send_Parameter, Send_Get_Parameter, Send_Respond_Identity,
-Send_Respond_Telemetry, Send_Buffer_Read, Send_Cogging_Harmonic, Send_Cogging_Table), and the actions 'Coast' and
+Send_Respond_Telemetry, Send_Buffer_Read, Send_Cogging_Harmonic, Send_Cogging_Table, Send_Sound, Send_Samples), and the actions 'Coast' and
 'Descend' of Send_Watchdog, come with the library's release after 1.20. It also adds calls built on the
 parameters, among them Send_Watchdog_Fallback, Send_Tool_ID, Send_Cogging_Mode, Send_Capture_Setup,
-Send_Capture_Trigger, Send_Histogram, Send_Cogging_Calibrate and Send_Encoder_Calibrate. With 1.20, send those
-frames with `python-can` in the layouts of the [CAN reference](can/index.md).
+Send_Capture_Trigger, Send_Histogram, Send_Cogging_Calibrate and Send_Encoder_Calibrate; the sound calls Send_Tone,
+Send_Sound_Stop, Send_Sound_Event, Send_Sound_Play, Send_Sound_Clear, Send_Samples_Play and Send_Samples_Stop on top
+of Send_Sound and Send_Samples; and the module `Spectral_BLDC.music` (note names, ringtone melodies, MIDI and WAV
+files as queue events and samples, see [Sound](../06-operation/sound.md)). With 1.20, send those frames with
+`python-can` in the layouts of the [CAN reference](can/index.md).
 
 ## Receiving
 

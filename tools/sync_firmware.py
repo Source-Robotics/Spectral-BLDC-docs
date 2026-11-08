@@ -7,7 +7,7 @@ same idea as par6's tools/sync_runtime.py: facts come from the TAGGED code, neve
     python tools/sync_firmware.py --firmware PATH --tag V108
     python tools/sync_firmware.py --print uart|can|defaults [--tag V103]   print one table instead of writing
     python tools/sync_firmware.py --no-network         keep the release notes that are there (no GitHub API call)
-    python tools/sync_firmware.py --prerelease 7b7b195 --no-network
+    python tools/sync_firmware.py --prerelease 199b6a2 --no-network
                                                        before the release tag exists: read that commit instead
 
 It reads the firmware repository with `git show <tag>:<file>` and writes, into docs/includes/generated/:
@@ -159,6 +159,7 @@ def uart_handlers(communication_cpp: str) -> list[dict]:
 DEFINE = re.compile(r"^#define[ \t]+((?:IN_|OUT_|OUT_IN_)[A-Z0-9_]+|HEARTBEAT_SETUP)[ \t]+(\d+)[ \t]*(?://[ \t]*(.*))?$", re.M)
 CASE = re.compile(r"case\s+([A-Z0-9_]+)\s*:")
 LEN = re.compile(r"CAN_RX_msg\.len\s*==\s*(\d+)")
+LEN_MIN = re.compile(r"CAN_RX_msg\.len\s*>=\s*(\d+)")   # a handler that takes any length from N up
 # a response function, called with or without arguments (Param_value_CAN(CAN_RX_msg.data[0]) since 2026-11)
 RESPONSE_FN = re.compile(r"\b([A-Z][A-Za-z_0-9]*(?:_CAN|_response|_pack|_pack_data))\((?:[^();]|\([^();]*\))*\)\s*;")
 # every function definition (the end of the one before); a transmitting one sets a frame's length and its ID
@@ -188,6 +189,9 @@ def can_handlers(communication_can_cpp: str) -> dict[str, dict]:
         out[m.group(1)] = {"lengths": sorted({int(x) for x in LEN.findall(body)}),
                            "responds": list(dict.fromkeys(RESPONSE_FN.findall(body))),
                            "empty": body.strip().count("\n") <= 1}
+        least = LEN_MIN.findall(body)
+        if least:
+            out[m.group(1)]["min_length"] = min(int(x) for x in least)
     return out
 
 

@@ -12,6 +12,7 @@ the two tools on top of them, what happens when something goes wrong, and grippe
 - [With Python](python.md)
 - [Working in Motor GUI](motor-gui.md)
 - [Errors and recovery](errors.md)
+- [Sound](sound.md): tones, tunes and recorded sound through the motor
 - [Status and diagnostics](diagnostics.md): what is in force, the identity, telemetry, captures
 - [Gripper mode](gripper-mode.md)
 

@@ -26,7 +26,7 @@ flowchart TD
 | No LED | the supply, DC+ and DC−, the power cable's orientation. If the cable was the wrong way round the driver is destroyed |
 | LED on, nothing on the terminal | 256000 baud; TX to RX and RX to TX; the adapter's port; 3.3 V adapter; the line ending CR+LF |
 | LED on, nothing on CAN | the node ID; 1 Mbit/s on the adapter; termination (about 60 Ω across CAN H and CAN L with everything unpowered); the CAN cable's orientation |
-| `Unknown command` | the name's spelling and case: `#Kpiq`, not `#kpiq`; an argument with a space in it (`#WdFb 2000,0,1000,2`, not `#WdFb 2000, 0, 1000, 2`). `#Calonly` and `#Par` are refused in this build (known issue KI-17) |
+| `Unknown command` | the name's spelling and case: `#Kpiq`, not `#kpiq`; an argument with a space in it (`#WdFb 2000,0,1000,2`, not `#WdFb 2000, 0, 1000, 2`) |
 | `Wrong firmware for this board (product lock)`, the LED on steadily | the other product's firmware was flashed: a STEPFOC image on a Spectral Micro. Flash the Spectral Micro firmware; the configuration was not touched ([The product lock](../06-operation/diagnostics.md#the-product-lock)) |
 | the LED is off and nothing works after a firmware update | the bootloader has no valid firmware: flash again, see [Updating through the bootloader](../07-firmware/update.md) |
 

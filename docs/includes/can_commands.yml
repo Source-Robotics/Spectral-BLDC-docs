@@ -21,6 +21,9 @@ groups:
   parameters:
     title: Parameters and buffers
     page: parameters.md
+  sound:
+    title: Sound
+    page: sound.md
   gripper:
     title: Gripper
     page: gripper.md
@@ -504,6 +507,57 @@ commands:
           - {bytes: "2-3", name: Word A, type: signed 16-bit, meaning: "kind 2: the harmonic (1-32, 0 = unused); kind 3: value at index"}
           - {bytes: "4-5", name: Word B, type: signed 16-bit, meaning: "kind 2: a in mA; kind 3: value at index + 1"}
           - {bytes: "6-7", name: Word C, type: signed 16-bit, meaning: "kind 2: b in mA; kind 3: value at index + 2"}
+
+  # ------------------------------------------------------------ sound
+  IN_SOUND:
+    name: Send_Sound
+    group: sound
+    python: Send_Sound()
+    description: >
+      Plays sound through the motor: a tone now, a queue of timed events, or samples. The sound is added to the
+      output voltage, on the q axis by default (parameter 82), and only while the driver holds or moves (position,
+      velocity, current or PD mode); idle or an error stops all of it. Up to 4 tones sound at once (channels 0 to 3),
+      from 20 Hz to below 2500 Hz, half the control-loop rate. Loudness is given as a current: the driver turns it into
+      a voltage with the coil's impedance at that pitch, so low and high notes sound alike. The total voltage is
+      limited to parameter 81 (2000 mV by default; 0 refuses sound). Added in firmware 108. The driver does
+      not answer; parameter 80 says what plays. The Python library wraps the operations as Send_Tone,
+      Send_Sound_Stop, Send_Sound_Event, Send_Sound_Play, Send_Sound_Clear, Send_Samples_Play and
+      Send_Samples_Stop.
+    forms:
+      - length: 8
+        fields:
+          - {bytes: "0", name: Operation, type: unsigned 8-bit, meaning: "0 stop everything (tones, queue, samples); 1 a tone now; 2 add an event to the queue; 3 play the queue; 4 play the samples; 5 samples off, buffer cleared; 6 clear the queue (tones that sound keep sounding)"}
+          - {bytes: "1", name: Channel, type: unsigned 8-bit, meaning: "the tone channel, 0-3 (operations 1 and 2)"}
+          - {bytes: "2-3", name: A, type: unsigned 16-bit, meaning: "1, 2: the pitch in Hz (2: 0 silences the channel); 4: the sample rate in Hz, at most the loop rate"}
+          - {bytes: "4-5", name: B, type: unsigned 16-bit, meaning: "1, 2: the loudness in mA; 4: the voltage of a full-scale sample in mV"}
+          - {bytes: "6-7", name: C, type: unsigned 16-bit, meaning: "1: the duration in ms, 0 = until stopped; 2: the wait in ms before the next event, 0 = the next one starts with it"}
+    notes: >
+      The queue holds 31 events and is played by the control loop with loop-exact timing: an event sets one
+      channel's pitch and loudness, then waits. A chord is three events with wait 0 and a fourth with the chord's
+      length. When the queue runs out, every channel falls silent. An event sent to a full queue is dropped.
+      Samples: send them first with Send_Sound_Samples, then operation 4; the driver plays them at the given rate
+      and stops when the buffer runs dry. A frame of another length, or a remote frame, is ignored. It does not
+      reset the watchdog.
+  IN_SOUND_SAMPLES:
+    name: Send_Sound_Samples
+    group: sound
+    python: Send_Samples()
+    description: >
+      Appends 1 to 8 samples (signed 8-bit, one per byte, −127 to 127 = full scale) to the driver's 1024-place
+      sample buffer, which holds 1023 samples. Samples that do not fit are dropped; parameter 80 says how many are
+      buffered. Send_Sound with operation 4 plays them. Added in firmware 108. The driver does not answer.
+    forms:
+      - length: 8
+        title: eight samples; a shorter frame carries fewer
+        fields:
+          - {bytes: "0", name: Sample 1, type: signed 8-bit, meaning: the next sample}
+          - {bytes: "1", name: Sample 2, type: signed 8-bit, meaning: ""}
+          - {bytes: "2", name: Sample 3, type: signed 8-bit, meaning: ""}
+          - {bytes: "3", name: Sample 4, type: signed 8-bit, meaning: ""}
+          - {bytes: "4", name: Sample 5, type: signed 8-bit, meaning: ""}
+          - {bytes: "5", name: Sample 6, type: signed 8-bit, meaning: ""}
+          - {bytes: "6", name: Sample 7, type: signed 8-bit, meaning: ""}
+          - {bytes: "7", name: Sample 8, type: signed 8-bit, meaning: ""}
 
   # ------------------------------------------------------------ gripper
   IN_GRIPPER_DATA_PACK:

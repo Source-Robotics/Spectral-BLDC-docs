@@ -19,8 +19,9 @@ trims. Over CAN, Send_Save_config does the same. Saving also copies the node ID 
 after changing the node ID.
 
 !!! warning "Set the current limit before you save a calibration"
-    Calibration leaves the current limit at 1600 mA. Set the limit for your motor (`#Ilim`) before you save, or the
-    1600 mA are saved with the calibration.
+    Firmware 107 and older left the current limit at 1600 mA after a calibration, and a save stored it. From
+    firmware 108 calibration puts the limit that was in force back; check that it suits your motor (`#Ilim`)
+    before you save.
 
 ## What is not saved
 
