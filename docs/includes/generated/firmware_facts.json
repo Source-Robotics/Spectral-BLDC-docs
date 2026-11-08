@@ -347,7 +347,7 @@
     "responds": []
    },
    "PARAM_KT": {
-    "empty": true,
+    "empty": false,
     "lengths": [],
     "responds": []
    },
@@ -1172,7 +1172,7 @@
    }
   }
  },
- "commit": "260c774c889f",
+ "commit": "acaed1a0ca85",
  "defaults": [
   {
    "after_default": "1111 in the EEPROM, not read back",
@@ -2568,9 +2568,9 @@
   }
  ],
  "prerelease": {
-  "commit": "260c774c889f",
+  "commit": "acaed1a0ca85",
   "firmware_version_in_source": "109",
-  "ref": "260c774"
+  "ref": "acaed1a"
  },
  "tag": "V109",
  "uart": {

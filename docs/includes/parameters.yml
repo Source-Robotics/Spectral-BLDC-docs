@@ -11,7 +11,7 @@
 #   description  what it is
 #
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
-# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 260c774, the code of release 109. The Spectral Micro has
+# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit acaed1a, the code of release 109. The Spectral Micro has
 # the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
 # and ranges differ (a 5000 Hz control loop).
 
@@ -23,11 +23,12 @@ groups:
       other settings; Send_Save_config keeps all seven. A value outside a range is clamped, replaced or ignored,
       as the Value column says.
   readback:
-    title: Gains, limits and settings, read back
+    title: Gains, limits and settings
     intro: >
-      The values in force, readable over CAN for the first time. They are set with their own commands; a write
-      to one of these numbers is refused. A float travels as its IEEE-754 bit pattern, big-endian, the way the gain
-      commands send it.
+      The values in force, readable and writable by parameter (their own commands, given in each row, still work).
+      A float travels as its IEEE-754 bit pattern, big-endian, the way the gain commands send it; over UART
+      `#Par 9,0.02` sets Kpv. A write goes to RAM like the commands' own; Send_Save_config keeps it. Parameter 23,
+      the product stamp, stays read only.
   motor:
     title: The motor
   current:
@@ -108,80 +109,80 @@ params:
   # ------------------------------------------------------------ read back
   PARAM_KPP:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: Kp of the position loop (Send_Position_Gains, `#Kpp`).
   PARAM_KPV:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: Kp of the velocity loop (Send_Velocity_Gains, `#Kpv`).
   PARAM_KIV:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: Ki of the velocity loop (Send_Velocity_Gains, `#Kiv`).
   PARAM_KPIQ:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: Kp of the Iq current loop (Send_Current_Gains, `#Kpiq`, calibration, parameter 49).
   PARAM_KIIQ:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: Ki of the Iq current loop (Send_Current_Gains, `#Kiiq`, calibration, parameter 49).
   PARAM_KP:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: KP, the stiffness of the impedance (PD) loop (Send_PD_Gains).
   PARAM_KD:
     group: readback
-    access: r
-    value: float
+    access: rw
+    value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
     description: KD, the damping of the impedance (PD) loop (Send_PD_Gains).
   PARAM_VELOCITY_LIMIT:
     group: readback
-    access: r
-    value: float, ticks/s
+    access: rw
+    value: "float, ticks/s; 0 or more, below 10^9 (otherwise refused)"
     saved: "yes"
     description: The velocity limit (Send_Limits, `#Vlimit`).
   PARAM_CURRENT_LIMIT:
     group: readback
-    access: r
-    value: float, mA
+    access: rw
+    value: "float, mA; 0-2800 (negative or above 2800: refused)"
     saved: "yes"
     description: The current limit (Send_Limits, `#Ilim`).
   PARAM_VOLTAGE_LIMIT:
     group: readback
-    access: r
-    value: mV, 0 = the supply voltage
+    access: rw
+    value: "mV, 0-60000 (outside: refused); 0 = the supply voltage"
     saved: "yes"
     description: The voltage limit of the current loops (Send_Voltage_Limit, `#Vlim`).
   PARAM_BRAKE_COAST:
     group: readback
-    access: r
-    value: 1 brake, 0 coast
+    access: rw
+    value: "1 brake, 0 coast (any value but 0: brake)"
     saved: "no: the driver coasts at every power-up"
     description: The idle behaviour (Send_Settings bit 0, `#Brake`).
   PARAM_HEARTBEAT_MS:
     group: readback
-    access: r
-    value: ms, 0 = off
+    access: rw
+    value: "ms, 0-60000 (outside: refused); 0 = off"
     saved: "yes"
     description: The heartbeat interval (Send_Heartbeat_Setup).
   PARAM_KT:
     group: readback
-    access: r
-    value: float, Nm/A
+    access: rw
+    value: "float, Nm/A; 0 or more, below 10^9 (otherwise refused)"
     saved: "yes"
     description: The torque constant (Send_Kt, `#Kt`, calibration).
   PARAM_BOARD_PRODUCT:

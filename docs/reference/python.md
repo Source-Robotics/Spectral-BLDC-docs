@@ -18,6 +18,13 @@ of Send_Sound and Send_Samples; and the module `Spectral_BLDC.music` (note names
 files as queue events and samples, see [Sound](../06-operation/sound.md)). With 1.20, send those frames with
 `python-can` in the layouts of the [CAN reference](can/index.md).
 
+The same release adds `Spectral_BLDC.helpers`, blocking functions that send a request and wait for the answer:
+`get_parameter` and `set_parameter` (which reads the value back), `read_identity`, `read_telemetry`, `features`,
+`read_buffer`, `capture`, `wait_for_state` (for the encoder table, the anti-cogging and other runs), and
+`play_events` and `stream_samples` for sound. They are for setting up and diagnostics, not for the inside of a fast
+control loop. The library's `examples` folder shows them at work: `parameters_and_status.py`, `capture.py`,
+`calibration_features.py`, `watchdog.py` and `sound.py`.
+
 ## Receiving
 
 `CanCommunication.receive_can_messages(timeout)` returns `(message, ids)`: the raw `python-can` message and a tuple

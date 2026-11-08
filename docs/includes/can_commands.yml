@@ -428,7 +428,7 @@ commands:
       - length: 5
         fields:
           - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: "the parameter number, 1-79"}
-          - {bytes: "1-4", name: Value, type: signed 32-bit, meaning: "the new value, in the parameter's unit"}
+          - {bytes: "1-4", name: Value, type: signed 32-bit, meaning: "the new value, in the parameter's unit; for the gains, limits and Kt (8-16, 20) a float's bit pattern"}
     notes: >
       A data frame of another length, or a remote frame, is ignored and flagged as a wrong data length. It does
       not reset the watchdog.
