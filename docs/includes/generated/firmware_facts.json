@@ -1172,7 +1172,7 @@
    }
   }
  },
- "commit": "acaed1a0ca85",
+ "commit": "10860a29e5c0",
  "defaults": [
   {
    "after_default": "1111 in the EEPROM, not read back",
@@ -2568,9 +2568,9 @@
   }
  ],
  "prerelease": {
-  "commit": "acaed1a0ca85",
+  "commit": "10860a29e5c0",
   "firmware_version_in_source": "109",
-  "ref": "acaed1a"
+  "ref": "10860a2"
  },
  "tag": "V109",
  "uart": {

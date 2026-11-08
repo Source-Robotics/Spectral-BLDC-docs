@@ -11,7 +11,7 @@
 #   description  what it is
 #
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
-# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit acaed1a, the code of release 109. The Spectral Micro has
+# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 10860a2, the code of release 109. The Spectral Micro has
 # the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
 # and ranges differ (a 5000 Hz control loop).
 
@@ -130,13 +130,15 @@ params:
     access: rw
     value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
-    description: Kp of the Iq current loop (Send_Current_Gains, `#Kpiq`, calibration, parameter 49).
+    description: Kp of the current loops; writing it sets the Iq and the Id loop, as `#Kpiq` does
+      (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.
   PARAM_KIIQ:
     group: readback
     access: rw
     value: "float; 0 or more, below 10^9 (negative or not a number: refused)"
     saved: "yes"
-    description: Ki of the Iq current loop (Send_Current_Gains, `#Kiiq`, calibration, parameter 49).
+    description: Ki of the current loops; writing it sets the Iq and the Id loop, as `#Kiiq` does
+      (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.
   PARAM_KP:
     group: readback
     access: rw

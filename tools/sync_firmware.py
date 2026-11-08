@@ -7,7 +7,7 @@ same idea as par6's tools/sync_runtime.py: facts come from the TAGGED code, neve
     python tools/sync_firmware.py --firmware PATH --tag V108
     python tools/sync_firmware.py --print uart|can|defaults [--tag V103]   print one table instead of writing
     python tools/sync_firmware.py --no-network         keep the release notes that are there (no GitHub API call)
-    python tools/sync_firmware.py --prerelease acaed1a --no-network
+    python tools/sync_firmware.py --prerelease 10860a2 --no-network
                                                        before the release tag exists: read that commit instead
 
 It reads the firmware repository with `git show <tag>:<file>` and writes, into docs/includes/generated/:

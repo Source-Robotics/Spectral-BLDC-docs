@@ -125,7 +125,7 @@ commands:
     python: Send_Current_Gains()
     description: >
       Sets Kp and Ki of the PI current loop of Iq. The Id loop keeps its gains; over UART, `#Kpiq` and `#Kiiq` set
-      both loops.
+      both loops, and so do parameters 11 and 12.
     forms:
       - length: 8
         fields:

@@ -15,7 +15,7 @@
 #
 # Seeded 2026-11-04 from the final docs review (2026-11-03), each checked against the firmware at tag V107
 # (Bootloader_main branch). STEPFOC has most of them too: STEPFOC-docs' known_issues.yml.
-# 2026-11-08: KI-1 to KI-15 spot-checked against firmware 109 (commit acaed1a of the hardening branch): KI-2 is
+# 2026-11-08: KI-1 to KI-15 spot-checked against firmware 109 (commit 10860a2 of the hardening branch): KI-2 is
 # fixed in 109, the others are still there. KI-19 is new in 109. KI-17 and KI-18 were given to two faults found and
 # fixed before 109 was released (the serial parser refused #Calonly and #Par; #Cogcal did not name states 7 to 11);
 # no release had them, so they are not listed, and the two ids are never used again.
