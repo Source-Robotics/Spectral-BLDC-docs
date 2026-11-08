@@ -39,9 +39,11 @@ single precision. Flags inside a byte are numbered from the most significant bit
 ## A control loop
 
 Send Send_data_pack_1 at a fixed rate, 100 Hz to 1 kHz, with the setpoint for this cycle; read Respond_data_pack_1
-for the position, speed and current of the last cycle. Every motion command (and every status request) resets
-the watchdog, so with Send_Watchdog set to a few cycle times the motor stops when the host stops. Other frames,
-such as gains, limits or Send_Idle, do not reset it, and neither does anything sent over UART. The heartbeat is the other way round:
+for the position, speed and current of the last cycle. Every motion command (and every request the driver
+answers) resets the watchdog, so with Send_Watchdog set to a few cycle times the motor stops when the host stops;
+from firmware 108 it can also hold its position, brake, coast or let a joint down slowly
+([The watchdog](watchdog.md)). Other frames, such as gains, limits, Send_Parameter or Send_Idle, do not reset it,
+and neither does anything sent over UART. The heartbeat is the other way round:
 Send_Heartbeat_Setup makes the driver send a frame on its own every N ms when it has nothing else to send, so the
 host can see it is alive.
 
@@ -59,6 +61,19 @@ sequenceDiagram
     D-->>H: heartbeat, whenever nothing else was sent for N ms
     Note over D: no motion command within the watchdog time: watchdog error, the motor stops
 ```
+
+## Parameters, identity and telemetry
+
+From firmware 108 a host can also:
+
+- set and read any setting by its number with Send_Parameter and Send_Get_Parameter (IDs 36 and 37, the answer on
+  38), including the gains and limits in force, which it could not read back before
+  ([Parameters and buffers](../reference/can/parameters.md));
+- ask a drive what it is with Send_Respond_Identity (ID 39): product, tool, firmware release, pole pairs, whether
+  it is calibrated;
+- poll temperature, supply voltage, errors and current in one frame with Send_Respond_Telemetry (ID 40);
+- record signals inside the control loop and read them with Send_Buffer_Read (ID 41)
+  ([Status and diagnostics](diagnostics.md)).
 
 ## From a PC
 

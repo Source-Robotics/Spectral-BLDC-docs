@@ -65,6 +65,9 @@ connect anything; the few rules here are the ones that destroy a driver, a motor
 - `Send_ESTOP` over CAN, or `#Idle` over UART, stops the motor at once; the E-stop error stays until it is cleared.
 - Cutting the supply stops the motor as well; the motor then holds nothing, so a vertical axis drops.
 - The watchdog ([Send_Watchdog](reference/can/system.md)) stops the motor by itself when the host stops talking.
+  From firmware 108 its action can instead hold the position or let a joint down at a limited speed, for a set
+  time at most, then brake or coast ([The watchdog](06-operation/watchdog.md)): while that runs the motor is still
+  driven.
 
 Nothing on the driver is a certified safety function. A machine that can hurt someone needs an emergency stop
 that cuts the motor supply, independent of the driver.

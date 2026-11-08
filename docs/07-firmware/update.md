@@ -8,7 +8,8 @@ No programming adapter, and nothing to open.
     - Park the mechanism: the motor loses torque during the update and until the new firmware is calibrated and
       commanded.
     - An update may clear the calibration (the release notes say so when it does); plan to calibrate and `#Save`
-      afterwards, and note the gains `#Info` prints.
+      afterwards, and note the gains `#Info` prints. An update to 108 keeps it:
+      [Upgrading from older firmware](upgrading.md) says what changes and what to run.
     - On a bus with several drivers, update each node; a bus with mixed releases behaves unpredictably.
 
 ## With Motor GUI
@@ -28,10 +29,10 @@ which flashes an image over CAN (slcan or candleLight/gs_usb adapters) or over U
     pip install -r requirements.txt
 
     # over CAN with a CANvas (slcan) adapter on COM6, driver with board ID 0
-    python bl_flash.py --transport can --can-interface slcan --channel COM6 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    python bl_flash.py --transport can --can-interface slcan --channel COM6 flash spectral-bldc-firmware-V108.bin --board 0 --erase-first
 
     # over UART on COM7
-    python bl_flash.py --transport uart --port COM7 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    python bl_flash.py --transport uart --port COM7 --baudrate 256000 flash spectral-bldc-firmware-V108.bin --board 0 --erase-first
     ```
 
 === "Linux"
@@ -40,10 +41,10 @@ which flashes an image over CAN (slcan or candleLight/gs_usb adapters) or over U
     pip install -r requirements.txt
 
     # over CAN with a CANvas (slcan) adapter, driver with board ID 0
-    python3 bl_flash.py --transport can --can-interface slcan --channel /dev/ttyACM0 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    python3 bl_flash.py --transport can --can-interface slcan --channel /dev/ttyACM0 flash spectral-bldc-firmware-V108.bin --board 0 --erase-first
 
     # over UART with the serial adapter
-    python3 bl_flash.py --transport uart --port /dev/ttyUSB0 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    python3 bl_flash.py --transport uart --port /dev/ttyUSB0 --baudrate 256000 flash spectral-bldc-firmware-V108.bin --board 0 --erase-first
     ```
     Your user needs the `dialout` group for both ports ([Motor GUI: the port](../05-setup/motor-gui.md#opening-the-port)).
 
@@ -53,10 +54,10 @@ which flashes an image over CAN (slcan or candleLight/gs_usb adapters) or over U
     pip install -r requirements.txt
 
     # over CAN with a CANvas (slcan) adapter, driver with board ID 0; ls /dev/cu.usbmodem* gives the name
-    python3 bl_flash.py --transport can --can-interface slcan --channel /dev/cu.usbmodem1101 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    python3 bl_flash.py --transport can --can-interface slcan --channel /dev/cu.usbmodem1101 flash spectral-bldc-firmware-V108.bin --board 0 --erase-first
 
     # over UART with the serial adapter; ls /dev/cu.usbserial* gives the name
-    python3 bl_flash.py --transport uart --port /dev/cu.usbserial-0001 --baudrate 256000 flash spectral-bldc-firmware-V107.bin --board 0 --erase-first
+    python3 bl_flash.py --transport uart --port /dev/cu.usbserial-0001 --baudrate 256000 flash spectral-bldc-firmware-V108.bin --board 0 --erase-first
     ```
 
 The tool sends the reset command to the running firmware (`#Reset` over UART, Send_Reset over CAN), catches the

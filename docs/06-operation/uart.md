@@ -14,7 +14,8 @@ A command is `#`, a name, optionally a space and one number, and a line ending:
 ```
 
 - The name is case-sensitive and matches the firmware's spelling exactly (`#Kpiq`, not `#kpiq`); at most 19
-  characters, the number at most 19 characters, both together at most 20.
+  characters, the argument at most 19 characters and without spaces (`#WdFb 2000,0,1000,2`). Firmware 107 and
+  older allowed 20 characters for both together.
 - The line ends with LF (`\n`); a CR before it is accepted. Terminals send CR+LF when you press Enter, with the
   setting described in [The serial terminal](../05-setup/terminal.md).
 - A **Set/Get** command with a number sets the value and prints it; without a number it only prints it. `#P 16384`

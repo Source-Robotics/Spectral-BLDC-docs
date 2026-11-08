@@ -4,7 +4,8 @@ Calibration teaches the driver its motor: it checks the magnet and the supply, m
 resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find
 the pole pairs and the direction, checks the order of the phases and aligns the encoder to the rotor field, and
 measures the motor constants Kt, KV and the flux linkage. Nothing about the motor has to be entered first. It
-runs once per motor; the result is kept by saving.
+runs once per motor; the result is kept by saving. Firmware 108 can follow it with two more runs, the
+[encoder table and the anti-cogging](anti-cogging.md); by default it does not.
 
 !!! danger "The motor turns"
     Calibration spins the motor in both directions, fast at times. Fix the motor to the bench and take everything
@@ -20,7 +21,7 @@ of 2 to 24 Ω; change them only for a motor outside that range.
 
 | Setting | Default | Command | What it does |
 |---|---|---|---|
-| Current loop bandwidth | 500 Hz | `#Cbw` | the bandwidth the current loop gains are computed for; too high makes the motor vibrate and whine |
+| Current loop bandwidth | 160 Hz | `#Cbw` | the bandwidth the current loop gains are computed for (Kp = ω·L, Ki = ω·R, ω = 2π × the bandwidth); too high makes the motor vibrate and whine. 500 Hz up to firmware 107 |
 | Resistance voltage | 1000 mV | `#Resv` | the voltage the resistance measurement starts at; it rises until the power reaches the limit below |
 | Max power dissipation | 12 W | `#Calpwr` | the power the resistance and inductance measurements may put into the motor |
 | Open loop voltage | 5000 mV | `#Openv` | the voltage of the open-loop spin that finds the pole pairs |
@@ -28,7 +29,8 @@ of 2 to 24 Ω; change them only for a motor outside that range.
 | Phase search voltage | 5000 mV | `#Vp` | the voltage of the spin that checks the phase order |
 
 A seventh setting is not printed: `#Iqoffset`, 300 mA by default, the current of the angle-offset search and of
-the commutation check. None of the seven is saved; after a power cycle they are back at these defaults.
+the commutation check. None of the seven is saved; after a power cycle they are back at these defaults. The
+current gains the bandwidth gives are saved with the calibration.
 
 !!! danger "Low-resistance motors"
     These voltages are made for motors of 2 Ω and more. On a motor with a much lower resistance, such as a drone
@@ -54,8 +56,9 @@ values.
     #Default
     ```
 
-This also sets the CAN node ID back to 0 and the hardware version and batch date to factory values; note what
-`#Info` printed if you need them. [Saving the configuration](saving.md) says what else it does.
+This also sets the hardware version and batch date to factory values, and clears an encoder table and an
+anti-cogging set from another motor; note what `#Info` printed if you need them. From firmware 108 the CAN node
+ID is kept. [Saving the configuration](saving.md) says what else it does.
 
 ## 2. Run it
 
@@ -76,7 +79,7 @@ goes. The numbers below are those of one tested motor; yours will differ:
 ----------------
 Calibration mode
 -----Settings-----
-Current loop bandwidth: 500.00Hz
+Current loop bandwidth: 160.00Hz
 Resistance voltage: 1000mV
 Max Power dissipation: 12.00W
 Open loop voltage: 5000mV
@@ -109,6 +112,10 @@ Going to idle!
 The `Calibrating angle offset...` lines come every half second while the encoder is aligned, which can take
 about 40 seconds; the routine has not stopped.
 
+`#Calonly` runs the same calibration without anything of parameter 56 after it; with parameter 56 at 0, the
+default, `#Cal` does the same. (In the build this page describes, the serial parser does not accept `#Calonly`:
+known issue KI-17.)
+
 What the steps are:
 
 | Step | What happens | Fails with |
@@ -125,6 +132,16 @@ What the steps are:
     The resistance, the inductance and the motor constants differ a little from one run to the next, and KV, and
     with it Kt and the flux linkage, can be off by a factor of two or three on cheap motors with uneven windings.
     For the loops this does not matter; for a torque estimate in newton-metres, measure Kt yourself.
+
+## What can follow the calibration
+
+Parameter 56 says what the driver starts by itself half a second after `Calibration success!`: 0 nothing (the
+default on the Spectral Micro), 1 the anti-cogging identification, 2 the encoder table and then the anti-cogging.
+With 1 or 2 the driver saves everything when they succeed, and the log says `Next, by itself: …` instead of
+`Save config with #Save`. On STEPFOC 2 is the default; on the Spectral Micro the runs are not yet tested on its
+bench, so they stay off until you set 56 (Send_Parameter(56, 2), then Send_Save_config).
+[Encoder table and anti-cogging](anti-cogging.md) explains both, and why the encoder table needs a current limit
+set for the motor first (known issue KI-19).
 
 ## 3. Set the current limit and save
 

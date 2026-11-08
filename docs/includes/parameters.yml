@@ -1,0 +1,546 @@
+# The hand-written half of the parameter reference (Send_Parameter / Send_Get_Parameter, CAN commands 36-38): what
+# each parameter is, its unit, range and default, and whether Send_Save_config keeps it. The other half, the
+# parameter numbers, comes from the firmware's PARAM_* defines at its release tag (generated/firmware_facts.json,
+# can.params), and the build fails when the two do not name the same parameters. Keys are the firmware's names.
+#
+#   group        a key under groups: (one table per group on the Parameters page, in this order)
+#   access       rw: set and read; r: read only (a write is refused); run: a write starts or stops a run, a read
+#                gives its state
+#   value        unit, range (what the firmware does with a value outside it), default
+#   saved        whether Send_Save_config (#Save) keeps it, and where
+#   description  what it is
+#
+# Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
+# scope.cpp, encal.cpp, cogcal.cpp, EEPROM.cpp) at commit 7b7b195, the code of release 108. The Spectral Micro has
+# the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
+# and ranges differ (a 5000 Hz control loop).
+
+groups:
+  watchdog:
+    title: Watchdog and tool
+    intro: >
+      Parameters 1 to 5 live in settings block 2 of the EEPROM, 6 and 7 in the first settings block beside the
+      other settings; Send_Save_config keeps all seven. A value outside a range is clamped, replaced or ignored,
+      as the Value column says.
+  readback:
+    title: Gains, limits and settings, read back
+    intro: >
+      The values in force, readable over CAN for the first time. They are set with their own commands; a write
+      to one of these numbers is refused. A float travels as its IEEE-754 bit pattern, big-endian, the way the gain
+      commands send it.
+  motor:
+    title: The motor
+  current:
+    title: Current sensing and the current loop
+    intro: >
+      The current-sense zero is the ADC reading with no current flowing, in counts from 2048 (1 count is about
+      1.6 mA). The driver measures it at every start-up with the bridge off; the trim is added to it.
+  speed:
+    title: Speed estimate and the velocity loop
+  cogging:
+    title: Anti-cogging
+  encoder:
+    title: Encoder table
+  capture:
+    title: Capture and histogram
+    intro: >
+      The signal numbers: 0 none, 1 measured Iq (mA), 2 measured Id (mA), 3 Iq setpoint with the anti-cogging (mA),
+      4 speed (ticks/s, saturates at ±32767), 5 speed ÷ 16, 6 position (ticks, the low 16 bits), 7 position error
+      (ticks), 8 electrical angle (0-16383 per electrical turn, from the encoder alone), 9 encoder (0-16383 per
+      motor turn), 10 Vbus (10 mV), 11 and 12 the two current-sense readings (counts after the zero), 13 the
+      control interrupt's time (µs), 14 the anti-cogging feedforward (mA), 15 the Iq setpoint without the
+      anti-cogging (mA), 16 the Uq setpoint (mV), 17 and 18 the d and q voltage the output transform received (mV).
+      None of these settings is saved.
+  status:
+    title: Status
+
+params:
+  # ------------------------------------------------------------ watchdog and tool
+  PARAM_TOOL_ID:
+    group: watchdog
+    access: rw
+    value: "0 none, 1 SSG-48, 11-33 MSG, 200-254 your own tools; a value outside 0-255 is ignored. Default 0"
+    saved: yes, settings block 2
+    description: >
+      What the drive is built into. For an MSG the tens digit is the rail (1 = 100, 2 = 150, 3 = 200 mm) and the
+      units digit the stepper (1 = 21.5, 2 = 40, 3 = 60 mm). Also `#Tool`; reported in the identity frame.
+  PARAM_WD_FALLBACK_TIME:
+    group: watchdog
+    access: rw
+    value: "ms, 0-60000 (clamped). Default 2000"
+    saved: yes, settings block 2
+    description: How long watchdog hold or descend runs before the after-action takes over.
+  PARAM_WD_FALLBACK_CURRENT:
+    group: watchdog
+    access: rw
+    value: "mA, signed, -32768 to 32767 (outside: 0). Default 0"
+    saved: yes, settings block 2
+    description: The current watchdog descend applies. 0 lets gravity lower a joint; a gripper gets its grip current.
+  PARAM_WD_FALLBACK_SPEED:
+    group: watchdog
+    access: rw
+    value: "ticks/s, 0-65535 (outside: 1000). Default 1000"
+    saved: yes, settings block 2
+    description: The speed watchdog descend never exceeds, in either direction.
+  PARAM_WD_AFTER_ACTION:
+    group: watchdog
+    access: rw
+    value: "0 legacy, 2 brake, 3 coast (any other value: 0). Default 0"
+    saved: yes, settings block 2
+    description: What follows hold or descend when the fallback time has run out.
+  PARAM_WD_TIME:
+    group: watchdog
+    access: rw
+    value: "ms, 0 = off (a negative value: 0). Default 0"
+    saved: yes, settings block 1
+    description: The watchdog time, the same value Send_Watchdog sets.
+  PARAM_WD_ACTION:
+    group: watchdog
+    access: rw
+    value: "0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (outside 0-255: 0; 5-255 act as legacy). Default 0"
+    saved: yes, settings block 1
+    description: What a trip of the watchdog alone does, the same value as byte 4 of Send_Watchdog.
+
+  # ------------------------------------------------------------ read back
+  PARAM_KPP:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: Kp of the position loop (Send_Position_Gains, `#Kpp`).
+  PARAM_KPV:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: Kp of the velocity loop (Send_Velocity_Gains, `#Kpv`).
+  PARAM_KIV:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: Ki of the velocity loop (Send_Velocity_Gains, `#Kiv`).
+  PARAM_KPIQ:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: Kp of the Iq current loop (Send_Current_Gains, `#Kpiq`, calibration, parameter 49).
+  PARAM_KIIQ:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: Ki of the Iq current loop (Send_Current_Gains, `#Kiiq`, calibration, parameter 49).
+  PARAM_KP:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: KP, the stiffness of the impedance (PD) loop (Send_PD_Gains).
+  PARAM_KD:
+    group: readback
+    access: r
+    value: float
+    saved: "yes"
+    description: KD, the damping of the impedance (PD) loop (Send_PD_Gains).
+  PARAM_VELOCITY_LIMIT:
+    group: readback
+    access: r
+    value: float, ticks/s
+    saved: "yes"
+    description: The velocity limit (Send_Limits, `#Vlimit`).
+  PARAM_CURRENT_LIMIT:
+    group: readback
+    access: r
+    value: float, mA
+    saved: "yes"
+    description: The current limit (Send_Limits, `#Ilim`).
+  PARAM_VOLTAGE_LIMIT:
+    group: readback
+    access: r
+    value: mV, 0 = the supply voltage
+    saved: "yes"
+    description: The voltage limit of the current loops (Send_Voltage_Limit, `#Vlim`).
+  PARAM_BRAKE_COAST:
+    group: readback
+    access: r
+    value: 1 brake, 0 coast
+    saved: "no: the driver coasts at every power-up"
+    description: The idle behaviour (Send_Settings bit 0, `#Brake`).
+  PARAM_HEARTBEAT_MS:
+    group: readback
+    access: r
+    value: ms, 0 = off
+    saved: "yes"
+    description: The heartbeat interval (Send_Heartbeat_Setup).
+  PARAM_KT:
+    group: readback
+    access: r
+    value: float, Nm/A
+    saved: "yes"
+    description: The torque constant (Send_Kt, `#Kt`, calibration).
+  PARAM_BOARD_PRODUCT:
+    group: readback
+    access: r
+    value: 2 Spectral Micro, 1 STEPFOC, 0 none
+    saved: yes, settings block 2 (stamped by the firmware)
+    description: >
+      The product lock: the product that calibrated this board. Stamped at the first start-up of a calibrated
+      board and at every save. A firmware that finds the other product's stamp drives nothing (see Errors).
+
+  # ------------------------------------------------------------ the motor
+  PARAM_R_MOHM:
+    group: motor
+    access: rw
+    value: "mΩ, 1-100000 (outside: refused)"
+    saved: yes, with the calibration
+    description: >
+      The phase resistance, the same value as `#R` (in Ω there). Calibration measures it; set by hand, the current
+      gains follow when parameter 49 is written.
+  PARAM_L_UH:
+    group: motor
+    access: rw
+    value: "µH, 1-1000000 (outside: refused)"
+    saved: yes, with the calibration
+    description: >
+      The phase inductance, the same value as `#L` (in H there). Calibration measures it; set by hand, the current
+      gains follow when parameter 49 is written.
+  PARAM_POLE_PAIRS:
+    group: motor
+    access: rw
+    value: "1-200, only while the driver is idle (otherwise refused)"
+    saved: yes, with the calibration
+    description: The motor's pole pairs, the same value as `#PP`. Calibration finds them.
+
+  # ------------------------------------------------------------ current sensing and the current loop
+  PARAM_SENSE1_OFFSET:
+    group: current
+    access: rw
+    value: "counts from 2048, -400 to 400 (outside: refused)"
+    saved: "no: measured again at every start-up"
+    description: >
+      The current-sense zero of channel 1 in use. Measured at start-up (the trim, 59, added); writable for tests,
+      until the next start-up.
+  PARAM_SENSE2_OFFSET:
+    group: current
+    access: rw
+    value: "counts from 2048, -400 to 400 (outside: refused)"
+    saved: "no: measured again at every start-up"
+    description: The current-sense zero of channel 2 in use, as 21.
+  PARAM_SENSE1_OFFSET_OFF:
+    group: current
+    access: r
+    value: counts from 2048
+    saved: "no: measured at every start-up"
+    description: The zero of channel 1 measured with the bridge off, the trim added.
+  PARAM_SENSE2_OFFSET_OFF:
+    group: current
+    access: r
+    value: counts from 2048
+    saved: "no: measured at every start-up"
+    description: The zero of channel 2 measured with the bridge off, the trim added.
+  PARAM_SENSE_ZERO_SWITCHING:
+    group: current
+    access: r
+    value: "0 not run, 1 measuring, 2 in use, 3 rejected (implausible), 4 interrupted (a command or an error came first), 5 measured, not in use"
+    saved: "no"
+    description: >
+      The second zero measurement, made in idle after start-up with the bridge switching at 50 % duty. On the
+      bench it made the current ripple worse, so it is measured and kept but not used unless 46 asks for it.
+  PARAM_SENSE_ZERO_USE_SWITCHING:
+    group: current
+    access: rw
+    value: "1 the zero measured with the bridge switching, 0 the bridge-off zero. Default 0"
+    saved: "no"
+    description: Which zero is in use. 1 takes effect only while 42 reads 5 (measured, not in use).
+  PARAM_SENSE1_OFFSET_SW:
+    group: current
+    access: r
+    value: counts from 2048
+    saved: "no"
+    description: The zero of channel 1 measured with the bridge switching.
+  PARAM_SENSE2_OFFSET_SW:
+    group: current
+    access: r
+    value: counts from 2048
+    saved: "no"
+    description: The zero of channel 2 measured with the bridge switching.
+  PARAM_ZERO_TRIM1:
+    group: current
+    access: rw
+    value: "counts, -60 to 60 (outside: refused). Default 0"
+    saved: yes, encoder block
+    description: >
+      The trim added to the zero of channel 1 measured at every start-up; writing it moves the zero in use at
+      once. The Spectral Micro firmware 108 skips the trim step of the anti-cogging identification, so only a
+      write sets it.
+  PARAM_ZERO_TRIM2:
+    group: current
+    access: rw
+    value: "counts, -60 to 60 (outside: refused). Default 0"
+    saved: yes, encoder block
+    description: The trim of channel 2, as 59.
+  PARAM_TRIM_H1_BEFORE:
+    group: current
+    access: r
+    value: 0.1 mA
+    saved: "no"
+    description: The 1st harmonic of the anti-cogging set found by an identification with the trim (43 = 4 or 5).
+  PARAM_TRIM_H1_AFTER:
+    group: current
+    access: r
+    value: 0.1 mA
+    saved: "no"
+    description: After a trim, the 1st harmonic again; the Spectral Micro skips the trim, so it equals 62.
+  PARAM_CURRENT_BANDWIDTH:
+    group: current
+    access: rw
+    value: "Hz, 10-500 (outside, or with R or L not set: refused). 160 at every start-up"
+    saved: "no; the gains it sets are kept by Save"
+    description: >
+      Writing it sets Kp_iq and Ki_iq at once from R, L and this bandwidth, as `#Cbw` does. Reading gives the
+      bandwidth the gains in force amount to with the R and L in force (0 without them).
+  PARAM_ID_SETPOINT:
+    group: current
+    access: rw
+    value: "mA, -3000 to 3000 (outside: refused). Default 0"
+    saved: "no"
+    description: The d-axis current setpoint, as `#Id`. It makes no torque, only more current in the coils.
+  PARAM_THETA_OFFSET:
+    group: current
+    access: r
+    value: 0.1° electrical
+    saved: yes, with the calibration
+    description: The electrical offset between the encoder and the motor, found by calibration (`#Offset` in rad).
+  PARAM_COMM_DELAY_US:
+    group: current
+    access: rw
+    value: "µs, 0-500 (outside: refused), 0 = off. Default 0"
+    saved: "no: off at every start-up"
+    description: >
+      Commutation delay compensation: the output voltage is turned forward by the angle the rotor covers in this
+      time. Applied in the closed-loop modes above 100 ticks/s. Off until it is measured on the Spectral Micro.
+  PARAM_FAST_TRIG:
+    group: current
+    access: rw
+    value: "1 from the integer sine table, 0 from the float routine. Default 0"
+    saved: "no"
+    description: Where the transforms of every control loop take sin and cos from. On the STEPFOC bench the table was not faster.
+
+  # ------------------------------------------------------------ speed estimate and the velocity loop
+  PARAM_SPEED_ESTIMATOR:
+    group: speed
+    access: rw
+    value: "0 moving average, 1 PLL, 2 direct PLL (outside: refused). Default 0"
+    saved: "no: 0 at every start-up"
+    description: >
+      The speed the loops, the watchdog descend, telemetry and the capture use. Calibration and the gripper's stop
+      detection always use the moving average.
+  PARAM_SPEED_PLL_BANDWIDTH:
+    group: speed
+    access: rw
+    value: "Hz, 10-250 (outside: refused). Default 160"
+    saved: "no: 160 at every start-up"
+    description: The natural frequency of both PLLs.
+  PARAM_INPUT_FILTER_HZ:
+    group: speed
+    access: rw
+    value: "Hz, 0-200 (outside: refused), 0 = off. Default 0"
+    saved: "no"
+    description: >
+      The position input filter, position and PD modes: a critically damped filter between the host's position
+      setpoints and the loops, which also makes the speed from them. Only for hosts that send positions without
+      the speed; about the host's setpoint rate ÷ 12.
+  PARAM_VEL_INT_DEADBAND:
+    group: speed
+    access: rw
+    value: "ticks, 0-2000 (outside: refused), 0 = off. Default 0"
+    saved: "no"
+    description: >
+      Position mode: the velocity integral sees the position error less this band, so a holding motor stops
+      pushing against a small error. It trades holding current for accuracy.
+
+  # ------------------------------------------------------------ anti-cogging
+  PARAM_COGGING_MODE:
+    group: cogging
+    access: rw
+    value: "0 off, 1 harmonics, 2 table. Default 0"
+    saved: yes, anti-cogging block
+    description: >
+      Which form of the stored anti-cogging is added to the current setpoint in velocity and position modes. 1 or
+      2 is refused while the stored set holds nothing for that form: read it back.
+  PARAM_COGGING_SCALE:
+    group: cogging
+    access: rw
+    value: "percent, 0-200 (clamped). Default 100"
+    saved: yes, anti-cogging block
+    description: How much of the stored anti-cogging is applied.
+  PARAM_COGCAL:
+    group: cogging
+    access: run
+    value: >
+      Write 0 abort, 1 identify, 2 identify and save, 3 encoder table, then anti-cogging, then save all, 4 identify
+      with the current-sense zero trim, 5 the same and save. Read 0 idle, 1 turning forward, 2 turning backward, 3
+      done (harmonics on), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the shaft did not turn), 7
+      a combined run is measuring the encoder table, 8 the combined run's encoder table failed (52 says why), 9 not
+      used, 10 switched off (the encoder table was measured again on its own), 11 done without the trim
+    saved: the result, when started with 2, 3 or 5
+    description: >
+      The anti-cogging identification on the drive: one motor turn forward and one back in velocity mode at the
+      speed of 44. The shaft must be free to turn. A command from a host or an error aborts it. On the Spectral
+      Micro 4 and 5 identify like 1 and 2 (the trim step is skipped); not yet tested on its bench.
+  PARAM_COGCAL_SPEED:
+    group: cogging
+    access: rw
+    value: "ticks/s, 100-20000 (clamped). Default 1500"
+    saved: "no"
+    description: The speed the identification turns at.
+  PARAM_COGCAL_RIPPLE:
+    group: cogging
+    access: r
+    value: 0.1 mA rms
+    saved: "no"
+    description: The cogging current the last identification found, rms.
+
+  # ------------------------------------------------------------ encoder table
+  PARAM_ENCAL:
+    group: encoder
+    access: run
+    value: >
+      Write 0 abort, 1 measure and use, 2 measure, use and save, 3 then the anti-cogging and save all. Read 0 idle,
+      1 turning forward, 2 turning backward, 3 done (in use), 4 aborted, 5 failed (an error, or not calibrated), 6
+      failed (the rotor did not follow the field), 7 rejected (over 4° peak to peak, or an offset move over 60°
+      electrical)
+    saved: the table, when started with 2 or 3
+    description: >
+      Measures the encoder table: the field turns the rotor open loop one shaft turn forward and one back at 2048
+      ticks/s (about 20 s). The shaft must be free. Not yet tested on the Spectral Micro's bench.
+  PARAM_ENCAL_USE:
+    group: encoder
+    access: rw
+    value: "1 on, 0 off; 1 only when a table was measured; refused while one is being measured"
+    saved: yes, encoder block
+    description: Corrects the encoder reading with the table.
+  PARAM_ENCAL_PP:
+    group: encoder
+    access: r
+    value: 0.01° of the shaft
+    saved: with the table
+    description: The table's error, peak to peak (0 without a table).
+  PARAM_ENCAL_ONCE:
+    group: encoder
+    access: r
+    value: 0.01° of the shaft
+    saved: with the table
+    description: The once-per-turn part of the error, its amplitude (mostly a magnet off the axis).
+  PARAM_AFTER_CAL:
+    group: encoder
+    access: rw
+    value: "0 nothing, 1 anti-cogging, 2 encoder table then anti-cogging (outside: refused). Default 0"
+    saved: yes, encoder block
+    description: >
+      What runs by itself after a successful calibration; the whole configuration is saved when it succeeds.
+      `#Calonly` skips it once. 0 on the Spectral Micro until the runs are tested on its bench.
+  PARAM_ENCAL_OFFSET:
+    group: encoder
+    access: r
+    value: 0.1° electrical
+    saved: "no"
+    description: How far the last encoder-table run moved the electrical offset.
+
+  # ------------------------------------------------------------ capture and histogram
+  PARAM_CAPTURE_SOURCE_A:
+    group: capture
+    access: rw
+    value: "signal 0-18 (outside: 0). Default 4, speed"
+    saved: "no"
+    description: The signal of channel A, which is also the trigger channel.
+  PARAM_CAPTURE_SOURCE_B:
+    group: capture
+    access: rw
+    value: "signal 0-18 (outside: 0). Default 1, Iq"
+    saved: "no"
+    description: The signal of channel B.
+  PARAM_CAPTURE_SOURCE_C:
+    group: capture
+    access: rw
+    value: "signal 0-18 (outside: 0). Default 8, electrical angle"
+    saved: "no"
+    description: The signal of channel C.
+  PARAM_CAPTURE_DIVIDER:
+    group: capture
+    access: rw
+    value: "control loops per sample, 1-65535 (clamped). Default 1"
+    saved: "no"
+    description: One sample every N control loops of 200 µs.
+  PARAM_CAPTURE_TRIGGER:
+    group: capture
+    access: rw
+    value: "0 stop, 1 now, 2 on an error, 3 channel A rising through the level, 4 falling through it (outside: 0)"
+    saved: "no"
+    description: >
+      1 to 4 clear the buffer and arm a capture; 0 stops one and keeps what was recorded. The error trigger fires
+      when the error flag rises, a watchdog trip included; an error already present does not fire it.
+  PARAM_CAPTURE_LEVEL:
+    group: capture
+    access: rw
+    value: "channel A's unit, -32768 to 32767 (saturated). Default 0"
+    saved: "no"
+    description: The level of triggers 3 and 4.
+  PARAM_CAPTURE_PRETRIGGER:
+    group: capture
+    access: rw
+    value: "samples, 0-1023 (clamped). Default 0"
+    saved: "no"
+    description: How many samples from before the trigger the capture keeps.
+  PARAM_CAPTURE_STATE:
+    group: capture
+    access: r
+    value: 0 idle, 1 armed, 2 recording, 3 done
+    saved: "no"
+    description: Where the capture stands.
+  PARAM_CAPTURE_COUNT:
+    group: capture
+    access: r
+    value: samples, 0-1024
+    saved: "no"
+    description: The samples readable with buffer kind 0.
+  PARAM_CAPTURE_TRIGGER_INDEX:
+    group: capture
+    access: r
+    value: sample index; -1 before a trigger
+    saved: "no"
+    description: Which sample of the read-out is the trigger sample.
+  PARAM_HIST_X:
+    group: capture
+    access: rw
+    value: "0 off, 1 electrical angle, 2 encoder (256 bins each; outside: 0)"
+    saved: "no"
+    description: 1 or 2 clear the histogram and start it; 0 stops it and keeps the data readable.
+  PARAM_HIST_Y:
+    group: capture
+    access: rw
+    value: "signal 0-18 (outside: 0). Default 3, Iq setpoint"
+    saved: "no"
+    description: The signal summed per bin. Set it before 34.
+  PARAM_HIST_SAMPLES:
+    group: capture
+    access: r
+    value: samples
+    saved: "no"
+    description: Samples summed since the start. The histogram stops by itself when one bin holds 65535.
+  PARAM_CAPTURE_LENGTH:
+    group: capture
+    access: r
+    value: "1024"
+    saved: "—"
+    description: The samples per channel a capture holds.
+
+  # ------------------------------------------------------------ status
+  PARAM_FEATURES:
+    group: status
+    access: r
+    value: bits, see What is in force
+    saved: "—"
+    description: What is in force and what is running, one bit each.

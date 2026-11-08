@@ -8,6 +8,20 @@
     ],
     "responds": []
    },
+   "IN_BUFFER_READ": {
+    "empty": false,
+    "lengths": [
+     5
+    ],
+    "responds": []
+   },
+   "IN_BUFFER_WRITE": {
+    "empty": false,
+    "lengths": [
+     8
+    ],
+    "responds": []
+   },
    "IN_CAN_ID": {
     "empty": false,
     "lengths": [
@@ -117,6 +131,22 @@
     ],
     "responds": []
    },
+   "IN_PARAM_GET": {
+    "empty": false,
+    "lengths": [
+     1
+    ],
+    "responds": [
+     "Param_value_CAN"
+    ]
+   },
+   "IN_PARAM_SET": {
+    "empty": false,
+    "lengths": [
+     5
+    ],
+    "responds": []
+   },
    "IN_RESET": {
     "empty": false,
     "lengths": [],
@@ -162,6 +192,13 @@
      "Encoder_data_CAN"
     ]
    },
+   "OUT_IN_IDENTITY": {
+    "empty": false,
+    "lengths": [],
+    "responds": [
+     "Identity_CAN"
+    ]
+   },
    "OUT_IN_IQ": {
     "empty": false,
     "lengths": [],
@@ -190,6 +227,13 @@
      "State_of_Errors_CAN"
     ]
    },
+   "OUT_IN_TELEMETRY": {
+    "empty": false,
+    "lengths": [],
+    "responds": [
+     "Telemetry_CAN"
+    ]
+   },
    "OUT_IN_TEMPERATURE_CAN": {
     "empty": false,
     "lengths": [],
@@ -203,6 +247,211 @@
     "responds": [
      "Voltage_CAN"
     ]
+   },
+   "PARAM_BOARD_PRODUCT": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_BRAKE_COAST": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_COMM_DELAY_US": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_CURRENT_BANDWIDTH": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_CURRENT_LIMIT": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_FAST_TRIG": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_FEATURES": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_HEARTBEAT_MS": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_ID_SETPOINT": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_INPUT_FILTER_HZ": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KD": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KIIQ": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KIV": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KP": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KPIQ": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KPP": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KPV": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_KT": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_L_UH": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_POLE_PAIRS": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_R_MOHM": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE1_OFFSET": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE1_OFFSET_OFF": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE1_OFFSET_SW": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE2_OFFSET": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE2_OFFSET_OFF": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE2_OFFSET_SW": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE_ZERO_SWITCHING": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE_ZERO_USE_SWITCHING": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SPEED_ESTIMATOR": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SPEED_PLL_BANDWIDTH": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_TOOL_ID": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_VELOCITY_LIMIT": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_VEL_INT_DEADBAND": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_VOLTAGE_LIMIT": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_WD_ACTION": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_WD_AFTER_ACTION": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_WD_FALLBACK_CURRENT": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_WD_FALLBACK_SPEED": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_WD_FALLBACK_TIME": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_WD_TIME": {
+    "empty": true,
+    "lengths": [],
+    "responds": []
    }
   },
   "ids": [
@@ -358,6 +607,46 @@
    },
    {
     "comment": "",
+    "id": 36,
+    "name": "IN_PARAM_SET"
+   },
+   {
+    "comment": "",
+    "id": 37,
+    "name": "IN_PARAM_GET"
+   },
+   {
+    "comment": "",
+    "id": 38,
+    "name": "OUT_PARAM_VALUE"
+   },
+   {
+    "comment": "",
+    "id": 39,
+    "name": "OUT_IN_IDENTITY"
+   },
+   {
+    "comment": "",
+    "id": 40,
+    "name": "OUT_IN_TELEMETRY"
+   },
+   {
+    "comment": "",
+    "id": 41,
+    "name": "IN_BUFFER_READ"
+   },
+   {
+    "comment": "",
+    "id": 42,
+    "name": "OUT_BUFFER_DATA"
+   },
+   {
+    "comment": "",
+    "id": 43,
+    "name": "IN_BUFFER_WRITE"
+   },
+   {
+    "comment": "",
     "id": 2,
     "name": "IN_DATA_PACK_1"
    },
@@ -390,6 +679,363 @@
     "comment": "",
     "id": 62,
     "name": "IN_GRIPPER_CALIB"
+   }
+  ],
+  "params": [
+   {
+    "comment": "0 none, 1 SSG-48, 11-33 MSG (tens = rail, units = stepper), 200-254 custom",
+    "id": 1,
+    "name": "PARAM_TOOL_ID"
+   },
+   {
+    "comment": "ms that watchdog hold/descend may run, 0-60000",
+    "id": 2,
+    "name": "PARAM_WD_FALLBACK_TIME"
+   },
+   {
+    "comment": "mA that descend applies, signed",
+    "id": 3,
+    "name": "PARAM_WD_FALLBACK_CURRENT"
+   },
+   {
+    "comment": "ticks/s, the speed cap of descend in either direction, 0-65535",
+    "id": 4,
+    "name": "PARAM_WD_FALLBACK_SPEED"
+   },
+   {
+    "comment": "after hold/descend: 0 legacy, 2 brake, 3 coast",
+    "id": 5,
+    "name": "PARAM_WD_AFTER_ACTION"
+   },
+   {
+    "comment": "watchdog time ms, 0 = off (also set by IN_WATCHDOG_TIMEOUT)",
+    "id": 6,
+    "name": "PARAM_WD_TIME"
+   },
+   {
+    "comment": "watchdog action 0-4 (also set by IN_WATCHDOG_TIMEOUT data[4])",
+    "id": 7,
+    "name": "PARAM_WD_ACTION"
+   },
+   {
+    "comment": "F position gain (IN_KPP)",
+    "id": 8,
+    "name": "PARAM_KPP"
+   },
+   {
+    "comment": "F velocity P gain (IN_KPV_KIV)",
+    "id": 9,
+    "name": "PARAM_KPV"
+   },
+   {
+    "comment": "F velocity I gain (IN_KPV_KIV)",
+    "id": 10,
+    "name": "PARAM_KIV"
+   },
+   {
+    "comment": "F current P gain (IN_KIIQ_KPIQ)",
+    "id": 11,
+    "name": "PARAM_KPIQ"
+   },
+   {
+    "comment": "F current I gain (IN_KIIQ_KPIQ)",
+    "id": 12,
+    "name": "PARAM_KIIQ"
+   },
+   {
+    "comment": "F PD/impedance stiffness (IN_KP_KD)",
+    "id": 13,
+    "name": "PARAM_KP"
+   },
+   {
+    "comment": "F PD/impedance damping (IN_KP_KD)",
+    "id": 14,
+    "name": "PARAM_KD"
+   },
+   {
+    "comment": "F velocity limit, ticks/s (IN_LIMITS)",
+    "id": 15,
+    "name": "PARAM_VELOCITY_LIMIT"
+   },
+   {
+    "comment": "F current limit, mA (IN_LIMITS)",
+    "id": 16,
+    "name": "PARAM_CURRENT_LIMIT"
+   },
+   {
+    "comment": "voltage limit, mV, 0 = Vbus (IN_VLIM)",
+    "id": 17,
+    "name": "PARAM_VOLTAGE_LIMIT"
+   },
+   {
+    "comment": "idle behaviour, 1 brake, 0 coast (IN_SETTINGS bit 0)",
+    "id": 18,
+    "name": "PARAM_BRAKE_COAST"
+   },
+   {
+    "comment": "heartbeat period ms, 0 = off (HEARTBEAT_SETUP)",
+    "id": 19,
+    "name": "PARAM_HEARTBEAT_MS"
+   },
+   {
+    "comment": "F torque constant (IN_KT)",
+    "id": 20,
+    "name": "PARAM_KT"
+   },
+   {
+    "comment": "current-sense zero of channel 1, ADC counts from 2048 (1 count = 1.6 mA); writable, in RAM until the next start measures it again (batch 10)",
+    "id": 21,
+    "name": "PARAM_SENSE1_OFFSET"
+   },
+   {
+    "comment": "current-sense zero of channel 2, ADC counts from 2048",
+    "id": 22,
+    "name": "PARAM_SENSE2_OFFSET"
+   },
+   {
+    "comment": "product lock stamp: 1 STEPFOC, 2 Spectral, 0 none",
+    "id": 23,
+    "name": "PARAM_BOARD_PRODUCT"
+   },
+   {
+    "comment": "signal of channel A (SIGNAL_*), also the trigger channel",
+    "id": 24,
+    "name": "PARAM_CAPTURE_SOURCE_A"
+   },
+   {
+    "comment": "signal of channel B",
+    "id": 25,
+    "name": "PARAM_CAPTURE_SOURCE_B"
+   },
+   {
+    "comment": "signal of channel C",
+    "id": 26,
+    "name": "PARAM_CAPTURE_SOURCE_C"
+   },
+   {
+    "comment": "control loops per sample, 1-65535",
+    "id": 27,
+    "name": "PARAM_CAPTURE_DIVIDER"
+   },
+   {
+    "comment": "writing starts (TRIGGER_NOW..FALLING) or stops (TRIGGER_STOP) a capture",
+    "id": 28,
+    "name": "PARAM_CAPTURE_TRIGGER"
+   },
+   {
+    "comment": "trigger level, in channel A's units",
+    "id": 29,
+    "name": "PARAM_CAPTURE_LEVEL"
+   },
+   {
+    "comment": "samples kept from before the trigger, 0 to the capture length - 1",
+    "id": 30,
+    "name": "PARAM_CAPTURE_PRETRIGGER"
+   },
+   {
+    "comment": "R CAPTURE_IDLE, ARMED, RECORDING, DONE",
+    "id": 31,
+    "name": "PARAM_CAPTURE_STATE"
+   },
+   {
+    "comment": "R samples readable, 0 to the capture length",
+    "id": 32,
+    "name": "PARAM_CAPTURE_COUNT"
+   },
+   {
+    "comment": "R the trigger sample's index in the read-out, -1 if not triggered",
+    "id": 33,
+    "name": "PARAM_CAPTURE_TRIGGER_INDEX"
+   },
+   {
+    "comment": "writing HIST_X_ELECTRICAL or HIST_X_ENCODER clears and starts; HIST_X_OFF stops",
+    "id": 34,
+    "name": "PARAM_HIST_X"
+   },
+   {
+    "comment": "the signal averaged per bin (SIGNAL_*); set it before PARAM_HIST_X",
+    "id": 35,
+    "name": "PARAM_HIST_Y"
+   },
+   {
+    "comment": "R samples summed since the start; stops by itself when a bin holds 65535",
+    "id": 36,
+    "name": "PARAM_HIST_SAMPLES"
+   },
+   {
+    "comment": "anti-cogging: 0 off, 1 harmonics, 2 table (velocity and position modes)",
+    "id": 37,
+    "name": "PARAM_COGGING_MODE"
+   },
+   {
+    "comment": "percent of the stored anti-cogging applied, 0-200",
+    "id": 38,
+    "name": "PARAM_COGGING_SCALE"
+   },
+   {
+    "comment": "R current-sense zero 1 measured with the bridge off, counts from 2048",
+    "id": 40,
+    "name": "PARAM_SENSE1_OFFSET_OFF"
+   },
+   {
+    "comment": "R current-sense zero 2 measured with the bridge off",
+    "id": 41,
+    "name": "PARAM_SENSE2_OFFSET_OFF"
+   },
+   {
+    "comment": "R the zero measured with the bridge switching: SENSE_ZERO_SW_*",
+    "id": 42,
+    "name": "PARAM_SENSE_ZERO_SWITCHING"
+   },
+   {
+    "comment": "1: use the zero measured with the bridge switching, 0: the bridge-off zero (default; the switching zero raised the 1st harmonic on the bench)",
+    "id": 46,
+    "name": "PARAM_SENSE_ZERO_USE_SWITCHING"
+   },
+   {
+    "comment": "R current-sense zero 1 measured with the bridge switching, counts",
+    "id": 47,
+    "name": "PARAM_SENSE1_OFFSET_SW"
+   },
+   {
+    "comment": "R current-sense zero 2 measured with the bridge switching",
+    "id": 48,
+    "name": "PARAM_SENSE2_OFFSET_SW"
+   },
+   {
+    "comment": "current-loop bandwidth, Hz: writing sets Kp_iq/Ki_iq at once from the measured R and L (RAM; #Save keeps the gains); reading gives the bandwidth the gains in force amount to (0: R, L not measured)",
+    "id": 49,
+    "name": "PARAM_CURRENT_BANDWIDTH"
+   },
+   {
+    "comment": "the speed the loops use: SPEED_ESTIMATOR_* (RAM)",
+    "id": 50,
+    "name": "PARAM_SPEED_ESTIMATOR"
+   },
+   {
+    "comment": "the PLLs' natural frequency, Hz (RAM)",
+    "id": 51,
+    "name": "PARAM_SPEED_PLL_BANDWIDTH"
+   },
+   {
+    "comment": "write 1: measure the encoder table and use it, 2: and save, 3: then the anti-cogging too and save both, 0: abort; read: ENCAL_*",
+    "id": 52,
+    "name": "PARAM_ENCAL"
+   },
+   {
+    "comment": "1: correct the encoder with the table (only if one was measured)",
+    "id": 53,
+    "name": "PARAM_ENCAL_USE"
+   },
+   {
+    "comment": "R the table's error peak to peak, 0.01 deg of the shaft",
+    "id": 54,
+    "name": "PARAM_ENCAL_PP"
+   },
+   {
+    "comment": "R its once-per-turn part (amplitude), 0.01 deg of the shaft",
+    "id": 55,
+    "name": "PARAM_ENCAL_ONCE"
+   },
+   {
+    "comment": "what runs after a successful calibration: AFTER_CAL_* (saved with the table)",
+    "id": 56,
+    "name": "PARAM_AFTER_CAL"
+   },
+   {
+    "comment": "R how far the last run moved the electrical offset, 0.1 deg electrical",
+    "id": 57,
+    "name": "PARAM_ENCAL_OFFSET"
+   },
+   {
+    "comment": "the d-axis current setpoint, mA (RAM, as #Id): no torque, more phase current",
+    "id": 58,
+    "name": "PARAM_ID_SETPOINT"
+   },
+   {
+    "comment": "the trim of current-sense zero 1, counts (saved with the encoder block)",
+    "id": 59,
+    "name": "PARAM_ZERO_TRIM1"
+   },
+   {
+    "comment": "the trim of zero 2",
+    "id": 60,
+    "name": "PARAM_ZERO_TRIM2"
+   },
+   {
+    "comment": "R the electrical offset, 0.1 deg electrical",
+    "id": 61,
+    "name": "PARAM_THETA_OFFSET"
+   },
+   {
+    "comment": "R the 1st harmonic before the last trim, 0.1 mA",
+    "id": 62,
+    "name": "PARAM_TRIM_H1_BEFORE"
+   },
+   {
+    "comment": "R and after it, 0.1 mA",
+    "id": 63,
+    "name": "PARAM_TRIM_H1_AFTER"
+   },
+   {
+    "comment": "commutation delay compensation, us (0 = off, RAM; batch 12)",
+    "id": 64,
+    "name": "PARAM_COMM_DELAY_US"
+   },
+   {
+    "comment": "1: sin/cos of the transforms from the integer table, 0: qfplib (default)",
+    "id": 65,
+    "name": "PARAM_FAST_TRIG"
+   },
+   {
+    "comment": "the position input filter, true Hz, critically damped; position and PD modes; about the host's setpoint rate / 12; for hosts that send positions without the speed (bench 2026-11-08)",
+    "id": 74,
+    "name": "PARAM_INPUT_FILTER_HZ"
+   },
+   {
+    "comment": "ticks: the velocity integral sees the position error less this band",
+    "id": 75,
+    "name": "PARAM_VEL_INT_DEADBAND"
+   },
+   {
+    "comment": "phase resistance, milliohm (1-100000)",
+    "id": 76,
+    "name": "PARAM_R_MOHM"
+   },
+   {
+    "comment": "phase inductance, microhenry (1-1000000)",
+    "id": 77,
+    "name": "PARAM_L_UH"
+   },
+   {
+    "comment": "pole pairs (1-200), only while idle; calibrate after a change",
+    "id": 78,
+    "name": "PARAM_POLE_PAIRS"
+   },
+   {
+    "comment": "R what is in force and what runs: the bits FEAT_* (batch 20)",
+    "id": 79,
+    "name": "PARAM_FEATURES"
+   },
+   {
+    "comment": "write 1: identify the anti-cogging on the drive, 2: and save, 0: abort; read: COGCAL_*",
+    "id": 43,
+    "name": "PARAM_COGCAL"
+   },
+   {
+    "comment": "ticks/s the identification turns at, 100-20000 (1500)",
+    "id": 44,
+    "name": "PARAM_COGCAL_SPEED"
+   },
+   {
+    "comment": "R the identified cogging current, rms, 0.1 mA",
+    "id": 45,
+    "name": "PARAM_COGCAL_RIPPLE"
+   },
+   {
+    "comment": "R samples per channel a capture holds (SCOPE_LEN, 1024 since 2026-11-07)",
+    "id": 39,
+    "name": "PARAM_CAPTURE_LENGTH"
    }
   ],
   "tx": {
@@ -425,17 +1071,33 @@
     "id_define": "OUT_HEARTBEAT",
     "len": 0
    },
+   "Identity_CAN": {
+    "id_define": "OUT_IN_IDENTITY",
+    "len": 8
+   },
    "KT_data_CAN": {
     "id_define": "OUT_IN_KT",
     "len": 4
+   },
+   "Param_value_CAN": {
+    "id_define": "OUT_PARAM_VALUE",
+    "len": 5
    },
    "Ping_response": {
     "id_define": "OUT_IN_PING",
     "len": 0
    },
+   "Scope_pump": {
+    "id_define": "OUT_BUFFER_DATA",
+    "len": 8
+   },
    "State_of_Errors_CAN": {
     "id_define": "OUT_IN_STATE_OF_ERRORS_CAN",
     "len": 2
+   },
+   "Telemetry_CAN": {
+    "id_define": "OUT_IN_TELEMETRY",
+    "len": 8
    },
    "Temperature_CAN": {
     "id_define": "OUT_IN_TEMPERATURE_CAN",
@@ -447,7 +1109,7 @@
    }
   }
  },
- "commit": "2e7febc4de63",
+ "commit": "7b7b19585a52",
  "defaults": [
   {
    "after_default": "1111 in the EEPROM, not read back",
@@ -531,11 +1193,11 @@
   },
   {
    "after_default": "\u2014",
-   "comment": "default 200 HZ; Will set PI gains for Q and D current loops based on phase resistance",
+   "comment": "Hz: the current PI gains come from R, L",
    "name": "current_control_bandwidth",
    "saved": "no",
    "setting": true,
-   "value": "500"
+   "value": "160 (CURRENT_BANDWIDTH_DEFAULT)"
   },
   {
    "after_default": "\u2014",
@@ -715,10 +1377,210 @@
   },
   {
    "after_default": "0",
-   "comment": "Hold position, Idle, brake",
+   "comment": "0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (watchdog_action.h)",
    "name": "watchdog_action",
    "saved": "yes",
    "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "2000",
+   "comment": "how long hold/descend may run before the after-action",
+   "name": "wd_fallback_time_ms",
+   "saved": "yes",
+   "setting": true,
+   "value": "2000"
+  },
+  {
+   "after_default": "0",
+   "comment": "mA, descend: the current applied (signed)",
+   "name": "wd_fallback_current",
+   "saved": "yes",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "1000",
+   "comment": "ticks/s, descend: the speed cap in either direction",
+   "name": "wd_fallback_speed",
+   "saved": "yes",
+   "setting": true,
+   "value": "1000"
+  },
+  {
+   "after_default": "0 (WD_ACTION_LEGACY)",
+   "comment": "after hold/descend: 0 legacy, 2 brake, 3 coast",
+   "name": "wd_after_action",
+   "saved": "yes",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "0",
+   "comment": "what the drive is built into: 0 none, 1 SSG-48, 11-33 MSG, 200-254 custom",
+   "name": "tool_id",
+   "saved": "yes",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the EEPROM has the bank settings block 2 lives in (0x51)",
+   "name": "eeprom_block2_ok",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "0",
+   "comment": "product lock stamp in block 2: 1 STEPFOC, 2 Spectral, 0 none",
+   "name": "board_product",
+   "saved": "yes",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "this firmware is on the other product's board: it drives nothing",
+   "name": "wrong_product",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "current-sense zero of channel 1, ADC counts from 2048 (start-up)",
+   "name": "sense1_offset",
+   "saved": "no",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "current-sense zero of channel 2",
+   "name": "sense2_offset",
+   "saved": "no",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the bridge-off zeros, kept for comparison (parameters 40, 41)",
+   "name": "sense1_offset_off",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "",
+   "name": "sense2_offset_off",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "SENSE_ZERO_SW_*: the zero measured with the bridge switching",
+   "name": "sense_zero_switching",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the switching zeros, when measured (parameters 47, 48)",
+   "name": "sense1_offset_sw",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "",
+   "name": "sense2_offset_sw",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "parameter 64: commutation delay compensation, us (0 = off)",
+   "name": "comm_delay_us",
+   "saved": "no",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "parameter 74: the position input filter, Hz (0 = off)",
+   "name": "input_filter_hz",
+   "saved": "no",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "parameter 75: the velocity integral's deadband, ticks (0 = off)",
+   "name": "vel_int_deadband",
+   "saved": "no",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "parameter 65: 1 the transforms' sin/cos from the integer table (it was",
+   "name": "fast_trig",
+   "saved": "no",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "parameter 50",
+   "name": "speed_estimator",
+   "saved": "no",
+   "setting": true,
+   "value": "0 (SPEED_ESTIMATOR_DEFAULT)"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "parameter 51, Hz",
+   "name": "speed_pll_bandwidth",
+   "saved": "no",
+   "setting": true,
+   "value": "160 (SPEED_PLL_BANDWIDTH_DEFAULT)"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the start-up zero was measured and within SENSE_ZERO_MAX_DEV",
+   "name": "sense_zero_ok",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the EEPROM answers at 0x53, so anti-cogging block 3 can be saved",
+   "name": "eeprom_block3_ok",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the EEPROM answers at 0x54, so the encoder block can be saved",
+   "name": "eeprom_block4_ok",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "the anti-cogging in RAM is the one in EEPROM block 3",
+   "name": "cogging_saved",
+   "saved": "no",
+   "setting": false,
    "value": "0"
   },
   {
@@ -1002,7 +1864,7 @@
    "value": "0"
   },
   {
-   "after_default": "0",
+   "after_default": "existing_id",
    "comment": "CAN id of THIS motor driver! No 2 motor drivers can share the same ID.",
    "name": "CAN_ID",
    "saved": "yes",
@@ -1210,6 +2072,22 @@
    "value": "0"
   },
   {
+   "after_default": "\u2014",
+   "comment": "the commutation delay rotation, cos and sin (Comm_delay_update)",
+   "name": "delay_c",
+   "saved": "no",
+   "setting": false,
+   "value": "1.0f"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "",
+   "name": "delay_s",
+   "saved": "no",
+   "setting": false,
+   "value": "0.0f"
+  },
+  {
    "after_default": "0",
    "comment": "Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used",
    "name": "Voltage_limit",
@@ -1278,7 +2156,7 @@
    "comment": "",
    "name": "Feedforward_speed",
    "saved": "no",
-   "setting": true,
+   "setting": false,
    "value": "0"
   },
   {
@@ -1594,7 +2472,12 @@
    "value": "0"
   }
  ],
- "tag": "V107",
+ "prerelease": {
+  "commit": "7b7b19585a52",
+  "firmware_version_in_source": "107",
+  "ref": "7b7b195"
+ },
+ "tag": "V108",
  "uart": {
   "accepted": [
    "Iq",
@@ -1662,6 +2545,11 @@
    "Phase",
    "Activate",
    "Gripper",
+   "Tool",
+   "WdFb",
+   "Product",
+   "Encal",
+   "Cogcal",
    "Gripcal",
    "Grippos",
    "Gripvel",
@@ -1907,10 +2795,18 @@
    },
    {
     "arg": "",
-    "comment": "Enter calibration mode",
+    "comment": "Enter calibration mode #Cal: the calibration, then what parameter 56 adds (STEPFOC default: the encoder table and the anti-cogging, then save); #Calonly: the calibration alone (batch 20)",
     "kind": "Action",
     "mode": "",
     "name": "Cal",
+    "response": ""
+   },
+   {
+    "arg": "",
+    "comment": "Enter calibration mode #Cal: the calibration, then what parameter 56 adds (STEPFOC default: the encoder table and the anti-cogging, then save); #Calonly: the calibration alone (batch 20)",
+    "kind": "Action",
+    "mode": "",
+    "name": "Calonly",
     "response": ""
    },
    {
@@ -2124,7 +3020,7 @@
    {
     "arg": "",
     "comment": "Print Information about motor driver and motor",
-    "kind": "Get",
+    "kind": "Action",
     "mode": "",
     "name": "Info",
     "response": "Hardware version:"
@@ -2136,6 +3032,54 @@
     "mode": "",
     "name": "Gripper",
     "response": "Gripper:"
+   },
+   {
+    "arg": "int",
+    "comment": "Set/get the tool id: what this drive is built into (0 none, 1 SSG-48, 11-33 MSG with tens = rail 1/2/3 = 100/150/200 mm and units = stepper 1/2/3 = 21.5/40/60 mm, 200-254 custom). Saved with #Save.",
+    "kind": "Set/Get",
+    "mode": "",
+    "name": "Tool",
+    "response": "Invalid tool id (0-255)"
+   },
+   {
+    "arg": "int",
+    "comment": "The encoder table on the drive (encal.h): #Encal measures it (one shaft turn each way at 2048 ticks/s, about 20 s; the shaft must be free), #Encal save also saves, #Encal all also identifies the anti-cogging and saves both, #Encal stop aborts, #Encal on / off switches the correction, #Encal state shows it. Any CAN parameter by number (batch 20): #Par lists all, #Par n reads one, #Par n,v sets it",
+    "kind": "Set/Get",
+    "mode": "",
+    "name": "Par",
+    "response": "Par: a number 1-255, then optionally ,value"
+   },
+   {
+    "arg": "",
+    "comment": "",
+    "kind": "Action",
+    "mode": "",
+    "name": "Encal",
+    "response": "Encoder table:"
+   },
+   {
+    "arg": "",
+    "comment": "On-drive anti-cogging identification (cogcal.h): #Cogcal runs it, #Cogcal save also saves, #Cogcal stop aborts, #Cogcal state shows it. One motor turn each way at the cogcal speed: the shaft must be free to turn.",
+    "kind": "Action",
+    "mode": "",
+    "name": "Cogcal",
+    "response": "Anti-cogging identification:"
+   },
+   {
+    "arg": "",
+    "comment": "Product lock: #Product shows the board's stamp; #Product claim stamps it as this product (a motor the rule misjudges, a repaired board); #Product clear removes the stamp. UART only, on purpose.",
+    "kind": "Action",
+    "mode": "",
+    "name": "Product",
+    "response": "Board stamped as this product. Power-cycle the drive."
+   },
+   {
+    "arg": "int list",
+    "comment": "Set/get the watchdog fallback: #WdFb time_ms,current_mA,speed_ticks_s,after_action (after_action 0 legacy, 2 brake, 3 coast). Used by watchdog actions 1 (hold) and 4 (descend). Saved with #Save.",
+    "kind": "Set/Get",
+    "mode": "",
+    "name": "WdFb",
+    "response": "Use #WdFb time_ms,current_mA,speed_ticks_s,after_action"
    },
    {
     "arg": "",
@@ -2291,5 +3235,5 @@
    }
   ]
  },
- "version": "107"
+ "version": "108"
 }

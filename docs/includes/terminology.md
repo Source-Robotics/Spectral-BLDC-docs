@@ -9,6 +9,11 @@
 :   The angle between the encoder's zero and the motor's electrical zero, found by calibration and stored. The
     driver needs it to place the current vector relative to the rotor.
 
+**Anti-cogging**
+:   A current added to the current setpoint, a function of the electrical angle, that cancels the motor's own
+    torque ripple (the pull of its magnets towards the stator's teeth and the ripple of current-sensing errors).
+    Identified on the driver (`#Cogcal`, parameter 43; firmware 108 and newer).
+
 **Back-EMF**
 :   The voltage a turning motor generates in its own windings, proportional to speed. It opposes the supply, limits
     the top speed at a given voltage, and is what calibration measures to find KV, Kt and the flux linkage.
@@ -49,13 +54,21 @@
     from the encoder angle and the angle offset; a hobby ESC does it in six steps from the back-EMF, which fails at
     standstill.
 
+**Commutation delay compensation** (parameter 64)
+:   Turning the output voltage forward by the angle the rotor covers between the angle reading and the moment the
+    voltage reaches the motor. Off on the Spectral Micro until it is measured.
+
 **Control mode**
 :   What the driver is doing with the motor: idle, position, velocity, current, PD (impedance), voltage torque, open
     loop, gripper, or calibration. A command that carries a setpoint puts the driver in the matching mode.
 
-**Current loop bandwidth** (`#Cbw`)
-:   How fast the current loop follows a change of its setpoint, in Hz. Calibration computes the current loop gains
-    from it and the motor's resistance and inductance; 500 Hz by default.
+**Current loop bandwidth** (`#Cbw`, parameter 49)
+:   How fast the current loop follows a change of its setpoint, in Hz. The current loop gains follow from it and
+    the motor's resistance and inductance: Kp = ω·L, Ki = ω·R. 160 Hz by default from firmware 108 (500 Hz before).
+
+**Current-sense zero**
+:   The reading of a current sensor with no current flowing. From firmware 108 the driver measures it at every
+    start-up and subtracts it.
 
 **Daisy chain**
 :   Several drivers on one CAN bus and one supply, each driver's second CAN and power connector feeding the next.
@@ -71,6 +84,10 @@
 **EEPROM**
 :   The non-volatile memory on the driver that holds the configuration and the calibration. `#Save` writes it,
     `#Default` restores the factory values.
+
+**Encoder table**
+:   A correction of the encoder's small angle error around the turn, measured on the driver (`#Encal`, parameter
+    52) and saved with the configuration (firmware 108 and newer).
 
 **Encoder ticks**
 :   The unit of position: the 14-bit magnetic encoder gives 16384 ticks per revolution of the motor shaft, counted
@@ -131,6 +148,10 @@
 :   Turning the stator field at a set electrical speed without the encoder in the loop, so that the rotor follows it
     like a stepper: `#Openloop`, and the open-loop spin of the calibration that finds the pole pairs.
 
+**Parameter**
+:   A setting reached by its number through Send_Parameter and Send_Get_Parameter (CAN 36 to 38) or `#Par`
+    (firmware 108 and newer). The numbers are permanent.
+
 **Phase order**
 :   The order in which the motor's three phases are connected to U, V and W. Firmware 105 and newer learns it during
     calibration and compensates it; firmware 101 asks for two wires to be swapped when it is reversed.
@@ -139,9 +160,17 @@
 :   The spare pin of the driver, on the three-pad header next to the UART connector, usable as an analog input or a
     digital input/output. The firmware's name for it is ADDITIONAL.
 
+**PLL (speed estimate)**
+:   A phase-locked loop that follows the encoder count and gives the speed with less lag than a moving average
+    (parameter 50, firmware 108 and newer; the moving average stays the Spectral Micro's default).
+
 **Pole pairs**
 :   The number of electrical cycles per mechanical revolution, half the number of rotor magnets: 7 for a typical
     2804 gimbal motor, 11 for a 5208, 14 for an 8108. Calibration finds it; `#PP` sets it by hand.
+
+**Product lock**
+:   The stamp in the EEPROM of the product that calibrated a board. A firmware that finds the other product's
+    stamp drives nothing (firmware 108 and newer).
 
 **Remote frame**
 :   A CAN frame with the RTR bit set and no data: a request. The host asks for data with a remote frame under a
@@ -154,10 +183,14 @@
 **Termination**
 :   The 120 Ω resistor the first and the last node of a CAN bus need. The switch on the driver turns it on.
 
+**Tool id** (`#Tool`, parameter 1)
+:   What a drive is built into: 0 none, 1 SSG-48, 11 to 33 an MSG, 200 to 254 a customer's tool.
+
 **Vbus**
 :   The supply voltage at the driver, measured and printed in mV. Outside the limits the driver raises a Vbus
     error.
 
 **Watchdog**
 :   A timer the driver resets with every motion command and status request it receives over CAN. When it is set
-    (Send_Watchdog) and runs out, the driver reports a watchdog error and stops.
+    (Send_Watchdog) and runs out, the driver reports a watchdog error and stops; from firmware 108 it holds,
+    brakes, coasts or descends as the watchdog's action says.

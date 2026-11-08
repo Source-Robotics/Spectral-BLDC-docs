@@ -24,14 +24,15 @@ Send_Respond_State_of_Errors (bits numbered from the most significant).
 | `Error` | `In error state!` | 0, 7 | any of the flags below is set (also the error bit of every CAN identifier) |
 | `temperature_error` | `Temp error` | 0, 6 | the thermistor reads above `#Tlim` (with `#Term 1`) |
 | `encoder_error` | `Encoder error` | 0, 5 | the magnet is not detected or the reading fails its check |
-| `Vbus_error` | `Vbus error` | 0, 4 | the supply is below 9 V or above `#Vmax` (29 V after `#Default`) |
+| `Vbus_error` | `Vbus error` | 0, 4 | the supply is below 9 V or above `#Vmax` (29 V after `#Default`); from firmware 108 a low supply is not checked in the first 500 ms after power-up |
 | `Driver_error` | `Drv error` | 0, 3 | the MOSFET driver reported a fault on its fault pin: undervoltage, thermal shutdown or overcurrent. `#Error` also prints `FAULT pin is HIGH` while the fault output is still active |
 | `Velocity_error` | `Velocity error` | 0, 2 | the measured speed exceeds 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit: a runaway or an encoder fault, not `#Vlimit` |
 | `Current_error` | `Current error` | 0, 1 | never in this firmware; reserved |
 | `ESTOP_error` | `Received ESTOP command` | 0, 0 | Send_ESTOP was received |
 | `Calibrated` (0) | `Not calibrated` | 1, 7 (1 = calibrated) | the motor has not been calibrated |
 | `Activated` | — | 1, 6 | the activated flag, not an error |
-| `Watchdog_error` | `Watchdog error` | 1, 5 | the watchdog time passed without a motion command or a status request over CAN |
+| `Watchdog_error` | `Watchdog error` | 1, 5 | the watchdog time passed without a motion command or an answered request over CAN |
+| `wrong_product` | `Wrong firmware for this board (product lock)` | 1, 4 | from firmware 108: the firmware found the other product's stamp, or a calibration its product cannot make, at start-up; it drives nothing |
 
 Gripper mode has its own flags in Respond_Gripper_data_pack: a temperature error (the driver's temperature
 error), a timeout error (the driver's watchdog error: the CAN watchdog ran out) and an E-stop error; see the
@@ -41,4 +42,5 @@ error), a timeout error (the driver's watchdog error: the CAN watchdog ran out) 
 
 `#Clear` and Send_Clear_Error clear every flag except `Calibrated` and go to idle; a flag whose cause persists is
 set again at once. While any flag is set the driver disables the motor, which coasts whatever `#Brake` says. The watchdog, E-stop and velocity errors clear and stay clear; the Vbus, encoder, driver and
-temperature errors come back until the cause is gone. Calibration clears the calibration error.
+temperature errors come back until the cause is gone. Calibration clears the calibration error. A wrong product
+stays until the right firmware is flashed. Clearing a watchdog error also ends a watchdog hold or descend.

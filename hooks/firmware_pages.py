@@ -13,9 +13,12 @@ Placeholders, each replaced when the site is built:
     <!-- uart-commands: GROUP -->    the commands of the group as a table
     <!-- defaults-table -->          the defaults of the firmware structures
     <!-- compatibility-table -->     the rows of compatibility.yml
+    <!-- can-parameters -->          every parameter of IN_PARAM_SET / IN_PARAM_GET (firmware 2026-11 and newer): the
+                                     numbers from the firmware, the rest from docs/includes/parameters.yml, one table
+                                     per group
 
-A command the firmware has and the descriptions lack, or the other way round, stops the build (tools/test_tools.py
-checks the same before a push). Registered in mkdocs.yml under `hooks:`.
+A command or a parameter the firmware has and the descriptions lack, or the other way round, stops the build
+(tools/test_tools.py checks the same before a push). Registered in mkdocs.yml under `hooks:`.
 """
 from __future__ import annotations
 
@@ -36,6 +39,7 @@ UART_GROUP = re.compile(r"<!--\s*uart-commands:\s*([\w-]+)\s*-->")
 DEFAULTS = re.compile(r"<!--\s*defaults-table\s*-->")
 COMPAT = re.compile(r"<!--\s*compatibility-table\s*-->")
 PYTHON = re.compile(r"<!--\s*python-calls\s*-->")
+PARAMS = re.compile(r"<!--\s*can-parameters\s*-->")
 
 _d: dict = {}
 
@@ -50,10 +54,61 @@ def load() -> dict:
         can = yaml.safe_load((INC / "can_commands.yml").read_text(encoding="utf-8"))
         uart = yaml.safe_load((INC / "uart_commands.yml").read_text(encoding="utf-8"))
         compat = yaml.safe_load((ROOT / "compatibility.yml").read_text(encoding="utf-8"))
+        params_file = INC / "parameters.yml"
+        params = yaml.safe_load(params_file.read_text(encoding="utf-8")) if params_file.exists() else None
     except (OSError, ValueError, yaml.YAMLError) as exc:
         raise PluginError(f"firmware pages: {exc}") from exc
     check(facts, can, uart)
-    return {"facts": facts, "can": can, "uart": uart, "compat": compat}
+    check_params(facts, params)
+    return {"facts": facts, "can": can, "uart": uart, "compat": compat, "params": params}
+
+
+ACCESS = {"rw": "set, read", "r": "read only", "run": "set starts or stops a run; read gives its state"}
+
+
+def check_params(facts: dict, params: dict | None) -> None:
+    """The parameter descriptions and the firmware's PARAM_* numbers must name the same parameters."""
+    fw = {p["name"] for p in facts["can"].get("params", [])}
+    if params is None:
+        if fw:
+            raise PluginError(f"the firmware has {len(fw)} parameters (PARAM_*) and docs/includes/parameters.yml is missing")
+        return
+    doc = set(params.get("params") or {})
+    if fw != doc and not (params.get("partial") and doc <= fw):
+        raise PluginError(f"parameters.yml and the firmware disagree: missing {sorted(fw - doc)}, extra {sorted(doc - fw)}")
+    for name, p in params["params"].items():
+        if p.get("group") not in params.get("groups", {}):
+            raise PluginError(f"parameters.yml: {name} has no known group")
+        if p.get("access") not in ACCESS:
+            raise PluginError(f"parameters.yml: {name} access {p.get('access')!r} is not one of {sorted(ACCESS)}")
+        for key in ("value", "saved", "description"):
+            if isinstance(p.get(key), bool):   # YAML reads a bare yes/no as a boolean: quote it
+                raise PluginError(f"parameters.yml: {name} {key} is a YAML boolean; write it in quotes")
+            if not str(p.get(key, "")).strip():
+                raise PluginError(f"parameters.yml: {name} lacks {key}")
+
+
+def params_tables(d: dict) -> str:
+    """One table per group, in the order of parameters.yml's groups, the parameters by number."""
+    params = d["params"]
+    if not params:
+        return ""
+    number = {p["name"]: p["id"] for p in d["facts"]["can"].get("params", [])}
+    out = []
+    for g, group in params["groups"].items():
+        names = sorted((n for n, p in params["params"].items() if p["group"] == g), key=lambda n: number[n])
+        if not names:
+            continue
+        out += [f"### {group['title']}", ""]
+        if group.get("intro"):
+            out += [group["intro"].strip(), ""]
+        out += ["| No. | Name | Access | Value | Kept by Save | What it is |", "|---|---|---|---|---|---|"]
+        for n in names:
+            p = params["params"][n]
+            out.append(f"| {number[n]} | `{n}` | {ACCESS[p['access']]} | {esc(str(p['value']).strip())} | "
+                       f"{esc(str(p['saved']).strip())} | {esc(p['description'].strip())} |")
+        out.append("")
+    return "\n".join(out) + "\n"
 
 
 def check(facts: dict, can: dict, uart: dict) -> None:
@@ -197,8 +252,20 @@ def uart_rows(names: list[str], d: dict) -> str:
         if h["mode"]:
             desc += f" Enters **{h['mode']}** mode."
         resp = c.get("response") or (f"`{h['response']}…`" if h["response"] else "—")
+        if n in refused(d):
+            desc += (" **In this firmware build the serial parser does not accept the name: the driver answers "
+                     "`Unknown command`.**")
         rows.append(f"| `#{n}` | {h['kind']} | {esc(arg)} | {esc(desc)} | {esc(resp)} |")
     return "\n".join(rows) + "\n"
+
+
+def refused(d: dict) -> list[str]:
+    """Commands the firmware has a handler for but its serial parser does not accept (SerialPacketParser.cpp drops
+    them before a handler sees them), so they cannot be used; empty for a partial reference."""
+    if d["uart"].get("partial"):
+        return []
+    accepted = set(d["facts"]["uart"]["accepted"])
+    return sorted({h["name"] for h in d["facts"]["uart"]["handlers"]} - accepted, key=str.lower)
 
 
 def uart_group(group: str, d: dict) -> str:
@@ -223,6 +290,14 @@ def uart_overview(d: dict) -> str:
         text += ("\nThe parser also accepts " + ", ".join(f"`#{n}`" for n in orphans) +
                  ", which have no handler: the driver answers `Unknown command` to them, as to a name it does not "
                  "know.\n")
+    names = refused(d)
+    if names:
+        one = len(names) == 1
+        text += ("\nThe firmware has a handler for " + ", ".join(f"`#{n}`" for n in names) +
+                 (", but its serial parser does not accept the name, so in this build the driver answers "
+                  "`Unknown command` to it.\n" if one else
+                  ", but its serial parser does not accept these names, so in this build the driver answers "
+                  "`Unknown command` to them.\n"))
     return text
 
 
@@ -300,4 +375,5 @@ def on_page_markdown(markdown, page, config, files):
     markdown = DEFAULTS.sub(lambda m: defaults_table(d), markdown)
     markdown = COMPAT.sub(lambda m: compat_table(d), markdown)
     markdown = PYTHON.sub(lambda m: python_calls(d), markdown)
+    markdown = PARAMS.sub(lambda m: params_tables(d), markdown)
     return markdown

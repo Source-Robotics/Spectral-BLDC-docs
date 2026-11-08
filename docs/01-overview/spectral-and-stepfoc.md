@@ -15,7 +15,9 @@ What this means in practice:
   actions `#Brake` and `#Coast`. Send_Settings over CAN is the same on both.
 - **The firmware releases go in step.** Most Spectral Micro releases have a STEPFOC counterpart with the same changes;
   the [compatibility table](../appendix/compatibility.md) lists the pairs. The numbers do not always match: the
-  current pair is Spectral Micro 107 and STEPFOC 108.
+  current pair is Spectral Micro 108 and STEPFOC 109. In this pair some new features were tested on the STEPFOC
+  bench first, so the Spectral Micro keeps its earlier defaults for them (the speed estimate, the delay
+  compensation, the runs after a calibration) until they are measured on it.
 - **Calibration differs.** The Spectral Micro measures the motor's resistance and inductance and finds its pole
   pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first. See
   [Calibration](../05-setup/calibration.md).

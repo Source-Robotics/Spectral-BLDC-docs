@@ -288,6 +288,7 @@ nav:
               - Motor GUI: 05-setup/motor-gui.md
               - The serial terminal: 05-setup/terminal.md
               - Calibration: 05-setup/calibration.md
+              - Encoder table and anti-cogging: 05-setup/anti-cogging.md
               - Current limit and loop tuning: 05-setup/tuning.md
               - Saving the configuration: 05-setup/saving.md
           - 6. Operation:
@@ -295,15 +296,18 @@ nav:
               - Control modes: 06-operation/modes.md
               - Over UART: 06-operation/uart.md
               - Over CAN: 06-operation/can.md
+              - The watchdog: 06-operation/watchdog.md
               - With Python: 06-operation/python.md
               - Working in Motor GUI: 06-operation/motor-gui.md
               - Errors and recovery: 06-operation/errors.md
+              - Status and diagnostics: 06-operation/diagnostics.md
               - Gripper mode: 06-operation/gripper-mode.md
           - 7. Firmware:
               - 07-firmware/index.md
               - Releases and versions: 07-firmware/releases.md
               - The bootloader: 07-firmware/the-bootloader.md
               - Updating through the bootloader: 07-firmware/update.md
+              - Upgrading from older firmware: 07-firmware/upgrading.md
               - Installing the bootloader on an older board: 07-firmware/bootloader.md
               - Building from source: 07-firmware/building.md
           - 8. Troubleshooting:
@@ -327,6 +331,7 @@ nav:
           - Gains and limits: reference/can/gains-and-limits.md
           - Status requests: reference/can/status.md
           - System: reference/can/system.md
+          - Parameters and buffers: reference/can/parameters.md
           - Gripper: reference/can/gripper.md
       - UART commands:
           - reference/uart/index.md

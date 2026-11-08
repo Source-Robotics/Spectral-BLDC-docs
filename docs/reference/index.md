@@ -7,9 +7,9 @@ messages they send.
 ## Where the facts come from
 
 The command IDs, the frame lengths the firmware accepts, the responses it sends, the list of UART commands with
-their kind (Set/Get, Get or action), their argument type, the mode each enters and what it prints, and the
-defaults are read from the firmware's source at its release tag by `tools/sync_firmware.py` in the documentation
-repository, and the pages are built from that at every build. The descriptions, units and byte layouts are
+their kind (Set/Get, Get or action), their argument type, the mode each enters and what it prints, the parameter
+numbers, and the defaults are read from the firmware's source at its release tag by `tools/sync_firmware.py` in
+the documentation repository, and the pages are built from that at every build. The descriptions, units and byte layouts are
 written by hand, and the build fails when they name a command the firmware does not have, or miss one it has, or
 when a byte layout does not fit the frame. The firmware version is in the version box on the
 [landing page](../index.md).
@@ -25,7 +25,8 @@ when a byte layout does not fit the frame. The firmware version is in the versio
 
 ## In the API reference
 
-- [CAN protocol](can/index.md): the identifier, the three kinds of message, every message by group
+- [CAN protocol](can/index.md): the identifier, the three kinds of message, every message by group, and every
+  [parameter](can/parameters.md)
 - [UART commands](uart/index.md): the syntax and every command by group
 - [Defaults](defaults.md)
 - [Errors and LED states](errors.md)

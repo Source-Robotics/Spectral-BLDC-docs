@@ -136,6 +136,9 @@ if loaded:
     facts = d["facts"]
     check("B2 the generated facts are from the release versions.yml names", facts["tag"] == shipped["firmware"]["tag"]
           and facts["version"] == shipped["docs_version"], f"{facts['tag']} vs {shipped['firmware']['tag']}")
+    pre = facts.get("prerelease")
+    check("B2b the generated facts come from the release tag, not a prerelease commit (sync_firmware.py --prerelease)",
+          not pre, f"read from commit {pre and pre.get('commit')}: run tools/sync_firmware.py once the tag exists")
     missing = [g["page"] for src in (d["can"], d["uart"]) for g in src["groups"].values()]
     missing = [p for p, base in zip(missing, ["can"] * len(d["can"]["groups"]) + ["uart"] * len(d["uart"]["groups"]))
                if not (ROOT / "docs" / "reference" / base / p).exists()]
@@ -195,6 +198,28 @@ if loaded:
           "After `#Default`" in dt and "Kept by `#Save`" in dt and bool(shown) and bool(internal)
           and all(f"| `{n}` |" in dt for n in shown) and not any(f"| `{n}` |" in dt for n in internal if n not in shown),
           dt[:200])
+    # the parameters (firmware 109 and newer): every PARAM_* number described, nothing invented, one row each
+    if facts["can"].get("params"):
+        pt = pages.params_tables(d)
+        check("B14 the parameter tables list every parameter of the firmware with its number",
+              all(f"| {p['id']} | `{p['name']}` |" in pt for p in facts["can"]["params"]), pt[:200])
+        bad = json.loads(json.dumps(d["params"]))
+        bad["params"].pop(next(iter(bad["params"])))
+        try:
+            pages.check_params(facts, bad)
+            refused = False
+        except PluginError:
+            refused = True
+        check("B15 a parameter the firmware has but parameters.yml lacks stops the build", refused)
+    # a UART handler the serial parser does not accept is flagged in the overview and in its group's table
+    fake = json.loads(json.dumps({k: d[k] for k in ("facts", "uart")}))
+    name = next(n for n in fake["uart"]["commands"] if n in fake["facts"]["uart"]["accepted"])
+    fake["facts"]["uart"]["accepted"].remove(name)
+    group = fake["uart"]["commands"][name]["group"]
+    check("B16 a command the parser does not accept is flagged as answered Unknown command",
+          f"`#{name}`" in pages.uart_overview(fake).split("does not accept")[0].rsplit("handler for", 1)[-1]
+          and "does not accept the name" in pages.uart_group(group, fake))
+
 
 # ---------------------------------------------------------------- the sync tool, on fixtures
 sync = load_module("sync_firmware", ROOT / "tools" / "sync_firmware.py")

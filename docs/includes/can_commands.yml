@@ -18,6 +18,9 @@ groups:
   system:
     title: System
     page: system.md
+  parameters:
+    title: Parameters and buffers
+    page: parameters.md
   gripper:
     title: Gripper
     page: gripper.md
@@ -51,6 +54,10 @@ commands:
           - {bytes: "0-1", name: Current setpoint, type: signed 16-bit, meaning: mA}
     notes: >
       Every form resets the watchdog. With `Rstint` set, the integral accumulators are cleared on each new setpoint.
+      From firmware 108 a position or speed frame that follows another mode (idle, current, PD, a watchdog trip)
+      starts the velocity integral from zero, so a release from a wound-up mode does not kick; one that follows
+      position or velocity mode keeps it. The new setpoint, the mode change and the driver's wake-up reach the
+      control loop together, so the first frame after Idle is followed.
   IN_DATA_PACK_PD:
     name: Send_data_pack_PD
     group: motion
@@ -212,7 +219,7 @@ commands:
     name: Send_Respond_State_of_Errors
     group: status
     python: Send_Respond_State_of_Errors()
-    description: Asks for every error flag and the calibrated, activated and watchdog states.
+    description: Asks for every error flag and the calibrated, activated, watchdog and product-lock states.
     response_fields:
       - {bytes: "0", bit: 7, name: error, type: bit, meaning: any error is active}
       - {bytes: "0", bit: 6, name: temperature_error, type: bit, meaning: motor over the temperature limit, _shared: true}
@@ -225,6 +232,7 @@ commands:
       - {bytes: "1", bit: 7, name: calibrated, type: bit, meaning: the motor is calibrated}
       - {bytes: "1", bit: 6, name: activated, type: bit, meaning: the controller is activated, _shared: true}
       - {bytes: "1", bit: 5, name: watchdog_error, type: bit, meaning: the watchdog ran out, _shared: true}
+      - {bytes: "1", bit: 4, name: wrong_product, type: bit, meaning: "from firmware 108: this firmware is on the other product's board (the product lock) and drives nothing", _shared: true}
   OUT_IN_IQ:
     name: Send_Respond_Iq_data
     group: status
@@ -247,6 +255,47 @@ commands:
     description: Asks for the torque constant Kt the driver uses. Added in firmware 104.
     response_fields:
       - {bytes: "0-3", name: Kt, type: float 32, meaning: Nm/A}
+  OUT_IN_IDENTITY:
+    name: Send_Respond_Identity
+    group: status
+    python: Send_Respond_Identity()
+    description: >
+      Asks what the drive is: the product, the tool it is built into, the firmware release, the hardware version,
+      the pole pairs, whether it is calibrated, and eight flags. A host can check it before it commands or flashes
+      a drive. Added in firmware 108. Python attributes `product_id`, `product_name`, `tool_id`,
+      `firmware_version`, `identity_hardware_version`, `pole_pairs`, `identity_calibrated`, `identity_flags`.
+    response_fields:
+      - {bytes: "0", name: product, type: unsigned 8-bit, meaning: "1 STEPFOC, 2 Spectral Micro: the firmware that answers"}
+      - {bytes: "1", name: tool_id, type: unsigned 8-bit, meaning: "parameter 1: 0 none, 1 SSG-48, 11-33 MSG, 200-254 your own"}
+      - {bytes: "2-3", name: firmware_version, type: unsigned 16-bit, meaning: "the release, e.g. 108"}
+      - {bytes: "4", name: hardware_version, type: unsigned 8-bit, meaning: PCB revision from the EEPROM}
+      - {bytes: "5", name: pole_pairs, type: unsigned 8-bit, meaning: "the motor's pole pairs; 0 if outside 0-255"}
+      - {bytes: "6", name: calibrated, type: unsigned 8-bit, meaning: "1 calibrated, 0 not"}
+      - {bytes: "7", bit: 0, name: gripper, type: bit, meaning: "the driver is set up as a gripper (#Gripper 1)"}
+      - {bytes: "7", bit: 1, name: brake_on_idle, type: bit, meaning: "idle brakes (1) or coasts (0)", _shared: true}
+      - {bytes: "7", bit: 2, name: commutation_reversed, type: bit, meaning: calibration found the coils wired the other way round, _shared: true}
+      - {bytes: "7", bit: 3, name: settings_block2, type: bit, meaning: "the EEPROM has the bank settings block 2 lives in, so parameters 1-5 can be saved", _shared: true}
+      - {bytes: "7", bit: 4, name: wrong_product, type: bit, meaning: "this firmware is on the other product's board (the product lock) and drives nothing", _shared: true}
+      - {bytes: "7", bit: 5, name: sense_zero_measured, type: bit, meaning: the current-sense zero was measured at start-up and is plausible, _shared: true}
+      - {bytes: "7", bit: 6, name: cogging_saved, type: bit, meaning: the anti-cogging in use is the one saved in the EEPROM, _shared: true}
+      - {bytes: "7", bit: 7, name: switching_zero_in_use, type: bit, meaning: "the current-sense zero measured with the bridge switching is in use (parameter 46)", _shared: true}
+    notes: >
+      The flags in byte 7 are numbered the usual way, bit 0 the least significant (unlike the error bytes, which
+      the firmware packs from bit 7 down).
+  OUT_IN_TELEMETRY:
+    name: Send_Respond_Telemetry
+    group: status
+    python: Send_Respond_Telemetry()
+    description: >
+      Asks for the temperature, the supply voltage, both error bytes and the current in one frame, all from the
+      same moment: one request instead of four. Added in firmware 108. The Python library fills the same
+      attributes as the four separate answers.
+    response_fields:
+      - {bytes: "0-1", name: temperature, type: signed 16-bit, meaning: "°C (meaningful with the thermistor enabled)"}
+      - {bytes: "2-3", name: voltage, type: signed 16-bit, meaning: supply voltage in mV}
+      - {bytes: "4", name: errors_1, type: unsigned 8-bit, meaning: "the error flags, as byte 0 of Send_Respond_State_of_Errors"}
+      - {bytes: "5", name: errors_2, type: unsigned 8-bit, meaning: "calibrated, activated, watchdog, wrong product, as byte 1 of Send_Respond_State_of_Errors"}
+      - {bytes: "6-7", name: current, type: signed 16-bit, meaning: Iq in mA}
   OUT_HEARTBEAT:
     name: Respond_Heartbeat
     group: status
@@ -287,7 +336,12 @@ commands:
     python: Send_Save_config()
     description: >
       Writes the current configuration (gains, limits, calibration, CAN ID, heartbeat, watchdog, gripper flag) to
-      the EEPROM, and copies the CAN ID into the bootloader's board ID.
+      the EEPROM, and copies the CAN ID into the bootloader's board ID. From firmware 108 it also writes the tool id
+      and the watchdog fallback (settings block 2), the anti-cogging set with its mode and scale, and the encoder
+      table with its on/off flag, parameter 56 and the current-sense zero trims, each block with its own checksum;
+      of the two large blocks only the 16-byte pages that changed are written. Not kept: the idle behaviour of
+      Send_Settings, the current loop bandwidth, and every parameter the parameter table marks as not kept. A drive
+      stopped by the product lock writes nothing.
   IN_RESET:
     name: Send_Reset
     group: system
@@ -300,24 +354,32 @@ commands:
     group: system
     python: Send_Clear_Error()
     description: >
-      Clears the error flags and goes to idle. An error whose cause is still present comes straight back. A
-      calibration error is cleared only by calibrating.
+      Clears the error flags and goes to idle; it also ends a watchdog hold or descend. An error whose cause is
+      still present comes straight back. A calibration error is cleared only by calibrating.
   IN_WATCHDOG_TIMEOUT:
     name: Send_Watchdog
     group: system
     python: Send_Watchdog()
     description: >
       Sets the watchdog. The motion commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the
-      status requests (the Send_Respond_ remote frames) reset it; the other frames and UART commands do not. When
-      the time runs out the driver reports a watchdog error and disables the motor, which then coasts. 0 turns it
-      off (the default). The action byte is stored but not acted on by this firmware. The setting is kept by
-      Send_Save_config and there is no UART command for it: to turn off a saved watchdog, send 0 over CAN and save,
-      or use `#Default`.
+      requests the driver answers (the Send_Respond_ remote frames, Send_Get_Parameter, Send_Buffer_Read) reset it;
+      the other frames (Send_Parameter among them) and UART commands do not. When the time runs out the driver
+      reports a watchdog error and does what the action byte says. 0 turns it off (the default). From firmware 108
+      the driver acts on the action byte, but only when the watchdog is the only active error: any other error
+      gets the legacy response, the motor disabled and coasting. Hold and descend run for the fallback time
+      (parameter 2, 2 s by default), then the after-action (parameter 5); they start only if the driver was in
+      position, velocity, current, PD or gripper mode, otherwise it stays as idle was.
+      [The watchdog](../../06-operation/watchdog.md) explains each action. The setting is kept by Send_Save_config
+      and has no UART command of its own: to turn off a saved watchdog, send 0 over CAN (or parameter 6 = 0) and
+      save, or use `#Default`. The same values are parameters 6 and 7.
     forms:
       - length: 5
         fields:
           - {bytes: "0-3", name: Time, type: unsigned 32-bit, meaning: ms; 0 = off}
-          - {bytes: "4", name: Action, type: unsigned 8-bit, meaning: "0 idle, 1 hold, 2 brake (stored only)"}
+          - {bytes: "4", name: Action, type: unsigned 8-bit, meaning: "0 legacy (the motor disabled, coasting), 1 hold the position, 2 brake (not current-limited), 3 coast, 4 descend at the fallback current and speed; other values act as 0"}
+    notes: >
+      Firmware 107 and older store the action byte without acting on it. The Python library 1.20 sends 0, 1 or 2
+      ('Idle', 'Hold', 'Brake'); 'Coast' and 'Descend' come with its next release.
   HEARTBEAT_SETUP:
     name: Send_Heartbeat_Setup
     group: system
@@ -346,6 +408,102 @@ commands:
     name: Send_Cyclic_command
     group: system
     description: Reserved. The firmware has no handler for this ID and the Python library's call does nothing.
+
+  # ------------------------------------------------------------ parameters and buffers
+  IN_PARAM_SET:
+    name: Send_Parameter
+    group: parameters
+    python: Send_Parameter()
+    description: >
+      Sets one parameter by its number (the [parameter table](#every-parameter)). Firmware 108 gives new settings
+      a parameter number instead of a command ID of their own, since the identifier has room for only 64 command
+      IDs. A value outside a parameter's range is clamped, replaced or refused as the table says; a number the
+      firmware does not know, or a read-only one, is ignored. The driver does not answer: read the value back with
+      Send_Get_Parameter. A value set this way lives in RAM until Send_Save_config, like every other setting; the
+      table says which parameters Save keeps.
+    forms:
+      - length: 5
+        fields:
+          - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: "the parameter number, 1-79"}
+          - {bytes: "1-4", name: Value, type: signed 32-bit, meaning: "the new value, in the parameter's unit"}
+    notes: >
+      A data frame of another length, or a remote frame, is ignored and flagged as a wrong data length. It does
+      not reset the watchdog.
+  IN_PARAM_GET:
+    name: Send_Get_Parameter
+    group: parameters
+    python: Send_Get_Parameter()
+    description: >
+      Asks for the value in force of one parameter. The answer, Respond_Parameter, comes under ID 38, not 37: a
+      host and a driver must never send data frames with the same identifier, because two sent at the same
+      moment collide. Resets the watchdog. The Python library stores the value in `parameters[number]`.
+    forms:
+      - length: 1
+        fields:
+          - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: the parameter number}
+  OUT_PARAM_VALUE:
+    name: Respond_Parameter
+    group: parameters
+    description: >
+      The answer to Send_Get_Parameter: the number and the value in force. For a number the firmware does not
+      know the frame carries the number alone (1 byte; the Python library sets `unknown_parameter`). The gains,
+      limits and Kt (parameters 8 to 16 and 20) travel as the bit pattern of an IEEE-754 float, the others as
+      integers.
+    response_fields:
+      - {bytes: "0", name: parameter, type: unsigned 8-bit, meaning: the parameter number}
+      - {bytes: "1-4", name: value, type: signed 32-bit, meaning: "the value in force; a float's bits for 8-16 and 20"}
+  IN_BUFFER_READ:
+    name: Send_Buffer_Read
+    group: parameters
+    python: Send_Buffer_Read()
+    description: >
+      Asks for entries of one of the drive's buffers: the capture, the histogram, the anti-cogging harmonics or
+      table, or the encoder table. The driver answers with one Respond_Buffer_Data frame per entry (for the two
+      tables, one per three values), sent from its main loop whenever a transmit mailbox is free, so a long
+      read-out never holds up the control loop or other answers. A new request replaces one still in progress;
+      count 0 cancels it. Entries past the end are not sent. Resets the watchdog.
+    forms:
+      - length: 5
+        fields:
+          - {bytes: "0", name: Kind, type: unsigned 8-bit, meaning: "0 capture (up to 1024 samples: parameter 32 says how many), 1 histogram (256 bins), 2 anti-cogging harmonics (8 slots), 3 anti-cogging table (256 values), 4 encoder table (128 values)"}
+          - {bytes: "1-2", name: First, type: unsigned 16-bit, meaning: the first index}
+          - {bytes: "3-4", name: Count, type: unsigned 16-bit, meaning: "how many entries; 0 cancels a read-out"}
+  OUT_BUFFER_DATA:
+    name: Respond_Buffer_Data
+    group: parameters
+    description: >
+      One entry of a buffer, the answer to Send_Buffer_Read. The first two bytes say which: the kind in the top
+      three bits, the index in the other thirteen (kind × 8192 + index). The six bytes after them depend on the
+      kind, as the table below the frame says.
+    response_fields:
+      - {bytes: "0-1", name: header, type: unsigned 16-bit, meaning: "kind × 8192 + index"}
+      - {bytes: "2-3", name: word_a, type: signed 16-bit, meaning: "capture: channel A; histogram: the count (unsigned); harmonics: the harmonic number (0 = slot unused); tables: entry index"}
+      - {bytes: "4-5", name: word_b, type: signed 16-bit, meaning: "capture: channel B; histogram: the sum's upper 16 bits; harmonics: a, the cosine term in mA; tables: entry index + 1"}
+      - {bytes: "6-7", name: word_c, type: signed 16-bit, meaning: "capture: channel C; histogram: the sum's lower 16 bits; harmonics: b, the sine term in mA; tables: entry index + 2 (0 past the end)"}
+    notes: |
+      | Kind | Index | Bytes 2-7 |
+      |---|---|---|
+      | 0 capture | the sample, oldest first, 0 to parameter 32 − 1 | channels A, B and C, each in its signal's unit (the parameter table lists the signals) |
+      | 1 histogram | the bin, 0-255 over one electrical turn or one motor turn | the count (unsigned 16-bit), then the sum (signed 32-bit); the bin's mean is sum ÷ count |
+      | 2 anti-cogging harmonics | the slot, 0-7 | the harmonic of the electrical angle (1-32, 0 = unused), a and b in mA: the slot adds a·cos(h·θ) + b·sin(h·θ) |
+      | 3 anti-cogging table | the first of three values, 0-255 | three values in mA, 64 angle counts apart (256 per electrical turn) |
+      | 4 encoder table | the first of three values, 0-127 | three corrections in 1/16 encoder count, 128 per motor turn |
+  IN_BUFFER_WRITE:
+    name: Send_Buffer_Write
+    group: parameters
+    python: Send_Cogging_Harmonic(), Send_Cogging_Table()
+    description: >
+      Writes the anti-cogging set: kind 2 one harmonic slot per frame, kind 3 three table values per frame, in the
+      Respond_Buffer_Data layout. Other kinds are ignored (the encoder table cannot be written), and so is a
+      harmonic above 32. The set lives in RAM until Send_Save_config; switch it on with parameter 37. The driver
+      does not answer.
+    forms:
+      - length: 8
+        fields:
+          - {bytes: "0-1", name: Header, type: unsigned 16-bit, meaning: "kind × 8192 + index; kind 2 or 3"}
+          - {bytes: "2-3", name: Word A, type: signed 16-bit, meaning: "kind 2: the harmonic (1-32, 0 = unused); kind 3: value at index"}
+          - {bytes: "4-5", name: Word B, type: signed 16-bit, meaning: "kind 2: a in mA; kind 3: value at index + 1"}
+          - {bytes: "6-7", name: Word C, type: signed 16-bit, meaning: "kind 2: b in mA; kind 3: value at index + 2"}
 
   # ------------------------------------------------------------ gripper
   IN_GRIPPER_DATA_PACK:
@@ -378,7 +536,9 @@ commands:
       The driver's answer to Send_gripper_data_pack: position, measured current, and the state bits. Python
       attributes `gripper_position`, `gripper_current`, `gripper_activated`, `gripper_action_status`,
       `gripper_object_detection`, `gripper_temperature_error`, `gripper_timeout_error`, `gripper_estop_error`,
-      `gripper_calibrated`.
+      `gripper_calibrated`. The Python library 1.20 and older combine the two object-detection bits the wrong way
+      round, so their `gripper_object_detection` reads 2 for an object found while closing and 1 for one found
+      while opening; the library's next release reads them as the table says.
     response_fields:
       - {bytes: "0", name: gripper_position, type: unsigned 8-bit, meaning: "0 fully open, 255 fully closed"}
       - {bytes: "1-2", name: gripper_current, type: signed 16-bit, meaning: measured current in mA}

@@ -12,6 +12,8 @@ reports 101 can be either ([Drivers that report 101](releases.md#drivers-that-re
 - [The bootloader](the-bootloader.md): what it is, how the driver boots, how it is entered, its protocol and tools
 - [Updating through the bootloader](update.md): the normal update, with Motor GUI, the bootloader's command-line
   tool, or a PAR6 control box
+- [Upgrading from older firmware](upgrading.md): what a driver keeps when it is updated to this release, what works
+  at once and what has to be run
 - [Installing the bootloader on an older board](bootloader.md): for a driver that runs firmware 101 or older
 - [Building from source](building.md): PlatformIO, the memory layout, uploading with a programming adapter
 

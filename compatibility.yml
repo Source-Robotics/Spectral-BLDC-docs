@@ -12,6 +12,14 @@ columns:
   - {key: docs, title: Docs}
 
 rows:
+  - firmware: "108"
+    date: not released yet
+    bootloader: required
+    stepfoc: "109"
+    python: "1.20 or newer; the calls for the commands added in 108 (parameters, identity, telemetry, buffers, the watchdog's coast and descend) need the library's next release"
+    runtime: 0.9 or newer (it sends watchdog action 0, the legacy response)
+    pcb: v2.0
+    docs: "108"
   - firmware: "107"
     date: 2026-08-26
     bootloader: required

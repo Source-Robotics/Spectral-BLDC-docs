@@ -12,7 +12,10 @@ the firmware's internal state (counters, flags, scratch variables).
 - **Kept by `#Save`** says whether the setting survives a power cycle. *No* means the driver starts with the start
   value again after every power-up.
 
-`#Default` also sets the CAN node ID to 0 and erases the calibration; see
-[Saving the configuration](../05-setup/saving.md).
+`#Default` also erases the calibration; from firmware 108 it keeps a valid stored CAN node ID (`existing_id` in
+the table; 0 when none is stored); see [Saving the configuration](../05-setup/saving.md). A name after a value,
+such as `160 (CURRENT_BANDWIDTH_DEFAULT)`, is the constant in `constants.h` the value comes from. The settings of
+firmware 108 that are parameters, the anti-cogging and the encoder table among them, are in the
+[parameter table](can/parameters.md#every-parameter) with their defaults.
 
 <!-- defaults-table -->

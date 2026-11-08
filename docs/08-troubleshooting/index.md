@@ -26,7 +26,8 @@ flowchart TD
 | No LED | the supply, DC+ and DC−, the power cable's orientation. If the cable was the wrong way round the driver is destroyed |
 | LED on, nothing on the terminal | 256000 baud; TX to RX and RX to TX; the adapter's port; 3.3 V adapter; the line ending CR+LF |
 | LED on, nothing on CAN | the node ID; 1 Mbit/s on the adapter; termination (about 60 Ω across CAN H and CAN L with everything unpowered); the CAN cable's orientation |
-| `Unknown command` | the name's spelling and case: `#Kpiq`, not `#kpiq` |
+| `Unknown command` | the name's spelling and case: `#Kpiq`, not `#kpiq`; an argument with a space in it (`#WdFb 2000,0,1000,2`, not `#WdFb 2000, 0, 1000, 2`). `#Calonly` and `#Par` are refused in this build (known issue KI-17) |
+| `Wrong firmware for this board (product lock)`, the LED on steadily | the other product's firmware was flashed: a STEPFOC image on a Spectral Micro. Flash the Spectral Micro firmware; the configuration was not touched ([The product lock](../06-operation/diagnostics.md#the-product-lock)) |
 | the LED is off and nothing works after a firmware update | the bootloader has no valid firmware: flash again, see [Updating through the bootloader](../07-firmware/update.md) |
 
 ## Motor GUI
@@ -53,6 +54,7 @@ come back most:
 | `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for the motor |
 | `Commutation/alignment check failed!` | the motor did not respond to the commutation check: a phase open, `#Iqoffset` too low, a magnet that slips |
 | calibration succeeds, the motor then runs badly or in the wrong direction | the magnet slipped on the shaft; glue it and calibrate again |
+| the anti-cogging does not switch on (parameter 37 stays 0) | no set is identified for that form; run `#Cogcal save`. After an encoder table measured on its own the set is switched off until it is identified again ([Encoder table and anti-cogging](../05-setup/anti-cogging.md)) |
 | calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`, a value from an older release ([The check at power-up](../05-setup/saving.md#the-check-at-power-up)): `#Default`, calibrate again |
 
 ## The motor
@@ -88,7 +90,10 @@ cooling.
 
 ## After a firmware update
 
-`#Info` shows the new release. If the values look wrong or the LED stays on: `#Default`, `#Cal`, `#Save`. A release note says when an update clears the calibration.
+`#Info` shows the new release. If the values look wrong or the LED stays on: `#Default`, `#Cal`, `#Save`. A release note says when an update clears the calibration. After an update to 108, [Upgrading from older firmware](../07-firmware/upgrading.md) says what changes.
+
+A Vbus error right after power-up, cleared by `#Clear`, was the supply ramping up; from firmware 108 a low supply is
+not checked in the first 500 ms.
 
 ## Getting help
 

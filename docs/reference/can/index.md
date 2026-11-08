@@ -23,8 +23,11 @@ numbered from the most significant bit (bit 7 first).
 
 - [Motion](motion.md): the motion commands and their answers
 - [Gains and limits](gains-and-limits.md): the loop gains, the limits, Kt
-- [Status requests](status.md): temperature, voltage, identity, errors, current, encoder, Kt, the heartbeat
+- [Status requests](status.md): temperature, voltage, device info, errors, current, encoder, Kt, identity,
+  telemetry, the heartbeat
 - [System](system.md): node ID, E-stop, idle, save, reset, clear, watchdog, heartbeat setup, settings
+- [Parameters and buffers](parameters.md): the parameters behind Send_Parameter and Send_Get_Parameter, every one
+  of them, and the buffers: capture, histogram, anti-cogging, encoder table
 - [Gripper](gripper.md): the gripper command, calibration and the gripper state
 
 ## The Python library

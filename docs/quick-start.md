@@ -91,8 +91,8 @@ Read in more detail: [Power and the CAN daisy chain](04-mounting/power-and-can.m
 ## 6. Calibrate
 
 First the factory defaults, so that calibration does not start from another motor's values or from junk in the
-EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also sets the CAN node ID back to
-0 and the hardware version and batch date to factory values.) Then fix the motor to the bench, nothing on the
+EEPROM: *Default* in the Motor GUI settings, or `#Default` in the terminal. (It also sets the hardware version and
+batch date to factory values; from firmware 108 it keeps the CAN node ID.) Then fix the motor to the bench, nothing on the
 shaft, 24 V on the supply. There is nothing to enter: calibration measures the motor's resistance and inductance
 and finds its pole pairs and phase order by itself.
 

@@ -7,21 +7,32 @@ same idea as par6's tools/sync_runtime.py: facts come from the TAGGED code, neve
     python tools/sync_firmware.py --firmware PATH --tag V108
     python tools/sync_firmware.py --print uart|can|defaults [--tag V103]   print one table instead of writing
     python tools/sync_firmware.py --no-network         keep the release notes that are there (no GitHub API call)
+    python tools/sync_firmware.py --prerelease 7b7b195 --no-network
+                                                       before the release tag exists: read that commit instead
 
 It reads the firmware repository with `git show <tag>:<file>` and writes, into docs/includes/generated/:
 
     firmware_facts.json         what the code says: FIRMWARE_VERSION, every CAN command ID with the lengths its
                                 handler accepts and the response it sends, every frame the driver transmits with
-                                its length, every UART command the parser accepts and every UART handler with its
-                                kind (Set/Get, Get, Action), argument type, the mode it enters and the response it
-                                prints, the start values of the controller, PID and gripper structures with
-                                what #Default sets and #Save keeps (EEPROM.cpp), each marked as a setting or
-                                internal state
+                                its length (communication_CAN.cpp, and scope.cpp from 2026-11), every parameter
+                                number of IN_PARAM_SET / IN_PARAM_GET (PARAM_* in constants.h, from 2026-11), every
+                                UART command the parser accepts and every UART handler with its kind (Set/Get,
+                                Get, Action), argument type, the mode it enters and the response it prints, the
+                                start values of the controller, PID and gripper structures with what #Default
+                                sets and #Save keeps (EEPROM.cpp, settings block 2 included), each marked as a
+                                setting or internal state
     firmware_release_notes.md   the GitHub Release notes of every release up to docs_version (the release body is
                                 the firmware's changelog, see the firmware repository's release_guide.md)
 
 hooks/firmware_pages.py turns the facts and the hand-written descriptions (docs/includes/can_commands.yml,
-uart_commands.yml) into the reference pages at build time, and tools/test_tools.py checks that the two agree.
+uart_commands.yml, parameters.yml) into the reference pages at build time, and tools/test_tools.py checks that the
+two agree.
+
+--prerelease REF is for writing the pages of a release before it is tagged: the facts are read from REF (a commit
+or a branch; give the commit, a branch moves on), labelled with firmware.tag, and marked "prerelease" with REF's
+commit. The firmware's FIRMWARE_VERSION may still be the previous release's number then (it is bumped when the
+release is cut). tools/test_tools.py fails while the facts are a prerelease, so such a version is never published:
+once the tag exists, run the tool again without the option.
 
 The firmware repository (the last part of firmware.repository in versions.yml) is --firmware, else $FIRMWARE_DIR, else a
 folder of that name next to this repository, next to its parent, or under ../../projects; firmware.src names its
@@ -89,15 +100,29 @@ def uart_whitelist(parser_cpp: str) -> list[str]:
     return list(dict.fromkeys(STRCMP.findall(parser_cpp)))
 
 
+def handler_starts(text: str) -> list[list[re.Match]]:
+    """The handler conditions, in source order: each a list of the names it compares (`"Cal" || "Calonly"`). A
+    strcmp that is not part of an if condition (an argument passed to a function inside a handler) starts nothing."""
+    groups: list[list[re.Match]] = []
+    for m in STRCMP.finditer(text):
+        before = text[:m.start()].rstrip()
+        if before.endswith("||") and groups:
+            groups[-1].append(m)
+        elif re.search(r"\bif\s*\($", before):
+            groups.append([m])
+    return groups
+
+
 def uart_handlers(communication_cpp: str) -> list[dict]:
-    """One entry per UART handler, in source order."""
+    """One entry per UART handler, in source order; names compared in one condition share the handler."""
     text = communication_cpp
-    matches = list(STRCMP.finditer(text))
+    groups = handler_starts(text)
     out = []
-    for i, m in enumerate(matches):
+    for i, group in enumerate(groups):
+        m = group[0]
         start = m.start()
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-        block = text[start:end]
+        end = groups[i + 1][0].start() if i + 1 < len(groups) else len(text)
+        block = text[group[-1].end():end]
         # the firmware's own comment lines right above the handler
         before = text[:start].rstrip()
         comments = []
@@ -113,16 +138,19 @@ def uart_handlers(communication_cpp: str) -> list[dict]:
         comments.reverse()
         prints = [p for p in PRINT.findall(block) if p.strip()]
         has_arg = "strlen(argument)" in block
-        arg_type = "float" if "atof(argument)" in block else "int" if "atoi(argument)" in block else ""
+        # atof() until the 2026-11 flash savings, parse_float() since; parse_ints() reads a comma-separated list
+        arg_type = ("float" if re.search(r"\b(?:atof|parse_float)\(argument\)", block) else
+                    "int" if "atoi(argument)" in block else "int list" if "parse_ints(argument" in block else "")
         mode = MODE.search(strip_comments(block))
         # a handler that changes state is an action: it enters a mode, assigns a variable, or calls a function
         # (Write_config(), Set_Default_config(), Bootloader_ResetIntoBootloader(), ...; prints do not count)
         calls = [c for c in re.findall(r"\b([A-Z]\w+)\s*\(", block) if c not in ("Serialport",)]
         changes = bool(mode) or bool(ASSIGN.search(block)) or bool(calls)
         kind = "Set/Get" if has_arg else ("Action" if changes else "Get")
-        out.append({"name": m.group(1), "kind": kind, "arg": arg_type if has_arg else "",
-                    "mode": MODE_NAMES.get(int(mode.group(1)), mode.group(1)) if mode else "",
-                    "response": (prints[0].strip() if prints else ""), "comment": " ".join(comments)})
+        for g in group:
+            out.append({"name": g.group(1), "kind": kind, "arg": arg_type if has_arg else "",
+                        "mode": MODE_NAMES.get(int(mode.group(1)), mode.group(1)) if mode else "",
+                        "response": (prints[0].strip() if prints else ""), "comment": " ".join(comments)})
     return out
 
 
@@ -131,9 +159,11 @@ def uart_handlers(communication_cpp: str) -> list[dict]:
 DEFINE = re.compile(r"^#define[ \t]+((?:IN_|OUT_|OUT_IN_)[A-Z0-9_]+|HEARTBEAT_SETUP)[ \t]+(\d+)[ \t]*(?://[ \t]*(.*))?$", re.M)
 CASE = re.compile(r"case\s+([A-Z0-9_]+)\s*:")
 LEN = re.compile(r"CAN_RX_msg\.len\s*==\s*(\d+)")
-RESPONSE_FN = re.compile(r"\b([A-Z][A-Za-z_0-9]*(?:_CAN|_response|_pack|_pack_data))\(\)\s*;")
-TX_FN = re.compile(r"^void\s+(\w+)\s*\(\s*\)\s*\{", re.M)
-TX_LEN = re.compile(r"CAN_TX_msg\.len\s*=\s*(\d+)")
+# a response function, called with or without arguments (Param_value_CAN(CAN_RX_msg.data[0]) since 2026-11)
+RESPONSE_FN = re.compile(r"\b([A-Z][A-Za-z_0-9]*(?:_CAN|_response|_pack|_pack_data))\((?:[^();]|\([^();]*\))*\)\s*;")
+# every function definition (the end of the one before); a transmitting one sets a frame's length and its ID
+FN_START = re.compile(r"^(?:static\s+)?(?:void|bool|int|float|uint\d+_t|int\d+_t)\s+(\w+)\s*\([^)]*\)\s*\{", re.M)
+TX_LEN = re.compile(r"\b(?:CAN_TX_msg|msg)\.len\s*=\s*(\d+)")
 TX_ID = re.compile(r"Combine_2_CAN_ID\([^,]+,\s*([A-Z0-9_]+)")
 
 
@@ -161,17 +191,19 @@ def can_handlers(communication_can_cpp: str) -> dict[str, dict]:
     return out
 
 
-def can_tx(communication_can_cpp: str) -> dict[str, dict]:
-    """Every frame the driver transmits: the function name -> its command ID define and length."""
-    text = communication_can_cpp
-    matches = list(TX_FN.finditer(text))
+def can_tx(*sources: str) -> dict[str, dict]:
+    """Every frame the driver transmits: the function name -> its command ID define and length (the first length
+    the function sets: OUT_PARAM_VALUE's 5; its 1-byte "unknown" answer is in the descriptions). The sources are
+    communication_CAN.cpp and, from 2026-11, scope.cpp (OUT_BUFFER_DATA, sent from the main loop)."""
     out = {}
-    for i, m in enumerate(matches):
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-        block = text[m.start():end]
-        length, ident = TX_LEN.search(block), TX_ID.search(block)
-        if length and ident:
-            out[m.group(1)] = {"len": int(length.group(1)), "id_define": ident.group(1)}
+    for text in sources:
+        matches = list(FN_START.finditer(text))
+        for i, m in enumerate(matches):
+            end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+            block = strip_comments(text[m.start():end])
+            length, ident = TX_LEN.search(block), TX_ID.search(block)
+            if length and ident:
+                out[m.group(1)] = {"len": int(length.group(1)), "id_define": ident.group(1)}
     return out
 
 
@@ -214,7 +246,8 @@ def eeprom_facts(eeprom_cpp: str, constants_h: str) -> tuple[dict, dict, dict]:
     what #Default writes (key -> value), and what #Save writes (field -> key)."""
     code = strip_comments(eeprom_cpp)
     loads: dict[str, dict] = {}
-    for fn in ("read_config", "Load_calibration_from_eeprom", "Load_settings_from_eeprom"):
+    # settings block 2 (2026-11): its own load, defaults, and write functions beside the first two blocks'
+    for fn in ("read_config", "Load_calibration_from_eeprom", "Load_settings_from_eeprom", "Load_settings2_from_eeprom"):
         for field, rhs in STRUCT_SET.findall(function_body(code, fn)):
             rhs = rhs.strip()
             if field in loads:
@@ -228,16 +261,36 @@ def eeprom_facts(eeprom_cpp: str, constants_h: str) -> tuple[dict, dict, dict]:
                 c = re.search(rf"^#define[ \t]+{rhs}[ \t]+(\S+)", constants_h, re.M)
                 if c:
                     loads[field] = {"value": c.group(1)}
+    # block 2 writes its defaults from RAM (controller.x), which Settings2_defaults_to_ram() sets just before
+    ram_defaults = {f: v.strip() for f, v in STRUCT_SET.findall(function_body(code, "Settings2_defaults_to_ram"))}
     written: dict[str, str] = {}
-    for fn in ("Set_Default_config", "Set_Default_calibration_block", "Set_Default_settings_block"):
+    for fn in ("Set_Default_config", "Set_Default_calibration_block", "Set_Default_settings_block",
+               "Set_Default_settings2_block"):
         for key, value in WRITE_KEY.findall(function_body(code, fn)):
-            written[key] = value.strip()
+            value = value.strip()
+            f = re.fullmatch(r"controller\.(\w+)", value)
+            written[key] = ram_defaults.get(f.group(1), value) if f else value
     saved: dict[str, str] = {}
-    for key, value in WRITE_KEY.findall(function_body(code, "Write_config")):
-        f = re.search(r"\b(?:controller|PID|Gripper)\.(\w+)", value)
-        if f:
-            saved.setdefault(f.group(1), key)
+    for fn in ("Write_config", "Write_settings2_block"):
+        for key, value in WRITE_KEY.findall(function_body(code, fn)):
+            f = re.search(r"\b(?:controller|PID|Gripper)\.(\w+)", value)
+            if f:
+                saved.setdefault(f.group(1), key)
     return loads, written, saved
+
+
+def resolve(value: str, defines: str, depth: int = 4) -> str:
+    """A #define name as its number, with the name kept: CURRENT_BANDWIDTH_DEFAULT -> "160 (CURRENT_BANDWIDTH_DEFAULT)".
+    Anything that is not a single defined name comes back unchanged."""
+    name, v = value, value
+    for _ in range(depth):
+        if not re.fullmatch(r"[A-Z_][A-Z0-9_]*", v):
+            break
+        m = re.search(rf"^#define[ \t]+{v}[ \t]+([^\s/]+)", defines, re.M)
+        if not m:
+            break
+        v = m.group(1)
+    return value if v == name else f"{v} ({name})"
 
 
 def set_from_outside(communication_cpp: str, communication_can_cpp: str) -> set[str]:
@@ -290,9 +343,9 @@ def defaults(common_h: str, eeprom_cpp: str = "", constants_h: str = "", communi
     limits = set(LIMIT.findall(strip_comments(motor_control_cpp)))
     out = []
     for n, v, c in FIELD.findall(common_h):
-        out.append({"name": n, "value": v.strip(), "comment": (c or "").strip(),
+        out.append({"name": n, "value": resolve(v.strip(), constants_h), "comment": (c or "").strip(),
                     "setting": n in loads or n in saved or n in outside or n in limits,
-                    "after_default": after_default(n, loads, written, saved),
+                    "after_default": resolve(after_default(n, loads, written, saved), constants_h),
                     "saved": kept_by_save(n, loads, saved)})
     return out
 
@@ -359,23 +412,71 @@ def release_notes(docs_version: str) -> str:
 
 # ---------------------------------------------------------------- build
 
-def facts_for(repo: Path, tag: str) -> dict:
-    read = lambda name: git_show(repo, tag, f"{SRC}/{name}")
+def read_optional(read, name: str) -> str:
+    """A source file that older releases do not have (scope.cpp, watchdog_action.h: 2026-11), or ""."""
+    try:
+        return read(name)
+    except SyncError:
+        return ""
+
+
+PARAM = re.compile(r"^#define[ \t]+(PARAM_[A-Z0-9_]+)[ \t]+(\d+)[ \t]*(?://[ \t]*(.*))?$", re.M)
+
+
+def can_params(constants_h: str) -> list[dict]:
+    """The parameter numbers of IN_PARAM_SET / IN_PARAM_GET (2026-11): name, number, the firmware's comment with
+    its continuation lines (a `//` line right below, indented)."""
+    out = []
+    lines = constants_h.splitlines()
+    for i, line in enumerate(lines):
+        m = PARAM.match(line)
+        if not m:
+            continue
+        comment = [(m.group(3) or "").strip()]
+        for nxt in lines[i + 1:]:
+            c = re.match(r"^[ \t]+//[ \t]*(.*)$", nxt)
+            if not c:
+                break
+            comment.append(c.group(1).strip())
+        out.append({"name": m.group(1), "id": int(m.group(2)), "comment": " ".join(x for x in comment if x)})
+    return out
+
+
+def facts_for(repo: Path, tag: str, prerelease: str | None = None) -> dict:
+    """The facts of release `tag`, read at the tag, or at commit `prerelease` before the tag exists."""
+    ref = prerelease or tag
+    read = lambda name: git_show(repo, ref, f"{SRC}/{name}")
     constants, can_cpp, comm_cpp = read("constants.h"), read("communication_CAN.cpp"), read("communication.cpp")
-    commit = subprocess.run(["git", "-C", str(repo), "rev-list", "-n", "1", tag], capture_output=True, text=True).stdout.strip()
-    return {
-        "tag": tag, "version": firmware_version(constants, tag), "commit": commit[:12],
-        "can": {"ids": can_ids(constants), "handlers": can_handlers(can_cpp), "tx": can_tx(can_cpp)},
+    defines = constants + "\n" + read_optional(read, "watchdog_action.h")
+    commit = subprocess.run(["git", "-C", str(repo), "rev-list", "-n", "1", ref], capture_output=True, text=True).stdout.strip()
+    if prerelease and not commit:
+        raise SyncError(f"--prerelease {prerelease}: no such commit in {repo}")
+    # before the release is cut, FIRMWARE_VERSION may still name the release before it
+    version = tag.lstrip("Vv") if prerelease else firmware_version(constants, tag)
+    facts = {
+        "tag": tag, "version": version, "commit": commit[:12],
+        "can": {"ids": can_ids(constants), "handlers": can_handlers(can_cpp),
+                "tx": can_tx(can_cpp, read_optional(read, "scope.cpp"))},
         "uart": {"accepted": uart_whitelist(read("SerialPacketParser.cpp")), "handlers": uart_handlers(comm_cpp)},
-        "defaults": defaults(read("common.h"), read("EEPROM.cpp"), constants, comm_cpp, can_cpp,
+        "defaults": defaults(read("common.h"), read("EEPROM.cpp"), defines, comm_cpp, can_cpp,
                              read("motor_control.cpp")),
     }
+    params = can_params(constants)
+    if params:
+        facts["can"]["params"] = params
+    if prerelease:
+        facts["prerelease"] = {"ref": prerelease, "commit": commit[:12],
+                               "firmware_version_in_source": re.search(r"^#define\s+FIRMWARE_VERSION\s+(\d+)",
+                                                                        constants, re.M).group(1)}
+    return facts
 
 
-def build(repo: Path, tag: str, docs_version: str, network: bool) -> dict[str, str]:
-    facts = facts_for(repo, tag)
+def build(repo: Path, tag: str, docs_version: str, network: bool, prerelease: str | None = None) -> dict[str, str]:
+    facts = facts_for(repo, tag, prerelease)
     if facts["version"] != docs_version:
         raise SyncError(f"release {tag} is firmware {facts['version']}, docs_version is {docs_version} (versions.yml)")
+    if prerelease and network:
+        raise SyncError("--prerelease: the release has no notes on GitHub yet; add --no-network")
     head = (f"<!-- Generated by tools/sync_firmware.py from {REPO_NAME} {tag} ({facts['commit']}). Do not "
             f"edit: change the firmware, release it, then run the tool again. -->\n")
     files = {"firmware_facts.json": json.dumps(facts, indent=1, sort_keys=True) + "\n"}
@@ -391,6 +492,8 @@ def main(argv=None) -> int:
     ap.add_argument("--check", action="store_true", help="write nothing; exit 1 when a generated file is out of date")
     ap.add_argument("--no-network", action="store_true", help="do not fetch the release notes from GitHub")
     ap.add_argument("--print", choices=["uart", "can", "defaults"], help="print one table and exit")
+    ap.add_argument("--prerelease", metavar="REF", help="before the release tag exists: read the firmware at commit "
+                    "REF for the release firmware.tag names (never published: the tests fail on it)")
     args = ap.parse_args(argv)
     facts_yml = yaml.safe_load((ROOT / "versions.yml").read_text(encoding="utf-8"))
     tag = args.tag or facts_yml["firmware"]["tag"]
@@ -404,10 +507,11 @@ def main(argv=None) -> int:
     try:
         repo = find_firmware(args.firmware)
         if args.print:
-            facts = facts_for(repo, tag)
+            facts = facts_for(repo, tag, args.prerelease)
             sys.stdout.write({"uart": table_uart, "can": table_can, "defaults": table_defaults}[args.print](facts))
             return 0
-        files = build(repo, tag, str(facts_yml["docs_version"]), network=not args.no_network)
+        files = build(repo, tag, str(facts_yml["docs_version"]), network=not args.no_network,
+                      prerelease=args.prerelease)
     except SyncError as exc:
         print(f"sync_firmware: {exc}", file=sys.stderr)
         return 2
@@ -420,7 +524,8 @@ def main(argv=None) -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     for n in stale:
         (OUT / n).write_text(files[n], encoding="utf-8")
-    print(f"from {REPO_NAME} {tag}: {len(stale)} generated file(s) written, {len(files) - len(stale)} unchanged")
+    source = f"{tag}, PRERELEASE from commit {args.prerelease}" if args.prerelease else tag
+    print(f"from {REPO_NAME} {source}: {len(stale)} generated file(s) written, {len(files) - len(stale)} unchanged")
     return 0
 
 
