@@ -14,7 +14,7 @@ hand. [Over UART](../../06-operation/uart.md) explains the protocol.
 - A **Get** command only prints.
 - An **Action** command does something; a number after it is ignored.
 - Names are case-sensitive, at most 19 characters; the argument is one word of at most 19 characters, without
-  spaces, so a list is written with commas (`#WdFb 2000,0,1000,2`, `#Par 56,0`); firmware 107 and older allowed 20
+  spaces, so a list is written with commas (`#WdFb 2000,0,1000,2`, `#Par 1,200`); firmware 107 and older allowed 20
   characters for name and number together. The line ends with LF (CR before it is
   fine). 256000 baud, 8N1, 3.3 V.
 - A name the firmware does not know is answered `Unknown command`.

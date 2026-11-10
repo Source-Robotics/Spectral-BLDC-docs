@@ -31,8 +31,9 @@ Send_Save_config keeps it, and a kept watchdog runs from power-up: a host that d
 time finds the driver in watchdog error and clears it with Send_Clear_Error.
 
 What starts the timer again: Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack, the
-status requests (Send_Respond_…), Send_Get_Parameter and Send_Buffer_Read. What does not: the setting frames
-(gains, limits, Idle, Clear, Save, Settings, Send_Parameter, Send_Watchdog itself) and every UART command
+status requests (Send_Respond_…), Send_Get_Parameter and Send_Buffer_Read. Setting the watchdog time
+(Send_Watchdog, parameter 6) starts a fresh window, and so does Send_Save_config, whose save takes time. What
+does not: the other setting frames (gains, limits, Idle, Clear, Settings, Send_Parameter) and every UART command
 (known issue KI-11). While the encoder table or the anti-cogging is measured, the driver feeds it itself.
 
 ## What a trip does
@@ -53,7 +54,8 @@ Three rules keep a gentler action from softening the response to a real fault:
 - **Only a trip of the watchdog alone** gets the action. If another error is active as well (E-stop, encoder,
   supply voltage, temperature, not calibrated, a gripper E-stop), the driver gives the legacy response.
 - **Hold and descend take over only from a running motor**: position, velocity, current, PD or gripper mode. A
-  driver that was idle when the watchdog ran out stays as idle was.
+  driver that was idle when the watchdog ran out gives the legacy response: the motor coasts, also when it
+  braked in idle (`#Brake 1`).
 - **Hold and descend always end** after the fallback time, at most 60 s, so a lost host never leaves a motor
   driven for good. The after-action follows: 0 legacy, 2 brake or 3 coast.
 

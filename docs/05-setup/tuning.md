@@ -11,7 +11,7 @@ Set the current limit to the rated phase current of your motor in mA. Calibratio
 steps and, from firmware 109, puts your limit back when it ends (107 and older left 1600 mA: set it again after
 calibrating there). The factory default (`#Default`) of 1000 mA suits the gimbal motors in
 [Tested motors](../03-technical-data/tested-motors.md); a motor rated for more can go up to the driver's 2800 mA.
-`#Ilim` clamps the limit to 2800 mA; Send_Limits over CAN does not, so never send more. The firmware does not trip
+`#Ilim` clamps the limit to 2800 mA; from firmware 109 Send_Limits over CAN does too. The firmware does not trip
 on phase current by itself; the MOSFET driver's hardware protection only catches a hard fault. A limit above the
 motor's rating overheats the motor.
 
@@ -38,8 +38,10 @@ Tune from the inside out: the current loop first, then velocity, then position. 
 
 === "Motor GUI"
     The gains are in the settings: change one, *Apply gains*, command a move with the jog controls and read the
-    response on the plots. *Apply preset* loads a starting set for a kind of motor, its own current and velocity
-    gains included: apply a preset before you calibrate, so that the calibration computes the current gains.
+    response on the plots. *Apply preset* loads a starting set for a kind of motor: a product preset writes its
+    own current and velocity gains; the *Generic motor* presets set soft limits and velocity gains and leave the
+    current gains to `#Cbw` and the calibration. Apply a preset before you calibrate, so that the calibration
+    computes the current gains.
     **Save** when you are done.
 
 === "Terminal"
@@ -50,7 +52,8 @@ Tune from the inside out: the current loop first, then velocity, then position. 
 
 The current loop is a PI controller that turns a current request into a voltage. Its gains `Kpiq` and `Kiiq`
 follow from the motor's resistance R, its inductance L (both measured by calibration) and one number, the
-bandwidth: Kp = ω·L and Ki = ω·R, with ω = 2π × the bandwidth. The PI then cancels the coil's own lag, and the
+bandwidth: Kpiq ≈ ω·L and Kiiq = ω·R·T, with ω = 2π × the bandwidth and T the 200 µs control period (Kiiq is
+applied once per control loop). The PI then cancels the coil's own lag, and the
 current follows a request like a first-order filter at that bandwidth. Calibration computes them this way at
 160 Hz, the default from firmware 109; so does setting the bandwidth:
 
@@ -71,8 +74,12 @@ then tells which bandwidth they amount to.
 !!! note "Drives calibrated with older firmware"
     Firmware 107 and older computed the gains for 500 Hz on the 5000 Hz loop, which is fast for that loop rate.
     Their saved gains stay as they are after an update to 109: parameter 49 reads about 500 Hz until the drive is
-    calibrated again, or `#Cbw 160` and `#Save` are sent. 160 Hz was chosen on the STEPFOC bench; on the Spectral
-    Micro it is not yet tested. See [Upgrading from older firmware](../07-firmware/upgrading.md).
+    calibrated again. Calibrate again after the update where the motor can turn freely. A calibration made with
+    107 or older stored the resistance about 10 % and the inductance about 45 % too low, so `#Cbw` on the old
+    values gives gains for a lower bandwidth than it names (on an SSG-48 apply its preset instead, which writes
+    the gains). 160 Hz is the default; on the gimbal-motor bench 300 Hz settled a speed step 3.6 times faster at the
+    same holding noise, and 500 Hz added half again the current noise. The SSG-48 preset sets 300 Hz. See
+    [Upgrading from older firmware](../07-firmware/upgrading.md).
 
 Test with a current setpoint of a few hundred mA (*Jog current*, or `#Iq 300`): the motor should push with a
 steady, quiet torque. Keep the current well under the limit.
@@ -102,14 +109,15 @@ The velocity loop needs the speed, which the driver estimates from the encoder c
 
 | Parameter 50 | Estimate | How it behaves |
 |---|---|---|
-| 0 (default) | moving average of the last 20 count differences | about 2 ms late, in steps of 250 ticks/s: the estimate of every release before |
+| 0 | moving average of the last 20 count differences | about 2 ms late, in steps of 250 ticks/s: the estimate of every release before |
 | 1 | PLL, the speed is its integrator | smooth, a little late |
-| 2 | direct PLL, integrator plus the proportional term | almost no lag, a little more noise |
+| 2 (default) | direct PLL, integrator plus the proportional term | almost no lag, a little more noise |
 
-Both PLLs are critically damped at the natural frequency of parameter 51, 160 Hz by default (10 to 250 Hz). On
-the STEPFOC bench the lag of the moving average was what limited the velocity gain, and its default is now the
-direct PLL at 60 Hz, which allowed 40 % more `Kpv` and a lower speed ripple. The Spectral Micro keeps the moving
-average until it is measured the same way: try a PLL on your motor and compare. Calibration and the gripper's stop
+Both PLLs are critically damped at the natural frequency of parameter 51, 100 Hz by default (10 to 250 Hz). The
+lag of the moving average is what limits the velocity gain. On the gimbal-motor bench the direct PLL at 100 Hz
+allowed twice the `Kpv` of the moving average before the motor vibrated (0.11 against 0.056), lowered the speed
+ripple 1.3 to 3.4 times between 1500 and 48000 ticks/s, and cut the overshoot of a speed step from about 67 % to
+12 % at the same gains. At 60 Hz it overshot more, at 200 Hz it held with more current noise. Calibration and the gripper's stop
 detection always use the moving average. Neither parameter is kept by Save. The speed in Respond_data_pack_1 and
 Send_Respond_Encoder_data, the watchdog descend and the capture is the picked estimate.
 
@@ -118,9 +126,11 @@ Send_Respond_Encoder_data, the watchdog descend and the capture is the picked es
 The voltage a control loop sets reaches the motor later than the angle it was computed from was read: the rest of
 the loop, the wait for the PWM update and half a control period. By then the rotor has turned on, and the voltage
 lands a little behind the angle it was meant for. Parameter 64 turns the output voltage forward by the angle the
-rotor covers in that delay, in the closed-loop modes above 100 ticks/s; 1 to 500 µs are accepted. On the Spectral
-Micro it is 0, off, until the delay is measured; STEPFOC measured 166 µs on its own, faster loop, which does not
-carry over. It is not kept by Save.
+rotor covers in that delay, in the closed-loop modes above 100 ticks/s; 1 to 500 µs are accepted. The default is
+234 µs, the Spectral Micro's own delay measured on the bench: 20 points between 24000 and 120000 ticks/s gave one
+delay within 2 to 4 % of theory at every speed. Without it the field lags about 6° electrical at 120000 ticks/s.
+The delay belongs to the driver's timing, not to the motor, so it suits any motor; 0 switches it off. It is not
+kept by Save.
 
 ## The finer points of the velocity loop
 

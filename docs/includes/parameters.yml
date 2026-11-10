@@ -216,7 +216,7 @@ params:
   PARAM_POLE_PAIRS:
     group: motor
     access: rw
-    value: "1-200, only while the driver is idle (otherwise refused)"
+    value: "1-49, only while the driver is idle (otherwise refused); 50 and more would read as a STEPFOC calibration"
     saved: yes, with the calibration
     description: The motor's pole pairs, the same value as `#PP`. Calibration finds them.
 
@@ -323,11 +323,12 @@ params:
   PARAM_COMM_DELAY_US:
     group: current
     access: rw
-    value: "µs, 0-500 (outside: refused), 0 = off. Default 0"
-    saved: "no: off at every start-up"
+    value: "µs, 0-500 (outside: refused), 0 = off. Default 234"
+    saved: "no: 234 at every start-up"
     description: >
       Commutation delay compensation: the output voltage is turned forward by the angle the rotor covers in this
-      time. Applied in the closed-loop modes above 100 ticks/s. Off until it is measured on the Spectral Micro.
+      time. Applied in the closed-loop modes above 100 ticks/s. 234 µs is the Spectral Micro's own delay, measured
+      on the bench.
   PARAM_FAST_TRIG:
     group: current
     access: rw
@@ -339,16 +340,16 @@ params:
   PARAM_SPEED_ESTIMATOR:
     group: speed
     access: rw
-    value: "0 moving average, 1 PLL, 2 direct PLL (outside: refused). Default 0"
-    saved: "no: 0 at every start-up"
+    value: "0 moving average, 1 PLL, 2 direct PLL (outside: refused). Default 2"
+    saved: "no: 2 at every start-up"
     description: >
       The speed the loops, the watchdog descend, telemetry and the capture use. Calibration and the gripper's stop
       detection always use the moving average.
   PARAM_SPEED_PLL_BANDWIDTH:
     group: speed
     access: rw
-    value: "Hz, 10-250 (outside: refused). Default 160"
-    saved: "no: 160 at every start-up"
+    value: "Hz, 10-250 (outside: refused). Default 100"
+    saved: "no: 100 at every start-up"
     description: The natural frequency of both PLLs.
   PARAM_INPUT_FILTER_HZ:
     group: speed
@@ -422,7 +423,7 @@ params:
     saved: the table, when started with 2 or 3
     description: >
       Measures the encoder table: the field turns the rotor open loop one shaft turn forward and one back at 2048
-      ticks/s (about 20 s). The shaft must be free. Not yet tested on the Spectral Micro's bench.
+      ticks/s (about 20 s). The shaft must be free.
   PARAM_ENCAL_USE:
     group: encoder
     access: rw
@@ -444,11 +445,11 @@ params:
   PARAM_AFTER_CAL:
     group: encoder
     access: rw
-    value: "0 nothing, 1 anti-cogging, 2 encoder table then anti-cogging (outside: refused). Default 0"
+    value: "0, 1 or 2 (outside: refused). Default 0"
     saved: yes, encoder block
     description: >
-      What runs by itself after a successful calibration; the whole configuration is saved when it succeeds.
-      `#Calonly` skips it once. 0 on the Spectral Micro until the runs are tested on its bench.
+      No effect on the Spectral Micro: `#Cal` always runs the encoder table and the anti-cogging, and `#Calonly`
+      never does. It stays so that the parameter numbers match STEPFOC.
   PARAM_ENCAL_OFFSET:
     group: encoder
     access: r

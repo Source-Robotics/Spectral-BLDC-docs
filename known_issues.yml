@@ -32,7 +32,8 @@ issues:
     workaround: Keep the current limit your host sends within the motor's rating and 2800 mA.
     page: reference/can/gains-and-limits.md#send_limits
     title: Send_Limits
-    status: open
+    status: fixed
+    fixed_in: "109: Send_Limits stops the current limit at 2800 mA and ignores a negative value"
     since: 2026-11-04
 
   - id: KI-2
@@ -136,10 +137,10 @@ issues:
   - id: KI-11
     component: firmware
     summary: Only motion frames and answered status requests reset the watchdog. Setting frames (gains, limits, Idle,
-      Clear, Save) and UART commands do not, so a host that only configures the driver, or a terminal session with
+      Clear) and UART commands do not, so a host that only configures the driver, or a terminal session with
       a saved watchdog, ends in a watchdog error.
     workaround: While the watchdog runs, send a status request such as Send_Respond_Encoder_data within every watchdog
-      period. Before you work over UART alone, set the watchdog to 0 over CAN and save.
+      period. Before you work over UART alone, set the watchdog to 0 and save (`#Par 6,0`, then `#Save`).
     page: 06-operation/errors.md#the-watchdog
     title: The watchdog
     status: open
@@ -184,7 +185,8 @@ issues:
       do.
     page: 06-operation/errors.md
     title: Errors and recovery
-    status: open
+    status: fixed
+    fixed_in: "109: the line reads `FAULT pin is LOW: the gate driver reports a fault`"
     since: 2026-11-04
 
   - id: KI-16
@@ -201,11 +203,11 @@ issues:
 
   - id: KI-19
     component: firmware
-    summary: The encoder table holds a field current of 80 % of the current limit for about 20 s, also when parameter
-      56 starts it after a calibration. With a limit above the motor's rating (1000 mA after `#Default`), the run is
+    summary: The encoder table holds a field current of 80 % of the current limit for about 20 s, also in the run
+      that follows every `#Cal`. With a limit above the motor's rating (1000 mA after `#Default`), the run is
       above the rating too.
-    workaround: Set `#Ilim` for the motor before the encoder table runs, or before `#Cal` when parameter 56 is 1 or 2
-      (calibration puts the limit that was in force back before the runs that follow).
+    workaround: Set `#Ilim` for the motor before `#Encal` and before every `#Cal` (calibration puts the limit that
+      was in force back before the runs that follow).
     page: 05-setup/anti-cogging.md#running-them
     title: "Encoder table and anti-cogging: running them"
     status: open

@@ -7,7 +7,7 @@
 | Supply voltage | 12 to 29 V DC, 24 V typical; 10 V absolute minimum |
 | Vbus error limits (firmware) | below 9 V or above `#Vmax`, 29 V after `#Default` |
 | Phase current, continuous | 1.5 A typical |
-| Phase current, maximum | 2.8 A (`#Ilim` is clamped to 2800 mA; Send_Limits over CAN is not, so never send more); needs good cooling and short bursts |
+| Phase current, maximum | 2.8 A (`#Ilim` and, from firmware 109, Send_Limits over CAN are clamped to 2800 mA); needs good cooling and short bursts |
 | Power, maximum | 80 W |
 | Power, idle | 0.3 W |
 | PWM frequency | 25 kHz |

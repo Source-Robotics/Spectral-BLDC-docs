@@ -109,12 +109,16 @@ the supply, the resistance and inductance, the pole pairs, the phase order, the 
 
 ```
 Calibration success!
-Save config with #Save
+Next, by itself: the encoder table, then anti-cogging (about a minute; keep the shaft free). Everything is saved when they finish (#Encal state, #Cogcal state)
 Going to idle!
 ```
 
-A failed step names itself. `Magnet test: Failed` is the magnet; `Resistance test: Failed` or `Open loop: Failed`
-means a phase is not connected or the motor is outside the 2 to 24 Ω range; `Commutation/alignment check failed!`
+Keep the shaft free for about a minute more: the driver goes on to measure the encoder table and the anti-cogging,
+and saves everything when they succeed.
+
+A failed step names itself. `Magnet test: Failed` is the magnet; `Resistance test: Failed` means a phase is not
+connected or the motor is outside the 2 to 24 Ω range; `Open loop: Failed` means the rotor did not follow the
+field: check the three wires and that the shaft is free; `Commutation/alignment check failed!`
 means the motor did not respond: check the three wires, the supply, and that the magnet does not slip.
 
 Read in more detail: [Calibration](05-setup/calibration.md), with the whole log and every message.

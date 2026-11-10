@@ -21,11 +21,15 @@ what to do about each are on [Errors and recovery](errors.md).
 | `delay compensation:` | the commutation delay in µs, or `off` ([Commutation delay compensation](../05-setup/tuning.md#commutation-delay-compensation)) |
 | `speed estimate:` | `moving average`, `PLL, … Hz` or `direct PLL, … Hz` ([The speed estimate](../05-setup/tuning.md#the-speed-estimate)) |
 | `input filter:`, `integral deadband:` | parameters 74 and 75, or `off` |
-| `after a calibration` | what parameter 56 makes follow a `#Cal` |
 | `running:` | only while one runs: `calibration`, `encoder table`, `anti-cogging identification`, or `the runs after the calibration` |
 
 Before that section `#Info` prints, beside what it printed before:
 
+- `Build:` the git commit the firmware was built from, 7 hex digits, with a `+` when it was built with
+  uncommitted changes. `Board ID:` this board, 8 hex digits made from the chip's unique number; it never changes,
+  and it is not the bootloader's board ID (0 to 13). `Calibration ID:` a new number at every successful
+  calibration, kept by Save; `00000000` before the first. Over CAN they are parameters 84, 86 and 87; parameter
+  85 is the build time in Unix seconds.
 - `CAN RX overruns` and `CAN TX dropped`: frames the driver lost because its receive buffer was full, and answers
   it gave up after waiting 1 ms for a free transmit mailbox. Both should stay 0; they count from power-up. From
   firmware 109 the CAN controller passes only the frames addressed to the driver's own node ID, and the driver
@@ -35,6 +39,11 @@ Before that section `#Info` prints, beside what it printed before:
   count is about 1.6 mA), and what the second measurement with the bridge switching found. On the bench the zeros
   were −8 and −7 counts, and the current read 3.9 mA with nothing flowing, where it read −20 to +19 mA before. A zero more than 200
   counts from 2048 is not trusted: the driver then uses 2048 and says `not measured or out of range`.
+  The current sensors need the motor supply. If the driver starts without it (USB plugged in before the supply),
+  it waits up to half a second for the supply, then uses 2048 and says
+  `no motor supply at start-up: 2048 used; measured once the supply is there`. When the supply comes, the driver
+  measures the zero by itself at rest, coasting for about 100 ms even if it is set to brake, and the line shows the
+  new zeros. The Vbus error the late supply latched stays until `#Clear`.
 - `Tool ID`, `Watchdog: … ms, action …, fallback …`, `Settings block 2: ok` and `Anti-cogging: …, scale … %` with
   whether it is saved.
 

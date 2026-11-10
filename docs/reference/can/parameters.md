@@ -1,15 +1,19 @@
 # Parameters and buffers
 
-From firmware 109 a setting that has no command of its own is a **parameter**: a number from 1 to 79 behind one
+From firmware 109 a setting that has no command of its own is a **parameter**: a number from 1 to 87 behind one
 pair of commands, Send_Parameter (ID 36) to set it and Send_Get_Parameter (ID 37) to read it, answered with
 Respond_Parameter (ID 38). The identifier has room for only 64 command IDs, so new settings no longer use them up.
 Parameter numbers are permanent: a number is never given a new meaning. Number 73 is not used and stays free.
+Parameters 84 to 87 are read only and say which build and which board answer: the git commit the firmware was
+built from (84), its build time in Unix seconds (85), the board ID (86) and the calibration ID (87). `#Info` prints
+them as `Build`, `Board ID` and `Calibration ID` ([Status and diagnostics](../../06-operation/diagnostics.md)).
+They are not in the table below yet.
 
 The **buffers** are the larger data a drive holds: a capture of three signals, a histogram, the anti-cogging set
 and the encoder table. Send_Buffer_Read (ID 41) reads them in 8-byte frames, Respond_Buffer_Data (ID 42) carries
 them, and Send_Buffer_Write (ID 43) writes the anti-cogging set.
 
-Over UART, `#Par` does the same: `#Par` lists every parameter, `#Par 56` reads one, `#Par 56,0` sets it
+Over UART, `#Par` does the same: `#Par` lists every parameter, `#Par 1` reads one, `#Par 1,200` sets it
 ([Status and utility](../uart/utility.md)).
 
 ## Setting and reading a parameter
@@ -23,17 +27,19 @@ import Spectral_BLDC as Spectral
 comms = Spectral.CanCommunication(bustype='slcan', channel='COM41', bitrate=1000000)
 motor = Spectral.SpectralCAN(node_id=0, communication=comms)
 
-motor.Send_Parameter(56, 0)                # nothing runs by itself after the next calibration
-motor.Send_Get_Parameter(56)               # read it back
+motor.Send_Parameter(1, 200)               # tool id 200, a custom tool
+motor.Send_Get_Parameter(1)                # read it back
 message, ids = comms.receive_can_messages(timeout=0.1)
 if message is not None:
     motor.UnpackData(message, ids)
-print(motor.parameters.get(56))
+print(motor.parameters.get(1))
 motor.Send_Save_config()                   # keep it over a power cycle
 ```
 
 `Send_Parameter`, `Send_Get_Parameter` and the buffer calls come with the release of the Spectral-BLDC library
-after 1.20; with 1.20, send the frames yourself (`python-can`, the layouts below).
+after 1.20; with 1.20, send the frames yourself (`python-can`, the layouts below). `Send_Parameter` takes the
+value itself: a gain or a limit (8 to 16 and 20) is sent as a float, so `motor.Send_Parameter(16, 1500)` sets a
+current limit of 1500 mA; every other parameter takes a whole number.
 
 ## The commands
 
@@ -68,7 +74,7 @@ Bit 0 is the least significant.
 | 13 | sin and cos come from the integer table (parameter 65) |
 | 14 | the position input filter is on (parameter 74 not 0) |
 | 15 | the velocity-integral deadband is on (parameter 75 not 0) |
-| 16-17 | parameter 56: 0 nothing, 1 anti-cogging, 2 encoder table and anti-cogging after a calibration |
+| 16-17 | parameter 56 (no effect on the Spectral Micro) |
 | 20 | a calibration is running |
 | 21 | the encoder table is being measured |
 | 22 | the anti-cogging is being identified |

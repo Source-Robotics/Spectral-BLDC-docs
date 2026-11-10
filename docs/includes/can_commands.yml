@@ -155,9 +155,9 @@ commands:
     group: gains
     python: Send_Limits()
     description: >
-      Sets the speed limit and the current limit the loops may reach. The firmware stores the current limit as it
-      arrives: over CAN it is not clamped to the driver's 2800 mA (only `#Ilim` over UART clamps it). Never send
-      more than 2800 mA, or more than the motor's rating.
+      Sets the speed limit and the current limit the loops may reach. From firmware 109 a negative value, or one
+      that is not a number, is ignored, and the current limit stops at the driver's 2800 mA, as with `#Ilim`.
+      Firmware 107 and older stored the current limit as it arrived. Never send more than the motor's rating.
     forms:
       - length: 8
         fields:
@@ -179,7 +179,7 @@ commands:
     description: >
       Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 0 means use the supply
       voltage. In the 104 release image (the source at tag V104 does not have it yet) and in every release from
-      105.
+      105. From firmware 109 it takes 0 to 60000 mV, as parameter 17 does; a value outside is ignored.
     forms:
       - length: 4
         fields:
@@ -371,10 +371,11 @@ commands:
       the driver acts on the action byte, but only when the watchdog is the only active error: any other error
       gets the legacy response, the motor disabled and coasting. Hold and descend run for the fallback time
       (parameter 2, 2 s by default), then the after-action (parameter 5); they start only if the driver was in
-      position, velocity, current, PD or gripper mode, otherwise it stays as idle was.
-      [The watchdog](../../06-operation/watchdog.md) explains each action. The setting is kept by Send_Save_config
-      and has no UART command of its own: to turn off a saved watchdog, send 0 over CAN (or parameter 6 = 0) and
-      save, or use `#Default`. The same values are parameters 6 and 7.
+      position, velocity, current, PD or gripper mode, otherwise the driver gives the legacy response and the
+      motor coasts. Setting the time starts a fresh window, and a negative time means off.
+      [The watchdog](../../06-operation/watchdog.md) explains each action. The setting is kept by Send_Save_config.
+      The same values are parameters 6 and 7, which `#Par` reaches over UART: to turn off a saved watchdog, send 0
+      over CAN or `#Par 6,0`, and save.
     forms:
       - length: 5
         fields:
@@ -395,13 +396,15 @@ commands:
   IN_SETTINGS:
     name: Send_Settings
     group: system
+    python: Send_Settings()
     description: >
       Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a
       value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1
       brake (phases shorted), 0 coast (the default). The setting is not saved: the driver coasts again after a
       power cycle. Braking applies only in idle without an error; an error always disables the motor, which then
       coasts. The braking current is not limited, see Control modes. Added in firmware 107 (STEPFOC 107). The
-      Python library has no call for it yet.
+      Python library's release after 1.20 has `Send_Settings(mask, value)` and, for this bit,
+      `Send_Brake_Coast(brake)`; 1.20 has no call for it.
     forms:
       - length: 2
         fields:
@@ -427,7 +430,7 @@ commands:
     forms:
       - length: 5
         fields:
-          - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: "the parameter number, 1-79"}
+          - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: "the parameter number, 1-87"}
           - {bytes: "1-4", name: Value, type: signed 32-bit, meaning: "the new value, in the parameter's unit; for the gains, limits and Kt (8-16, 20) a float's bit pattern"}
     notes: >
       A data frame of another length, or a remote frame, is ignored and flagged as a wrong data length. It does
@@ -573,7 +576,7 @@ commands:
         fields:
           - {bytes: "0", name: Position, type: unsigned 8-bit, meaning: "0 fully open, 255 fully closed"}
           - {bytes: "1", name: Speed, type: unsigned 8-bit, meaning: "0 slowest, 255 fastest"}
-          - {bytes: "2-3", name: Current, type: signed 16-bit, meaning: "current limit of the move in mA; not clamped by the firmware, see the gripper manual for the safe range"}
+          - {bytes: "2-3", name: Current, type: signed 16-bit, meaning: "current limit of the move in mA; from firmware 109 its magnitude is used and it stops at 2800 mA; see the gripper manual for the safe range"}
           - {bytes: "4", bit: 7, name: Activate, type: bit, meaning: "1 activate the gripper, 0 deactivate"}
           - {bytes: "4", bit: 6, name: Action, type: bit, meaning: "1 go to the position, 0 idle", _shared: true}
           - {bytes: "4", bit: 5, name: E-stop, type: bit, meaning: 1 raises the gripper E-stop error, _shared: true}

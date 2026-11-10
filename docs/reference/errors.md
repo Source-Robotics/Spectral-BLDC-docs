@@ -22,10 +22,10 @@ Send_Respond_State_of_Errors (bits numbered from the most significant).
 | Flag | `#Error` prints | Byte, bit | Raised when |
 |---|---|---|---|
 | `Error` | `In error state!` | 0, 7 | any of the flags below is set (also the error bit of every CAN identifier) |
-| `temperature_error` | `Temp error` | 0, 6 | the thermistor reads above `#Tlim` (with `#Term 1`) |
+| `temperature_error` | `Temp error` | 0, 6 | the thermistor reads above `#Tlim` or below −20 °C (with `#Term 1`) |
 | `encoder_error` | `Encoder error` | 0, 5 | the magnet is not detected or the reading fails its check |
 | `Vbus_error` | `Vbus error` | 0, 4 | the supply is below 9 V or above `#Vmax` (29 V after `#Default`); from firmware 109 a low supply is not checked in the first 500 ms after power-up |
-| `Driver_error` | `Drv error` | 0, 3 | the MOSFET driver reported a fault on its fault pin: undervoltage, thermal shutdown or overcurrent. `#Error` also prints `FAULT pin is HIGH` while the fault output is still active |
+| `Driver_error` | `Drv error` | 0, 3 | the MOSFET driver reported a fault on its fault pin: undervoltage, thermal shutdown or overcurrent. `#Error` also prints `FAULT pin is LOW: the gate driver reports a fault` while the fault output is still active |
 | `Velocity_error` | `Velocity error` | 0, 2 | the measured speed exceeds 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit: a runaway or an encoder fault, not `#Vlimit` |
 | `Current_error` | `Current error` | 0, 1 | never in this firmware; reserved |
 | `ESTOP_error` | `Received ESTOP command` | 0, 0 | Send_ESTOP was received |

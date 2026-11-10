@@ -31,8 +31,8 @@ These settings are lost at a power cycle, whatever you save. The driver starts w
 - the idle behaviour (`#Brake`, Send_Settings): the driver coasts after every power-up;
 - the calibration settings `#Cbw` (160 Hz; the gains it computed are kept), `#Resv`, `#Calpwr`, `#Openv`,
   `#Opens`, `#Vp` and `#Iqoffset`: set them again before each calibration that needs other values;
-- the parameters of firmware 109 that tune the loops: the speed estimate (the moving average), the commutation
-  delay compensation (off), the sin/cos table (off), the position input filter and the velocity-integral deadband
+- the parameters of firmware 109 that tune the loops: the speed estimate (the direct PLL at 100 Hz), the
+  commutation delay compensation (234 µs), the sin/cos table (off), the position input filter and the velocity-integral deadband
   (off), the anti-cogging identification speed, the d-axis current, and the capture and histogram settings. The
   [parameter table](../reference/can/parameters.md#every-parameter) says for every parameter whether it is kept;
 - the cyclic output (`#Cyc`, `#Cyca`);
@@ -70,7 +70,7 @@ firmware 106 the saved configuration is in blocks, each with its own checksum; f
 |---|---|---|---|
 | calibration | 60-188, reserved 204-228 | 200 | the motor's resistance, inductance, pole pairs, phase order, direction, angle offset, Kt, KV and the current loop gains |
 | settings 1 | 44-180 | 196 | the other gains, the limits, the node ID, the watchdog, the heartbeat and the flags |
-| settings 2 (109) | 260-312 | 256 | tool id, watchdog fallback, the product stamp; reserved slots |
+| settings 2 (109) | 260-312 | 256 | tool id, watchdog fallback, the product stamp, the calibration ID; reserved slots |
 | anti-cogging (109) | 324-879 | 320 | the harmonics, the table, mode and scale |
 | encoder table (109) | 884-1147 | 880 | the table, its on/off switch, parameter 56, the current-sense zero trims |
 
@@ -91,7 +91,7 @@ the defaults.
 
 `#Info` prints the identity and the motor: hardware version, batch date, firmware version, CAN ID, whether the
 motor is calibrated, temperature, supply voltage, the phase order and direction, the pole pairs, resistance,
-inductance, Kt and KV, and from firmware 109 the tool id, the watchdog, the EEPROM blocks and, at its end, what is
-in force. `#SERNUM` prints the serial number, `#Param` the gains and limits, `#Error` the active errors. They are
+inductance, Kt and KV, and from firmware 109 the build, the board ID and the calibration ID, the tool id, the
+watchdog, the EEPROM blocks and, at its end, what is in force. `#SERNUM` prints the serial number, `#Param` the gains and limits, `#Error` the active errors. They are
 the first thing to look at when something is off, and the thing to copy into a bug report.
 [Status and diagnostics](../06-operation/diagnostics.md) explains the new lines.

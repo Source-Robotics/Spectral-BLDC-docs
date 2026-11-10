@@ -12,7 +12,7 @@ when it holds something. The [SSG-48 gripper](https://docs.source-robotics.com/S
 ```
 
 `#Default` clears the flag again. A driver in gripper mode still answers every other command; the gripper
-commands only work with the flag set.
+commands only work with the flag set, except the gripper calibration, which runs with or without it.
 
 ## Calibrating the gripper
 
@@ -56,9 +56,10 @@ error stays: while the E-stop bit is 1 the driver raises it again on every contr
 clear the bit (`#Gripstop 0`, or a Send_gripper_data_pack with the bit 0), then `#Clear` or Send_Clear_Error.
 
 !!! warning "Current"
-    The firmware does not limit the current you give a gripper move. The safe range depends on the gripper's
-    mechanics and motor; the [SSG-48 manual](https://docs.source-robotics.com/SSG48-gripper-docs/) gives it for
-    that gripper. The board is rated for 2800 mA, but nothing enforces it here. A gripper move also replaces the
+    From firmware 109 the current you give a gripper move stops at the board's 2800 mA; firmware 107 and older
+    did not limit it. The safe range depends on the gripper's mechanics and motor and is lower; the
+    [SSG-48 manual](https://docs.source-robotics.com/SSG48-gripper-docs/) gives it for that gripper. A gripper
+    move also replaces the
     driver's current limit with the move's current, and a later `#Save` keeps that value.
 
 ## Where the details are

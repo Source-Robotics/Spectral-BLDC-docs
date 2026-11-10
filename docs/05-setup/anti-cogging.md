@@ -6,15 +6,13 @@ status: new
 
 Firmware 109 can measure two corrections on the drive itself, with nothing but the motor on the bench: the
 **encoder table**, which corrects the small error of the encoder's angle reading, and the **anti-cogging**, a
-current that cancels the motor's own torque ripple. The same routines run on the sister driver STEPFOC, where
-they follow every calibration. On the Spectral Micro they are ported but not yet tested on its bench, so nothing
-runs by itself after a calibration (parameter 56 is 0); you start them yourself.
+current that cancels the motor's own torque ripple. The same routines run on the sister driver STEPFOC. From
+firmware 109 they follow every `#Cal` by themselves; `#Calonly` is the calibration alone.
 
-!!! warning "Not yet tested on a Spectral Micro"
-    The encoder table, the anti-cogging identification and parameter 56 come from the STEPFOC firmware, where they
-    were tested on the bench. On the Spectral Micro the first attempt, on a gimbal motor, could not finish: the
-    shaft stopped turning in velocity mode, and the cause was not found. Try them on your motor with care, and
-    check the result as below before you keep it.
+!!! note "Tested on a gimbal motor"
+    On the Spectral Micro bench (gimbal motor, 2026-11-10) a full `#Cal` measured the encoder table (0.50° peak to
+    peak) and identified the anti-cogging (6.8 mA rms), and saved both. Check the result as below before you keep it. When a
+    run fails after a `#Cal` the calibration itself is still good: save it with `#Save`.
 
 !!! danger "The motor turns"
     Each run turns the motor one revolution forward and one back, slowly. Keep the shaft free: nothing on it and
@@ -82,8 +80,7 @@ an error comes up; nothing is saved then.
 A save from a run is the whole configuration, as `#Save` writes it. After a change of the motor, the magnet or
 its position, run the encoder table and the anti-cogging again, in that order, or calibrate again.
 
-To have them follow every calibration, as on STEPFOC, set parameter 56 to 2 (both) or 1 (the anti-cogging alone)
-and save: after `Calibration success!` the driver then runs them and saves everything when they succeed.
+After `Calibration success!` of a `#Cal` the driver runs both by itself and saves everything when they succeed.
 
 Two guards keep a correction from running on the wrong data: parameter 37 refuses 1 or 2 while no set is stored
 for that form, and an encoder table measured on its own (52 = 1 or 2) switches an anti-cogging set from before
@@ -99,10 +96,9 @@ In force:
   encoder table: on, error 0.61 deg p-p
   anti-cogging: on (harmonics), saved
   current-sense zero trim: 0 / 0 counts
-  delay compensation: off
-  speed estimate: moving average
+  delay compensation: 234 us
+  speed estimate: direct PLL, 100 Hz
   input filter: off; integral deadband: off
-  after a calibration (#Cal; #Calonly skips it): nothing
 ```
 
 (here with an example encoder error). While a run goes, a line `running: encoder table` or

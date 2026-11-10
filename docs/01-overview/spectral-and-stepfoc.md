@@ -16,9 +16,9 @@ What this means in practice:
 - **The firmware releases go in step, and from 109 share their numbers.** From release 109 the two drivers are
   released together under the same version number; the Spectral Micro went from 107 straight to 109, so there is
   no Spectral Micro 108. Before, the numbers did not always match (Spectral Micro 107 went with STEPFOC 108); the
-  [compatibility table](../appendix/compatibility.md) lists the pairs. In 109 some new features were tested on the
-  STEPFOC bench first, so the Spectral Micro keeps its earlier defaults for them (the speed estimate, the delay
-  compensation, the runs after a calibration) until they are measured on it.
+  [compatibility table](../appendix/compatibility.md) lists the pairs. Some defaults differ, each measured on its
+  own driver: the direct PLL speed estimate at 100 Hz and 234 µs delay compensation here, 60 Hz and 166 µs on
+  STEPFOC.
 - **Calibration differs.** The Spectral Micro measures the motor's resistance and inductance and finds its pole
   pairs; STEPFOC cannot, so there the three values are entered from the motor's datasheet first. See
   [Calibration](../05-setup/calibration.md).

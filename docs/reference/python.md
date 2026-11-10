@@ -9,7 +9,8 @@ The `Spectral-BLDC` package ([Spectral-BLDC-Python](https://github.com/Source-Ro
 <!-- python-calls -->
 
 The calls for the messages added in firmware 109 (Send_Parameter, Send_Get_Parameter, Send_Respond_Identity,
-Send_Respond_Telemetry, Send_Buffer_Read, Send_Cogging_Harmonic, Send_Cogging_Table, Send_Sound, Send_Samples), and the actions 'Coast' and
+Send_Respond_Telemetry, Send_Buffer_Read, Send_Cogging_Harmonic, Send_Cogging_Table, Send_Sound, Send_Samples),
+Send_Settings and Send_Brake_Coast for the idle behaviour, and the actions 'Coast' and
 'Descend' of Send_Watchdog, come with the library's release after 1.20. It also adds calls built on the
 parameters, among them Send_Watchdog_Fallback, Send_Tool_ID, Send_Cogging_Mode, Send_Capture_Setup,
 Send_Capture_Trigger, Send_Histogram, Send_Cogging_Calibrate and Send_Encoder_Calibrate; the sound calls Send_Tone,
@@ -24,6 +25,18 @@ The same release adds `Spectral_BLDC.helpers`, blocking functions that send a re
 `play_events` and `stream_samples` for sound. They are for setting up and diagnostics, not for the inside of a fast
 control loop. The library's `examples` folder shows them at work: `parameters_and_status.py`, `capture.py`,
 `calibration_features.py`, `watchdog.py` and `sound.py`.
+
+The same release is stricter about what it sends and reads:
+
+- `Send_Parameter` takes the value itself. Parameters 8 to 16 and 20 are sent as floats
+  (`Send_Parameter(16, 1500)` is 1500 mA); every other parameter takes a whole number, and anything else raises
+  `ValueError`.
+- A position or a speed that does not fit 24 bits, or a current that does not fit 16 bits, raises `ValueError`;
+  1.20 wrapped it round. `Send_Voltage_Limit` raises `ValueError` outside 0 to 60000 mV.
+- A node ID must be 0 to 15.
+- `UnpackData` ignores frames from other nodes, remote frames and extended frames.
+- Parameters 79, 80 and 84 to 87 read as unsigned numbers.
+- A send that fails returns `False` and is logged once.
 
 ## Receiving
 

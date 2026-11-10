@@ -20,7 +20,8 @@
 
 **Board ID**
 :   The bootloader's own address, 0 to 13, stored in its configuration page. The firmware sets it to the CAN node
-    ID when the configuration is saved.
+    ID when the configuration is saved. The `Board ID` line of `#Info` (parameter 86, firmware 109 and newer) is
+    another thing: 8 hex digits from the chip's unique number, which never change.
 
 **Bootloader**
 :   The program in the first 12 KB of the driver's flash on boards that run firmware 104 or newer. It starts the
@@ -56,7 +57,7 @@
 
 **Commutation delay compensation** (parameter 64)
 :   Turning the output voltage forward by the angle the rotor covers between the angle reading and the moment the
-    voltage reaches the motor. Off on the Spectral Micro until it is measured.
+    voltage reaches the motor. 234 µs on the Spectral Micro by default.
 
 **Control mode**
 :   What the driver is doing with the motor: idle, position, velocity, current, PD (impedance), voltage torque, open
@@ -64,7 +65,7 @@
 
 **Current loop bandwidth** (`#Cbw`, parameter 49)
 :   How fast the current loop follows a change of its setpoint, in Hz. The current loop gains follow from it and
-    the motor's resistance and inductance: Kp = ω·L, Ki = ω·R. 160 Hz by default from firmware 109 (500 Hz before).
+    the motor's resistance and inductance: Kpiq ≈ ω·L, Kiiq = ω·R·T (T the 200 µs control period). 160 Hz by default from firmware 109 (500 Hz before).
 
 **Current-sense zero**
 :   The reading of a current sensor with no current flowing. From firmware 109 the driver measures it at every
@@ -162,7 +163,7 @@
 
 **PLL (speed estimate)**
 :   A phase-locked loop that follows the encoder count and gives the speed with less lag than a moving average
-    (parameter 50, firmware 109 and newer; the moving average stays the Spectral Micro's default).
+    (parameter 50, firmware 109 and newer; the direct PLL at 100 Hz is the default).
 
 **Pole pairs**
 :   The number of electrical cycles per mechanical revolution, half the number of rotor magnets: 7 for a typical

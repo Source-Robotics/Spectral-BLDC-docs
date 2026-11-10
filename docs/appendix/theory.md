@@ -42,11 +42,12 @@ what makes impedance control and force-limited motion possible.
 Calibration supplies the constants this needs. The resistance $R$ and inductance $L$ of a winding are measured.
 The current loop gains follow from them and the chosen bandwidth $\omega_c = 2\pi f_c$ (`#Cbw`):
 $K_p = L\,\omega_c$ and $K_i = R\,\omega_c$ cancel the winding's electrical time constant and give a first-order
-response at $f_c$. The pole pairs come from an open-loop spin: the field is turned a known number of electrical
+response at $f_c$. The driver stores them in the form its 5 kHz loop uses: `Kpiq` is close to $L\,\omega_c$, and
+`Kiiq` is $R\,\omega_c T$, with $T$ the 200 µs control period. The pole pairs come from an open-loop spin: the field is turned a known number of electrical
 cycles and the encoder says how far the rotor went. The angle offset is found by driving a current along the $d$
 axis and reading where the rotor settles. The velocity constant $K_V$ comes from the back-EMF the spinning motor
-generates, and the torque constant follows from it: in SI units $K_t = 1/K_V$ (with $K_V$ in rpm/V,
-$K_t \approx 9.55/K_V$ Nm/A).
+generates, and the torque constant follows from it: in SI units $K_t = 1/K_V$. The firmware computes
+$K_t = 8.27/K_V$ Nm/A, with $K_V$ in rpm/V.
 
 ## The cascade of loops
 
@@ -92,6 +93,10 @@ $$
 with the stiffness $K_P$ in Nm/rad, the damping $K_D$ in Nm·s/rad, and a current feedforward $I_{ff}$ for a known
 load such as gravity. The torque is produced by the current loop ($I_q = \tau / K_t$), which is what makes FOC a
 prerequisite: a drive without the rotor angle cannot produce a commanded torque at low speed.
+
+The driver computes the same loop in its own units. Its `KP` is in mA per encoder tick and its `KD` in mA per
+tick/s (0.14 and 0.0028 by default), and the result is a current in mA. The stiffness in Nm/rad is
+`KP` × $K_t$ × 2.608, and the damping in Nm·s/rad is `KD` × $K_t$ × 2.608 (16384 ticks per turn, 1000 mA per A).
 
 Pushed off its setpoint by an external force $F$, the motor yields by $\Delta\theta = \tau_{ext}/K_P$ and pushes
 back with that force; let go, it returns, with the damper settling the motion. A small $K_P$ makes a soft joint,

@@ -4,8 +4,8 @@ Calibration teaches the driver its motor: it checks the magnet and the supply, m
 resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find
 the pole pairs and the direction, checks the order of the phases and aligns the encoder to the rotor field, and
 measures the motor constants Kt, KV and the flux linkage. Nothing about the motor has to be entered first. It
-runs once per motor; the result is kept by saving. Firmware 109 can follow it with two more runs, the
-[encoder table and the anti-cogging](anti-cogging.md); by default it does not.
+runs once per motor; the result is kept by saving. From firmware 109 every `#Cal` goes on by itself to two more
+runs, the [encoder table and the anti-cogging](anti-cogging.md), and saves. `#Calonly` is the calibration alone.
 
 !!! danger "The motor turns"
     Calibration spins the motor in both directions, fast at times. Fix the motor to the bench and take everything
@@ -21,7 +21,7 @@ of 2 to 24 Ω; change them only for a motor outside that range.
 
 | Setting | Default | Command | What it does |
 |---|---|---|---|
-| Current loop bandwidth | 160 Hz | `#Cbw` | the bandwidth the current loop gains are computed for (Kp = ω·L, Ki = ω·R, ω = 2π × the bandwidth); too high makes the motor vibrate and whine. 500 Hz up to firmware 107 |
+| Current loop bandwidth | 160 Hz | `#Cbw` | the bandwidth the current loop gains are computed for (Kpiq ≈ ω·L, Kiiq = ω·R·T, with ω = 2π × the bandwidth and T the 200 µs control period); too high makes the motor vibrate and whine. 500 Hz up to firmware 107 |
 | Resistance voltage | 1000 mV | `#Resv` | the voltage the resistance measurement starts at; it rises until the power reaches the limit below |
 | Max power dissipation | 12 W | `#Calpwr` | the power the resistance and inductance measurements may put into the motor |
 | Open loop voltage | 5000 mV | `#Openv` | the voltage of the open-loop spin that finds the pole pairs |
@@ -102,10 +102,11 @@ Phase order = 2
 Phase order is good!
 KV is: ...
 Kt is: ...
+KV runs: ... ... ... ... (same direction within ... %)
 Flux linkage is: ...
 ----------------
 Calibration success!
-Save config with #Save
+Next, by itself: the encoder table, then anti-cogging (about a minute; keep the shaft free). Everything is saved when they finish (#Encal state, #Cogcal state)
 Going to idle!
 ----------------
 ```
@@ -113,8 +114,7 @@ Going to idle!
 The `Calibrating angle offset...` lines come every half second while the encoder is aligned, which can take
 about 40 seconds; the routine has not stopped.
 
-`#Calonly` runs the same calibration without anything of parameter 56 after it; with parameter 56 at 0, the
-default, `#Cal` does the same.
+`#Calonly` runs the same calibration and nothing after it; it ends with `Save config with #Save` instead.
 
 What the steps are:
 
@@ -124,30 +124,34 @@ What the steps are:
 | Vbus test | the supply is within limits | `Vbus test: Failed` |
 | Resistance | a rising voltage is put on the windings and the current measured; the motor clicks. The resistance follows from the two | `Resistance test: Failed`: no current flows, a phase is not connected, or the motor is far outside the 2 to 24 Ω range |
 | Inductance | a voltage step and the rate at which the current rises give the inductance. Kp_iq and Ki_iq are computed from R, L and the bandwidth | `Inductance test: Failed` |
-| Open loop | the stator field is turned at the open-loop speed and the encoder watched: the pole pairs are the ratio of electrical to mechanical turns, and the direction the rotor turned is remembered as `Dir` | `Open loop: Failed`: the encoder saw no rotation |
+| Open loop | the stator field is turned at the open-loop speed and the encoder watched: the pole pairs are the ratio of electrical to mechanical turns, and 1 to 49 are accepted. The direction the rotor turned is remembered as the commutation direction (`Commutation dir` in `#Info`); `Dir` is always 1 after a calibration | `Open loop: Failed`, then `The rotor did not follow the open-loop field (pole pairs must come out as 1 to 49).` and `Check the motor's three wires and that the shaft is free.` |
 | Phase order | a current command must move the rotor the expected way, and the encoder's zero is aligned to the rotor field (the angle offset, `#Offset`). A motor that does not respond gets a second try at another angle | `Commutation/alignment check failed!`, `Motor did not respond as expected to a current command...` and a line `Spin-confirm delta: … ticks (need > 8192), Vbus: … mV` that says how far the motor turned (half a revolution is needed) and at what voltage |
-| Kt, KV, flux linkage | the motor spins fast for a moment and the constants are computed from the back-EMF | — |
+| Kt, KV, flux linkage | four spins from standstill, about a second each and alternately forward and back; KV is the mean speed per volt available, and the constants follow from it. `KV runs:` in the log shows all four and how far they agree | nothing. `KV runs disagree` is a warning, not a failure: two runs in the same direction differ by more than 5 %. The shaft was not free, or something held it; calibrate again |
 
 !!! note "The measured values are estimates"
     The resistance, the inductance and the motor constants differ a little from one run to the next, and KV, and
     with it Kt and the flux linkage, can be off by a factor of two or three on cheap motors with uneven windings.
     For the loops this does not matter; for a torque estimate in newton-metres, measure Kt yourself.
 
-## What can follow the calibration
+## What follows the calibration
 
-Parameter 56 says what the driver starts by itself half a second after `Calibration success!`: 0 nothing (the
-default on the Spectral Micro), 1 the anti-cogging identification, 2 the encoder table and then the anti-cogging.
-With 1 or 2 the driver saves everything when they succeed, and the log says `Next, by itself: …` instead of
-`Save config with #Save`. On STEPFOC 2 is the default; on the Spectral Micro the runs are not yet tested on its
-bench, so they stay off until you set 56 (Send_Parameter(56, 2), then Send_Save_config).
-[Encoder table and anti-cogging](anti-cogging.md) explains both, and why the encoder table needs a current limit
-set for the motor first: it runs at 80 % of the limit, which calibration puts back before the runs (known issue
-KI-19).
+Half a second after `Calibration success!` of a `#Cal` the driver starts two runs on its own: the encoder table,
+then the anti-cogging identification. Keep the shaft free for about a minute more. When they succeed, everything is
+saved. A command from a host (a motion command, `#Idle`) stops them; then nothing is saved, and the calibration is
+kept only if you `#Save` it. A host that takes the drive before they start has 3 s: after that the runs are
+dropped and do not start later. `#Cal` always runs them; `#Calonly` never does.
+[Encoder table and anti-cogging](anti-cogging.md) explains both.
+
+!!! warning "Set the current limit before you calibrate"
+    The encoder table turns the field with a current of 80 % of the current limit, for about 20 s. Calibration uses
+    its own 1600 mA for its steps and puts the limit that was in force back before the encoder table runs. So set
+    `#Ilim` for the motor before `#Cal` (known issue KI-19).
 
 ## 3. Set the current limit and save
 
 Calibration puts back the current limit that was in force when it started (firmware 107 and older left
-1600 mA). If that is not your motor's yet, set it now ([Current limit and loop tuning](tuning.md)), then save.
+1600 mA). If that is not your motor's yet, set it now ([Current limit and loop tuning](tuning.md)), then save. After
+`#Cal` the driver saves by itself when the runs succeed; save anyway once they are done, or after `#Calonly`.
 
 === "Motor GUI"
     Set the current limit in the limits, then **Save**. The GUI marks *Unsaved changes* until you do.
@@ -158,7 +162,8 @@ Calibration puts back the current limit that was in force when it started (firmw
     #Save
     ```
 
-Without it the calibration is gone at the next power cycle. The driver goes to idle and the LED shows normal
+Without it the calibration is gone at the next power cycle. After `#Calonly` the driver is idle. After `#Cal` it
+ends the two runs holding the position the shaft reached: `#Idle` releases it. The LED shows normal
 operation; `#Info` shows *Calibrated*, the pole pairs, the resistance and inductance, Kt and KV, the phase order
 and the commutation direction.
 
@@ -170,6 +175,9 @@ and the commutation direction.
 
 - After changing the motor, the magnet or the wiring.
 - After restoring the defaults.
+- After an update from firmware 107 or older to 109, where the motor can turn freely: the older calibration stored
+  the resistance and the inductance too low. An assembled SSG-48 keeps its calibration and gets its preset
+  ([Upgrading from older firmware](../07-firmware/upgrading.md)).
 - After a firmware update that clears the calibration (a release note says so when it does).
 
 A calibration that reports success but a motor that runs badly afterwards usually means the magnet moved on the
@@ -183,8 +191,9 @@ shaft between calibration and use: fix the magnet and calibrate again.
 | `Vbus test: Failed` | supply off, too low, or the cable the wrong way round (if the driver survived it) |
 | `Resistance test: Failed`, `Inductance test: Failed` | a phase not connected or shorted; a motor far outside the 2 to 24 Ω range |
 | the motor wobbles left and right and the routine fails | one phase is not connected |
-| `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for a high-resistance motor, the supply's current limit set too low |
+| `Open loop: Failed` | the rotor did not follow the field, or the pole pairs came out outside 1 to 49: a phase open, the shaft not free, the open-loop voltage (`#Openv`) too low for a high-resistance motor, the supply's current limit set too low |
 | `Commutation/alignment check failed!` | the motor did not respond to the current command: a phase open, `#Iqoffset` set too low, a magnet that slips. Run `#Cal` again. Firmware 101 printed `Phase order is wrong! Switch motor phases and try again!` here; since 105 the wiring is compensated and swapping wires does not help |
+| `Cal: not started, the E-stop is latched (#Clear first)`, or `Stopped by an E-stop: #Clear, then calibrate again.` after `Calibration failed!` | an E-stop is latched or ended the calibration: `#Clear`, then `#Cal`; the alignment starts again from its first stage |
 | the routine stops in a step and prints nothing more | reset the driver (`#Reset`) and try again |
 | success, but the LED stays on and no error is reported | `#Info` shows `-1` somewhere: the EEPROM holds a value from an older release ([The check at power-up](saving.md#the-check-at-power-up)); restore the defaults and calibrate again |
 | the resistance, KV or Kt look wrong | the supply was not 24 V, or the motor is one of the uneven ones; see the note above |

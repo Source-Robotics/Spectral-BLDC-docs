@@ -51,9 +51,10 @@ come back most:
 |---|---|
 | `Magnet test: Failed` | magnet too far, axially magnetised, or missing |
 | the motor wobbles left and right during calibration | one phase is not connected |
-| `Open loop: Failed` | the motor did not turn: a phase open, the open-loop voltage (`#Openv`) too low for the motor |
+| `Open loop: Failed` | the rotor did not follow the open-loop field, or the pole pairs came out outside 1 to 49: a phase open, the shaft not free, the open-loop voltage (`#Openv`) too low for the motor |
 | `Commutation/alignment check failed!` | the motor did not respond to the commutation check: a phase open, `#Iqoffset` too low, a magnet that slips |
 | calibration succeeds, the motor then runs badly or in the wrong direction | the magnet slipped on the shaft; glue it and calibrate again |
+| after `Calibration success!` the motor turns slowly by itself for about a minute | the encoder table and the anti-cogging that follow a `#Cal`; let them finish, they save everything ([What follows the calibration](../05-setup/calibration.md#what-follows-the-calibration)) |
 | the anti-cogging does not switch on (parameter 37 stays 0) | no set is identified for that form; run `#Cogcal save`. After an encoder table measured on its own the set is switched off until it is identified again ([Encoder table and anti-cogging](../05-setup/anti-cogging.md)) |
 | calibration succeeds but the LED stays on and `#Error` shows nothing | `#Info` shows `-1`, a value from an older release ([The check at power-up](../05-setup/saving.md#the-check-at-power-up)): `#Default`, calibrate again |
 
@@ -90,7 +91,7 @@ cooling.
 
 ## After a firmware update
 
-`#Info` shows the new release. If the values look wrong or the LED stays on: `#Default`, `#Cal`, `#Save`. A release note says when an update clears the calibration. After an update to 109, [Upgrading from older firmware](../07-firmware/upgrading.md) says what changes.
+`#Info` shows the new release. If the values look wrong or the LED stays on: `#Default`, `#Cal`, `#Save`. A release note says when an update clears the calibration. After an update to 109, calibrate again (`#Cal`) where the motor can turn freely; on an assembled SSG-48 apply its preset instead. [Upgrading from older firmware](../07-firmware/upgrading.md) says why and what else changes.
 
 A Vbus error right after power-up, cleared by `#Clear`, was the supply ramping up; from firmware 109 a low supply is
 not checked in the first 500 ms.

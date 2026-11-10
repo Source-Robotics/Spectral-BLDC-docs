@@ -56,9 +56,9 @@ connect anything; the few rules here are the ones that destroy a driver, a motor
     A motor running at its rated current gets hot enough to burn, and so do the driver's chips and the board
     around them. Switch off and let both cool for a few minutes before you touch them. Set the current limit for
     your motor ([Current limit and loop tuning](05-setup/tuning.md)), use the thermistor, and give the driver
-    airflow when it runs near 2.8 A. `#Ilim` is clamped to 2800 mA, but the current limit of Send_Limits over CAN
-    and the current of a gripper move are used as sent: a host must keep them within the motor's rating and
-    2800 mA.
+    airflow when it runs near 2.8 A. `#Ilim` is clamped to 2800 mA, and from firmware 109 so are the current limit of
+    Send_Limits over CAN and the current of a gripper move. The motor's rating is usually lower: a host must keep
+    them within it.
 
 ## Stopping the motor
 

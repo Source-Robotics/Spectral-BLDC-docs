@@ -8,8 +8,10 @@ No programming adapter, and nothing to open.
     - Park the mechanism: the motor loses torque during the update and until the new firmware is calibrated and
       commanded.
     - An update may clear the calibration (the release notes say so when it does); plan to calibrate and `#Save`
-      afterwards, and note the gains `#Info` prints. An update to 109 keeps it:
-      [Upgrading from older firmware](upgrading.md) says what changes and what to run.
+      afterwards, and note the gains `#Info` prints. An update to 109 keeps it, and the driver runs on it; calibrate
+      again where the motor can turn freely, or apply the SSG-48 preset on an assembled gripper (over UART, with
+      *Gripper CAN ID* set to the gripper's node):
+      [Upgrading from older firmware](upgrading.md) says why, what changes and what to run.
     - On a bus with several drivers, update each node; a bus with mixed releases behaves unpredictably.
 
 ## With Motor GUI
