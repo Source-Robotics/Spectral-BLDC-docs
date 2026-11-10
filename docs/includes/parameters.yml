@@ -11,9 +11,9 @@
 #   description  what it is
 #
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
-# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at commit 10860a2, the code of release 109. The Spectral Micro has
-# the STEPFOC's parameters except 66-72 (the loop-time sections and register paths of the STEPFOC); some defaults
-# and ranges differ (a 5000 Hz control loop).
+# scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at tag V109. The Spectral Micro has the STEPFOC's
+# parameters except 66-72 (the loop-time sections and register paths of the STEPFOC), and two of its own, 88 and 89
+# (a current-sampling diagnostic); some defaults and ranges differ (a 5000 Hz control loop).
 
 groups:
   watchdog:
@@ -335,6 +335,22 @@ params:
     value: "1 from the integer sine table, 0 from the float routine. Default 0"
     saved: "no"
     description: Where the transforms of every control loop take sin and cos from. On the STEPFOC bench the table was not faster.
+  PARAM_SENSE_SAMPLE_AT:
+    group: current
+    access: rw
+    value: "-1: read wherever the code is (the default); 0 to the PWM period (the timer's reload value): wait for that count first (outside: refused)"
+    saved: "no: -1 at every start-up"
+    description: >
+      An experimental diagnostic of when the current sensors are read, off by default. They are read by a software
+      start, wherever the code happens to be in the 25 kHz centre-aligned PWM cycle, so the moment of a reading
+      depends on the code before it. With a count set, the driver waits until the PWM counter is within 24 counts
+      of it (at most about 60 µs), then reads. Leave it at -1 unless you are investigating the current sensing.
+  PARAM_SENSE_SAMPLE_SEEN:
+    group: current
+    access: r
+    value: "the PWM counter at the last reading, +65536 while it counts down"
+    saved: "—"
+    description: Where in the PWM cycle the last current reading happened; it shows where parameter 88 puts the readings.
 
   # ------------------------------------------------------------ speed estimate and the velocity loop
   PARAM_SPEED_ESTIMATOR:
@@ -583,3 +599,33 @@ params:
       The stack margin: RAM between the heap and the stack that the stack has not used since start-up (setup()
       fills it with a pattern at its end, and this counts the bytes the pattern is still in). The stack needs
       about 1.5 to 2 KB of the about 7 KB there are; a value far below that means the drive is short of RAM.
+  PARAM_BUILD_COMMIT:
+    group: status
+    access: r
+    value: "the commit's first 7 hex digits as a number (bits 0-27); bit 28 set: built with uncommitted changes; 0 when git was not available at the build"
+    saved: "—"
+    description: The git commit the firmware was built from. `#Info` prints it as `Build:`, with a `+` for bit 28.
+  PARAM_BUILD_TIME:
+    group: status
+    access: r
+    value: Unix seconds, UTC; 0 when the build did not set it
+    saved: "—"
+    description: When the firmware was built.
+  PARAM_BOARD_ID:
+    group: status
+    access: r
+    value: 32 bits, read as unsigned
+    saved: "—"
+    description: >
+      This board: the chip's factory-unique 96-bit number folded into 32 bits. It never changes, also not with a
+      new firmware or `#Default`. `#Info` prints it as `Board ID:`, 8 hex digits. It is not the bootloader's board
+      ID (0 to 13).
+  PARAM_CALIBRATION_ID:
+    group: status
+    access: r
+    value: 32 bits, read as unsigned; 0 before the first calibration
+    saved: yes, settings block 2
+    description: >
+      A new number at every successful calibration, so a host can tell one calibration from the next.
+      Send_Save_config keeps it, and `#Default` sets it back to 0. `#Info` prints it as `Calibration ID:`, 8 hex
+      digits.

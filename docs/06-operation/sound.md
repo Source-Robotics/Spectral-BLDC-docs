@@ -46,8 +46,8 @@ loop rate, or parameter 81 is 0.
 
 Send_Sound (ID 44) carries every operation: a tone now, an event for the queue, play the queue, play the samples,
 stop. Send_Sound_Samples (ID 45) fills the sample buffer ([Sound](../reference/can/sound.md) in the CAN
-reference). The Python calls below come with the Spectral-BLDC library's release after 1.20, as does its `music`
-module (note names, ringtone melodies, MIDI files, WAV files).
+reference). The Python calls below need the Spectral-BLDC library 1.21 or newer, as does its `music` module (note
+names, ringtone melodies, MIDI files, WAV files).
 
 Over CAN the host makes the driver hold first, for example with a position frame to where the motor is:
 

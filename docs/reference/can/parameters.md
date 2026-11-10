@@ -1,13 +1,14 @@
 # Parameters and buffers
 
-From firmware 109 a setting that has no command of its own is a **parameter**: a number from 1 to 87 behind one
+From firmware 109 a setting that has no command of its own is a **parameter**: a number from 1 to 89 behind one
 pair of commands, Send_Parameter (ID 36) to set it and Send_Get_Parameter (ID 37) to read it, answered with
 Respond_Parameter (ID 38). The identifier has room for only 64 command IDs, so new settings no longer use them up.
 Parameter numbers are permanent: a number is never given a new meaning. Number 73 is not used and stays free.
 Parameters 84 to 87 are read only and say which build and which board answer: the git commit the firmware was
 built from (84), its build time in Unix seconds (85), the board ID (86) and the calibration ID (87). `#Info` prints
 them as `Build`, `Board ID` and `Calibration ID` ([Status and diagnostics](../../06-operation/diagnostics.md)).
-They are not in the table below yet.
+Parameters 88 and 89, a diagnostic of when the current sensors are read, are the Spectral Micro's own; STEPFOC
+does not have them.
 
 The **buffers** are the larger data a drive holds: a capture of three signals, a histogram, the anti-cogging set
 and the encoder table. Send_Buffer_Read (ID 41) reads them in 8-byte frames, Respond_Buffer_Data (ID 42) carries
@@ -36,10 +37,9 @@ print(motor.parameters.get(1))
 motor.Send_Save_config()                   # keep it over a power cycle
 ```
 
-`Send_Parameter`, `Send_Get_Parameter` and the buffer calls come with the release of the Spectral-BLDC library
-after 1.20; with 1.20, send the frames yourself (`python-can`, the layouts below). `Send_Parameter` takes the
-value itself: a gain or a limit (8 to 16 and 20) is sent as a float, so `motor.Send_Parameter(16, 1500)` sets a
-current limit of 1500 mA; every other parameter takes a whole number.
+`Send_Parameter`, `Send_Get_Parameter` and the buffer calls need the Spectral-BLDC library 1.21 or newer.
+`Send_Parameter` takes the value itself: a gain or a limit (8 to 16 and 20) is sent as a float, so
+`motor.Send_Parameter(16, 1500)` sets a current limit of 1500 mA; every other parameter takes a whole number.
 
 ## The commands
 

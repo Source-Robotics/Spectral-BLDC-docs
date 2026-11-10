@@ -126,7 +126,7 @@ for i in sorted(motor.capture):
 
 Trigger 2 records up to an error instead: armed with a pre-trigger, it keeps the moments before a trip, the
 watchdog's included, and the time after it. The capture calls (`Send_Parameter`, `Send_Get_Parameter`,
-`Send_Buffer_Read`) need the release of the Spectral-BLDC library after 1.20.
+`Send_Buffer_Read`) need the Spectral-BLDC library 1.21 or newer.
 
 ## Memory
 

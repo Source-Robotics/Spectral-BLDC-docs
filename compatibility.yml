@@ -13,10 +13,10 @@ columns:
 
 rows:
   - firmware: "109"
-    date: not released yet
+    date: 2026-11-10
     bootloader: required
     stepfoc: "109 (from 109 the two share their version numbers; there is no Spectral Micro 108)"
-    python: "1.20 or newer; the calls for the commands added in 109 (parameters, identity, telemetry, buffers, the watchdog's coast and descend) need the library's next release"
+    python: "1.21 or newer (the calls for the commands added in 109: parameters, identity, telemetry, buffers, the watchdog's coast and descend)"
     runtime: 0.9 or newer (it sends watchdog action 0, the legacy response)
     pcb: v2.0
     docs: "109"

@@ -16,8 +16,8 @@ driver always disabled the motor, which then coasted.
     ```python
     motor.Send_Watchdog(_rate=100, _action='Hold')   # 100 ms, then hold the position
     ```
-    The library 1.20 knows the actions 'Idle', 'Hold' and 'Brake'; 'Coast' and 'Descend' come with its next
-    release.
+    The library knows all five actions from 1.21: 'Idle', 'Hold', 'Brake', 'Coast' and 'Descend'. 1.20 and
+    older know only 'Idle', 'Hold' and 'Brake'.
 
 === "CAN"
     Send_Watchdog (ID 15): the time in ms (4 bytes) and the action (1 byte). Or the parameters 6 (time) and 7
@@ -106,7 +106,7 @@ Four values, kept by Send_Save_config in settings block 2:
     motor.Send_Watchdog_Fallback(2000, current_mA=0, speed=1000, after='Brake')
     motor.Send_Save_config()
     ```
-    From the library's next release; with 1.20, Send_Parameter frames 2 to 5 do the same.
+    Library 1.21 and newer.
 
 ## Choosing an action
 

@@ -57,7 +57,7 @@ that does not fit the frame.
 python tools/sync_firmware.py            # write docs/includes/generated/ from firmware.tag in versions.yml
 python tools/sync_firmware.py --check    # exit 1 if they are out of date
 python tools/sync_firmware.py --print uart --tag v101   # look at another release's commands
-python tools/sync_firmware.py --prerelease 10860a2 --no-network   # before the tag exists: read that commit
+python tools/sync_firmware.py --prerelease <commit> --no-network   # before the tag exists: read that commit
 ```
 
 `--prerelease` lets the pages of a coming release be written before it is tagged. The facts then say which commit

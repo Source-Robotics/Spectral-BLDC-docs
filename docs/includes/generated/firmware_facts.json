@@ -261,12 +261,32 @@
      "Voltage_CAN"
     ]
    },
+   "PARAM_BOARD_ID": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
    "PARAM_BOARD_PRODUCT": {
     "empty": false,
     "lengths": [],
     "responds": []
    },
    "PARAM_BRAKE_COAST": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_BUILD_COMMIT": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_BUILD_TIME": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_CALIBRATION_ID": {
     "empty": false,
     "lengths": [],
     "responds": []
@@ -396,6 +416,16 @@
     "lengths": [],
     "responds": []
    },
+   "PARAM_SENSE_SAMPLE_AT": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
+   "PARAM_SENSE_SAMPLE_SEEN": {
+    "empty": false,
+    "lengths": [],
+    "responds": []
+   },
    "PARAM_SENSE_ZERO_SWITCHING": {
     "empty": false,
     "lengths": [],
@@ -482,7 +512,7 @@
     "responds": []
    },
    "PARAM_WD_TIME": {
-    "empty": true,
+    "empty": false,
     "lengths": [],
     "responds": []
    }
@@ -981,7 +1011,7 @@
     "name": "PARAM_ENCAL_ONCE"
    },
    {
-    "comment": "what runs after a successful calibration: AFTER_CAL_* (saved with the table)",
+    "comment": "no effect on the Spectral (#Cal always runs both); kept so the numbers match STEPFOC",
     "id": 56,
     "name": "PARAM_AFTER_CAL"
    },
@@ -1081,6 +1111,36 @@
     "name": "PARAM_STACK_UNUSED"
    },
    {
+    "comment": "R the git commit it was built from: 7 hex digits; bit 28 = with uncommitted changes",
+    "id": 84,
+    "name": "PARAM_BUILD_COMMIT"
+   },
+   {
+    "comment": "R when it was built, Unix seconds UTC",
+    "id": 85,
+    "name": "PARAM_BUILD_TIME"
+   },
+   {
+    "comment": "R this board: the chip's unique number folded into 32 bits; never changes",
+    "id": 86,
+    "name": "PARAM_BOARD_ID"
+   },
+   {
+    "comment": "RAM: PWM counter value (TIM2) to read the current sensors at; -1 whenever the code gets there",
+    "id": 88,
+    "name": "PARAM_SENSE_SAMPLE_AT"
+   },
+   {
+    "comment": "R where the last current reading happened: TIM2 count, +65536 while counting down",
+    "id": 89,
+    "name": "PARAM_SENSE_SAMPLE_SEEN"
+   },
+   {
+    "comment": "R a new random number at every successful calibration, saved by #Save; 0 none yet",
+    "id": 87,
+    "name": "PARAM_CALIBRATION_ID"
+   },
+   {
     "comment": "write 1: identify the anti-cogging on the drive, 2: and save, 0: abort; read: COGCAL_*",
     "id": 43,
     "name": "PARAM_COGCAL"
@@ -1172,7 +1232,7 @@
    }
   }
  },
- "commit": "10860a29e5c0",
+ "commit": "655c72a00839",
  "defaults": [
   {
    "after_default": "1111 in the EEPROM, not read back",
@@ -1383,6 +1443,14 @@
    "value": "0"
   },
   {
+   "after_default": "\u2014",
+   "comment": "largest gap between runs of the same direction, % of the mean",
+   "name": "KV_spread_pct",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
    "after_default": "75",
    "comment": "Max temperature in degrees",
    "name": "Max_temperature",
@@ -1475,6 +1543,14 @@
    "comment": "after hold/descend: 0 legacy, 2 brake, 3 coast",
    "name": "wd_after_action",
    "saved": "yes",
+   "setting": true,
+   "value": "0"
+  },
+  {
+   "after_default": "0 in the EEPROM, not read back",
+   "comment": "parameter 87: new at every successful calibration",
+   "name": "calibration_id",
+   "saved": "written, not read back",
    "setting": true,
    "value": "0"
   },
@@ -1572,7 +1648,7 @@
    "name": "comm_delay_us",
    "saved": "no",
    "setting": true,
-   "value": "0"
+   "value": "234 (COMM_DELAY_DEFAULT_US)"
   },
   {
    "after_default": "\u2014",
@@ -1620,7 +1696,7 @@
    "name": "speed_estimator",
    "saved": "no",
    "setting": true,
-   "value": "0 (SPEED_ESTIMATOR_DEFAULT)"
+   "value": "2 (SPEED_ESTIMATOR_DEFAULT)"
   },
   {
    "after_default": "\u2014",
@@ -1628,12 +1704,20 @@
    "name": "speed_pll_bandwidth",
    "saved": "no",
    "setting": true,
-   "value": "160 (SPEED_PLL_BANDWIDTH_DEFAULT)"
+   "value": "100 (SPEED_PLL_BANDWIDTH_DEFAULT)"
   },
   {
    "after_default": "\u2014",
    "comment": "the start-up zero was measured and within SENSE_ZERO_MAX_DEV",
    "name": "sense_zero_ok",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "no motor supply at start-up: the zero is measured once it comes",
+   "name": "sense_zero_wait_vbus",
    "saved": "no",
    "setting": false,
    "value": "0"
@@ -2090,6 +2174,14 @@
    "after_default": "\u2014",
    "comment": "Calibrate_Angle_Offset_Align() progress: state index (0 = not running)",
    "name": "Align_stage",
+   "saved": "no",
+   "setting": false,
+   "value": "0"
+  },
+  {
+   "after_default": "\u2014",
+   "comment": "a calibration was ended from outside (an E-stop): the alignment starts from its first stage next time",
+   "name": "Align_restart",
    "saved": "no",
    "setting": false,
    "value": "0"
@@ -2567,11 +2659,6 @@
    "value": "0"
   }
  ],
- "prerelease": {
-  "commit": "10860a29e5c0",
-  "firmware_version_in_source": "109",
-  "ref": "10860a2"
- },
  "tag": "V109",
  "uart": {
   "accepted": [],
@@ -2793,26 +2880,34 @@
     "response": "Idle"
    },
    {
-    "arg": "int",
+    "arg": "",
     "comment": "Set/Get idle-mode phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage PWM vector shorts the phases). Only takes effect once idle (Controller_mode == 0) -- send Idle first/after.",
-    "kind": "Set/Get",
+    "kind": "Get",
     "mode": "",
     "name": "Brake",
-    "response": "Brake"
+    "response": "Cal: not started, the E-stop is latched (#Clear first)"
    },
    {
     "arg": "",
-    "comment": "Enter calibration mode #Cal: the calibration, then what parameter 56 adds (STEPFOC default: the encoder table and the anti-cogging, then save); #Calonly: the calibration alone (batch 20)",
-    "kind": "Action",
+    "comment": "Set/Get idle-mode phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage PWM vector shorts the phases). Only takes effect once idle (Controller_mode == 0) -- send Idle first/after.",
+    "kind": "Get",
     "mode": "",
+    "name": "Calonly",
+    "response": "Cal: not started, the E-stop is latched (#Clear first)"
+   },
+   {
+    "arg": "",
+    "comment": "",
+    "kind": "Action",
+    "mode": "idle",
     "name": "Cal",
     "response": ""
    },
    {
     "arg": "",
-    "comment": "Enter calibration mode #Cal: the calibration, then what parameter 56 adds (STEPFOC default: the encoder table and the anti-cogging, then save); #Calonly: the calibration alone (batch 20)",
+    "comment": "",
     "kind": "Action",
-    "mode": "",
+    "mode": "idle",
     "name": "Calonly",
     "response": ""
    },
@@ -3067,7 +3162,7 @@
    {
     "arg": "",
     "comment": "",
-    "kind": "Action",
+    "kind": "Set/Get",
     "mode": "",
     "name": "Encal",
     "response": "Encoder table:"
@@ -3075,7 +3170,7 @@
    {
     "arg": "",
     "comment": "On-drive anti-cogging identification (cogcal.h): #Cogcal runs it, #Cogcal save also saves, #Cogcal stop aborts, #Cogcal state shows it. One motor turn each way at the cogcal speed: the shaft must be free to turn.",
-    "kind": "Action",
+    "kind": "Set/Get",
     "mode": "",
     "name": "Cogcal",
     "response": "Anti-cogging identification:"
@@ -3206,7 +3301,7 @@
     "kind": "Set/Get",
     "mode": "",
     "name": "PP",
-    "response": "Pole pairs:"
+    "response": "PP: not taken (1-49, and only while idle)"
    },
    {
     "arg": "",

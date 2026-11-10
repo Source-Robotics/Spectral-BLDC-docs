@@ -13,10 +13,6 @@ docs_version: "109"
 
 # The firmware release the pages describe, and the generated pages come from. Its tag must be V<docs_version>.
 # Releases are cut from the Bootloader_main branch (see the firmware repository's release_guide.md).
-# 109 is not released yet (2026-11-08): the generated reference comes from commit 10860a2 on the firmware's
-# `hardening` branch (`python tools/sync_firmware.py --prerelease 10860a2 --no-network`; the facts say so under
-# "prerelease", and tools/test_tools.py fails until they come from the tag). When V109 is tagged, run
-# `python tools/sync_firmware.py`, set `released`, and the manual's status and publication date below.
 firmware:
   repository: https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller
   tag: V109
@@ -25,8 +21,8 @@ firmware:
   src: Spectral BLDC Firmware/src
   modes: {0: idle, 1: position, 2: velocity, 3: current, 4: PD, 5: open loop, 6: gripper, 7: gripper calibration,
           8: voltage torque, 12: encoder table}
-  # The date of the GitHub release of that tag (the downloads page writes it beside the version); null until then.
-  released: null
+  # The date of the GitHub release of that tag (the downloads page writes it beside the version).
+  released: 2026-11-10
 
 # The other software the pages describe, at the version they describe. The downloads page links each at its tag
 # (<!-- version-link: software.KEY -->); the compatibility table says which versions work with which firmware.
@@ -34,11 +30,9 @@ software:
   python_library:
     name: Spectral-BLDC Python library
     repository: https://github.com/Source-Robotics/Spectral-BLDC-Python
-    # 1.20 has no tag on GitHub: the link goes to the commit that made it 1.20 ("bump to 1.20"), the version PyPI
-    # has published since 2026-06-19. Use the tag here once it is pushed.
-    tag: ef30bbe4fdd1e9a93544f7f356bbaeedeaa3b459
-    version: "1.20"
-    released: 2026-06-19
+    tag: v1.21
+    version: "1.21"
+    released: 2026-11-10
   bootloader:
     name: stm32f103c-bootloader
     repository: https://github.com/Source-Robotics/stm32f103c-bootloader
@@ -53,8 +47,8 @@ manuals:
     number: SR-5002
     title: Spectral Micro Manual
     revision: 2026.B
-    status: draft
-    published: null
+    status: published
+    published: 2026-11-10
     firmware: true
     applies_to: Spectral Micro driver PCB v2.0
     covers: "the Spectral Micro BLDC driver: quick start, safety, technical data, mounting, setup with Motor GUI or a terminal, operation, firmware; the API reference; guides"
