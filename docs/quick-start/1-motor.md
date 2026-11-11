@@ -46,6 +46,6 @@ Solder the motor's three wires to **U, V and W**. The order does not matter: cal
 
 !!! success "Check"
     With the driver unpowered, a multimeter shows about the same resistance between U and V, V and W, and W
-    and U, and no strand bridges two pads. If not: [Wiring the motor](../04-mounting/wiring.md).
+    and U, and no strand bridges two groups. If not: [Wiring the motor](../04-mounting/wiring.md).
 
 More: [Wiring the motor](../04-mounting/wiring.md).

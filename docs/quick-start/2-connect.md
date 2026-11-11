@@ -12,7 +12,8 @@ The supply powers the motor, the serial adapter connects the PC.
 
 3. Power on.
 
-The LED turns on steadily: the driver is not calibrated yet, which it reports as an error state.
+The LED blinks for about two seconds while the bootloader waits for a host. Then the firmware starts, and the LED
+stays on steadily: the driver is not calibrated yet, which it reports as an error state.
 
 ![On, steady](../assets/Error2.webp){ width="180" }
 

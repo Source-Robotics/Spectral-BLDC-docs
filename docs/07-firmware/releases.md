@@ -25,8 +25,12 @@ A driver that reports 101 runs either release 101 from the `main` branch, withou
 (or an earlier build of `Bootloader_main`), which also writes 101 and runs above the bootloader. Drivers sold before
 release 105 shipped with firmware 101 or 103.
 
-To tell whether yours has the bootloader, power it up while `bl_flash.py list` or Motor GUI's *Scan bootloaders*
-is polling: a driver with the bootloader answers in its first two seconds.
+To tell whether yours has the bootloader:
+
+- Watch the LED as you switch the driver on: with the bootloader it blinks for about two seconds before the
+  firmware starts.
+- Or power it up while `bl_flash.py list` or Motor GUI's *Scan bootloaders* is polling: a driver with the
+  bootloader answers in its first two seconds.
 
 With the bootloader, update it to the current release as in [Updating through the bootloader](update.md); the release
 it ran before does not matter then. Without one, install it first:

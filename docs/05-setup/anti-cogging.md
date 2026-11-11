@@ -45,6 +45,13 @@ higher orders is left out by keeping only the harmonics 1 to 16 per turn.
 The result is a table of 128 corrections. From then on the encoder reading is corrected with it. The electrical
 offset is moved by the table's mean error, so the commutation stays right.
 
+The plot shows a measured table from the sister driver STEPFOC, which runs the same routine, on its bench
+NEMA 17. Its right-hand scale multiplies by the stepper's 50 pole pairs. On an 11-pole-pair motor the same error
+is about 4.5 times smaller in electrical degrees.
+
+![Measured with the STEPFOC on its bench NEMA 17: the encoder's error at each 1/128 of a turn, 0.61° peak to peak, about 31° electrical on the right-hand scale for 50 pole pairs (about 7° on an 11-pole-pair motor); the dashed line is its once-per-turn part.](../assets/anti-cogging/encoder_table.svg#only-light){ width="800" }
+![Measured with the STEPFOC on its bench NEMA 17: the encoder's error at each 1/128 of a turn, 0.61° peak to peak, about 31° electrical on the right-hand scale for 50 pole pairs (about 7° on an 11-pole-pair motor); the dashed line is its once-per-turn part.](../assets/anti-cogging/encoder_table_dark.svg#only-dark){ width="800" }
+
 A check of the routine on a simulated 11-pole-pair motor at the Spectral Micro's loop rate took the commutation
 error from 30 to 0.4 electrical degrees.
 
@@ -68,6 +75,12 @@ From that it keeps two forms of the same correction:
 - **harmonics** (parameter 37 = 1): the 8 largest of the harmonics 1 to 32 of the electrical angle, each
   a·cos(h·θ) + b·sin(h·θ) in mA;
 - **table** (parameter 37 = 2): 256 values in mA over one electrical turn, interpolated between them.
+
+The plot shows both forms on the STEPFOC's bench NEMA 17. Its cogging current was about the size of the Spectral
+Micro's bench gimbal motor's (7.1 and 6.8 mA rms); the shape over the turn depends on the motor.
+
+![Measured with the STEPFOC on its bench NEMA 17: the anti-cogging over one electrical turn, identified at 1500 ticks/s before that drive had the encoder table and the zero trim: above, its two forms; below, the current the velocity loop asks for with it off and on.](../assets/anti-cogging/anticogging.svg#only-light){ width="800" }
+![Measured with the STEPFOC on its bench NEMA 17: the anti-cogging over one electrical turn, identified at 1500 ticks/s before that drive had the encoder table and the zero trim: above, its two forms; below, the current the velocity loop asks for with it off and on.](../assets/anti-cogging/anticogging_dark.svg#only-dark){ width="800" }
 
 The identification switches the harmonics on. On the bench gimbal motor it found 6.8 mA rms. Parameter 38 scales
 the correction from 0 to 200 % for experiments; 100 % is as identified.
@@ -109,6 +122,9 @@ The driver must be calibrated and without an error. Each run has a UART command 
 | the anti-cogging, switched on | `#Cogcal` | 43 = 1 |
 | the anti-cogging, switched on and saved | `#Cogcal save` | 43 = 2 |
 | stop a run | `#Encal stop`, `#Cogcal stop` | 52 = 0, 43 = 0 |
+
+`#Encal stop` does not stop the anti-cogging part of a combined run (`#Encal all`). `#Cogcal stop` stops a run
+in either part, and so do 52 = 0 and 43 = 0 over CAN.
 
 1. Make sure the shaft is free: nothing on it and nothing it could drive.
 2. Send the run's command from the table, on the UART or over CAN.
@@ -171,6 +187,12 @@ the harmonics, kind 3 the anti-cogging table ([Respond_Buffer_Data](../reference
 
 A capture of the speed while the motor turns slowly, with the anti-cogging off and on
 ([Status and diagnostics](../06-operation/diagnostics.md#a-capture)), shows whether it helps on your motor.
+
+On the STEPFOC's bench NEMA 17 the speed ripple that repeats with the angle was 1.2 to 2 times smaller with the
+anti-cogging on, at 1500 to 6000 ticks/s. The Spectral Micro has not been measured this way yet.
+
+![Measured with the STEPFOC: the speed of its bench NEMA 17 turning at 6000 ticks/s, minus its mean, before that drive had the encoder table and the zero trim: with the anti-cogging on, the part that repeats with the angle is about half as large.](../assets/anti-cogging/anticogging_speed.svg#only-light){ width="800" }
+![Measured with the STEPFOC: the speed of its bench NEMA 17 turning at 6000 ticks/s, minus its mean, before that drive had the encoder table and the zero trim: with the anti-cogging on, the part that repeats with the angle is about half as large.](../assets/anti-cogging/anticogging_speed_dark.svg#only-dark){ width="800" }
 
 When a run fails:
 
