@@ -85,7 +85,7 @@ finally:
 error bit of the identifier; `UnpackData` decodes the message into the attributes the message carries. This example resends the same
 setpoint at 50 Hz for five seconds, prints only matching motion feedback, and puts the motor in idle when it
 ends. Idle releases torque: support any attached mechanism before running it. A missing reply is reported
-without claiming that a move finished. Configure and calibrate the driver first ([Quick start](../quick-start.md)).
+without claiming that a move finished. Configure and calibrate the driver first ([Quick start](../quick-start/index.md)).
 
 !!! success "Check"
     The program prints a line of position, speed, current and error bit for each cycle, the position moves to

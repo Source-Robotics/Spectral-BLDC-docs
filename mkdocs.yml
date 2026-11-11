@@ -262,7 +262,12 @@ nav:
   - Spectral Micro Manual:
       - index.md
       - Before you start:
-          - Quick start: quick-start.md
+          - Quick start:
+              - quick-start/index.md
+              - 1. Fit the motor: quick-start/1-motor.md
+              - 2. Connect: quick-start/2-connect.md
+              - 3. Calibrate: quick-start/3-calibrate.md
+              - 4. First moves: quick-start/4-first-moves.md
           - About this manual: about.md
       - Chapters:
           - 1. Overview:

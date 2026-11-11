@@ -12,8 +12,8 @@ It is written for someone who builds a robot or a machine with the Spectral Micr
 engineer who can solder three motor wires and open a serial terminal. It does not assume any knowledge of
 field-oriented control; the Theory corner in the appendix explains the concepts the control modes rely on.
 
-Read the Safety chapter before you power anything. The [Quick start](quick-start.md) is the whole first setup on
-one page; the chapters are in the order you need them and go deeper.
+Read the Safety chapter before you power anything. The [Quick start](quick-start/index.md) is the whole first setup,
+in four short parts; the chapters are in the order you need them and go deeper.
 
 ## Finding your way
 

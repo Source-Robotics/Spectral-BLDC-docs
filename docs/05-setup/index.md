@@ -15,4 +15,4 @@ every step also gives the terminal command, for a terminal or for the console in
 6. [Saving the configuration](saving.md): nothing survives a power cycle until it is saved; where it is kept.
 
 A driver that has been through these pages is ready for [Operation](../06-operation/index.md). The
-[Quick start](../quick-start.md) is the same path on one page.
+[Quick start](../quick-start/index.md) is the same path in four short parts.
