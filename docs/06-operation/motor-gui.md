@@ -7,9 +7,11 @@ what it does, running several motors, and the few things that only work from the
 
 The jog controls send setpoints in the matching control mode: *Jog velocity* turns the motor at a speed in encoder
 ticks per second (16384 is one revolution per second), *Jog position* moves it to a position in ticks, *Jog
-current* applies a torque in mA. *Send setpoint* sends a value in the mode the driver is in. Idle stops the
-motor; [Control modes](modes.md) says what each mode does. With *Live stream while dragging* the setpoint follows
-the slider, which is the quickest way to feel a tuning change.
+current* applies a torque in mA.
+
+*Send setpoint* sends a value in the mode the driver is in. Idle stops the motor; [Control modes](modes.md) says what
+each mode does. With *Live stream while dragging* the setpoint follows the slider, which is the quickest way to feel a
+tuning change.
 
 ## Watching it
 
@@ -30,9 +32,10 @@ cause is still present comes straight back; [Errors and recovery](errors.md) say
 
 ## Several motors
 
-Over the CANvas adapter the GUI sees every driver on the bus and addresses each by its node ID. Give each driver
-its own ID over the serial adapter first (the CAN node ID in the settings, then Save), terminate the first and the
-last node, and set a watchdog (*Watchdog ms*) on a bus that drives something that must not run away:
+Over the CANvas adapter the GUI sees every driver on the bus and addresses each by its node ID.
+
+Give each driver its own ID over the serial adapter first (the CAN node ID in the settings, then Save), terminate the
+first and the last node, and set a watchdog (*Watchdog ms*) on a bus that drives something that must not run away:
 [Power and the CAN daisy chain](../04-mounting/power-and-can.md), [Over CAN](can.md).
 
 ## Gripper

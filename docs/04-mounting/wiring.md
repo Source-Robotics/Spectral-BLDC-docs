@@ -14,16 +14,22 @@ reversed.
 
 A motor that comes with a connector keeps it: solder a short lead with the mating connector to each pad group.
 
+!!! success "Check"
+    With the driver unpowered, a multimeter shows about the same resistance between U and V, V and W, and W
+    and U, and no strand bridges two groups.
+
 !!! warning
     Never connect or disconnect the motor while the driver is powered.
 
 ## Phase order and direction
 
 Calibration spins the motor in open loop and watches the encoder, then checks that a current command moves the
-rotor the expected way. With firmware 105 and newer, the order of the phases is detected and compensated, so the
-motor calibrates identically with any wiring, and positive commands turn the motor the same way whatever the
-wiring: counter-clockwise seen from the encoder side of the board, see [Control modes](../06-operation/modes.md).
-To turn the other way, use negative setpoints.
+rotor the expected way.
+
+With firmware 105 and newer, the order of the phases is detected and compensated, so the motor calibrates identically
+with any wiring, and positive commands turn the motor the same way whatever the wiring: counter-clockwise seen from
+the encoder side of the board, see [Control modes](../06-operation/modes.md). To turn the other way, use negative
+setpoints.
 
 Firmware older than 105 does not compensate the order: calibration stops with
 `Phase order is wrong! Switch motor phases and try again!`. Swap any two of U, V and W and calibrate again.

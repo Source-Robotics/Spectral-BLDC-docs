@@ -2,18 +2,22 @@
 
 Calibration leaves the driver with current loop gains computed for your motor and with conservative velocity and
 position gains. Two things remain: the current limit, which you must set for your motor, and the loop gains, which
-you tune if the defaults do not suit it. Motor GUI shows the motor's response on its plots while you change a gain,
-which is what makes tuning quick.
+you tune if the defaults do not suit it.
+
+Motor GUI shows the motor's response on its plots while you change a gain, which is what makes tuning quick.
 
 ## The current limit
 
 Set the current limit to the rated phase current of your motor in mA. Calibration uses its own 1600 mA for its
 steps and, from firmware 109, puts your limit back when it ends (107 and older left 1600 mA: set it again after
-calibrating there). The factory default (`#Default`) of 1000 mA suits the gimbal motors in
+calibrating there).
+
+The factory default (`#Default`) of 1000 mA suits the gimbal motors in
 [Tested motors](../03-technical-data/tested-motors.md); a motor rated for more can go up to the driver's 2800 mA.
-`#Ilim` clamps the limit to 2800 mA; from firmware 109 Send_Limits over CAN does too. The firmware does not trip
-on phase current by itself; the MOSFET driver's hardware protection only catches a hard fault. A limit above the
-motor's rating overheats the motor.
+
+`#Ilim` clamps the limit to 2800 mA; from firmware 109 Send_Limits over CAN does too. The firmware does not trip on
+phase current by itself; the MOSFET driver's hardware protection only catches a hard fault. A limit above the motor's
+rating overheats the motor.
 
 === "Motor GUI"
     In the limits set the current limit, then **Save**.
@@ -50,12 +54,14 @@ Tune from the inside out: the current loop first, then velocity, then position. 
 
 ### The current loop
 
-The current loop is a PI controller that turns a current request into a voltage. Its gains `Kpiq` and `Kiiq`
-follow from the motor's resistance R, its inductance L (both measured by calibration) and one number, the
-bandwidth: Kpiq ≈ ω·L and Kiiq = ω·R·T, with ω = 2π × the bandwidth and T the 200 µs control period (Kiiq is
-applied once per control loop). The PI then cancels the coil's own lag, and the
-current follows a request like a first-order filter at that bandwidth. Calibration computes them this way at
-160 Hz, the default from firmware 109; so does setting the bandwidth:
+The current loop is a PI controller that turns a current request into a voltage.
+
+Its gains `Kpiq` and `Kiiq` follow from the motor's resistance R, its inductance L (both measured by calibration) and
+one number, the bandwidth: Kpiq ≈ ω·L and Kiiq = ω·R·T, with ω = 2π × the bandwidth and T the 200 µs control period
+(Kiiq is applied once per control loop).
+
+The PI then cancels the coil's own lag, and the current follows a request like a first-order filter at that bandwidth.
+Calibration computes them this way at 160 Hz, the default from firmware 109; so does setting the bandwidth:
 
 === "Terminal"
     ```
@@ -114,23 +120,30 @@ The velocity loop needs the speed, which the driver estimates from the encoder c
 | 2 (default) | direct PLL, integrator plus the proportional term | almost no lag, a little more noise |
 
 Both PLLs are critically damped at the natural frequency of parameter 51, 100 Hz by default (10 to 250 Hz). The
-lag of the moving average is what limits the velocity gain. On the gimbal-motor bench the direct PLL at 100 Hz
-allowed twice the `Kpv` of the moving average before the motor vibrated (0.11 against 0.056), lowered the speed
-ripple 1.3 to 3.4 times between 1500 and 48000 ticks/s, and cut the overshoot of a speed step from about 67 % to
-12 % at the same gains. At 60 Hz it overshot more, at 200 Hz it held with more current noise. Calibration and the gripper's stop
-detection always use the moving average. Neither parameter is kept by Save. The speed in Respond_data_pack_1 and
+lag of the moving average is what limits the velocity gain.
+
+On the gimbal-motor bench the direct PLL at 100 Hz allowed twice the `Kpv` of the moving average before the motor
+vibrated (0.11 against 0.056), lowered the speed ripple 1.3 to 3.4 times between 1500 and 48000 ticks/s, and cut the
+overshoot of a speed step from about 67 % to 12 % at the same gains.
+
+At 60 Hz it overshot more, at 200 Hz it held with more current noise. Calibration and the gripper's stop detection
+always use the moving average. Neither parameter is kept by Save. The speed in Respond_data_pack_1 and
 Send_Respond_Encoder_data, the watchdog descend and the capture is the picked estimate.
 
 ## Commutation delay compensation
 
 The voltage a control loop sets reaches the motor later than the angle it was computed from was read: the rest of
-the loop, the wait for the PWM update and half a control period. By then the rotor has turned on, and the voltage
-lands a little behind the angle it was meant for. Parameter 64 turns the output voltage forward by the angle the
-rotor covers in that delay, in the closed-loop modes above 100 ticks/s; 1 to 500 µs are accepted. The default is
-234 µs, the Spectral Micro's own delay measured on the bench: 20 points between 24000 and 120000 ticks/s gave one
-delay within 2 to 4 % of theory at every speed. Without it the field lags about 6° electrical at 120000 ticks/s.
-The delay belongs to the driver's timing, not to the motor, so it suits any motor; 0 switches it off. It is not
-kept by Save.
+the loop, the wait for the PWM update and half a control period.
+
+By then the rotor has turned on, and the voltage lands a little behind the angle it was meant for. Parameter 64 turns
+the output voltage forward by the angle the rotor covers in that delay, in the closed-loop modes above 100 ticks/s; 1
+to 500 µs are accepted.
+
+The default is 234 µs, the Spectral Micro's own delay measured on the bench: 20 points between 24000 and 120000
+ticks/s gave one delay within 2 to 4 % of theory at every speed.
+
+Without it the field lags about 6° electrical at 120000 ticks/s. The delay belongs to the driver's timing, not to the
+motor, so it suits any motor; 0 switches it off. It is not kept by Save.
 
 ## The finer points of the velocity loop
 
@@ -150,10 +163,11 @@ Two settings for special cases, both off by default and not kept by Save; both w
 ![The impedance loop: a spring (KP) and a damper (KD) around the position setpoint, plus a current feedforward.](../assets/PDloop.webp){ width="800" }
 
 In PD mode the motor behaves like a spring and a damper: the torque is `KP × (setpoint − position) + KD × (speed
-setpoint − speed) + feedforward current`. Set `KP` and `KD` (the gains, or `#KP`, `#KD`, or Send_PD_Gains), then
-command with `#PD`, `#PDV` and `#PDI` or Send_data_pack_PD. Start with a small `KP` and `KD` of 0, raise `KP` until
-the motor holds position firmly, then add `KD` until it stops ringing. The [theory corner](../appendix/theory.md)
-explains the loop.
+setpoint − speed) + feedforward current`.
+
+Set `KP` and `KD` (the gains, or `#KP`, `#KD`, or Send_PD_Gains), then command with `#PD`, `#PDV` and `#PDI` or
+Send_data_pack_PD. Start with a small `KP` and `KD` of 0, raise `KP` until the motor holds position firmly, then add
+`KD` until it stops ringing. The [theory corner](../appendix/theory.md) explains the loop.
 
 ## Limits
 

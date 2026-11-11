@@ -37,21 +37,24 @@ In error mode the LED does not flash: it stays on, as in the photo on the right.
 
 `#Clear` or Send_Clear_Error clears the flags and goes to idle. An error whose cause is still present comes
 straight back: a Vbus error at 2 V stays until the supply is right; once the supply is 24 V, one `#Clear` returns
-the driver to normal operation. The calibration error clears only by calibrating (or, for a motor you know is
-calibrated, `#Calibrated 1`).
+the driver to normal operation.
+
+The calibration error clears only by calibrating (or, for a motor you know is calibrated, `#Calibrated 1`).
 
 ## The watchdog
 
 The watchdog is set with Send_Watchdog over CAN, or with parameters 6 (time) and 7 (action): over UART,
 `#Par 6,<ms>` and `#Par 7,<action>`. It counts the motion commands (Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack) and the requests
-the driver answers (the Send_Respond_ remote frames, Send_Get_Parameter, Send_Buffer_Read). Other CAN frames and
-UART commands do not reset it. Send_Save_config keeps it over a power cycle, like the heartbeat interval. What the
-driver does when it runs out is the watchdog's action ([The watchdog](watchdog.md)).
+the driver answers (the Send_Respond_ remote frames, Send_Get_Parameter, Send_Buffer_Read).
+
+Other CAN frames and UART commands do not reset it. Send_Save_config keeps it over a power cycle, like the heartbeat
+interval. What the driver does when it runs out is the watchdog's action ([The watchdog](watchdog.md)).
 
 A driver with a saved watchdog that is used over UART only, or by a host that sends no motion command, raises a
-watchdog error each time the watchdog time runs out, also right after `#Clear`. To turn it off, send Send_Watchdog
-with 0 and then Send_Save_config over CAN. Over UART, `#Par 6,0` and then `#Save` do the same; nothing else is
-changed.
+watchdog error each time the watchdog time runs out, also right after `#Clear`.
+
+To turn it off, send Send_Watchdog with 0 and then Send_Save_config over CAN. Over UART, `#Par 6,0` and then `#Save`
+do the same; nothing else is changed.
 
 ## When the driver does not answer
 

@@ -53,11 +53,18 @@ Send_Respond_Identity (ID 39, a remote frame) answers with the product (1 STEPFO
 the firmware release, the hardware version, the pole pairs, whether it is calibrated, and eight flags: set up as
 a gripper, brakes in idle, coils reversed, settings block 2 available, wrong product, current-sense zero measured,
 anti-cogging saved, switching zero in use ([Send_Respond_Identity](../reference/can/status.md#send_respond_identity)).
+
 A host can read it before it commands or flashes a drive, to know it talks to the drive it expects.
 
-The **tool id** says what the drive is built into: 0 none (a joint or a bare driver), 1 an SSG-48, 11 to 33 an
-MSG (the tens digit the rail, 1 = 100, 2 = 150, 3 = 200 mm; the units digit the stepper, 1 = 21.5, 2 = 40,
-3 = 60 mm), 200 to 254 your own tools. Set it with `#Tool` or parameter 1 and save.
+The **tool id** says what the drive is built into:
+
+- 0: none (a joint or a bare driver);
+- 1: an SSG-48;
+- 11 to 33: an MSG (the tens digit the rail, 1 = 100, 2 = 150, 3 = 200 mm; the units digit the stepper, 1 = 21.5,
+  2 = 40, 3 = 60 mm);
+- 200 to 254: your own tools.
+
+Set it with `#Tool` or parameter 1 and save.
 
 ## Everything at once: telemetry
 
@@ -69,13 +76,18 @@ and the current, all from the same moment: one request instead of four, for a ho
 
 STEPFOC and the Spectral Micro use the same bootloader and the same file name for their firmware, and each
 firmware drives the other board wrongly: the Spectral Micro firmware on a STEPFOC drove a coil at about 1.7 A in
-every mode on the bench. From firmware 109 a board remembers which product calibrated it, a stamp in the EEPROM
-written at the first start-up of a calibrated board and at every save. A firmware that finds the other product's
-stamp, or no stamp but a calibration its own product cannot make (the Spectral Micro firmware treats 50 pole pairs
-or more as a STEPFOC calibration), reads and writes nothing more, drives no pin (its gate driver is enabled only
-after the check) and starts no control loop. It stays reachable: it reports an error,
-`Wrong firmware for this board (product lock)` in `#Error`, the `wrong_product` bit in the error state and the
-identity, and a warning in `#Info`. Flash the right firmware and the board runs as before; nothing was written.
+every mode on the bench.
+
+From firmware 109 a board remembers which product calibrated it, a stamp in the EEPROM written at the first start-up
+of a calibrated board and at every save.
+
+A firmware that finds the other product's stamp, or no stamp but a calibration its own product cannot make (the
+Spectral Micro firmware treats 50 pole pairs or more as a STEPFOC calibration), reads and writes nothing more, drives
+no pin (its gate driver is enabled only after the check) and starts no control loop.
+
+It stays reachable: it reports an error, `Wrong firmware for this board (product lock)` in `#Error`, the
+`wrong_product` bit in the error state and the identity, and a warning in `#Info`. Flash the right firmware and the
+board runs as before; nothing was written.
 
 `#Product` shows the stamp. On a board the rule misjudges, `#Product claim` stamps it as this product and
 `#Product clear` removes the stamp; power-cycle after either. Both are UART commands only.
@@ -84,8 +96,10 @@ identity, and a warning in `#Info`. Flash the right firmware and the board runs 
 
 The control loop runs every 200 µs (5000 Hz) and has to finish inside that. `#Info` prints the last loop's time.
 On the bench an early build of firmware 109 took about 80 µs of the 200; anti-cogging and the commutation delay
-compensation each add some 10 µs (measured on STEPFOC). The section timing and the register fast paths of the
-STEPFOC firmware (its parameters 66 to 72) are not in the Spectral Micro firmware.
+compensation each add some 10 µs (measured on STEPFOC).
+
+The section timing and the register fast paths of the STEPFOC firmware (its parameters 66 to 72) are not in the
+Spectral Micro firmware.
 
 ## A capture
 
@@ -132,15 +146,18 @@ watchdog's included, and the time after it. The capture calls (`Send_Parameter`,
 
 The drive's microcontroller has 128 KB of flash, of which the bootloader takes 12 KB, and 20 KB of RAM. Firmware
 109 uses about 91.5 % of the 116 KB application flash and 65 % of the RAM for fixed data, which leaves about
-7 KB for the stack and the heap. Parameter 83 (`#Par 83`, or Send_Get_Parameter(83)) is the margin check: the
-bytes of that RAM the stack has never reached since start-up. The stack needs about 1.5 to 2 KB; read parameter 83
-after the drive has run its hardest work (a calibration, the encoder table, the anti-cogging, sound) and see that
-plenty is left.
+7 KB for the stack and the heap.
+
+Parameter 83 (`#Par 83`, or Send_Get_Parameter(83)) is the margin check: the bytes of that RAM the stack has never
+reached since start-up. The stack needs about 1.5 to 2 KB; read parameter 83 after the drive has run its hardest work
+(a calibration, the encoder table, the anti-cogging, sound) and see that plenty is left.
 
 ## A histogram
 
 The histogram adds one signal into 256 bins over the electrical angle or over one motor turn, every control loop,
 until it is stopped or a bin holds 65535 samples (about an hour): the mean per bin shows what repeats with the
-angle, such as the cogging current at a steady speed. Parameter 35 picks the signal, 34 starts it (1 electrical
-angle, 2 motor turn) and stops it (0), 36 counts the samples, and Send_Buffer_Read with kind 1 reads the count and
-the sum of each bin. The anti-cogging identification uses it the same way.
+angle, such as the cogging current at a steady speed.
+
+Parameter 35 picks the signal, 34 starts it (1 electrical angle, 2 motor turn) and stops it (0), 36 counts the
+samples, and Send_Buffer_Read with kind 1 reads the count and the sum of each bin. The anti-cogging identification
+uses it the same way.

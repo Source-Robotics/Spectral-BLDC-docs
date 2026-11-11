@@ -5,10 +5,11 @@ status: new
 # The watchdog
 
 The watchdog stops the motor when the host stops talking: a host program that crashes, a cable that comes out,
-a USB adapter that hangs. It is a timer in the driver. Every valid motion frame and every request the driver
-answers starts it again; when it runs out, the driver raises the watchdog error and does what its **action**
-says. From firmware 109 the action can hold the position, brake, coast, or let a joint down slowly; before, the
-driver always disabled the motor, which then coasted.
+a USB adapter that hangs. It is a timer in the driver.
+
+Every valid motion frame and every request the driver answers starts it again; when it runs out, the driver raises the
+watchdog error and does what its **action** says. From firmware 109 the action can hold the position, brake, coast, or
+let a joint down slowly; before, the driver always disabled the motor, which then coasted.
 
 ## Setting it
 
@@ -32,8 +33,9 @@ time finds the driver in watchdog error and clears it with Send_Clear_Error.
 
 What starts the timer again: Send_data_pack_1, Send_data_pack_PD, Send_gripper_data_pack, the
 status requests (Send_Respond_…), Send_Get_Parameter and Send_Buffer_Read. Setting the watchdog time
-(Send_Watchdog, parameter 6) starts a fresh window, and so does Send_Save_config, whose save takes time. What
-does not: the other setting frames (gains, limits, Idle, Clear, Settings, Send_Parameter) and every UART command
+(Send_Watchdog, parameter 6) starts a fresh window, and so does Send_Save_config, whose save takes time.
+
+What does not: the other setting frames (gains, limits, Idle, Clear, Settings, Send_Parameter) and every UART command
 (known issue KI-11). While the encoder table or the anti-cogging is measured, the driver feeds it itself.
 
 ## What a trip does
@@ -65,9 +67,11 @@ once and goes to idle; the next motion frame takes over.
 ### Hold
 
 Hold keeps the position loop on the position the shaft had at the trip. Coming from position or velocity mode it
-keeps the velocity integral too, so a joint under load does not sag at the moment of the trip. A host that recovers within the fallback time (a USB
-hiccup) finds the joint where it left it. On the bench a gimbal motor held within 6 ticks; with a load pulling on
-its shaft the holding current rose to 440 mA while the shaft crept 59 ticks.
+keeps the velocity integral too, so a joint under load does not sag at the moment of the trip.
+
+A host that recovers within the fallback time (a USB hiccup) finds the joint where it left it. On the bench a gimbal
+motor held within 6 ticks; with a load pulling on its shaft the holding current rose to 440 mA while the shaft crept
+59 ticks.
 
 ### Descend
 

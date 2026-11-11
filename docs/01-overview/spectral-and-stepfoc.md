@@ -2,9 +2,10 @@
 
 The Spectral Micro and the [STEPFOC stepper driver](https://docs.source-robotics.com/STEPFOC-docs/) are sister
 drivers: similar hardware and similar firmware, each made for its kind of motor. The Spectral Micro drives
-three-phase brushless motors; STEPFOC drives two-phase stepper motors. They are not the same board and do not run
-the same firmware, but they are controlled and run practically the same way: the same CAN and UART commands, the
-same Python library, Motor GUI and bootloader.
+three-phase brushless motors; STEPFOC drives two-phase stepper motors.
+
+They are not the same board and do not run the same firmware, but they are controlled and run practically the same
+way: the same CAN and UART commands, the same Python library, Motor GUI and bootloader.
 
 What this means in practice:
 

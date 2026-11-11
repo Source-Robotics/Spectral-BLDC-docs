@@ -19,6 +19,10 @@ its hole pattern to the motor's bottom holes and its height so that the magnet e
 3. Check the gap: about 1 mm, the magnet not touching the chip. If it is wrong, change the bracket's height or the
    magnet's thickness ([The encoder magnet](magnet.md)).
 
+!!! success "Check"
+    The board sits parallel to the motor, about 1 mm from the magnet, and the rotor turns by hand without the
+    magnet touching the chip. If the gap is wrong: [The encoder magnet](magnet.md).
+
 ## Motors with the NEMA 17 pattern
 
 A brushless motor in the NEMA 17 format, such as the 42BLS40 in the [tested motors](../03-technical-data/tested-motors.md),

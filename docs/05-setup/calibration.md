@@ -1,10 +1,13 @@
 # Calibration
 
-Calibration teaches the driver its motor: it checks the magnet and the supply, measures the motor's phase
-resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find
-the pole pairs and the direction, checks the order of the phases and aligns the encoder to the rotor field, and
-measures the motor constants Kt, KV and the flux linkage. Nothing about the motor has to be entered first. It
-runs once per motor; the result is kept by saving. From firmware 109 every `#Cal` goes on by itself to two more
+Calibration teaches the driver its motor. It checks the magnet and the supply, then measures the motor's phase
+resistance and inductance and computes the current loop gains from them.
+
+It spins the motor in open loop to find the pole pairs and the direction, checks the order of the phases and
+aligns the encoder to the rotor field, and measures the motor constants Kt, KV and the flux linkage. Nothing about
+the motor has to be entered first.
+
+It runs once per motor; the result is kept by saving. From firmware 109 every `#Cal` goes on by itself to two more
 runs, the [encoder table and the anti-cogging](anti-cogging.md), and saves. `#Calonly` is the calibration alone.
 
 !!! danger "The motor turns"
@@ -136,11 +139,13 @@ What the steps are:
 ## What follows the calibration
 
 Half a second after `Calibration success!` of a `#Cal` the driver starts two runs on its own: the encoder table,
-then the anti-cogging identification. Keep the shaft free for about a minute more. When they succeed, everything is
-saved. A command from a host (a motion command, `#Idle`) stops them; then nothing is saved, and the calibration is
-kept only if you `#Save` it. A host that takes the drive before they start has 3 s: after that the runs are
-dropped and do not start later. `#Cal` always runs them; `#Calonly` never does.
-[Encoder table and anti-cogging](anti-cogging.md) explains both.
+then the anti-cogging identification. Keep the shaft free for about a minute more.
+
+When they succeed, everything is saved. A command from a host (a motion command, `#Idle`) stops them; then nothing is
+saved, and the calibration is kept only if you `#Save` it.
+
+A host that takes the drive before they start has 3 s: after that the runs are dropped and do not start later. `#Cal`
+always runs them; `#Calonly` never does. [Encoder table and anti-cogging](anti-cogging.md) explains both.
 
 !!! warning "Set the current limit before you calibrate"
     The encoder table turns the field with a current of 80 % of the current limit, for about 20 s. Calibration uses
