@@ -43,4 +43,5 @@ The cables from the shop are made this way: [CAN cable](https://source-robotics.
 - A PC joins the bus with the [CANvas adapter](https://source-robotics.com/products/canvas-usb-to-can-adapter),
   which has its own termination.
 
-![The termination switch, ON for the first and the last node.](../assets/TERM.webp){ width="520" }
+![The termination switch, ON for the first and the last node.](../assets/TERM.webp#only-light){ width="520" }
+![The termination switch, ON for the first and the last node.](../assets/TERM_dark.webp#only-dark){ width="520" }

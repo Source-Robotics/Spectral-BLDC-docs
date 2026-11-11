@@ -86,7 +86,8 @@ the torque as Kt times the current.
 
 ## Positive rotation
 
-![Looking at the encoder side of the board, the side that faces the magnet, positive rotation is counter-clockwise. A positive current turns the motor that way, a positive speed too, and the position grows.](../assets/Positive_rotation.webp){ width="520" }
+![Looking at the encoder side of the board, the side that faces the magnet, positive rotation is counter-clockwise. A positive current turns the motor that way, a positive speed too, and the position grows.](../assets/Positive_rotation.webp#only-light){ width="520" }
+![Looking at the encoder side of the board, the side that faces the magnet, positive rotation is counter-clockwise. A positive current turns the motor that way, a positive speed too, and the position grows.](../assets/Positive_rotation_dark.webp#only-dark){ width="520" }
 
 The direction is tied to the encoder, not to the wiring: since firmware 105 calibration compensates the order of
 the phases, so the motor turns the same way whichever wire went to which terminal.

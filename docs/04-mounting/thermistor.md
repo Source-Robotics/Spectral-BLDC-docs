@@ -21,7 +21,8 @@ bottom and can be reached through one of the mounting holes or past the edge of 
 Thermal cement holds the bead in place and conducts the heat; keep the leads clear of the rotor.
 
 <figure markdown="span">
-  ![Thermal cement](../assets/Thermal_cement.webp){ width="220" }
+  ![Thermal cement](../assets/Thermal_cement.webp#only-light){ width="220" }
+  ![Thermal cement](../assets/Thermal_cement_dark.webp#only-dark){ width="220" }
   <figcaption>Thermal cement: it sets hard and conducts heat. Thermal paste stays soft and lets the bead move, ordinary glue insulates it. <a href="https://s.click.aliexpress.com/e/_c3dBOwTD" target="_blank" rel="noopener">Where to buy it</a>.</figcaption>
 </figure>
 

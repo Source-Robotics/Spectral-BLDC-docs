@@ -34,7 +34,8 @@ update goes over UART or CAN.
 === "macOS"
     STM32CubeProgrammer; the ST-LINK Utility runs on Windows only. The adapter needs no driver.
 
-![The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.](../assets/FLASHING2-Photoroom.webp){ width="520" }
+![The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.](../assets/FLASHING2.webp#only-light){ width="520" }
+![The JTAG pads. The adapter is pressed onto them; a little pressure makes the contact.](../assets/FLASHING2_dark.webp#only-dark){ width="520" }
 
 ## Steps
 

@@ -15,7 +15,8 @@ shaft's axis.
 ![Board dimensions and hole pattern.](../assets/micro_dimensions.webp#only-light){ width="600" }
 ![Board dimensions and hole pattern.](../assets/micro_dimensions_dark.webp#only-dark){ width="600" }
 
-![The STEP model.](../assets/bldc_step.webp){ width="520" }
+![The board's model, from its STEP file: the PCB and everything mounted on it.](../assets/renders/spectral_board_studio.webp#only-light){ width="520" }
+![The board's model, from its STEP file: the PCB and everything mounted on it.](../assets/renders/spectral_board_studio_dark.webp#only-dark){ width="520" }
 
 The STEP files of the board and of an example mounting bracket are in the firmware repository, in
 [STEP files](https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller/tree/main/STEP%20files):

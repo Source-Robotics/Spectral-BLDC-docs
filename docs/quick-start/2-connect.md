@@ -7,7 +7,8 @@ The supply powers the motor, the serial adapter connects the PC.
 1. Connect the supply to a power connector: **DC+ to positive, DC− to negative**. Check twice.
 2. Connect the serial adapter to the UART connector with the UART cable: TX to RX, RX to TX. 3.3 V only.
 
-    ![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART%20connection.webp){ width="700" }
+    ![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART_connection.webp#only-light){ width="700" }
+    ![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART_connection_dark.webp#only-dark){ width="700" }
 
 3. Power on.
 

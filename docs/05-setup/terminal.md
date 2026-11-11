@@ -9,7 +9,8 @@ exactly as it prints them, which is useful when something does not work.
 The driver talks on its UART connector at 256000 baud, 8N1, 3.3 V. Any terminal that sends a line ending in
 CR+LF works.
 
-![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART%20connection.webp){ width="700" }
+![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART_connection.webp#only-light){ width="700" }
+![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](../assets/UART_connection_dark.webp#only-dark){ width="700" }
 
 ## Connecting
 
