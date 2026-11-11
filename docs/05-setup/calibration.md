@@ -66,6 +66,12 @@ ID is kept. [Saving the configuration](saving.md) says what else it does.
 
 ## 2. Run it
 
+!!! tip "We recommend a Motor GUI preset"
+    In Motor GUI's **Presets** tab, apply *Generic motor*, *BLDC motor on Spectral Micro (soft)* before you
+    calibrate. It writes a low current limit and soft loops and leaves the resistance, the inductance and the pole
+    pairs to the calibration, which measures them, so the motor calibrates safely. Raise the limits and the gains
+    from there ([Current limit and loop tuning](tuning.md)). More: [Motor GUI](motor-gui.md).
+
 === "Motor GUI"
     Start the calibration. The driver enters *Calibration mode* and the GUI shows its log step by step; when it
     finishes, the resistance, inductance and pole pairs it measured, the phase order and direction, Kt, KV and the

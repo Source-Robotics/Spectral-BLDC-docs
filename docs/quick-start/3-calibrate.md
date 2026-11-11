@@ -23,6 +23,12 @@ EEPROM.
 
 ## 2. Calibrate
 
+!!! tip "We recommend a Motor GUI preset"
+    In Motor GUI's **Presets** tab, apply *Generic motor*, *BLDC motor on Spectral Micro (soft)* before you
+    calibrate. It writes a low current limit and soft loops and leaves the resistance, the inductance and the pole
+    pairs to the calibration, which measures them, so the motor calibrates safely. Raise the limits and the gains
+    from there ([Current limit and loop tuning](../05-setup/tuning.md)). More: [Motor GUI](../05-setup/motor-gui.md).
+
 1. Fix the motor to the bench, with nothing on the shaft.
 2. Set the supply to 24 V.
 3. Start the calibration:

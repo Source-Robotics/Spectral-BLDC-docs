@@ -16,12 +16,12 @@ its hole pattern to the motor's bottom holes and its height so that the magnet e
 2. Bolt the board to the bracket with M3 screws, with the encoder chip (the bottom of the board, see
    [Connectors and pinout](../03-technical-data/connectors.md)) towards the magnet. Tighten the screws evenly; the
    board must be parallel to the magnet's face.
-3. Check the gap: about 1 mm, the magnet not touching the chip. If it is wrong, change the bracket's height or the
-   magnet's thickness ([The encoder magnet](magnet.md)).
+3. Check the gap between the magnet and the encoder chip: about 1 mm, the magnet not touching it. If it is wrong,
+   change the bracket's height or the magnet's thickness ([The encoder magnet](magnet.md)).
 
 !!! success "Check"
-    The board sits parallel to the motor, about 1 mm from the magnet, and the rotor turns by hand without the
-    magnet touching the chip. If the gap is wrong: [The encoder magnet](magnet.md).
+    The board sits parallel to the motor, with about 1 mm between the magnet and the encoder chip, and the rotor
+    turns by hand without the magnet touching the chip. If the gap is wrong: [The encoder magnet](magnet.md).
 
 ## Motors with the NEMA 17 pattern
 
