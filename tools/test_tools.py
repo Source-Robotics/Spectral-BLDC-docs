@@ -194,15 +194,24 @@ if loaded:
     dt = pages.defaults_table(d)
     internal = [x["name"] for x in facts["defaults"] if not x.get("setting")]
     shown = [x["name"] for x in facts["defaults"] if x.get("setting")]
+    # a row starts with the variable's name; its firmware comment, if any, follows in the same cell
+    row_of = lambda n: re.search(rf"^\| `{re.escape(n)}`( \||<br>)", dt, re.M)
     check("B13 the defaults table: what #Default sets and #Save keeps, the settings only, no internal state",
           "After `#Default`" in dt and "Kept by `#Save`" in dt and bool(shown) and bool(internal)
-          and all(f"| `{n}` |" in dt for n in shown) and not any(f"| `{n}` |" in dt for n in internal if n not in shown),
+          and all(row_of(n) for n in shown) and not any(row_of(n) for n in internal if n not in shown),
           dt[:200])
+    commented = [x for x in facts["defaults"] if x.get("setting") and str(x.get("comment") or "").strip()]
+    check("B13b every firmware comment of a setting is in the defaults table, under its name",
+          all(f"| `{x['name']}`<br><span class=\"meta\">{pages.esc(x['comment'])}</span> |" in dt for x in commented))
     # the parameters (firmware 109 and newer): every PARAM_* number described, nothing invented, one row each
     if facts["can"].get("params"):
         pt = pages.params_tables(d)
-        check("B14 the parameter tables list every parameter of the firmware with its number",
-              all(f"| {p['id']} | `{p['name']}` |" in pt for p in facts["can"]["params"]), pt[:200])
+        # three columns (No. | What it is | Value): the firmware name in the grey line under what it is
+        rows = {int(m.group(1)): m.group(2) for m in re.finditer(r"^\| (\d+) \| (.*)$", pt, re.M)}
+        check("B14 the parameter tables list every parameter of the firmware with its number, name, access and Save",
+              "| No. | What it is | Value |" in pt
+              and all(f"<span class=\"meta\">`{p['name']}` · Access: " in rows.get(p["id"], "")
+                      and " · Kept by Save: " in rows.get(p["id"], "") for p in facts["can"]["params"]), pt[:200])
         bad = json.loads(json.dumps(d["params"]))
         bad["params"].pop(next(iter(bad["params"])))
         try:
@@ -223,6 +232,17 @@ if loaded:
           and "does not accept the name" in pages.uart_group(group, fake))
     fake["facts"]["uart"]["accepted"] = []
     check("B16b a parser without a command list flags nothing", not pages.refused(fake))
+    # a UART group page: one section per command (a command the firmware lists twice still once), in the order of
+    # uart_commands.yml, each with the id the overview links to
+    every = [h["name"] for h in facts["uart"]["handlers"]]
+    sections_ok, detail = True, ""
+    for g, group in d["uart"]["groups"].items():
+        text = pages.uart_group(g, d)
+        want = [n for n, c in d["uart"]["commands"].items() if c["group"] == g and n in every]
+        got = re.findall(r"^### `#([^`]+)` \{ #([\w-]+) \}$", text, re.M)
+        if [n for n, _ in got] != want or any(f"]({group['page']}#{a})" not in uo for _, a in got):
+            sections_ok, detail = False, f"{g}: {[n for n, _ in got]} vs {want}"
+    check("B17 every UART command has one section on its group page, linked from the overview", sections_ok, detail)
 
 
 # ---------------------------------------------------------------- the sync tool, on fixtures

@@ -96,6 +96,71 @@
   background: var(--md-accent-fg-color--transparent);
 }
 
+/* The facts strip of a CAN message or a UART command (hooks/firmware_pages.py): Markdown puts the chips in a <p>, so
+   the row is that paragraph. A chip breaks only when it is wider than the page. The grey word in a chip names it. */
+.md-typeset .cmd-facts > p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.md-typeset .cmd-facts .fact .k {
+  color: var(--md-default-fg-color--light);
+  margin-right: 0.3em;
+}
+
+/* a command's section: the heading close to its facts strip, the strip close to the text */
+.md-typeset h3:has(+ .cmd-facts) {
+  margin: 1.2em 0 0.5em;
+}
+
+.md-typeset h3 + .cmd-facts {
+  margin-bottom: 0.8rem;
+}
+
+/* A UART group page: the row of its commands at the top, links (so blue, a.opt below), one chip each */
+.md-typeset .cmd-index > p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.35rem;
+  margin: 0 0 1.6rem;
+}
+
+/* The generated reference tables: hooks/firmware_pages.py puts each in <div class="ref-table KIND">. A column is as
+   wide as its content needs (the theme gives every column 5rem at least), a name in code is never broken inside a
+   word, and the long text gets the rest of the width. A little less space left and right of each cell than the
+   theme's, so a table of many columns fits the page instead of running off its right edge. */
+.md-typeset .ref-table table:not([class]) th {
+  min-width: 0;
+}
+
+.md-typeset .ref-table table:not([class]) th,
+.md-typeset .ref-table table:not([class]) td {
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+}
+
+.md-typeset .ref-table table:not([class]) code {
+  word-break: normal;
+}
+
+/* a frame's byte table: byte, bit, field and type on one line, the meaning wraps; the dates of the compatibility
+   table on one line */
+.md-typeset .ref-table.fields table:not([class]) td:not(:last-child),
+.md-typeset .ref-table.compat table:not([class]) td:nth-child(-n+2) {
+  white-space: nowrap;
+}
+
+/* a grey line under a cell's text: a parameter's firmware name, access and Save; a variable's firmware comment;
+   the group page of a library call's message */
+.md-typeset .ref-table .meta {
+  display: inline-block;
+  margin-top: 0.35em;
+  font-size: 0.92em;
+  color: var(--md-default-fg-color--light);
+}
+
 /* the Arguments table: no frame, a heavier rule under the header, names never broken */
 .md-typeset:has(> h1.cmd-title) table:not([class]) {
   display: table;

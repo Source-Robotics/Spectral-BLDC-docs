@@ -10,7 +10,8 @@ Placeholders, each replaced when the site is built:
     <!-- can-overview -->            every CAN message: ID, name, direction, length, group
     <!-- can-commands: GROUP -->     one section per CAN command of the group, facts strip + byte tables
     <!-- uart-overview -->           every UART command: name, kind, argument, group
-    <!-- uart-commands: GROUP -->    the commands of the group as a table
+    <!-- uart-commands: GROUP -->    the commands of the group: a row of links, then one section per command (facts
+                                     strip, the description at full width, the response), in uart_commands.yml's order
     <!-- defaults-table -->          the defaults of the firmware structures
     <!-- compatibility-table -->     the rows of compatibility.yml
     <!-- can-parameters -->          every parameter of IN_PARAM_SET / IN_PARAM_GET (firmware 2026-11 and newer): the
@@ -19,6 +20,11 @@ Placeholders, each replaced when the site is built:
 
 A command or a parameter the firmware has and the descriptions lack, or the other way round, stops the build
 (tools/test_tools.py checks the same before a push). Registered in mkdocs.yml under `hooks:`.
+
+Every table written here sits in a <div class="ref-table KIND"> (ref_table()), so docs/stylesheets/extra.css can
+give the generated tables their widths: names on one line, the long text in the widest column. Long text does not
+go into a narrow column: a UART command gets its own section, a parameter's name, access and saving sit under
+what it is.
 """
 from __future__ import annotations
 
@@ -46,6 +52,16 @@ _d: dict = {}
 
 def esc(text) -> str:
     return str(text if text is not None else "").replace("|", r"\|")
+
+
+def ref_table(table: str, kind: str) -> str:
+    """A generated table in its <div class="ref-table KIND">, which extra.css styles (column widths, no wrapping
+    inside a name)."""
+    return f'<div class="ref-table {kind}" markdown>\n\n{table.rstrip()}\n\n</div>\n'
+
+
+def facts_strip(chips: list[str]) -> str:
+    return '<div class="cmd-facts" markdown>' + "".join(f'<span class="fact">{x}</span>' for x in chips) + "</div>"
 
 
 def load() -> dict:
@@ -89,7 +105,9 @@ def check_params(facts: dict, params: dict | None) -> None:
 
 
 def params_tables(d: dict) -> str:
-    """One table per group, in the order of parameters.yml's groups, the parameters by number."""
+    """One table per group, in the order of parameters.yml's groups, the parameters by number. Three columns, so
+    the text has room: the number; what it is, with the firmware name, the access and whether Save keeps it in a
+    line under it; the value."""
     params = d["params"]
     if not params:
         return ""
@@ -102,12 +120,13 @@ def params_tables(d: dict) -> str:
         out += [f"### {group['title']}", ""]
         if group.get("intro"):
             out += [group["intro"].strip(), ""]
-        out += ["| No. | Name | Access | Value | Kept by Save | What it is |", "|---|---|---|---|---|---|"]
+        rows = ["| No. | What it is | Value |", "|---|---|---|"]
         for n in names:
             p = params["params"][n]
-            out.append(f"| {number[n]} | `{n}` | {ACCESS[p['access']]} | {esc(str(p['value']).strip())} | "
-                       f"{esc(str(p['saved']).strip())} | {esc(p['description'].strip())} |")
-        out.append("")
+            meta = (f"`{n}` · Access: {ACCESS[p['access']]} · Kept by Save: {esc(str(p['saved']).strip())}")
+            rows.append(f"| {number[n]} | {esc(p['description'].strip())}<br><span class=\"meta\">{meta}</span> | "
+                        f"{esc(str(p['value']).strip())} |")
+        out += [ref_table("\n".join(rows), "params"), ""]
     return "\n".join(out) + "\n"
 
 
@@ -159,12 +178,27 @@ def field_size(f: dict) -> int:
     return 0 if f.get("bit") is not None and f.get("_shared") else n
 
 
+def has_bit(f: dict) -> bool:
+    return f.get("bit") is not None and str(f.get("bit")) != ""
+
+
 def fields_table(fields: list[dict]) -> str:
-    rows = ["| Byte | Bit | Field | Type | Meaning |", "|---|---|---|---|---|"]
+    """Byte | Bit | Field | Type | Meaning; the Bit column only in a frame that has bit fields."""
+    bits = any(has_bit(f) for f in fields)
+    head = ["Byte"] + (["Bit"] if bits else []) + ["Field", "Type", "Meaning"]
+    rows = ["| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
     for f in fields:
-        bit = f.get("bit", "")
-        rows.append(f"| {f['bytes']} | {bit} | {esc(f['name'])} | {esc(f.get('type', ''))} | {esc(f.get('meaning', ''))} |")
-    return "\n".join(rows)
+        cells = ([str(f["bytes"])] + ([str(f["bit"]) if has_bit(f) else ""] if bits else [])
+                 + [esc(f["name"]), esc(f.get("type", "")), esc(f.get("meaning", ""))])
+        rows.append("| " + " | ".join(cells) + " |")
+    return ref_table("\n".join(rows), "fields")
+
+
+def frame(title: str, fields: list[dict]) -> list[str]:
+    """A frame's title and its byte table; a frame without data says so instead of showing an empty table."""
+    if not fields:
+        return [f"{title} carries no data.", ""]
+    return [title, "", fields_table(fields), ""]
 
 
 def direction(name: str) -> str:
@@ -197,15 +231,15 @@ def can_section(name: str, c: dict, d: dict) -> str:
     reserved = h is None or h["empty"]
     if name.startswith("IN_") and reserved:
         chips.append("not implemented")
-    out = [f"### {c['name']}", "", '<div class="cmd-facts" markdown>' + "".join(f'<span class="fact">{x}</span>' for x in chips) + "</div>", ""]
+    out = [f"### {c['name']}", "", facts_strip(chips), ""]
     out.append(c["description"].strip())
     out.append("")
     for form in c.get("forms", []):
         title = f"**{form['length']} bytes**" + (f" — {form['title']}" if form.get("title") else "")
-        out += [title, "", fields_table(form["fields"]), ""]
+        out += frame(title, form["fields"])
     if c.get("response_fields") is not None:
         length = tx_len.get(name)
-        out += [f"**The frame** ({length} bytes)" if length is not None else "**The frame**", "", fields_table(c["response_fields"]), ""]
+        out += frame(f"**The frame** ({length} bytes)" if length is not None else "**The frame**", c["response_fields"])
     responds = [tx_of_fn[fn] for fn in (h["responds"] if h else []) if fn in tx_of_fn]
     if responds:
         names = ", ".join(d["can"]["commands"][r]["name"] for r in responds if r in d["can"]["commands"])
@@ -239,30 +273,40 @@ def can_overview(d: dict) -> str:
             length = ", ".join(str(x) for x in h["lengths"]) or "0"
         g = can["groups"][c["group"]]
         rows.append(f"| {e['id']} | [{c['name']}]({g['page']}#{anchor(c['name'])}) | {direction(e['name'])} | {length} | {g['title']} |")
-    return "\n".join(rows) + "\n"
+    return ref_table("\n".join(rows), "overview")
 
 
 def anchor(title: str) -> str:
     return re.sub(r"[^a-z0-9_-]+", "-", title.lower()).strip("-")
 
 
-def uart_rows(names: list[str], d: dict) -> str:
-    by_name = {h["name"]: h for h in d["facts"]["uart"]["handlers"]}
-    rows = ["| Command | Kind | Argument | What it does | Response |", "|---|---|---|---|---|"]
-    for n in names:
-        h, c = by_name[n], d["uart"]["commands"][n]
-        arg = c.get("argument") or (h["arg"] if h["kind"] == "Set/Get" else "")
-        if h["kind"] == "Set/Get" and h["arg"] and c.get("argument"):
-            arg = f"{h['arg']}: {c['argument']}"
-        desc = c["description"].strip()
-        if h["mode"]:
-            desc += f" Enters **{h['mode']}** mode."
-        resp = c.get("response") or (f"`{h['response']}…`" if h["response"] else "—")
-        if n in refused(d):
-            desc += (" **In this firmware build the serial parser does not accept the name: the driver answers "
-                     "`Unknown command`.**")
-        rows.append(f"| `#{n}` | {h['kind']} | {esc(arg)} | {esc(desc)} | {esc(resp)} |")
-    return "\n".join(rows) + "\n"
+def uart_anchor(name: str, names: list[str] | None = None) -> str:
+    """The id of a UART command's section on its group page: the name in lower case (`#Save` -> save). Two names
+    that differ only in case (none in this firmware) are told apart by a suffix."""
+    a = name.lower()
+    same = sorted((n for n in (names or []) if n.lower() == a), key=lambda n: (n != n.lower(), n))
+    return a if len(same) < 2 or same[0] == name else f"{a}-{same.index(name) + 1}"
+
+
+def uart_section(n: str, h: dict, c: dict, d: dict, names: list[str]) -> str:
+    """One UART command: the facts strip (kind, argument, the mode it enters), the description at full width, the
+    response."""
+    arg = c.get("argument") or (h["arg"] if h["kind"] == "Set/Get" else "")
+    if h["kind"] == "Set/Get" and h["arg"] and c.get("argument"):
+        arg = f"{h['arg']}: {c['argument']}"
+    chips = [h["kind"]]
+    if arg:
+        chips.append(f'<span class="k">Argument</span> {arg}')
+    if h["mode"]:
+        chips.append(f"Enters **{h['mode']}** mode")
+    desc = c["description"].strip()
+    if n in refused(d):
+        desc += (" **In this firmware build the serial parser does not accept the name: the driver answers "
+                 "`Unknown command`.**")
+    resp = c.get("response") or (f"`{h['response']}…`" if h["response"] else "—")
+    out = [f"### `#{n}` {{ #{uart_anchor(n, names)} }}", "", facts_strip(chips), "", desc, "",
+           f"**Response:** {resp}", "", "---"]
+    return "\n".join(out) + "\n"
 
 
 def refused(d: dict) -> list[str]:
@@ -277,9 +321,15 @@ def refused(d: dict) -> list[str]:
 
 
 def uart_group(group: str, d: dict) -> str:
-    names = [h["name"] for h in d["facts"]["uart"]["handlers"]
-             if h["name"] in d["uart"]["commands"] and d["uart"]["commands"][h["name"]]["group"] == group]
-    return uart_rows(names, d)
+    """The commands of a group in the order uart_commands.yml lists them (the firmware lists some handlers twice; a
+    command is shown once, with the facts of its last handler): a row of links to them, then a section each."""
+    by_name = {h["name"]: h for h in d["facts"]["uart"]["handlers"]}
+    every = list(by_name)
+    names = [n for n, c in d["uart"]["commands"].items() if c["group"] == group and n in by_name]
+    links = " ".join(f"[`#{n}`](#{uart_anchor(n, every)}){{ .opt }}" for n in names)
+    out = [f'<div class="cmd-index" markdown>{links}</div>', ""]
+    out += [uart_section(n, by_name[n], d["uart"]["commands"][n], d, every) for n in names]
+    return "\n".join(out) + "\n"
 
 
 def uart_overview(d: dict) -> str:
@@ -290,10 +340,10 @@ def uart_overview(d: dict) -> str:
             continue
         h, c = by_name[n], d["uart"]["commands"][n]
         g = d["uart"]["groups"][c["group"]]
-        rows.append(f"| [`#{n}`]({g['page']}) | {h['kind']} | {h['arg']} | {g['title']} |")
+        rows.append(f"| [`#{n}`]({g['page']}#{uart_anchor(n, list(by_name))}) | {h['kind']} | {h['arg']} | {g['title']} |")
     accepted = set(d["facts"]["uart"]["accepted"])
     orphans = sorted(accepted - set(by_name))
-    text = "\n".join(rows) + "\n"
+    text = ref_table("\n".join(rows), "overview")
     if orphans and not d["uart"].get("partial"):
         text += ("\nThe parser also accepts " + ", ".join(f"`#{n}`" for n in orphans) +
                  ", which have no handler: the driver answers `Unknown command` to them, as to a name it does not "
@@ -318,19 +368,22 @@ def defaults_table(d: dict) -> str:
         rows = ["| Variable | Default | Firmware comment |", "|---|---|---|"]
         for x in entries:
             rows.append(f"| `{x['name']}` | {esc(x['value'])} | {esc(x['comment'])} |")
-        return "\n".join(rows) + "\n"
-    rows = ["| Variable | Start value | After `#Default` | Kept by `#Save` | Firmware comment |", "|---|---|---|---|---|"]
+        return ref_table("\n".join(rows), "defaults")
+    # four columns: the firmware's comment sits in a grey line under the variable's name, so the three values and
+    # the comment all fit the page's width
+    rows = ["| Variable and firmware comment | Start value | After `#Default` | Kept by `#Save` |", "|---|---|---|---|"]
     for x in entries:
         if not x.get("setting"):
             continue
-        rows.append(f"| `{x['name']}` | {esc(x['value'])} | {esc(x['after_default'])} | {esc(x['saved'])} | "
-                    f"{esc(x['comment'])} |")
-    return "\n".join(rows) + "\n"
+        comment = f'<br><span class="meta">{esc(x["comment"])}</span>' if str(x.get("comment") or "").strip() else ""
+        rows.append(f"| `{x['name']}`{comment} | {esc(x['value'])} | {esc(x['after_default'])} | {esc(x['saved'])} |")
+    return ref_table("\n".join(rows), "defaults")
 
 
 def python_calls(d: dict) -> str:
-    """Every library call that sends a CAN message, with the message it sends and the page that describes it."""
-    rows = ["| Library call | Sends | Answered with | Reference |", "|---|---|---|---|"]
+    """Every library call that sends a CAN message, with the message it sends (a link to its section; the group page
+    in a grey line under it) and the answer."""
+    rows = ["| Library call | Sends | Answered with |", "|---|---|---|"]
     facts, can = d["facts"]["can"], d["can"]
     tx_of_fn = {fn: v["id_define"] for fn, v in facts["tx"].items()}
     for name, c in can["commands"].items():
@@ -342,8 +395,10 @@ def python_calls(d: dict) -> str:
         if name.startswith("OUT_IN_"):
             answer = c["name"] + " (data frame)"
         g = can["groups"][c["group"]]
-        rows.append(f"| `{c['python']}` | {c['name']} (ID {next(e['id'] for e in facts['ids'] if e['name'] == name)}) | {answer or '—'} | [{g['title']}](can/{g['page']}#{anchor(c['name'])}) |")
-    return "\n".join(rows) + "\n"
+        ident = next(e["id"] for e in facts["ids"] if e["name"] == name)
+        rows.append(f"| `{c['python']}` | [{c['name']}](can/{g['page']}#{anchor(c['name'])}) (ID {ident})"
+                    f"<br><span class=\"meta\">{g['title']}</span> | {answer or '—'} |")
+    return ref_table("\n".join(rows), "calls")
 
 
 def compat_table(d: dict) -> str:
@@ -351,7 +406,7 @@ def compat_table(d: dict) -> str:
     rows = ["| " + " | ".join(c["title"] for c in cols) + " |", "|" + "---|" * len(cols)]
     for r in d["compat"]["rows"]:
         rows.append("| " + " | ".join(esc(r.get(c["key"], "")) for c in cols) + " |")
-    return "\n".join(rows) + "\n"
+    return ref_table("\n".join(rows), "compat")
 
 
 def on_config(config):
