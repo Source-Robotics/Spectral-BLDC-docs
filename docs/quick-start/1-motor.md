@@ -28,8 +28,6 @@ More: [The encoder magnet](../04-mounting/magnet.md).
 2. Bolt the board to the bracket, with the encoder chip (the bottom of the board) towards the magnet.
 3. Check the gap between the magnet and the encoder chip: 1 mm, not touching.
 
-    ![Picture needed: the board on its bracket behind a gimbal motor, with the 1 mm gap](../assets/pilot/s1-board-on-bracket.svg){ width="560" }
-
 A NEMA 17-format motor takes the board on a spacer with its own rear screws.
 
 !!! success "Check"

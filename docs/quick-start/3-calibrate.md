@@ -37,8 +37,6 @@ EEPROM.
 
         Start the calibration. The GUI switches to *Calibration mode* and shows the driver's log step by step.
 
-        ![Picture needed: Motor GUI in Calibration mode, with the driver's log](../assets/pilot/s2-calibration-log.svg){ width="560" }
-
     === "Terminal"
 
         ```
