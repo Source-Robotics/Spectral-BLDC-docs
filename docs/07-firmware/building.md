@@ -49,10 +49,9 @@ PlatformIO's udev rules (`99-platformio-udev.rules`, in the PlatformIO documenta
 
 ## Making a release
 
-`release_guide.md` in the repository is the procedure: bump `FIRMWARE_VERSION`, build, commit the source change
-with the rebuilt `Binaries/firmware.bin`, tag `V<number>`, create the GitHub release with the image and
-`firmware.json` and the release notes. This site's `tools/sync_firmware.py` reads a release by its tag; the
-version box names the release.
+`release_guide.md` in the repository is the procedure: bump `FIRMWARE_VERSION`, build, commit the source change, tag
+`V<number>`, create the GitHub release with the image, `firmware.json` and the release notes. This site's
+`tools/sync_firmware.py` reads a release by its tag; the version box names the release.
 
 ## A firmware for a board without a bootloader
 
