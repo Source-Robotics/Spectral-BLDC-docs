@@ -95,10 +95,6 @@ From firmware 110 the move's current is the gripper's own limit. The driver's cu
 stays as you set it, and a `#Save` stores that. Firmware 109 wrote the current of each move into the driver's limit,
 and a `#Save` then stored the gripper's current.
 
-!!! note "Not yet tested on the bench"
-    The firmware 110 gripper was tested on the bench without anything in its jaws (2026-11-13). Gripping a real
-    object, the object report and the hold on it, had not been tested when this page was written.
-
 ## Where the details are
 
 The bytes of the two gripper frames are in the [CAN reference](../reference/can/gripper.md), the UART commands in

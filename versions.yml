@@ -13,10 +13,6 @@ docs_version: "110"
 
 # The firmware release the pages describe, and the generated pages come from. Its tag must be V<docs_version>.
 # Releases are cut from the Bootloader_main branch (see the firmware repository's release_guide.md).
-# 110 is not released yet (2026-11-13): the generated reference comes from commit 64c9dfb on the firmware's local
-# `gripper-110` branch (`python tools/sync_firmware.py --prerelease 64c9dfb --no-network`; the facts say so under
-# "prerelease", and tools/test_tools.py fails until they come from the tag). When V110 is tagged, run
-# `python tools/sync_firmware.py`, set `released`, and the manual's status and publication date below.
 firmware:
   repository: https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller
   tag: V110
@@ -26,7 +22,7 @@ firmware:
   modes: {0: idle, 1: position, 2: velocity, 3: current, 4: PD, 5: open loop, 6: gripper, 7: gripper calibration,
           8: voltage torque, 12: encoder table}
   # The date of the GitHub release of that tag (the downloads page writes it beside the version); null until then.
-  released: null
+  released: 2026-11-13
 
 # The other software the pages describe, at the version they describe. The downloads page links each at its tag
 # (<!-- version-link: software.KEY -->); the compatibility table says which versions work with which firmware.
@@ -34,9 +30,9 @@ software:
   python_library:
     name: Spectral-BLDC Python library
     repository: https://github.com/Source-Robotics/Spectral-BLDC-Python
-    tag: v1.21
-    version: "1.21"
-    released: 2026-11-10
+    tag: v1.22
+    version: "1.22"
+    released: 2026-11-13
   bootloader:
     name: stm32f103c-bootloader
     repository: https://github.com/Source-Robotics/stm32f103c-bootloader
@@ -51,8 +47,8 @@ manuals:
     number: SR-5002
     title: Spectral Micro Manual
     revision: 2026.C
-    status: draft
-    published: null
+    status: published
+    published: 2026-11-13
     firmware: true
     applies_to: Spectral Micro driver PCB v2.0
     covers: "the Spectral Micro BLDC driver: quick start, safety, technical data, mounting, setup with Motor GUI or a terminal, operation, firmware; the API reference; guides"

@@ -14,7 +14,8 @@ not have them.
 
 Firmware 110 adds 90 to 93: the three settings that only UART could set before, `#Rstint` (90), `#Term`, the
 thermistor (91) and `#Gripper`, gripper mode (92), and the gripper's stroke (93, read only). The Spectral-BLDC
-library 1.21 sets and reads them by their numbers.
+library 1.22 names them (`PARAM_RSTINT`, `PARAM_THERMISTOR`, `PARAM_GRIPPER_MODE`, `PARAM_GRIPPER_STROKE`); 1.21
+sets and reads them by their numbers.
 
 The **buffers** are the larger data a drive holds: a capture of three signals, a histogram, the anti-cogging set
 and the encoder table. Send_Buffer_Read (ID 41) reads them in 8-byte frames, Respond_Buffer_Data (ID 42) carries
