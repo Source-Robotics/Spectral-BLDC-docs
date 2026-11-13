@@ -33,8 +33,9 @@ commands:
   Ud: {group: motion, argument: voltage in mV, description: The d-axis voltage used in voltage-torque mode; does not change the mode., response: the Ud setpoint in mV}
   Openloop: {group: motion, argument: electrical speed in rad/s, description: "Turns the stator field at the given electrical speed without the encoder in the loop, with the voltage set by Openv. Without a number it still starts the motor, at the stored speed: `#Openloop` alone is not a query. The speed is the same setting as `#Opens`.", response: the open-loop speed}
   Idle: {group: motion, description: Goes to idle; the motor coasts or brakes as set by Brake., response: "`Idle`"}
-  Brake: {group: motion, argument: 0 or 1, description: "What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open, the default). Takes effect once the driver is idle, so send Idle first. Not saved: the driver coasts again after a power cycle. An error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107.", response: the setting}
-  Close: {group: motion, description: Leaves open loop and goes back to closed-loop idle., response: nothing}
+  Estop: {group: motion, description: "The E-stop, as Send_ESTOP over CAN: it raises the E-stop error, the driver disables the motor, which coasts, and a calibration, gripper calibration or encoder-table or anti-cogging run that is running ends. The error stays until Clear. Added in firmware 110.", response: "`E-stop`"}
+  Brake: {group: motion, argument: 0 or 1, description: "What the motor does in idle: 1 brakes (the phases are shorted through the driver), 0 coasts (the phases are open, the default). Takes effect once the driver is idle, so send Idle first. From firmware 110 Save keeps it; on 109 the driver coasted again after a power cycle. Also parameter 18. An error always disables the motor, which then coasts. The braking current is not limited, see Control modes. Added in firmware 107.", response: the setting}
+  Close: {group: motion, description: "Leaves open loop and goes back to closed-loop idle. From firmware 110, while a calibration (Cal, Calonly) runs, it stops the calibration instead: it ends as a failed one (`Calibration failed!`), with the motor released and the driver not calibrated until it calibrates again. Firmware 109 switched the mode under the running calibration.", response: "nothing; `Close: the calibration is stopped` during a calibration (firmware 110)"}
 
   # ------------------------------------------------------------ gains and limits
   Kpp: {group: gains, argument: gain, description: Kp of the position loop., response: the current value}
@@ -49,7 +50,7 @@ commands:
   Vlimit: {group: gains, argument: speed in encoder ticks/s, description: "The speed limit: the speed the position loop may command, and the largest velocity setpoint. (The velocity integrator is clamped to the current limit.) The magnitude of a negative number is taken.", response: the current limit}
   Ilim: {group: gains, argument: current in mA, description: The Iq current limit. Set it to the rated phase current of your motor; the firmware clamps it to 2800 mA and takes the magnitude of a negative number., response: the current limit}
   Vlim: {group: gains, argument: voltage in mV, description: The voltage limit of the current loops (Ud and Uq); 0 means use the supply voltage., response: the current limit in mV}
-  Rstint: {group: gains, argument: 0 or 1, description: Whether the integral accumulators are reset on every new setpoint., response: the setting}
+  Rstint: {group: gains, argument: 0 or 1, description: "Whether the integral accumulators are reset on every new setpoint. From firmware 110 also parameter 90.", response: the setting}
   Cbw: {group: gains, argument: "bandwidth in Hz, 10 to 500", description: "The current loop bandwidth. From firmware 109 setting it computes Kpiq and Kiiq at once from R and L, the way calibration does, and prints them (the same as parameter 49); a value outside 10-500, or with R or L at 0, changes nothing. Not saved: 160 Hz after a power cycle, but the gains it set are kept by Save.", response: "the bandwidth, then `Kp_iq = …, Ki_iq = …`"}
 
   # ------------------------------------------------------------ calibration and motor parameters
@@ -94,7 +95,7 @@ commands:
   Vbus: {group: utility, description: Prints the supply voltage., response: mV}
   Vmax: {group: utility, argument: voltage in mV, description: "The supply voltage above which a Vbus error is raised: 29000 mV after `#Default`.", response: "`Vmax in mV: N`"}
   Temp: {group: utility, description: Prints the thermistor temperature., response: "°C, or `Temp Off` while the thermistor is disabled"}
-  Term: {group: utility, argument: 0 or 1, description: Enables the thermistor measurement and the temperature error (off by default)., response: the setting}
+  Term: {group: utility, argument: 0 or 1, description: "Enables the thermistor measurement and the temperature error (off by default). From firmware 110 also parameter 91.", response: the setting}
   Tlim: {group: utility, argument: temperature in °C, description: The temperature at which the temperature error is raised; 75 by default., response: "`Temp limit N`"}
   Iabc: {group: utility, description: Prints the phase currents., response: "`Ia`, `Ib`, `Ic` in mA"}
   PWM: {group: utility, description: Prints the PWM duty values., response: the duties}
@@ -106,11 +107,11 @@ commands:
   Cyca: {group: utility, argument: interval in ms (0 = off), description: "Like Cyc, in the Arduino plotter format `Position:x,Speed:y,Iq:z`.", response: "`Cyclic disabled` for `#Cyca` without a number; `#Cyca 0` stops the output without an answer"}
 
   # ------------------------------------------------------------ gripper
-  Gripper: {group: gripper, argument: 0 or 1, description: "Whether this driver is a gripper. Save it; `#Default` clears it.", response: the flag}
-  Gripcal: {group: gripper, description: Starts the gripper calibration (the jaws find their end stops)., response: "`Gripper calibration!`"}
+  Gripper: {group: gripper, argument: 0 or 1, description: "Whether this driver is a gripper. Save it; `#Default` clears it. From firmware 110 also parameter 92, which takes a write only while the driver is idle.", response: the flag}
+  Gripcal: {group: gripper, description: "Starts the gripper calibration (the jaws find their end stops). From firmware 110 each end is read under a light 100 mA push after the 500 mA one, and 0 and 255 lie a few ticks inside the two ends; the gripper stays uncalibrated when the ends lie less than 1000 ticks apart, and Gripcal during a calibration starts it again from its first step. Parameter 93 then gives the stroke in ticks.", response: "`Gripper calibration!`"}
   Grippos: {group: gripper, argument: 0 (open) to 255 (closed), description: "The position setpoint; also activates the gripper, sets the action bit and goes to gripper mode.", response: the current position}
   Gripvel: {group: gripper, argument: 0 to 255, description: The speed setpoint of gripper moves., response: the setpoint}
-  Gripcur: {group: gripper, argument: current in mA, description: The current limit of gripper moves. From firmware 109 a gripper move uses its magnitude and stops at 2800 mA; see the gripper manual for the safe range., response: the setpoint}
+  Gripcur: {group: gripper, argument: current in mA, description: "The current limit of gripper moves. From firmware 109 a gripper move uses its magnitude and stops at 2800 mA; see the gripper manual for the safe range. From firmware 110 it is the gripper's own limit: the driver's current limit (Ilim) stays as set.", response: the setpoint}
   Gripact: {group: gripper, argument: 0 or 1, description: The activate bit., response: the bit}
   Gripstop: {group: gripper, argument: 0 or 1, description: The gripper E-stop bit., response: the bit}
   Gripinfo: {group: gripper, description: "Prints the gripper state: whether the driver is a gripper, calibrated, activated, the position, speed and current setpoints, the E-stop, action and object-detection status, and the end stops.", response: the report}

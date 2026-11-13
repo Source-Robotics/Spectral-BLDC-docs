@@ -13,7 +13,8 @@
 # Every fact here was checked against the firmware source (constants.h, communication_CAN.cpp Param_get/Param_set,
 # scope.cpp, encal.cpp, cogcal.cpp, sound.cpp, EEPROM.cpp) at tag V109. The Spectral Micro has the STEPFOC's
 # parameters except 66-72 (the loop-time sections and register paths of the STEPFOC), and two of its own, 88 and 89
-# (a current-sampling diagnostic); some defaults and ranges differ (a 5000 Hz control loop).
+# (a current-sampling diagnostic); some defaults and ranges differ (a 5000 Hz control loop). Parameter 18 and 90 to 93
+# (firmware 110) were checked at commit 64c9dfb of the gripper-110 branch, before V110 was tagged.
 
 groups:
   watchdog:
@@ -173,7 +174,7 @@ params:
     group: readback
     access: rw
     value: "1 brake, 0 coast (any value but 0: brake)"
-    saved: "no: the driver coasts at every power-up"
+    saved: "yes, settings block 2, from firmware 110 (109 coasted at every power-up). Never saved, and after `#Default`: coast"
     description: The idle behaviour (Send_Settings bit 0, `#Brake`).
   PARAM_HEARTBEAT_MS:
     group: readback
@@ -195,6 +196,28 @@ params:
     description: >
       The product lock: the product that calibrated this board. Stamped at the first start-up of a calibrated
       board and at every save. A firmware that finds the other product's stamp drives nothing (see Errors).
+  PARAM_RSTINT:
+    group: readback
+    access: rw
+    value: "0 or 1 (anything else: refused). Default 0"
+    saved: "yes"
+    description: >
+      Whether the velocity and current integrators are reset on every new setpoint command (`#Rstint`). Added in
+      firmware 110.
+  PARAM_THERMISTOR:
+    group: readback
+    access: rw
+    value: "0 off, 1 on (anything else: refused). Default 0"
+    saved: "yes"
+    description: The thermistor measurement and the temperature error (`#Term`). Added in firmware 110.
+  PARAM_GRIPPER_MODE:
+    group: readback
+    access: rw
+    value: "0 or 1 (anything else, or a write while the driver is not idle: refused). Default 0"
+    saved: "yes"
+    description: >
+      Gripper mode (`#Gripper`), in force at once: the driver then reads its commands as a gripper, or as a motor.
+      It is written only while the driver is idle, so a move is never cut over half-way. Added in firmware 110.
 
   # ------------------------------------------------------------ the motor
   PARAM_R_MOHM:
@@ -629,3 +652,11 @@ params:
       A new number at every successful calibration, so a host can tell one calibration from the next.
       Send_Save_config keeps it, and `#Default` sets it back to 0. `#Info` prints it as `Calibration ID:`, 8 hex
       digits.
+  PARAM_GRIPPER_STROKE:
+    group: status
+    access: r
+    value: ticks; 0 while the gripper is not calibrated since power-up
+    saved: "no: the gripper calibrates after every power-up"
+    description: >
+      The gripper's stroke between positions 0 and 255, from its last calibration
+      ([Gripper mode](../../06-operation/gripper-mode.md#calibrating-the-gripper)). Added in firmware 110.

@@ -29,7 +29,7 @@ Send_Respond_State_of_Errors (bits numbered from the most significant).
 | `Driver_error` | `Drv error` | 0, 3 | the MOSFET driver reported a fault on its fault pin: undervoltage, thermal shutdown or overcurrent. `#Error` also prints `FAULT pin is LOW: the gate driver reports a fault` while the fault output is still active |
 | `Velocity_error` | `Velocity error` | 0, 2 | the measured speed exceeds 20,000,000 ticks/s (about 1220 revolutions per second), a fixed limit: a runaway or an encoder fault, not `#Vlimit` |
 | `Current_error` | `Current error` | 0, 1 | never in this firmware; reserved |
-| `ESTOP_error` | `Received ESTOP command` | 0, 0 | Send_ESTOP was received |
+| `ESTOP_error` | `Received ESTOP command` | 0, 0 | Send_ESTOP was received, or from firmware 110 `#Estop` over UART |
 | `Calibrated` (0) | `Not calibrated` | 1, 7 (1 = calibrated) | the motor has not been calibrated |
 | `Activated` | — | 1, 6 | the activated flag, not an error |
 | `Watchdog_error` | `Watchdog error` | 1, 5 | the watchdog time passed without a motion command or an answered request over CAN |

@@ -25,7 +25,7 @@ hand. [Over UART](../../06-operation/uart.md) explains the protocol.
 
 ## By group
 
-- [Motion](motion.md): setpoints and modes
+- [Motion](motion.md): setpoints and modes, idle and the E-stop (`Estop`, from firmware 110)
 - [Gains and limits](gains.md): the loop gains, the limits, the integrator reset, the current loop bandwidth
 - [Calibration and motor parameters](calibration.md): `Cal` and `Calonly`, the motor's R, L and pole pairs, the constants calibration finds, the calibration settings, the encoder table (`Encal`) and the anti-cogging (`Cogcal`)
 - [Status and utility](utility.md): save, reset, defaults, identity, errors, temperature, the cyclic output, any parameter (`Par`), the tool id, the watchdog fallback, the product lock

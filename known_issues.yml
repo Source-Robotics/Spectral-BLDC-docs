@@ -19,9 +19,12 @@
 # fixed in 109, the others are still there. KI-19 is new in 109. KI-17 and KI-18 were given to two faults found and
 # fixed before 109 was released (the serial parser refused #Calonly and #Par; #Cogcal did not name states 7 to 11);
 # no release had them, so they are not listed, and the two ids are never used again.
+# 2026-11-13: checked against firmware 110 (commit 64c9dfb of the gripper-110 branch, before V110 was tagged): KI-7
+# and KI-13 are fixed in 110; the others are still there (110 changed only the gripper, the watchdog while idle,
+# brake or coast saved, `#Estop`, `#Close` during a calibration and parameters 90-93).
 
 components:
-  firmware: {name: Spectral Micro firmware, version: "109"}
+  firmware: {name: Spectral Micro firmware, version: "110"}
   release_104: {name: Release 104, version: "the image of the GitHub release V104"}
 
 issues:
@@ -100,7 +103,9 @@ issues:
       calibration, switch the driver off and on before you calibrate again.
     page: 06-operation/gripper-mode.md#calibrating-the-gripper
     title: "Gripper mode: calibrating"
-    status: open
+    status: fixed
+    fixed_in: "110: a new gripper calibration starts from its first step, also after one that was stopped (a command
+      during the calibration still stops it)"
     since: 2026-11-04
 
   - id: KI-8
@@ -164,7 +169,8 @@ issues:
     workaround: Send `#Brake 1` (or Send_Settings) after every power-up when the motor must brake in idle.
     page: 06-operation/modes.md#braking-in-idle
     title: Braking in idle
-    status: open
+    status: fixed
+    fixed_in: "110: `#Save` keeps the idle behaviour (`#Brake`, Send_Settings, parameter 18)"
     since: 2026-11-04
 
   - id: KI-14

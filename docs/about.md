@@ -45,5 +45,6 @@ The text and the images of this documentation are licensed under [CC BY-SA 4.0](
 
 | Revision | Date | Changes |
 |---|---|---|
+| 2026.C | draft | Firmware 110: the gripper (each end read under a light push, 0 and 255 clear of the stops, the soft start, a clean arrival and hold, an object after 50 ms, its own current limit), `#Estop` over UART, `#Close` during a calibration, brake or coast kept by Save, the watchdog while idle, parameters 90 to 93; the upgrade from 109 |
 | 2026.B | 2026-11-10 | Firmware 109: the parameters and buffers (CAN 36 to 43), the identity and telemetry frames, the watchdog actions, the encoder table and the anti-cogging, the current loop from R, L and a bandwidth, the speed estimate, the commutation delay compensation, the EEPROM blocks, status and diagnostics, sound through the motor (CAN 44 and 45, `#Tone`), upgrading from older firmware; new pages Encoder table and anti-cogging, The watchdog, Status and diagnostics, Sound, Upgrading from older firmware, Parameters and buffers, Sound (CAN) |
 | 2026.A | 2026-11-03 | First version in this form: the manual chapters, the generated CAN and UART reference, firmware 107 |

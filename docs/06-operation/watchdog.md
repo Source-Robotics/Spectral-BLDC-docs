@@ -57,7 +57,8 @@ Three rules keep a gentler action from softening the response to a real fault:
   supply voltage, temperature, not calibrated, a gripper E-stop), the driver gives the legacy response.
 - **Hold and descend take over only from a running motor**: position, velocity, current, PD or gripper mode. A
   driver that was idle when the watchdog ran out gives the legacy response: the motor coasts, also when it
-  braked in idle (`#Brake 1`).
+  braked in idle (`#Brake 1`). From firmware 110 that holds also when a motion frame comes before the error is
+  cleared; on 109 such a frame started the hold or the descend late, for the whole fallback time.
 - **Hold and descend always end** after the fallback time, at most 60 s, so a lost host never leaves a motor
   driven for good. The after-action follows: 0 legacy, 2 brake or 3 coast.
 

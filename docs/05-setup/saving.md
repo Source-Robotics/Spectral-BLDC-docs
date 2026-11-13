@@ -15,7 +15,8 @@ the CAN node ID, the heartbeat and watchdog settings, the thermistor and LED set
 limits and the gripper flag.
 
 From firmware 109 also the tool id and the watchdog fallback, the anti-cogging set with its mode and scale, and the
-encoder table with its on/off switch, parameter 56 and the current-sense zero trims.
+encoder table with its on/off switch, parameter 56 and the current-sense zero trims. From firmware 110 also the idle
+behaviour (`#Brake`, Send_Settings or parameter 18).
 
 Over CAN, Send_Save_config does the same. Saving also copies the node ID into the bootloader's board ID
 ([The bootloader](../07-firmware/the-bootloader.md#the-board-id)). Save after calibration, after tuning, and after
@@ -31,7 +32,6 @@ changing the node ID.
 These settings are lost at a power cycle, whatever you save. The driver starts with the values in the
 [Defaults](../reference/defaults.md) reference:
 
-- the idle behaviour (`#Brake`, Send_Settings): the driver coasts after every power-up;
 - the calibration settings `#Cbw` (160 Hz; the gains it computed are kept), `#Resv`, `#Calpwr`, `#Openv`,
   `#Opens`, `#Vp` and `#Iqoffset`: set them again before each calibration that needs other values;
 - the parameters of firmware 109 that tune the loops: the speed estimate (the direct PLL at 100 Hz), the
@@ -56,9 +56,11 @@ Restoring the defaults writes the factory values to the EEPROM and loads them. I
 driver reports *Not calibrated*), clears the gripper flag, the heartbeat rate and the watchdog, sets the hardware
 version to 1 and the batch date to 24092024, and stores 1111 as the serial number.
 
-From firmware 109 it also clears the tool id, the watchdog fallback, the anti-cogging set, the encoder table and
-its zero trims, and sets parameter 56 back to 0. The CAN node ID is kept from firmware 109 (it is 0 only when no
-valid ID is stored); firmware 107 and older set it to 0.
+From firmware 109 it also clears the tool id, the watchdog fallback, the anti-cogging set, the encoder table and its
+zero trims, and sets parameter 56 back to 0. From firmware 110 it also sets the idle behaviour back to coasting.
+
+The CAN node ID is kept from firmware 109 (it is 0 only when no valid ID is stored); firmware 107 and older set it
+to 0.
 
 Note what the driver reports before you use it. The values are listed in the [Defaults](../reference/defaults.md)
 reference.
@@ -76,7 +78,7 @@ firmware 106 the saved configuration is in blocks, each with its own checksum; f
 |---|---|---|---|
 | calibration | 60-188, reserved 204-228 | 200 | the motor's resistance, inductance, pole pairs, phase order, direction, angle offset, Kt, KV and the current loop gains |
 | settings 1 | 44-180 | 196 | the other gains, the limits, the node ID, the watchdog, the heartbeat and the flags |
-| settings 2 (109) | 260-312 | 256 | tool id, watchdog fallback, the product stamp, the calibration ID; reserved slots |
+| settings 2 (109) | 260-312 | 256 | tool id, watchdog fallback, the product stamp, the calibration ID, from 110 the idle behaviour; reserved slots |
 | anti-cogging (109) | 324-879 | 320 | the harmonics, the table, mode and scale |
 | encoder table (109) | 884-1147 | 880 | the table, its on/off switch, parameter 56, the current-sense zero trims |
 

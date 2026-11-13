@@ -298,6 +298,48 @@ check("C2 the defaults: a saved setting with its #Default value, a RAM-only sett
       and dfl["cyclic_period"]["setting"] and dfl["cyclic_period"]["saved"] == "no"
       and not dfl["interrupt_tick"]["setting"], str(dfl))
 
+UART_PAREN_FIXTURE = """
+            else if (strcmp(command, "Estop") == 0)
+            {
+                controller.ESTOP_error = 1;
+                Serialport.println("E-stop");
+            }
+            else if ((strcmp(command, "Cal") == 0 || strcmp(command, "Calonly") == 0) && controller.ESTOP_error)
+            {
+                Serialport.println("Cal: not started");
+            }
+            else if (strcmp(command, "Cal") == 0 || strcmp(command, "Calonly") == 0)
+            {
+                controller.Calibration = 1;
+            }
+"""
+hs = [(h["name"], h["kind"], h["response"]) for h in sync.uart_handlers(UART_PAREN_FIXTURE)]
+check("C3 a condition in its own brackets (if ((...) && ...)) is a handler of its own, not part of the one above",
+      hs[0] == ("Estop", "Action", "E-stop") and [n for n, _, _ in hs] == ["Estop", "Cal", "Calonly", "Cal", "Calonly"],
+      str(hs))
+EEPROM_LOCAL_FIXTURE = """
+static void Load_settings2_from_eeprom()
+{
+  {
+    const int saved = readInt(BRAKE_COAST_EEPROM);
+    controller.brake_coast = saved == 2 ? 1 : saved == 1 ? 0 : BRAKE_COAST_DEFAULT;
+  }
+}
+static void Write_settings2_block()
+{
+  writeInt(BRAKE_COAST_EEPROM, controller.brake_coast ? 2 : 1);
+}
+static void Set_Default_settings2_block()
+{
+  writeInt(BRAKE_COAST_EEPROM, 0);
+}
+"""
+dfl = {x["name"]: x for x in sync.defaults("    volatile int brake_coast = 1; // 1 is brake 0 is coast\n",
+                                          EEPROM_LOCAL_FIXTURE, "#define BRAKE_COAST_DEFAULT 1\n", "", "", "")}
+check("C4 a setting read into a local and mapped (brake or coast, firmware 110) is kept by Save; #Default gives the "
+      "firmware's default", dfl["brake_coast"]["saved"] == "yes"
+      and dfl["brake_coast"]["after_default"] == "1 (BRAKE_COAST_DEFAULT)", str(dfl))
+
 # ---------------------------------------------------------------- E. the figures hook
 fig = load_module("figures_hook", ROOT / "hooks" / "figures.py")
 pair = "\n".join(["Text.", "", '![A board](a.webp#only-light){ width="9" }',

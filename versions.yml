@@ -9,20 +9,24 @@
 # keep their own version of the site (101 is the last documented release from the main branch, before the bootloader).
 # From 109 the Spectral Micro and STEPFOC share their version numbers (owner, 2026-11-08): the Spectral Micro went
 # from 107 straight to 109, and there is no 108.
-docs_version: "109"
+docs_version: "110"
 
 # The firmware release the pages describe, and the generated pages come from. Its tag must be V<docs_version>.
 # Releases are cut from the Bootloader_main branch (see the firmware repository's release_guide.md).
+# 110 is not released yet (2026-11-13): the generated reference comes from commit 64c9dfb on the firmware's local
+# `gripper-110` branch (`python tools/sync_firmware.py --prerelease 64c9dfb --no-network`; the facts say so under
+# "prerelease", and tools/test_tools.py fails until they come from the tag). When V110 is tagged, run
+# `python tools/sync_firmware.py`, set `released`, and the manual's status and publication date below.
 firmware:
   repository: https://github.com/Source-Robotics/Spectral-Micro-BLDC-controller
-  tag: V109
+  tag: V110
   # The firmware's source folder in that repository, and its Controller_mode numbers with their names (for the
   # "enters mode" column of the UART reference). tools/sync_firmware.py reads both.
   src: Spectral BLDC Firmware/src
   modes: {0: idle, 1: position, 2: velocity, 3: current, 4: PD, 5: open loop, 6: gripper, 7: gripper calibration,
           8: voltage torque, 12: encoder table}
-  # The date of the GitHub release of that tag (the downloads page writes it beside the version).
-  released: 2026-11-10
+  # The date of the GitHub release of that tag (the downloads page writes it beside the version); null until then.
+  released: null
 
 # The other software the pages describe, at the version they describe. The downloads page links each at its tag
 # (<!-- version-link: software.KEY -->); the compatibility table says which versions work with which firmware.
@@ -46,9 +50,9 @@ manuals:
   spectral:
     number: SR-5002
     title: Spectral Micro Manual
-    revision: 2026.B
-    status: published
-    published: 2026-11-10
+    revision: 2026.C
+    status: draft
+    published: null
     firmware: true
     applies_to: Spectral Micro driver PCB v2.0
     covers: "the Spectral Micro BLDC driver: quick start, safety, technical data, mounting, setup with Motor GUI or a terminal, operation, firmware; the API reference; guides"

@@ -231,7 +231,7 @@ commands:
       - {bytes: "0", bit: 3, name: driver_error, type: bit, meaning: "the MOSFET driver reports undervoltage, thermal shutdown or overcurrent", _shared: true}
       - {bytes: "0", bit: 2, name: velocity_error, type: bit, meaning: speed over the limit, _shared: true}
       - {bytes: "0", bit: 1, name: current_error, type: bit, meaning: reserved; never set by this firmware, _shared: true}
-      - {bytes: "0", bit: 0, name: estop_error, type: bit, meaning: Send_ESTOP was received, _shared: true}
+      - {bytes: "0", bit: 0, name: estop_error, type: bit, meaning: "Send_ESTOP was received (from firmware 110 also #Estop over UART)", _shared: true}
       - {bytes: "1", bit: 7, name: calibrated, type: bit, meaning: the motor is calibrated}
       - {bytes: "1", bit: 6, name: activated, type: bit, meaning: the controller is activated, _shared: true}
       - {bytes: "1", bit: 5, name: watchdog_error, type: bit, meaning: the watchdog ran out, _shared: true}
@@ -342,8 +342,9 @@ commands:
       the EEPROM, and copies the CAN ID into the bootloader's board ID. From firmware 109 it also writes the tool id
       and the watchdog fallback (settings block 2), the anti-cogging set with its mode and scale, and the encoder
       table with its on/off flag, parameter 56 and the current-sense zero trims, each block with its own checksum;
-      of the two large blocks only the 16-byte pages that changed are written. Not kept: the idle behaviour of
-      Send_Settings, the current loop bandwidth, and every parameter the parameter table marks as not kept. A drive
+      of the two large blocks only the 16-byte pages that changed are written. From firmware 110 it also writes the
+      idle behaviour of Send_Settings (parameter 18). Not kept: the current loop bandwidth, and every parameter the
+      parameter table marks as not kept. A drive
       stopped by the product lock writes nothing.
   IN_RESET:
     name: Send_Reset
@@ -400,8 +401,8 @@ commands:
     description: >
       Sets boolean settings that have no command of their own: a mask byte says which settings the frame touches, a
       value byte gives their new values; settings outside the mask are left alone. Bit 0 is the idle behaviour: 1
-      brake (phases shorted), 0 coast (the default). The setting is not saved: the driver coasts again after a
-      power cycle. Braking applies only in idle without an error; an error always disables the motor, which then
+      brake (phases shorted), 0 coast (the default). From firmware 110 Send_Save_config keeps it; on 109 the driver
+      coasted again after a power cycle, as a driver still does that never saved it. Braking applies only in idle without an error; an error always disables the motor, which then
       coasts. The braking current is not limited, see Control modes. Added in firmware 107 (STEPFOC 107). The
       Python library has `Send_Settings(mask, value)` and, for this bit, `Send_Brake_Coast(brake)` from 1.21; 1.20
       and older have no call for it.
@@ -430,7 +431,7 @@ commands:
     forms:
       - length: 5
         fields:
-          - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: "the parameter number, 1-87"}
+          - {bytes: "0", name: Parameter, type: unsigned 8-bit, meaning: "the parameter number, 1-93"}
           - {bytes: "1-4", name: Value, type: signed 32-bit, meaning: "the new value, in the parameter's unit; for the gains, limits and Kt (8-16, 20) a float's bit pattern"}
     notes: >
       A data frame of another length, or a remote frame, is ignored and flagged as a wrong data length. It does
@@ -576,7 +577,7 @@ commands:
         fields:
           - {bytes: "0", name: Position, type: unsigned 8-bit, meaning: "0 fully open, 255 fully closed"}
           - {bytes: "1", name: Speed, type: unsigned 8-bit, meaning: "0 slowest, 255 fastest"}
-          - {bytes: "2-3", name: Current, type: signed 16-bit, meaning: "current limit of the move in mA; from firmware 109 its magnitude is used and it stops at 2800 mA; see the gripper manual for the safe range"}
+          - {bytes: "2-3", name: Current, type: signed 16-bit, meaning: "current limit of the move in mA; from firmware 109 its magnitude is used and it stops at 2800 mA; see the gripper manual for the safe range; from firmware 110 the gripper's own limit, the driver's current limit (parameter 16) stays as set"}
           - {bytes: "4", bit: 7, name: Activate, type: bit, meaning: "1 activate the gripper, 0 deactivate"}
           - {bytes: "4", bit: 6, name: Action, type: bit, meaning: "1 go to the position, 0 idle", _shared: true}
           - {bytes: "4", bit: 5, name: E-stop, type: bit, meaning: 1 raises the gripper E-stop error, _shared: true}
@@ -585,7 +586,10 @@ commands:
     name: Send_gripper_calibrate
     group: gripper
     python: Send_gripper_calibrate()
-    description: Starts the gripper calibration (the jaws find their end stops). Needed after every power-up.
+    description: >
+      Starts the gripper calibration (the jaws find their end stops). Needed after every power-up. From firmware
+      110 each end is read under a light push and positions 0 and 255 lie a few ticks inside the two ends; this
+      frame sent during a calibration starts it again from its first step. Parameter 93 gives the stroke found.
   OUT_GRIPPER_DATA_PACK:
     name: Respond_Gripper_data_pack
     group: gripper

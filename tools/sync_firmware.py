@@ -102,13 +102,15 @@ def uart_whitelist(parser_cpp: str) -> list[str]:
 
 def handler_starts(text: str) -> list[list[re.Match]]:
     """The handler conditions, in source order: each a list of the names it compares (`"Cal" || "Calonly"`). A
-    strcmp that is not part of an if condition (an argument passed to a function inside a handler) starts nothing."""
+    strcmp that is not part of an if condition (an argument passed to a function inside a handler) starts nothing.
+    A condition in its own brackets (`if ((strcmp(...) || strcmp(...)) && ...)`, from firmware 109) starts one too;
+    before 2026-11-13 it did not, and its names were added to the handler above it."""
     groups: list[list[re.Match]] = []
     for m in STRCMP.finditer(text):
         before = text[:m.start()].rstrip()
         if before.endswith("||") and groups:
             groups[-1].append(m)
-        elif re.search(r"\bif\s*\($", before):
+        elif re.search(r"\bif\s*\(+$", before):
             groups.append([m])
     return groups
 
@@ -226,6 +228,9 @@ FIELD = re.compile(r"^[ \t]*volatile[ \t]+(?:unsigned[ \t]+)?(?:int|float|bool|u
 STRUCT_SET = re.compile(r"\b(?:controller|PID|Gripper)\.(\w+)\s*=\s*([^;=][^;]*);")
 READ_KEY = re.compile(r"^read(?:Int|Float)\(\s*(\w+)\s*\)$")
 READ_TERNARY = re.compile(r"^\(\s*read(?:Int|Float)\(\s*(\w+)\s*\)\s*==\s*(-?\d+)\s*\)\s*\?\s*(-?\d+)\s*:\s*(-?\d+)$")
+# a value read into a local first and then mapped (brake or coast, from firmware 110):
+#   const int saved = readInt(KEY);  controller.x = saved == 2 ? 1 : saved == 1 ? 0 : SOME_DEFAULT;
+READ_LOCAL = re.compile(r"\b(?:const\s+)?(?:int|int32_t)\s+(\w+)\s*=\s*readInt\(\s*(\w+)\s*\)\s*;")
 WRITE_KEY = re.compile(r"\bwrite(?:Int|Float)\(\s*(\w+)\s*,\s*([^;]+?)\)\s*;")
 LIMIT = re.compile(r"[<>]=?\s*-?\s*(?:controller|PID)\.(\w+)")
 # The words that mark a value set from outside: a UART argument, or the data of a CAN frame.
@@ -245,6 +250,22 @@ def function_body(code: str, name: str) -> str:
     return code[m.end():i - 1]
 
 
+def local_cases(rhs: str, local: dict[str, str]) -> dict | None:
+    """`v == 2 ? 1 : v == 1 ? 0 : DEFAULT`, where v is a local read from the EEPROM (READ_LOCAL): the key it was
+    read from, the value for each number, and the value otherwise. None for anything else."""
+    first = re.match(r"(\w+)\s*==", rhs)
+    if not first or first.group(1) not in local:
+        return None
+    var, rest, cases = first.group(1), rhs, {}
+    case = re.compile(rf"\s*{var}\s*==\s*(-?\d+)\s*\?\s*([\w.-]+)\s*:")
+    while (c := case.match(rest)):
+        cases[int(c.group(1))] = c.group(2)
+        rest = rest[c.end():]
+    if not cases or not re.fullmatch(r"\s*[\w.-]+\s*", rest):
+        return None
+    return {"key": local[var], "cases": cases, "else": rest.strip()}
+
+
 def eeprom_facts(eeprom_cpp: str, constants_h: str) -> tuple[dict, dict, dict]:
     """What EEPROM.cpp does with each field: where it is loaded from at power-up (field -> key, or a constant),
     what #Default writes (key -> value), and what #Save writes (field -> key)."""
@@ -252,15 +273,19 @@ def eeprom_facts(eeprom_cpp: str, constants_h: str) -> tuple[dict, dict, dict]:
     loads: dict[str, dict] = {}
     # settings block 2 (2026-11): its own load, defaults, and write functions beside the first two blocks'
     for fn in ("read_config", "Load_calibration_from_eeprom", "Load_settings_from_eeprom", "Load_settings2_from_eeprom"):
-        for field, rhs in STRUCT_SET.findall(function_body(code, fn)):
+        body = function_body(code, fn)
+        local = dict(READ_LOCAL.findall(body))
+        for field, rhs in STRUCT_SET.findall(body):
             rhs = rhs.strip()
             if field in loads:
                 continue
-            m, t = READ_KEY.match(rhs), READ_TERNARY.match(rhs)
+            m, t, c = READ_KEY.match(rhs), READ_TERNARY.match(rhs), local_cases(rhs, local)
             if m:
                 loads[field] = {"key": m.group(1)}
             elif t:
                 loads[field] = {"key": t.group(1), "if": int(t.group(2)), "then": t.group(3), "else": t.group(4)}
+            elif c:
+                loads[field] = c
             elif re.fullmatch(r"[A-Z_][A-Z0-9_]*", rhs):
                 c = re.search(rf"^#define[ \t]+{rhs}[ \t]+(\S+)", constants_h, re.M)
                 if c:
@@ -316,6 +341,11 @@ def after_default(field: str, loads: dict, written: dict, saved: dict) -> str:
         v = written.get(ld["key"])
         if v is None:
             return ""
+        if "cases" in ld:
+            try:
+                return ld["cases"].get(int(v), ld["else"])
+            except ValueError:
+                return v
         if "if" in ld:
             try:
                 return ld["then"] if int(v) == ld["if"] else ld["else"]

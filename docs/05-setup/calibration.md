@@ -125,6 +125,13 @@ about 40 seconds; the routine has not stopped.
 
 `#Calonly` runs the same calibration and nothing after it; it ends with `Save config with #Save` instead.
 
+From firmware 110 `#Estop` or `#Close` stops a running calibration; `#Idle` does not. It ends as a failed
+calibration (`Calibration failed!`): the motor is released, and the driver is not calibrated until it calibrates
+again. After `#Estop`, send `#Clear` first.
+
+On firmware 109 a reset (`#Reset`) was the only clean way over UART: `#Close` switched the mode under the running
+calibration and left it half done.
+
 What the steps are:
 
 | Step | What happens | Fails with |
@@ -205,7 +212,7 @@ shaft between calibration and use: fix the magnet and calibrate again.
 | `Open loop: Failed` | the rotor did not follow the field, or the pole pairs came out outside 1 to 49: a phase open, the shaft not free, the open-loop voltage (`#Openv`) too low for a high-resistance motor, the supply's current limit set too low |
 | `Commutation/alignment check failed!` | the motor did not respond to the current command: a phase open, `#Iqoffset` set too low, a magnet that slips. Run `#Cal` again. Firmware 101 printed `Phase order is wrong! Switch motor phases and try again!` here; since 105 the wiring is compensated and swapping wires does not help |
 | `Cal: not started, the E-stop is latched (#Clear first)`, or `Stopped by an E-stop: #Clear, then calibrate again.` after `Calibration failed!` | an E-stop is latched or ended the calibration: `#Clear`, then `#Cal`; the alignment starts again from its first stage |
-| the routine stops in a step and prints nothing more | reset the driver (`#Reset`) and try again |
+| the routine stops in a step and prints nothing more | stop it with `#Close` (firmware 110) or reset the driver (`#Reset`), and try again |
 | success, but the LED stays on and no error is reported | `#Info` shows `-1` somewhere: the EEPROM holds a value from an older release ([The check at power-up](saving.md#the-check-at-power-up)); restore the defaults and calibrate again |
 | the resistance, KV or Kt look wrong | the supply was not 24 V, or the motor is one of the uneven ones; see the note above |
 

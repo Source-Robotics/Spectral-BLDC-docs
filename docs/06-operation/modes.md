@@ -38,8 +38,8 @@ passing through idle; a fault is any of the errors on [Errors and recovery](erro
 `#Brake 1` (or Send_Settings over CAN) makes the idle motor brake: the driver keeps the three phases shorted, so
 the motor resists being turned. `#Brake 0`, the default, lets it coast.
 
-The setting is not saved: every power-up starts with coasting. Braking works only in idle without an error; an error
-or an E-stop disables the driver, and the motor coasts.
+From firmware 110 `#Save` keeps the setting; on 109 every power-up started with coasting. Braking works only in idle
+without an error; an error or an E-stop disables the driver, and the motor coasts.
 
 !!! warning "The braking current is not limited"
     A motor that is turned while it brakes drives its own back-EMF current through the shorted phases, and the

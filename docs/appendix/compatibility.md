@@ -1,6 +1,6 @@
 # Versions and compatibility
 
-Which firmware release works with which bootloader, Python library, PAR6 runtime and board revision. One row per firmware release, newest first.
+Which firmware release works with which bootloader, Python library, Motor GUI, PAR6 runtime and board revision. One row per firmware release, newest first.
 
 <!-- compatibility-table -->
 

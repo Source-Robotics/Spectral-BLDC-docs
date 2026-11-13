@@ -12,7 +12,24 @@ This page says what a driver keeps when it is updated to 109, what works at once
 [Updating through the bootloader](update.md) is how to flash it.
 
 There is no firmware 108 for the Spectral Micro: from 109 the Spectral Micro and STEPFOC share their version
-numbers, so a Spectral Micro goes from 107 straight to 109.
+numbers, so a Spectral Micro goes from 107 straight to 109. The step from 109 to 110 is smaller:
+[From 109 to 110](#from-109-to-110).
+
+## From 109 to 110
+
+Firmware 110 changes the gripper, adds `#Estop` and parameters 90 to 93, and saves brake or coast; nothing has to
+be measured again. A driver updated from 109 keeps everything it saved: the settings, the motor calibration, the
+encoder table and the anti-cogging. 110 keeps the idle behaviour in a slot of settings block 2 that was reserved.
+
+- **Brake or coast** (parameter 18) is saved from 110 on. A driver that has not saved it yet coasts in idle, as on
+  109; send `#Brake 1` and `#Save` once if it should brake.
+- **The gripper calibration** is kept in RAM, as it always was: calibrate the gripper after the update, as after
+  every power-up. Positions 0 and 255 then lie a little inside the two ends
+  ([Gripper mode](../06-operation/gripper-mode.md#calibrating-the-gripper)).
+- **Motor GUI 0.7.0** is the version made for 110: its STOP sends `#Estop` over UART, and its presets write
+  parameters 90 to 92 over CAN.
+
+Going back to 109 is safe: 109 ignores the saved idle behaviour and coasts at every power-up again.
 
 ## What is kept
 

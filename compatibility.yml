@@ -1,17 +1,28 @@
 # Which firmware release works with what. One row per firmware release, newest first. hooks/firmware_pages.py
 # writes it into the "Versions and compatibility" page (<!-- compatibility-table -->); tools/test_tools.py checks
 # that docs_version has a row. The firmware repository has no compatibility file of its own, so this is the source.
+# The Motor GUI column was added with 110; it is empty for the releases before.
 columns:
   - {key: firmware, title: Firmware}
   - {key: date, title: Released}
   - {key: bootloader, title: Bootloader}
   - {key: stepfoc, title: STEPFOC equivalent}
   - {key: python, title: Python library (Spectral-BLDC)}
+  - {key: motor_gui, title: Motor GUI}
   - {key: runtime, title: PAR6 runtime}
   - {key: pcb, title: Spectral Micro PCB}
   - {key: docs, title: Docs}
 
 rows:
+  - firmware: "110"
+    date: not released yet
+    bootloader: required
+    stepfoc: "110"
+    python: "1.21 or newer (parameters 90 to 93 by their numbers)"
+    motor_gui: "0.7.0 or newer (STOP sends #Estop over UART, presets write parameters 90 to 92 over CAN)"
+    runtime: 0.9 or newer (it sends watchdog action 0, the legacy response)
+    pcb: v2.0
+    docs: "110"
   - firmware: "109"
     date: 2026-11-10
     bootloader: required
