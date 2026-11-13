@@ -95,9 +95,10 @@ dashboard's Firmware tab or with `tools/flash_motor_firmware.py`; the
 ## When it fails
 
 A flash that fails or is cancelled part way is not a brick: the stored CRC is invalid, so the bootloader refuses to
-start the firmware and waits for a host. Run the flash again; `bl_flash.py list` (or a passive scan from the
-control box) finds the board. A board that answers nothing: power-cycle it with the host already polling, to catch
-the two-second window.
+start the firmware and waits for a host.
+
+Run the flash again; `bl_flash.py list` (or a passive scan from the control box) finds the board. A board that answers
+nothing: power-cycle it with the host already polling, to catch the two-second window.
 
 An image linked for `0x08000000` (a firmware from the `main` branch, release 101 and earlier) must never be
 flashed through the bootloader: it would overwrite the bootloader's own region if the tool did not refuse it.

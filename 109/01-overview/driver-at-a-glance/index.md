@@ -3,9 +3,10 @@
 The Spectral Micro is a field-oriented controller for small three-phase brushless motors: gimbal motors and other
 low-current motors with a phase resistance of a few ohms. It mounts behind the motor, reads the rotor position
 from a magnet on the motor shaft, and drives the three phases with sinusoidal currents placed from that position,
-the way a servo drive does. The motor can be commanded in position, speed, current (torque) or impedance, holds a
-position at standstill, reports where it is, and runs quietly and efficiently. It is made for robot joints, legs,
-arms and grippers.
+the way a servo drive does.
+
+The motor can be commanded in position, speed, current (torque) or impedance, holds a position at standstill, reports
+where it is, and runs quietly and efficiently. It is made for robot joints, legs, arms and grippers.
 
 ![The Spectral Micro driver, 39 × 39 mm, with the encoder chip in the middle of the board.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/spectral-Photoroom.webp){ width="520" }
 
@@ -32,6 +33,7 @@ The connectors and their pinout are in [Connectors and pinout](https://docs.sour
 
 The firmware closes three nested loops on the motor: a current (torque) loop, a velocity loop around it and a
 position loop around that, plus an impedance (PD) loop that makes the motor behave like a spring and damper.
+
 A command picks the loop: a current setpoint, a speed, a position or a PD setpoint. An open-loop mode and a
 voltage-torque mode exist beside them; [Control modes](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/modes/) describes each.
 

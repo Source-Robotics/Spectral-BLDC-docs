@@ -8,7 +8,11 @@ Every page of this site is also available as Markdown at its address followed by
 ## Spectral Micro Manual
 
 - [Spectral Micro Manual](https://docs.source-robotics.com/Spectral-BLDC-docs/109/index.md): Source Robotics d.o.o.
-- [Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/index.md): From the box to a calibrated motor that follows commands, on one page.
+- [Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/index.md): From the box to a calibrated motor that follows commands, in four parts.
+- [1. Fit the motor](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/1-motor/index.md): The driver goes behind the motor, over a magnet on the end of the motor shaft.
+- [2. Connect](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/2-connect/index.md): The supply powers the motor, the serial adapter connects the PC.
+- [3. Calibrate](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/3-calibrate/index.md): The driver learns your motor.
+- [4. First moves](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/4-first-moves/index.md): The motor is calibrated and saved.
 - [About this manual](https://docs.source-robotics.com/Spectral-BLDC-docs/109/about/index.md): The Spectral Micro Manual covers the Spectral Micro BLDC driver from unpacking to a tuned motor on a CAN bus: what the driver is, how to mount it on a motor and wire it, the first setup with Motor GUI or the serial termi
 - [Overview](https://docs.source-robotics.com/Spectral-BLDC-docs/109/01-overview/index.md): What the Spectral Micro is and what it is made of, how it relates to the STEPFOC stepper driver that is built on it, and what you need around it to get a motor turning.
 - [The driver at a glance](https://docs.source-robotics.com/Spectral-BLDC-docs/109/01-overview/driver-at-a-glance/index.md): The Spectral Micro is a field-oriented controller for small three-phase brushless motors: gimbal motors and other low-current motors with a phase resistance of a few ohms.
@@ -29,8 +33,8 @@ Every page of this site is also available as Markdown at its address followed by
 - [First setup](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/index.md): From a mounted and wired driver to a calibrated, tuned motor.
 - [Motor GUI](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/motor-gui/index.md): Motor GUI reaches the hardware through the browser's serial port access (Web Serial), which Chromium-based browsers have: Chrome, Edge, Brave, Opera.
 - [The serial terminal](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/terminal/index.md): Motor GUI is the usual way to work with the driver; a plain serial terminal is the alternative, and it is what the console inside Motor GUI is.
-- [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/calibration/index.md): Calibration teaches the driver its motor: it checks the magnet and the supply, measures the motor's phase resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find the
-- [Encoder table and anti-cogging](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/anti-cogging/index.md): Firmware 109 can measure two corrections on the drive itself, with nothing but the motor on the bench: the encoder table, which corrects the small error of the encoder's angle reading, and the anti-cogging, a current tha
+- [Calibration](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/calibration/index.md): Calibration teaches the driver its motor.
+- [Encoder table and anti-cogging](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/anti-cogging/index.md): Firmware 109 measures two corrections on the drive itself, with nothing but the motor on the bench.
 - [Current limit and loop tuning](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/tuning/index.md): Calibration leaves the driver with current loop gains computed for your motor and with conservative velocity and position gains.
 - [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/saving/index.md): Nothing you set survives a power cycle until you save it.
 - [Operation](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/index.md): How a calibrated driver is used: the control modes and what each one does, the two ways to talk to the driver and the two tools on top of them, what happens when something goes wrong, and gripper mode.
@@ -73,11 +77,11 @@ Every page of this site is also available as Markdown at its address followed by
 - [Sound](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/sound/index.md): Sound through the motor: tones, a queue of timed events and samples, added to the output voltage while the driver holds or moves.
 - [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/index.md): The commands of gripper mode (#Gripper 1, saved).
 - [UART commands](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/index.md): Every command the firmware release this site describes understands over the serial port.
-- [Motion](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/motion/index.md)
-- [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/gains/index.md)
-- [Calibration and motor parameters](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/calibration/index.md)
-- [Status and utility](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/utility/index.md)
-- [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/gripper/index.md)
+- [Motion](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/motion/index.md): Current (torque) control with the given Iq setpoint.
+- [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/gains/index.md): Kp of the position loop.
+- [Calibration and motor parameters](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/calibration/index.md): Runs the calibration routine (see Calibration): it measures R and L, finds the pole pairs, the phase order and the angle offset, and measures Kt, KV and the flux linkage.
+- [Status and utility](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/utility/index.md): Writes the configuration to the EEPROM.
+- [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/uart/gripper/index.md): Whether this driver is a gripper.
 - [Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/defaults/index.md): The settings of the firmware, read from its source at the release this site describes.
 - [Errors and LED states](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/errors/index.md): The flags as the firmware keeps them, the line #Error prints for each, and where each sits in the two bytes of SendRespondStateofErrors (bits numbered from the most significant).
 - [Python library](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/python/index.md): The Spectral-BLDC package (Spectral-BLDC-Python, pip install Spectral-BLDC) has one method per CAN message in SpectralBLDC.SpectralCAN, and SpectralBLDC.CanCommunication for the bus.

@@ -8,10 +8,7 @@ Data the host asks for with a remote frame (RTR bit set, no data); the driver an
 
 Asks the driver to answer with an empty frame, to see that it is on the bus.
 
-**The frame** (0 bytes)
-
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
+**The frame** (0 bytes) carries no data.
 
 The driver answers with **Send_Respond_Ping**.
 
@@ -25,9 +22,13 @@ Asks for the thermistor temperature. Meaningful only with the thermistor enabled
 
 **The frame** (2 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | temperature | signed 16-bit | °C |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | temperature | signed 16-bit | °C |
+
+</div>
 
 The driver answers with **Send_Respond_Temperature**.
 
@@ -41,9 +42,13 @@ Asks for the supply voltage.
 
 **The frame** (2 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | voltage | unsigned 16-bit | mV |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | voltage | unsigned 16-bit | mV |
+
+</div>
 
 The driver answers with **Send_Respond_Voltage**.
 
@@ -57,12 +62,16 @@ Asks for the driver's identity: hardware version, batch date and serial number f
 
 **The frame** (7 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | HARDWARE_VERSION | unsigned 8-bit | PCB revision |
-| 1 |  | BATCH_DATE | unsigned 8-bit | production batch, the lowest 8 bits of the stored value (24092024 after #Default is sent as 120) |
-| 2 |  | SOFTWARE_VERSION | unsigned 8-bit | firmware release, e.g. 107 |
-| 3-6 |  | SERIAL_NUMBER | unsigned 32-bit | serial number |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | HARDWARE_VERSION | unsigned 8-bit | PCB revision |
+| 1 | BATCH_DATE | unsigned 8-bit | production batch, the lowest 8 bits of the stored value (24092024 after #Default is sent as 120) |
+| 2 | SOFTWARE_VERSION | unsigned 8-bit | firmware release, e.g. 107 |
+| 3-6 | SERIAL_NUMBER | unsigned 32-bit | serial number |
+
+</div>
 
 The driver answers with **Send_Respond_Device_Info**.
 
@@ -75,6 +84,8 @@ The driver answers with **Send_Respond_Device_Info**.
 Asks for every error flag and the calibrated, activated, watchdog and product-lock states.
 
 **The frame** (2 bytes)
+
+<div class="ref-table fields" markdown>
 
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
@@ -91,6 +102,8 @@ Asks for every error flag and the calibrated, activated, watchdog and product-lo
 | 1 | 5 | watchdog_error | bit | the watchdog ran out |
 | 1 | 4 | wrong_product | bit | from firmware 109: this firmware is on the other product's board (the product lock) and drives nothing |
 
+</div>
+
 The driver answers with **Send_Respond_State_of_Errors**.
 
 ---
@@ -103,9 +116,13 @@ Asks for the measured Iq current.
 
 **The frame** (2 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | current | signed 16-bit | mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | current | signed 16-bit | mA |
+
+</div>
 
 The driver answers with **Send_Respond_Iq_data**.
 
@@ -119,10 +136,14 @@ Asks for the position and the filtered speed, as 32-bit values. Python attribute
 
 **The frame** (8 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | position | signed 32-bit | encoder ticks |
-| 4-7 |  | speed | signed 32-bit | encoder ticks/s |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | position | signed 32-bit | encoder ticks |
+| 4-7 | speed | signed 32-bit | encoder ticks/s |
+
+</div>
 
 The driver answers with **Send_Respond_Encoder_data**.
 
@@ -136,9 +157,13 @@ Asks for the torque constant Kt the driver uses. Added in firmware 104.
 
 **The frame** (4 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Kt | float 32 | Nm/A |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Kt | float 32 | Nm/A |
+
+</div>
 
 The driver answers with **Send_Respond_Kt**.
 
@@ -151,6 +176,8 @@ The driver answers with **Send_Respond_Kt**.
 Asks what the drive is: the product, the tool it is built into, the firmware release, the hardware version, the pole pairs, whether it is calibrated, and eight flags. A host can check it before it commands or flashes a drive. Added in firmware 109. Python attributes `product_id`, `product_name`, `tool_id`, `firmware_version`, `identity_hardware_version`, `pole_pairs`, `identity_calibrated`, `identity_flags`.
 
 **The frame** (8 bytes)
+
+<div class="ref-table fields" markdown>
 
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
@@ -169,6 +196,8 @@ Asks what the drive is: the product, the tool it is built into, the firmware rel
 | 7 | 6 | cogging_saved | bit | the anti-cogging in use is the one saved in the EEPROM |
 | 7 | 7 | switching_zero_in_use | bit | the current-sense zero measured with the bridge switching is in use (parameter 46) |
 
+</div>
+
 The driver answers with **Send_Respond_Identity**.
 
 The flags in byte 7 are numbered the usual way, bit 0 the least significant (unlike the error bytes, which the firmware packs from bit 7 down).
@@ -183,13 +212,17 @@ Asks for the temperature, the supply voltage, both error bytes and the current i
 
 **The frame** (8 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | temperature | signed 16-bit | °C (meaningful with the thermistor enabled) |
-| 2-3 |  | voltage | signed 16-bit | supply voltage in mV |
-| 4 |  | errors_1 | unsigned 8-bit | the error flags, as byte 0 of Send_Respond_State_of_Errors |
-| 5 |  | errors_2 | unsigned 8-bit | calibrated, activated, watchdog, wrong product, as byte 1 of Send_Respond_State_of_Errors |
-| 6-7 |  | current | signed 16-bit | Iq in mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | temperature | signed 16-bit | °C (meaningful with the thermistor enabled) |
+| 2-3 | voltage | signed 16-bit | supply voltage in mV |
+| 4 | errors_1 | unsigned 8-bit | the error flags, as byte 0 of Send_Respond_State_of_Errors |
+| 5 | errors_2 | unsigned 8-bit | calibrated, activated, watchdog, wrong product, as byte 1 of Send_Respond_State_of_Errors |
+| 6-7 | current | signed 16-bit | Iq in mA |
+
+</div>
 
 The driver answers with **Send_Respond_Telemetry**.
 
@@ -201,9 +234,6 @@ The driver answers with **Send_Respond_Telemetry**.
 
 The frame the driver sends on its own at the heartbeat interval (Send_Heartbeat_Setup); empty. Off by default. Any other frame the driver sends resets the heartbeat timer, so a driver that answers motion commands at a high rate never sends a heartbeat.
 
-**The frame** (0 bytes)
-
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
+**The frame** (0 bytes) carries no data.
 
 ---

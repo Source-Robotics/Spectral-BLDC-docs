@@ -10,6 +10,8 @@ The gripper command, for a driver set up as a gripper (`#Gripper 1`, saved). Pos
 
 **5 bytes**
 
+<div class="ref-table fields" markdown>
+
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
 | 0 |  | Position | unsigned 8-bit | 0 fully open, 255 fully closed |
@@ -19,6 +21,8 @@ The gripper command, for a driver set up as a gripper (`#Gripper 1`, saved). Pos
 | 4 | 6 | Action | bit | 1 go to the position, 0 idle |
 | 4 | 5 | E-stop | bit | 1 raises the gripper E-stop error |
 | 4 | 4 | Release direction | bit | read by the firmware but not used |
+
+</div>
 
 The driver answers with **Respond_Gripper_data_pack**.
 
@@ -42,6 +46,8 @@ The driver's answer to Send_gripper_data_pack: position, measured current, and t
 
 **The frame** (4 bytes)
 
+<div class="ref-table fields" markdown>
+
 | Byte | Bit | Field | Type | Meaning |
 |---|---|---|---|---|
 | 0 |  | gripper_position | unsigned 8-bit | 0 fully open, 255 fully closed |
@@ -53,5 +59,7 @@ The driver's answer to Send_gripper_data_pack: position, measured current, and t
 | 3 | 2 | gripper_timeout_error | bit | the driver's watchdog error: the CAN watchdog ran out |
 | 3 | 1 | gripper_estop_error | bit |  |
 | 3 | 0 | gripper_calibrated | bit | 1 calibrated |
+
+</div>
 
 ---

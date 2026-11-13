@@ -1465,14 +1465,14 @@ the table; 0 when none is stored); see <a href="../../05-setup/saving/">Saving t
 such as <code>160 (CURRENT_BANDWIDTH_DEFAULT)</code>, is the constant in <code>constants.h</code> the value comes from. The settings of
 firmware 109 that are parameters, the anti-cogging and the encoder table among them, are in the
 <a href="../can/parameters/#every-parameter">parameter table</a> with their defaults.</p>
+<div class="ref-table defaults">
 <table>
 <thead>
 <tr>
-<th>Variable</th>
+<th>Variable and firmware comment</th>
 <th>Start value</th>
 <th>After <code>#Default</code></th>
 <th>Kept by <code>#Save</code></th>
-<th>Firmware comment</th>
 </tr>
 </thead>
 <tbody>
@@ -1481,570 +1481,510 @@ firmware 109 that are parameters, the anti-cogging and the encoder table among t
 <td>1</td>
 <td>1111 in the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, not read back</td>
 <td>written, not read back</td>
-<td></td>
 </tr>
 <tr>
-<td><code>HARDWARE_VERSION</code></td>
+<td><code>HARDWARE_VERSION</code><br><span class="meta">Version of the Spectral BLDC driver <abbr title="Printed Circuit Board">PCB</abbr></span></td>
 <td>1</td>
 <td>1</td>
 <td>yes</td>
-<td>Version of the Spectral BLDC driver <abbr title="Printed Circuit Board">PCB</abbr></td>
 </tr>
 <tr>
-<td><code>BATCH_DATE</code></td>
+<td><code>BATCH_DATE</code><br><span class="meta">Date the batch was produced</span></td>
 <td>1</td>
 <td>24092024</td>
 <td>yes</td>
-<td>Date the batch was produced</td>
 </tr>
 <tr>
-<td><code>SOFTWARE_VERSION</code></td>
+<td><code>SOFTWARE_VERSION</code><br><span class="meta">Software release</span></td>
 <td>1</td>
 <td>109</td>
 <td>no: set by the firmware</td>
-<td>Software release</td>
 </tr>
 <tr>
-<td><code>I_AM_GRIPPER</code></td>
+<td><code>I_AM_GRIPPER</code><br><span class="meta">Is motor controller gripper (1) or not (0)</span></td>
 <td>1</td>
 <td>0</td>
 <td>yes</td>
-<td>Is motor controller gripper (1) or not (0)</td>
 </tr>
 <tr>
-<td><code>LED_ON_OFF</code></td>
+<td><code>LED_ON_OFF</code><br><span class="meta">Use <abbr title="Light-Emitting Diode">LED</abbr> for status indication</span></td>
 <td>1</td>
 <td>1</td>
 <td>yes</td>
-<td>Use <abbr title="Light-Emitting Diode">LED</abbr> for status indication</td>
 </tr>
 <tr>
-<td><code>theta_offset</code></td>
+<td><code>theta_offset</code><br><span class="meta">will be determined at calibration</span></td>
 <td>0.0f</td>
 <td>0</td>
 <td>yes</td>
-<td>will be determined at calibration</td>
 </tr>
 <tr>
-<td><code>pole_pairs</code></td>
+<td><code>pole_pairs</code><br><span class="meta">Number of pole pairs of your BLDC motor</span></td>
 <td>11</td>
 <td>7</td>
 <td>yes</td>
-<td>Number of pole pairs of your BLDC motor</td>
 </tr>
 <tr>
-<td><code>current_control_bandwidth</code></td>
+<td><code>current_control_bandwidth</code><br><span class="meta">Hz: the current <abbr title="Proportional-Integral controller">PI</abbr> gains come from R, L</span></td>
 <td>160 (CURRENT_BANDWIDTH_DEFAULT)</td>
 <td>—</td>
 <td>no</td>
-<td>Hz: the current <abbr title="Proportional-Integral controller">PI</abbr> gains come from R, L</td>
 </tr>
 <tr>
-<td><code>DIR_</code></td>
+<td><code>DIR_</code><br><span class="meta">When looking at the magnetic encoder counter-clockwise is POSITIVE rotation.</span></td>
 <td>1</td>
 <td>0</td>
 <td>yes</td>
-<td>When looking at the magnetic encoder counter-clockwise is POSITIVE rotation.</td>
 </tr>
 <tr>
 <td><code>Phase_order</code></td>
 <td>2</td>
 <td>0</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
-<td><code>commutation_dir</code></td>
+<td><code>commutation_dir</code><br><span class="meta">+1 or -1, auto-detected at calibration so +Iq/+velocity/+rotation map to +encoder rotation</span></td>
 <td>1</td>
 <td>1</td>
 <td>yes</td>
-<td>+1 or -1, auto-detected at calibration so +Iq/+velocity/+rotation map to +encoder rotation</td>
 </tr>
 <tr>
-<td><code>Thermistor_on_off</code></td>
+<td><code>Thermistor_on_off</code><br><span class="meta">Are we taking termistor mesurements? 0 is off, 1 is on</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Are we taking termistor mesurements? 0 is off, 1 is on</td>
 </tr>
 <tr>
-<td><code>brake_coast</code></td>
+<td><code>brake_coast</code><br><span class="meta">Idle-mode (Controller_mode == 0) phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage <abbr title="Pulse-Width Modulation">PWM</abbr> vector shorts the phases together)</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>Idle-mode (Controller_mode == 0) phase behavior: 0 = coast (driver disabled, Hi-Z), 1 = brake (driver stays enabled, zero-voltage <abbr title="Pulse-Width Modulation">PWM</abbr> vector shorts the phases together)</td>
 </tr>
 <tr>
-<td><code>Resistance</code></td>
+<td><code>Resistance</code><br><span class="meta">Resistance of SINGLE PHASE of your BLDC motor</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Resistance of SINGLE PHASE of your BLDC motor</td>
 </tr>
 <tr>
-<td><code>Total_Resistance</code></td>
+<td><code>Total_Resistance</code><br><span class="meta">= 2 * Resistance + 2 * R_sense + 2 *Rdson</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>= 2 * Resistance + 2 * R_sense + 2 *Rdson</td>
 </tr>
 <tr>
-<td><code>Inductance</code></td>
+<td><code>Inductance</code><br><span class="meta">Inductance of SINGLE PHASE of your BLDC motor</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Inductance of SINGLE PHASE of your BLDC motor</td>
 </tr>
 <tr>
-<td><code>Kt</code></td>
+<td><code>Kt</code><br><span class="meta">Torque constant of your BLDC motor</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Torque constant of your BLDC motor</td>
 </tr>
 <tr>
-<td><code>flux_linkage</code></td>
+<td><code>flux_linkage</code><br><span class="meta">Flux linkage of your BLDC motor</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Flux linkage of your BLDC motor</td>
 </tr>
 <tr>
 <td><code>KV</code></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
-<td><code>Max_temperature</code></td>
+<td><code>Max_temperature</code><br><span class="meta">Max temperature in degrees</span></td>
 <td>75</td>
 <td>75</td>
 <td>yes</td>
-<td>Max temperature in degrees</td>
 </tr>
 <tr>
-<td><code>Min_temperature</code></td>
+<td><code>Min_temperature</code><br><span class="meta">Min temperature in degrees</span></td>
 <td>-20</td>
 <td>—</td>
 <td>no</td>
-<td>Min temperature in degrees</td>
 </tr>
 <tr>
-<td><code>Max_Vbus</code></td>
+<td><code>Max_Vbus</code><br><span class="meta">Max vbus voltage in mV</span></td>
 <td>29500</td>
 <td>29000</td>
 <td>yes</td>
-<td>Max vbus voltage in mV</td>
 </tr>
 <tr>
-<td><code>Min_Vbus</code></td>
+<td><code>Min_Vbus</code><br><span class="meta">Min vbus voltage in mV</span></td>
 <td>9000</td>
 <td>—</td>
 <td>no</td>
-<td>Min vbus voltage in mV</td>
 </tr>
 <tr>
 <td><code>watchdog_time_ms</code></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
-<td><code>watchdog_action</code></td>
+<td><code>watchdog_action</code><br><span class="meta">0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (watchdog_action.h)</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (watchdog_action.h)</td>
 </tr>
 <tr>
-<td><code>wd_fallback_time_ms</code></td>
+<td><code>wd_fallback_time_ms</code><br><span class="meta">how long hold/descend may run before the after-action</span></td>
 <td>2000</td>
 <td>2000</td>
 <td>yes</td>
-<td>how long hold/descend may run before the after-action</td>
 </tr>
 <tr>
-<td><code>wd_fallback_current</code></td>
+<td><code>wd_fallback_current</code><br><span class="meta">mA, descend: the current applied (signed)</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>mA, descend: the current applied (signed)</td>
 </tr>
 <tr>
-<td><code>wd_fallback_speed</code></td>
+<td><code>wd_fallback_speed</code><br><span class="meta">ticks/s, descend: the speed cap in either direction</span></td>
 <td>1000</td>
 <td>1000</td>
 <td>yes</td>
-<td>ticks/s, descend: the speed cap in either direction</td>
 </tr>
 <tr>
-<td><code>wd_after_action</code></td>
+<td><code>wd_after_action</code><br><span class="meta">after hold/descend: 0 legacy, 2 brake, 3 coast</span></td>
 <td>0</td>
 <td>0 (WD_ACTION_LEGACY)</td>
 <td>yes</td>
-<td>after hold/descend: 0 legacy, 2 brake, 3 coast</td>
 </tr>
 <tr>
-<td><code>calibration_id</code></td>
+<td><code>calibration_id</code><br><span class="meta">parameter 87: new at every successful calibration</span></td>
 <td>0</td>
 <td>0 in the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, not read back</td>
 <td>written, not read back</td>
-<td>parameter 87: new at every successful calibration</td>
 </tr>
 <tr>
-<td><code>tool_id</code></td>
+<td><code>tool_id</code><br><span class="meta">what the drive is built into: 0 none, 1 SSG-48, 11-33 MSG, 200-254 custom</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>what the drive is built into: 0 none, 1 SSG-48, 11-33 MSG, 200-254 custom</td>
 </tr>
 <tr>
-<td><code>board_product</code></td>
+<td><code>board_product</code><br><span class="meta">product lock stamp in block 2: 1 STEPFOC, 2 Spectral, 0 none</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>product lock stamp in block 2: 1 STEPFOC, 2 Spectral, 0 none</td>
 </tr>
 <tr>
-<td><code>sense1_offset</code></td>
+<td><code>sense1_offset</code><br><span class="meta">current-sense zero of channel 1, ADC counts from 2048 (start-up)</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>current-sense zero of channel 1, ADC counts from 2048 (start-up)</td>
 </tr>
 <tr>
-<td><code>sense2_offset</code></td>
+<td><code>sense2_offset</code><br><span class="meta">current-sense zero of channel 2</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>current-sense zero of channel 2</td>
 </tr>
 <tr>
-<td><code>comm_delay_us</code></td>
+<td><code>comm_delay_us</code><br><span class="meta">parameter 64: commutation delay compensation, us (0 = off)</span></td>
 <td>234 (COMM_DELAY_DEFAULT_US)</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 64: commutation delay compensation, us (0 = off)</td>
 </tr>
 <tr>
-<td><code>input_filter_hz</code></td>
+<td><code>input_filter_hz</code><br><span class="meta">parameter 74: the position input filter, Hz (0 = off)</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 74: the position input filter, Hz (0 = off)</td>
 </tr>
 <tr>
-<td><code>vel_int_deadband</code></td>
+<td><code>vel_int_deadband</code><br><span class="meta">parameter 75: the velocity integral's deadband, ticks (0 = off)</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 75: the velocity integral's deadband, ticks (0 = off)</td>
 </tr>
 <tr>
-<td><code>sound_limit_mv</code></td>
+<td><code>sound_limit_mv</code><br><span class="meta">parameter 81: the sound's voltage at most (batch 22)</span></td>
 <td>2000 (SOUND_LIMIT_DEFAULT_MV)</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 81: the sound's voltage at most (batch 22)</td>
 </tr>
 <tr>
-<td><code>sound_axis</code></td>
+<td><code>sound_axis</code><br><span class="meta">parameter 82: 1 the q axis (default: much louder on the bench), 0 the d axis</span></td>
 <td>1</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 82: 1 the q axis (default: much louder on the bench), 0 the d axis</td>
 </tr>
 <tr>
-<td><code>fast_trig</code></td>
+<td><code>fast_trig</code><br><span class="meta">parameter 65: 1 the transforms' sin/cos from the integer table (it was</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 65: 1 the transforms' sin/cos from the integer table (it was</td>
 </tr>
 <tr>
-<td><code>speed_estimator</code></td>
+<td><code>speed_estimator</code><br><span class="meta">parameter 50</span></td>
 <td>2 (SPEED_ESTIMATOR_DEFAULT)</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 50</td>
 </tr>
 <tr>
-<td><code>speed_pll_bandwidth</code></td>
+<td><code>speed_pll_bandwidth</code><br><span class="meta">parameter 51, Hz</span></td>
 <td>100 (SPEED_PLL_BANDWIDTH_DEFAULT)</td>
 <td>—</td>
 <td>no</td>
-<td>parameter 51, Hz</td>
 </tr>
 <tr>
-<td><code>Heartbeat_rate_ms</code></td>
+<td><code>Heartbeat_rate_ms</code><br><span class="meta">Motor controller will send data every Heartbeat_rate_ms</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Motor controller will send data every Heartbeat_rate_ms</td>
 </tr>
 <tr>
-<td><code>Calibrated</code></td>
+<td><code>Calibrated</code><br><span class="meta">0 if motor is not calibrated, 1 if it is calibrated</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>0 if motor is not calibrated, 1 if it is calibrated</td>
 </tr>
 <tr>
-<td><code>Resistance_calc_voltage</code></td>
+<td><code>Resistance_calc_voltage</code><br><span class="meta">Voltage used to calculate resistance //1000</span></td>
 <td>1000</td>
 <td>—</td>
 <td>no</td>
-<td>Voltage used to calculate resistance //1000</td>
 </tr>
 <tr>
-<td><code>Calibration_power</code></td>
+<td><code>Calibration_power</code><br><span class="meta">Max power that can dissipate during inductance test.</span></td>
 <td>12</td>
 <td>—</td>
 <td>no</td>
-<td>Max power that can dissipate during inductance test.</td>
 </tr>
 <tr>
-<td><code>Open_loop_voltage</code></td>
+<td><code>Open_loop_voltage</code><br><span class="meta">Voltage to use when spinning the motor open loop. In mV</span></td>
 <td>5000</td>
 <td>—</td>
 <td>no</td>
-<td>Voltage to use when spinning the motor open loop. In mV</td>
 </tr>
 <tr>
-<td><code>Open_loop_speed</code></td>
+<td><code>Open_loop_speed</code><br><span class="meta">Speed to be used when spinning the motor open loop. In RAD/s</span></td>
 <td>20.0</td>
 <td>—</td>
 <td>no</td>
-<td>Speed to be used when spinning the motor open loop. In RAD/s</td>
 </tr>
 <tr>
-<td><code>Phase_voltage</code></td>
+<td><code>Phase_voltage</code><br><span class="meta">Max voltage to be used during Kv calculation</span></td>
 <td>5000</td>
 <td>—</td>
 <td>no</td>
-<td>Max voltage to be used during Kv calculation</td>
 </tr>
 <tr>
-<td><code>cyclic_period</code></td>
+<td><code>cyclic_period</code><br><span class="meta">We send messages every cyclic_period</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>We send messages every cyclic_period</td>
 </tr>
 <tr>
-<td><code>CAN_ID</code></td>
+<td><code>CAN_ID</code><br><span class="meta"><abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> id of THIS motor driver! No 2 motor drivers can share the same ID.</span></td>
 <td>0</td>
 <td>existing_id</td>
 <td>yes</td>
-<td><abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> id of THIS motor driver! No 2 motor drivers can share the same ID.</td>
 </tr>
 <tr>
 <td><code>calibration_offset_current</code></td>
 <td>300</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
-<td><code>Voltage_limit</code></td>
+<td><code>Voltage_limit</code><br><span class="meta">Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used</span></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td>Voltage limit for Ud and Uq voltages. If 0 value of controller.VBUS_mV will be used</td>
 </tr>
 <tr>
 <td><code>Reset_integral_accumulator</code></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Kp_p</code></td>
 <td>11</td>
 <td>11</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Position_setpoint</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
-<td><code>Kp_v</code></td>
+<td><code>Kp_v</code><br><span class="meta">0.006 basic values that work for most motors but not optimal</span></td>
 <td>0.03</td>
 <td>0.03</td>
 <td>yes</td>
-<td>0.006 basic values that work for most motors but not optimal</td>
 </tr>
 <tr>
-<td><code>Ki_v</code></td>
+<td><code>Ki_v</code><br><span class="meta">0.0001 basic values that work for most motors but not optimal</span></td>
 <td>0.0003</td>
 <td>0.0003</td>
 <td>yes</td>
-<td>0.0001 basic values that work for most motors but not optimal</td>
 </tr>
 <tr>
-<td><code>Velocity_setpoint</code></td>
+<td><code>Velocity_setpoint</code><br><span class="meta">-1.5</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>-1.5</td>
 </tr>
 <tr>
-<td><code>Velocity_limit</code></td>
+<td><code>Velocity_limit</code><br><span class="meta">Clamp integrals to this  [TICKS/s]</span></td>
 <td>800000</td>
 <td>800000</td>
 <td>yes</td>
-<td>Clamp integrals to this  [TICKS/s]</td>
 </tr>
 <tr>
-<td><code>Velocity_limit_error</code></td>
+<td><code>Velocity_limit_error</code><br><span class="meta">[TICKS/s] ; Velocity when we will report error</span></td>
 <td>20000000</td>
 <td>—</td>
 <td>no</td>
-<td>[TICKS/s] ; Velocity when we will report error</td>
 </tr>
 <tr>
 <td><code>Kp_id</code></td>
 <td>3</td>
 <td>3</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Ki_id</code></td>
 <td>1.5</td>
 <td>1.5</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Id_setpoint</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Kp_iq</code></td>
 <td>3</td>
 <td>3</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Ki_iq</code></td>
 <td>1.5</td>
 <td>1.5</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Iq_current_limit</code></td>
 <td>1000</td>
 <td>1000</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Id_current_limit</code></td>
 <td>0</td>
 <td>0</td>
 <td>yes</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Feedforward_current</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
-<td><code>KD</code></td>
+<td><code>KD</code><br><span class="meta">[Nm*s/rad]  KD 0.002800</span></td>
 <td>0.002800</td>
 <td>0.0028</td>
 <td>yes</td>
-<td>[Nm*s/rad]  KD 0.002800</td>
 </tr>
 <tr>
-<td><code>KP</code></td>
+<td><code>KP</code><br><span class="meta">[Nm/rad] KP 0.14000</span></td>
 <td>0.14000</td>
 <td>0.1400</td>
 <td>yes</td>
-<td>[Nm/rad] KP 0.14000</td>
 </tr>
 <tr>
 <td><code>Uq_setpoint</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>Ud_setpoint</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>position_setpoint</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>speed_setpoint</code></td>
 <td>20</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>current_setpoint</code></td>
 <td>200</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
-<td><code>action_status</code></td>
+<td><code>action_status</code><br><span class="meta">-0 Stopped(or performing activation /automatic release).</span></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td>-0 Stopped(or performing activation /automatic release).</td>
 </tr>
 <tr>
 <td><code>activated</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>release_direction</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 <tr>
 <td><code>estop_status</code></td>
 <td>0</td>
 <td>—</td>
 <td>no</td>
-<td></td>
 </tr>
 </tbody>
 </table>
+</div>
+
+  
+  
+  
+    <nav class="page-nav" aria-label="Footer">
+      
+        <a href="../uart/gripper/" class="md-button page-nav__prev" rel="prev" aria-label="Previous: Gripper">
+          <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg></span>
+          <span>Previous: Gripper</span>
+        </a>
+      
+      
+        <a href="../errors/" class="md-button md-button--primary page-nav__next" rel="next" aria-label="Next: Errors and LED states">
+          <span>Next: Errors and LED states</span>
+          <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span>
+        </a>
+      
+    </nav>
+  
+
 
 
 
@@ -2279,7 +2219,18 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
       
       
     
-    <a href="https://www.instagram.com/5arcrnjak/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
+    <a href="https://www.youtube.com/@source-robotics" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.instagram.com/source_robotics/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M224.3 141a115 115 0 1 0-.6 230 115 115 0 1 0 .6-230m-.6 40.4a74.6 74.6 0 1 1 .6 149.2 74.6 74.6 0 1 1-.6-149.2m93.4-45.1a26.8 26.8 0 1 1 53.6 0 26.8 26.8 0 1 1-53.6 0m129.7 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8M399 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1"/></svg>
     </a>
   
@@ -2301,7 +2252,7 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
       
       
     
-    <a href="https://www.linkedin.com/in/petar-crnjak-009b43180/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+    <a href="https://www.linkedin.com/company/source-robotics" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
     </a>
   
@@ -2314,6 +2265,17 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
     
     <a href="https://discord.gg/prjUvjmGpZ" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.tiktok.com/@source.robotics" target="_blank" rel="noopener" title="www.tiktok.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M448.5 209.9c-44 .1-87-13.6-122.8-39.2v178.7c0 33.1-10.1 65.4-29 92.6s-45.6 48-76.6 59.6-64.8 13.5-96.9 5.3-60.9-25.9-82.7-50.8-35.3-56-39-88.9 2.9-66.1 18.6-95.2 40-52.7 69.6-67.7 62.9-20.5 95.7-16v89.9c-15-4.7-31.1-4.6-46 .4s-27.9 14.6-37 27.3-14 28.1-13.9 43.9 5.2 31 14.5 43.7 22.4 22.1 37.4 26.9 31.1 4.8 46-.1 28-14.4 37.2-27.1 14.2-28.1 14.2-43.8V0h88c-.1 7.4.6 14.9 1.9 22.2 3.1 16.3 9.4 31.9 18.7 45.7s21.3 25.6 35.2 34.6c19.9 13.1 43.2 20.1 67 20.1V210z"/></svg>
     </a>
   
 </div>

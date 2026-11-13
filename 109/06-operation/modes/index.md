@@ -36,9 +36,10 @@ passing through idle; a fault is any of the errors on [Errors and recovery](http
 ## Braking in idle
 
 `#Brake 1` (or Send_Settings over CAN) makes the idle motor brake: the driver keeps the three phases shorted, so
-the motor resists being turned. `#Brake 0`, the default, lets it coast. The setting is not saved: every power-up
-starts with coasting. Braking works only in idle without an error; an error or an E-stop disables the driver, and
-the motor coasts.
+the motor resists being turned. `#Brake 0`, the default, lets it coast.
+
+The setting is not saved: every power-up starts with coasting. Braking works only in idle without an error; an error
+or an E-stop disables the driver, and the motor coasts.
 
 !!! warning "The braking current is not limited"
     A motor that is turned while it brakes drives its own back-EMF current through the shorted phases, and the
@@ -86,6 +87,7 @@ the torque as Kt times the current.
 ## Positive rotation
 
 ![Looking at the encoder side of the board, the side that faces the magnet, positive rotation is counter-clockwise. A positive current turns the motor that way, a positive speed too, and the position grows.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/Positive_rotation.webp){ width="520" }
+![Looking at the encoder side of the board, the side that faces the magnet, positive rotation is counter-clockwise. A positive current turns the motor that way, a positive speed too, and the position grows.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/Positive_rotation_dark.webp){ width="520" }
 
 The direction is tied to the encoder, not to the wiring: since firmware 105 calibration compensates the order of
 the phases, so the motor turns the same way whichever wire went to which terminal.

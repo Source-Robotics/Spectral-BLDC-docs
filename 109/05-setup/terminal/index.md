@@ -1,13 +1,16 @@
 # The serial terminal
 
 Motor GUI is the usual way to work with the driver; a plain serial terminal is the alternative, and it is what
-the console inside Motor GUI is. Everything in this manual that is done in the GUI is also one `#` command, and
-the terminal shows the driver's answers exactly as it prints them, which is useful when something does not work.
+the console inside Motor GUI is.
+
+Everything in this manual that is done in the GUI is also one `#` command, and the terminal shows the driver's answers
+exactly as it prints them, which is useful when something does not work.
 
 The driver talks on its UART connector at 256000 baud, 8N1, 3.3 V. Any terminal that sends a line ending in
 CR+LF works.
 
-![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/UART%20connection.webp){ width="700" }
+![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/UART_connection.webp){ width="700" }
+![The UART connector. TX of the driver goes to RX of the adapter and RX to TX.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/UART_connection_dark.webp){ width="700" }
 
 ## Connecting
 

@@ -2064,11 +2064,11 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 </div>
 <p>Sets one parameter by its number (the <a href="#every-parameter">parameter table</a>). Firmware 109 gives new settings a parameter number instead of a command ID of their own, since the identifier has room for only 64 command IDs. A value outside a parameter's range is clamped, replaced or refused as the table says; a number the firmware does not know, or a read-only one, is ignored. The driver does not answer: read the value back with Send_Get_Parameter. A value set this way lives in RAM until Send_Save_config, like every other setting; the table says which parameters Save keeps.</p>
 <p><strong>5 bytes</strong></p>
+<div class="ref-table fields">
 <table>
 <thead>
 <tr>
 <th>Byte</th>
-<th>Bit</th>
 <th>Field</th>
 <th>Type</th>
 <th>Meaning</th>
@@ -2077,20 +2077,19 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 <tbody>
 <tr>
 <td>0</td>
-<td></td>
 <td>Parameter</td>
 <td>unsigned 8-bit</td>
 <td>the parameter number, 1-87</td>
 </tr>
 <tr>
 <td>1-4</td>
-<td></td>
 <td>Value</td>
 <td>signed 32-bit</td>
 <td>the new value, in the parameter's unit; for the gains, limits and Kt (8-16, 20) a float's bit pattern</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p>The driver does not answer this command.</p>
 <p>A data frame of another length, or a remote frame, is ignored and flagged as a wrong data length. It does not reset the watchdog.</p>
 <hr />
@@ -2100,11 +2099,11 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 </div>
 <p>Asks for the value in force of one parameter. The answer, Respond_Parameter, comes under ID 38, not 37: a host and a driver must never send data frames with the same identifier, because two sent at the same moment collide. Resets the watchdog. The Python library stores the value in <code>parameters[number]</code>.</p>
 <p><strong>1 bytes</strong></p>
+<div class="ref-table fields">
 <table>
 <thead>
 <tr>
 <th>Byte</th>
-<th>Bit</th>
 <th>Field</th>
 <th>Type</th>
 <th>Meaning</th>
@@ -2113,13 +2112,13 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 <tbody>
 <tr>
 <td>0</td>
-<td></td>
 <td>Parameter</td>
 <td>unsigned 8-bit</td>
 <td>the parameter number</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p>The driver answers with <strong>Respond_Parameter</strong>.</p>
 <hr />
 <h3 id="respond_parameter">Respond_Parameter<a class="headerlink" href="#respond_parameter" title="Permanent link">&para;</a></h3>
@@ -2128,11 +2127,11 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 </div>
 <p>The answer to Send_Get_Parameter: the number and the value in force. For a number the firmware does not know the frame carries the number alone (1 byte; the Python library sets <code>unknown_parameter</code>). The gains, limits and Kt (parameters 8 to 16 and 20) travel as the bit pattern of an IEEE-754 float, the others as integers.</p>
 <p><strong>The frame</strong> (5 bytes)</p>
+<div class="ref-table fields">
 <table>
 <thead>
 <tr>
 <th>Byte</th>
-<th>Bit</th>
 <th>Field</th>
 <th>Type</th>
 <th>Meaning</th>
@@ -2141,20 +2140,19 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 <tbody>
 <tr>
 <td>0</td>
-<td></td>
 <td>parameter</td>
 <td>unsigned 8-bit</td>
 <td>the parameter number</td>
 </tr>
 <tr>
 <td>1-4</td>
-<td></td>
 <td>value</td>
 <td>signed 32-bit</td>
 <td>the value in force; a float's bits for 8-16 and 20</td>
 </tr>
 </tbody>
 </table>
+</div>
 <hr />
 <h3 id="send_buffer_read">Send_Buffer_Read<a class="headerlink" href="#send_buffer_read" title="Permanent link">&para;</a></h3>
 <div class="cmd-facts">
@@ -2162,11 +2160,11 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 </div>
 <p>Asks for entries of one of the drive's buffers: the capture, the histogram, the anti-cogging harmonics or table, or the encoder table. The driver answers with one Respond_Buffer_Data frame per entry (for the two tables, one per three values), sent from its main loop whenever a transmit mailbox is free, so a long read-out never holds up the control loop or other answers. A new request replaces one still in progress; count 0 cancels it. Entries past the end are not sent. Resets the watchdog.</p>
 <p><strong>5 bytes</strong></p>
+<div class="ref-table fields">
 <table>
 <thead>
 <tr>
 <th>Byte</th>
-<th>Bit</th>
 <th>Field</th>
 <th>Type</th>
 <th>Meaning</th>
@@ -2175,27 +2173,25 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 <tbody>
 <tr>
 <td>0</td>
-<td></td>
 <td>Kind</td>
 <td>unsigned 8-bit</td>
 <td>0 capture (up to 1024 samples: parameter 32 says how many), 1 histogram (256 bins), 2 anti-cogging harmonics (8 slots), 3 anti-cogging table (256 values), 4 encoder table (128 values)</td>
 </tr>
 <tr>
 <td>1-2</td>
-<td></td>
 <td>First</td>
 <td>unsigned 16-bit</td>
 <td>the first index</td>
 </tr>
 <tr>
 <td>3-4</td>
-<td></td>
 <td>Count</td>
 <td>unsigned 16-bit</td>
 <td>how many entries; 0 cancels a read-out</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p>The driver does not answer this command.</p>
 <hr />
 <h3 id="respond_buffer_data">Respond_Buffer_Data<a class="headerlink" href="#respond_buffer_data" title="Permanent link">&para;</a></h3>
@@ -2204,11 +2200,11 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 </div>
 <p>One entry of a buffer, the answer to Send_Buffer_Read. The first two bytes say which: the kind in the top three bits, the index in the other thirteen (kind × 8192 + index). The six bytes after them depend on the kind, as the table below the frame says.</p>
 <p><strong>The frame</strong> (8 bytes)</p>
+<div class="ref-table fields">
 <table>
 <thead>
 <tr>
 <th>Byte</th>
-<th>Bit</th>
 <th>Field</th>
 <th>Type</th>
 <th>Meaning</th>
@@ -2217,34 +2213,31 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 <tbody>
 <tr>
 <td>0-1</td>
-<td></td>
 <td>header</td>
 <td>unsigned 16-bit</td>
 <td>kind × 8192 + index</td>
 </tr>
 <tr>
 <td>2-3</td>
-<td></td>
 <td>word_a</td>
 <td>signed 16-bit</td>
 <td>capture: channel A; histogram: the count (unsigned); harmonics: the harmonic number (0 = slot unused); tables: entry index</td>
 </tr>
 <tr>
 <td>4-5</td>
-<td></td>
 <td>word_b</td>
 <td>signed 16-bit</td>
 <td>capture: channel B; histogram: the sum's upper 16 bits; harmonics: a, the cosine term in mA; tables: entry index + 1</td>
 </tr>
 <tr>
 <td>6-7</td>
-<td></td>
 <td>word_c</td>
 <td>signed 16-bit</td>
 <td>capture: channel C; histogram: the sum's lower 16 bits; harmonics: b, the sine term in mA; tables: entry index + 2 (0 past the end)</td>
 </tr>
 </tbody>
 </table>
+</div>
 <table>
 <thead>
 <tr>
@@ -2288,11 +2281,11 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 </div>
 <p>Writes the anti-cogging set: kind 2 one harmonic slot per frame, kind 3 three table values per frame, in the Respond_Buffer_Data layout. Other kinds are ignored (the encoder table cannot be written), and so is a harmonic above 32. The set lives in RAM until Send_Save_config; switch it on with parameter 37. The driver does not answer.</p>
 <p><strong>8 bytes</strong></p>
+<div class="ref-table fields">
 <table>
 <thead>
 <tr>
 <th>Byte</th>
-<th>Bit</th>
 <th>Field</th>
 <th>Type</th>
 <th>Meaning</th>
@@ -2301,34 +2294,31 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 <tbody>
 <tr>
 <td>0-1</td>
-<td></td>
 <td>Header</td>
 <td>unsigned 16-bit</td>
 <td>kind × 8192 + index; kind 2 or 3</td>
 </tr>
 <tr>
 <td>2-3</td>
-<td></td>
 <td>Word A</td>
 <td>signed 16-bit</td>
 <td>kind 2: the harmonic (1-32, 0 = unused); kind 3: value at index</td>
 </tr>
 <tr>
 <td>4-5</td>
-<td></td>
 <td>Word B</td>
 <td>signed 16-bit</td>
 <td>kind 2: a in mA; kind 3: value at index + 1</td>
 </tr>
 <tr>
 <td>6-7</td>
-<td></td>
 <td>Word C</td>
 <td>signed 16-bit</td>
 <td>kind 2: b in mA; kind 3: value at index + 2</td>
 </tr>
 </tbody>
 </table>
+</div>
 <p>The driver does not answer this command.</p>
 <hr />
 <h2 id="every-parameter">Every parameter<a class="headerlink" href="#every-parameter" title="Permanent link">&para;</a></h2>
@@ -2336,807 +2326,554 @@ clamped, replaced or refused, as the table says, and a read-only number ignores 
 parameter ignores a write; a run parameter starts or stops a run when written and gives its state when read.</p>
 <h3 id="watchdog-and-tool">Watchdog and tool<a class="headerlink" href="#watchdog-and-tool" title="Permanent link">&para;</a></h3>
 <p>Parameters 1 to 5 live in settings block 2 of the <abbr title="the non-volatile memory on the driver that holds its configuration">EEPROM</abbr>, 6 and 7 in the first settings block beside the other settings; Send_Save_config keeps all seven. A value outside a range is clamped, replaced or ignored, as the Value column says.</p>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1</td>
-<td><code>PARAM_TOOL_ID</code></td>
-<td>set, read</td>
+<td>What the drive is built into. For an MSG the tens digit is the rail (1 = 100, 2 = 150, 3 = 200 mm) and the units digit the stepper (1 = 21.5, 2 = 40, 3 = 60 mm). Also <code>#Tool</code>; reported in the identity frame.<br><span class="meta"><code>PARAM_TOOL_ID</code> · Access: set, read · Kept by Save: yes, settings block 2</span></td>
 <td>0 none, 1 SSG-48, 11-33 MSG, 200-254 your own tools; a value outside 0-255 is ignored. Default 0</td>
-<td>yes, settings block 2</td>
-<td>What the drive is built into. For an MSG the tens digit is the rail (1 = 100, 2 = 150, 3 = 200 mm) and the units digit the stepper (1 = 21.5, 2 = 40, 3 = 60 mm). Also <code>#Tool</code>; reported in the identity frame.</td>
 </tr>
 <tr>
 <td>2</td>
-<td><code>PARAM_WD_FALLBACK_TIME</code></td>
-<td>set, read</td>
+<td>How long watchdog hold or descend runs before the after-action takes over.<br><span class="meta"><code>PARAM_WD_FALLBACK_TIME</code> · Access: set, read · Kept by Save: yes, settings block 2</span></td>
 <td>ms, 0-60000 (clamped). Default 2000</td>
-<td>yes, settings block 2</td>
-<td>How long watchdog hold or descend runs before the after-action takes over.</td>
 </tr>
 <tr>
 <td>3</td>
-<td><code>PARAM_WD_FALLBACK_CURRENT</code></td>
-<td>set, read</td>
+<td>The current watchdog descend applies. 0 lets gravity lower a joint; a gripper gets its grip current.<br><span class="meta"><code>PARAM_WD_FALLBACK_CURRENT</code> · Access: set, read · Kept by Save: yes, settings block 2</span></td>
 <td>mA, signed, -32768 to 32767 (outside: 0). Default 0</td>
-<td>yes, settings block 2</td>
-<td>The current watchdog descend applies. 0 lets gravity lower a joint; a gripper gets its grip current.</td>
 </tr>
 <tr>
 <td>4</td>
-<td><code>PARAM_WD_FALLBACK_SPEED</code></td>
-<td>set, read</td>
+<td>The speed watchdog descend never exceeds, in either direction.<br><span class="meta"><code>PARAM_WD_FALLBACK_SPEED</code> · Access: set, read · Kept by Save: yes, settings block 2</span></td>
 <td>ticks/s, 0-65535 (outside: 1000). Default 1000</td>
-<td>yes, settings block 2</td>
-<td>The speed watchdog descend never exceeds, in either direction.</td>
 </tr>
 <tr>
 <td>5</td>
-<td><code>PARAM_WD_AFTER_ACTION</code></td>
-<td>set, read</td>
+<td>What follows hold or descend when the fallback time has run out.<br><span class="meta"><code>PARAM_WD_AFTER_ACTION</code> · Access: set, read · Kept by Save: yes, settings block 2</span></td>
 <td>0 legacy, 2 brake, 3 coast (any other value: 0). Default 0</td>
-<td>yes, settings block 2</td>
-<td>What follows hold or descend when the fallback time has run out.</td>
 </tr>
 <tr>
 <td>6</td>
-<td><code>PARAM_WD_TIME</code></td>
-<td>set, read</td>
+<td>The watchdog time, the same value Send_Watchdog sets.<br><span class="meta"><code>PARAM_WD_TIME</code> · Access: set, read · Kept by Save: yes, settings block 1</span></td>
 <td>ms, 0 = off (a negative value: 0). Default 0</td>
-<td>yes, settings block 1</td>
-<td>The watchdog time, the same value Send_Watchdog sets.</td>
 </tr>
 <tr>
 <td>7</td>
-<td><code>PARAM_WD_ACTION</code></td>
-<td>set, read</td>
+<td>What a trip of the watchdog alone does, the same value as byte 4 of Send_Watchdog.<br><span class="meta"><code>PARAM_WD_ACTION</code> · Access: set, read · Kept by Save: yes, settings block 1</span></td>
 <td>0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (outside 0-255: 0; 5-255 act as legacy). Default 0</td>
-<td>yes, settings block 1</td>
-<td>What a trip of the watchdog alone does, the same value as byte 4 of Send_Watchdog.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="gains-limits-and-settings">Gains, limits and settings<a class="headerlink" href="#gains-limits-and-settings" title="Permanent link">&para;</a></h3>
 <p>The values in force, readable and writable by parameter (their own commands, given in each row, still work). A float travels as its IEEE-754 bit pattern, big-endian, the way the gain commands send it; over <abbr title="the serial port of the driver, 3.3 V, 256000 baud by default">UART</abbr> <code>#Par 9,0.02</code> sets Kpv. A write goes to RAM like the commands' own; Send_Save_config keeps it. Parameter 23, the product stamp, stays read only.</p>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>8</td>
-<td><code>PARAM_KPP</code></td>
-<td>set, read</td>
+<td>Kp of the position loop (Send_Position_Gains, <code>#Kpp</code>).<br><span class="meta"><code>PARAM_KPP</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>Kp of the position loop (Send_Position_Gains, <code>#Kpp</code>).</td>
 </tr>
 <tr>
 <td>9</td>
-<td><code>PARAM_KPV</code></td>
-<td>set, read</td>
+<td>Kp of the velocity loop (Send_Velocity_Gains, <code>#Kpv</code>).<br><span class="meta"><code>PARAM_KPV</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>Kp of the velocity loop (Send_Velocity_Gains, <code>#Kpv</code>).</td>
 </tr>
 <tr>
 <td>10</td>
-<td><code>PARAM_KIV</code></td>
-<td>set, read</td>
+<td>Ki of the velocity loop (Send_Velocity_Gains, <code>#Kiv</code>).<br><span class="meta"><code>PARAM_KIV</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>Ki of the velocity loop (Send_Velocity_Gains, <code>#Kiv</code>).</td>
 </tr>
 <tr>
 <td>11</td>
-<td><code>PARAM_KPIQ</code></td>
-<td>set, read</td>
+<td>Kp of the current loops; writing it sets the Iq and the Id loop, as <code>#Kpiq</code> does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.<br><span class="meta"><code>PARAM_KPIQ</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>Kp of the current loops; writing it sets the Iq and the Id loop, as <code>#Kpiq</code> does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.</td>
 </tr>
 <tr>
 <td>12</td>
-<td><code>PARAM_KIIQ</code></td>
-<td>set, read</td>
+<td>Ki of the current loops; writing it sets the Iq and the Id loop, as <code>#Kiiq</code> does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.<br><span class="meta"><code>PARAM_KIIQ</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>Ki of the current loops; writing it sets the Iq and the Id loop, as <code>#Kiiq</code> does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.</td>
 </tr>
 <tr>
 <td>13</td>
-<td><code>PARAM_KP</code></td>
-<td>set, read</td>
+<td>KP, the stiffness of the impedance (<abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr>) loop (Send_PD_Gains).<br><span class="meta"><code>PARAM_KP</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>KP, the stiffness of the impedance (<abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr>) loop (Send_PD_Gains).</td>
 </tr>
 <tr>
 <td>14</td>
-<td><code>PARAM_KD</code></td>
-<td>set, read</td>
+<td>KD, the damping of the impedance (<abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr>) loop (Send_PD_Gains).<br><span class="meta"><code>PARAM_KD</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float; 0 or more, below 10^9 (negative or not a number: refused)</td>
-<td>yes</td>
-<td>KD, the damping of the impedance (<abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr>) loop (Send_PD_Gains).</td>
 </tr>
 <tr>
 <td>15</td>
-<td><code>PARAM_VELOCITY_LIMIT</code></td>
-<td>set, read</td>
+<td>The velocity limit (Send_Limits, <code>#Vlimit</code>).<br><span class="meta"><code>PARAM_VELOCITY_LIMIT</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float, ticks/s; 0 or more, below 10^9 (otherwise refused)</td>
-<td>yes</td>
-<td>The velocity limit (Send_Limits, <code>#Vlimit</code>).</td>
 </tr>
 <tr>
 <td>16</td>
-<td><code>PARAM_CURRENT_LIMIT</code></td>
-<td>set, read</td>
+<td>The current limit (Send_Limits, <code>#Ilim</code>).<br><span class="meta"><code>PARAM_CURRENT_LIMIT</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float, mA; 0-2800 (negative or above 2800: refused)</td>
-<td>yes</td>
-<td>The current limit (Send_Limits, <code>#Ilim</code>).</td>
 </tr>
 <tr>
 <td>17</td>
-<td><code>PARAM_VOLTAGE_LIMIT</code></td>
-<td>set, read</td>
+<td>The voltage limit of the current loops (Send_Voltage_Limit, <code>#Vlim</code>).<br><span class="meta"><code>PARAM_VOLTAGE_LIMIT</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>mV, 0-60000 (outside: refused); 0 = the supply voltage</td>
-<td>yes</td>
-<td>The voltage limit of the current loops (Send_Voltage_Limit, <code>#Vlim</code>).</td>
 </tr>
 <tr>
 <td>18</td>
-<td><code>PARAM_BRAKE_COAST</code></td>
-<td>set, read</td>
+<td>The idle behaviour (Send_Settings bit 0, <code>#Brake</code>).<br><span class="meta"><code>PARAM_BRAKE_COAST</code> · Access: set, read · Kept by Save: no: the driver coasts at every power-up</span></td>
 <td>1 brake, 0 coast (any value but 0: brake)</td>
-<td>no: the driver coasts at every power-up</td>
-<td>The idle behaviour (Send_Settings bit 0, <code>#Brake</code>).</td>
 </tr>
 <tr>
 <td>19</td>
-<td><code>PARAM_HEARTBEAT_MS</code></td>
-<td>set, read</td>
+<td>The heartbeat interval (Send_Heartbeat_Setup).<br><span class="meta"><code>PARAM_HEARTBEAT_MS</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>ms, 0-60000 (outside: refused); 0 = off</td>
-<td>yes</td>
-<td>The heartbeat interval (Send_Heartbeat_Setup).</td>
 </tr>
 <tr>
 <td>20</td>
-<td><code>PARAM_KT</code></td>
-<td>set, read</td>
+<td>The torque constant (Send_Kt, <code>#Kt</code>, calibration).<br><span class="meta"><code>PARAM_KT</code> · Access: set, read · Kept by Save: yes</span></td>
 <td>float, Nm/A; 0 or more, below 10^9 (otherwise refused)</td>
-<td>yes</td>
-<td>The torque constant (Send_Kt, <code>#Kt</code>, calibration).</td>
 </tr>
 <tr>
 <td>23</td>
-<td><code>PARAM_BOARD_PRODUCT</code></td>
-<td>read only</td>
+<td>The product lock: the product that calibrated this board. Stamped at the first start-up of a calibrated board and at every save. A firmware that finds the other product's stamp drives nothing (see Errors).<br><span class="meta"><code>PARAM_BOARD_PRODUCT</code> · Access: read only · Kept by Save: yes, settings block 2 (stamped by the firmware)</span></td>
 <td>2 Spectral Micro, 1 STEPFOC, 0 none</td>
-<td>yes, settings block 2 (stamped by the firmware)</td>
-<td>The product lock: the product that calibrated this board. Stamped at the first start-up of a calibrated board and at every save. A firmware that finds the other product's stamp drives nothing (see Errors).</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="the-motor">The motor<a class="headerlink" href="#the-motor" title="Permanent link">&para;</a></h3>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>76</td>
-<td><code>PARAM_R_MOHM</code></td>
-<td>set, read</td>
+<td>The phase resistance, the same value as <code>#R</code> (in Ω there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written.<br><span class="meta"><code>PARAM_R_MOHM</code> · Access: set, read · Kept by Save: yes, with the calibration</span></td>
 <td>mΩ, 1-100000 (outside: refused)</td>
-<td>yes, with the calibration</td>
-<td>The phase resistance, the same value as <code>#R</code> (in Ω there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written.</td>
 </tr>
 <tr>
 <td>77</td>
-<td><code>PARAM_L_UH</code></td>
-<td>set, read</td>
+<td>The phase inductance, the same value as <code>#L</code> (in H there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written.<br><span class="meta"><code>PARAM_L_UH</code> · Access: set, read · Kept by Save: yes, with the calibration</span></td>
 <td>µH, 1-1000000 (outside: refused)</td>
-<td>yes, with the calibration</td>
-<td>The phase inductance, the same value as <code>#L</code> (in H there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written.</td>
 </tr>
 <tr>
 <td>78</td>
-<td><code>PARAM_POLE_PAIRS</code></td>
-<td>set, read</td>
+<td>The motor's pole pairs, the same value as <code>#PP</code>. Calibration finds them.<br><span class="meta"><code>PARAM_POLE_PAIRS</code> · Access: set, read · Kept by Save: yes, with the calibration</span></td>
 <td>1-49, only while the driver is idle (otherwise refused); 50 and more would read as a STEPFOC calibration</td>
-<td>yes, with the calibration</td>
-<td>The motor's pole pairs, the same value as <code>#PP</code>. Calibration finds them.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="current-sensing-and-the-current-loop">Current sensing and the current loop<a class="headerlink" href="#current-sensing-and-the-current-loop" title="Permanent link">&para;</a></h3>
 <p>The current-sense zero is the ADC reading with no current flowing, in counts from 2048 (1 count is about 1.6 mA). The driver measures it at every start-up with the bridge off; the trim is added to it.</p>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>21</td>
-<td><code>PARAM_SENSE1_OFFSET</code></td>
-<td>set, read</td>
+<td>The current-sense zero of channel 1 in use. Measured at start-up (the trim, 59, added); writable for tests, until the next start-up.<br><span class="meta"><code>PARAM_SENSE1_OFFSET</code> · Access: set, read · Kept by Save: no: measured again at every start-up</span></td>
 <td>counts from 2048, -400 to 400 (outside: refused)</td>
-<td>no: measured again at every start-up</td>
-<td>The current-sense zero of channel 1 in use. Measured at start-up (the trim, 59, added); writable for tests, until the next start-up.</td>
 </tr>
 <tr>
 <td>22</td>
-<td><code>PARAM_SENSE2_OFFSET</code></td>
-<td>set, read</td>
+<td>The current-sense zero of channel 2 in use, as 21.<br><span class="meta"><code>PARAM_SENSE2_OFFSET</code> · Access: set, read · Kept by Save: no: measured again at every start-up</span></td>
 <td>counts from 2048, -400 to 400 (outside: refused)</td>
-<td>no: measured again at every start-up</td>
-<td>The current-sense zero of channel 2 in use, as 21.</td>
 </tr>
 <tr>
 <td>40</td>
-<td><code>PARAM_SENSE1_OFFSET_OFF</code></td>
-<td>read only</td>
+<td>The zero of channel 1 measured with the bridge off, the trim added.<br><span class="meta"><code>PARAM_SENSE1_OFFSET_OFF</code> · Access: read only · Kept by Save: no: measured at every start-up</span></td>
 <td>counts from 2048</td>
-<td>no: measured at every start-up</td>
-<td>The zero of channel 1 measured with the bridge off, the trim added.</td>
 </tr>
 <tr>
 <td>41</td>
-<td><code>PARAM_SENSE2_OFFSET_OFF</code></td>
-<td>read only</td>
+<td>The zero of channel 2 measured with the bridge off, the trim added.<br><span class="meta"><code>PARAM_SENSE2_OFFSET_OFF</code> · Access: read only · Kept by Save: no: measured at every start-up</span></td>
 <td>counts from 2048</td>
-<td>no: measured at every start-up</td>
-<td>The zero of channel 2 measured with the bridge off, the trim added.</td>
 </tr>
 <tr>
 <td>42</td>
-<td><code>PARAM_SENSE_ZERO_SWITCHING</code></td>
-<td>read only</td>
+<td>The second zero measurement, made in idle after start-up with the bridge switching at 50 % duty. On the bench it made the current ripple worse, so it is measured and kept but not used unless 46 asks for it.<br><span class="meta"><code>PARAM_SENSE_ZERO_SWITCHING</code> · Access: read only · Kept by Save: no</span></td>
 <td>0 not run, 1 measuring, 2 in use, 3 rejected (implausible), 4 interrupted (a command or an error came first), 5 measured, not in use</td>
-<td>no</td>
-<td>The second zero measurement, made in idle after start-up with the bridge switching at 50 % duty. On the bench it made the current ripple worse, so it is measured and kept but not used unless 46 asks for it.</td>
 </tr>
 <tr>
 <td>46</td>
-<td><code>PARAM_SENSE_ZERO_USE_SWITCHING</code></td>
-<td>set, read</td>
+<td>Which zero is in use. 1 takes effect only while 42 reads 5 (measured, not in use).<br><span class="meta"><code>PARAM_SENSE_ZERO_USE_SWITCHING</code> · Access: set, read · Kept by Save: no</span></td>
 <td>1 the zero measured with the bridge switching, 0 the bridge-off zero. Default 0</td>
-<td>no</td>
-<td>Which zero is in use. 1 takes effect only while 42 reads 5 (measured, not in use).</td>
 </tr>
 <tr>
 <td>47</td>
-<td><code>PARAM_SENSE1_OFFSET_SW</code></td>
-<td>read only</td>
+<td>The zero of channel 1 measured with the bridge switching.<br><span class="meta"><code>PARAM_SENSE1_OFFSET_SW</code> · Access: read only · Kept by Save: no</span></td>
 <td>counts from 2048</td>
-<td>no</td>
-<td>The zero of channel 1 measured with the bridge switching.</td>
 </tr>
 <tr>
 <td>48</td>
-<td><code>PARAM_SENSE2_OFFSET_SW</code></td>
-<td>read only</td>
+<td>The zero of channel 2 measured with the bridge switching.<br><span class="meta"><code>PARAM_SENSE2_OFFSET_SW</code> · Access: read only · Kept by Save: no</span></td>
 <td>counts from 2048</td>
-<td>no</td>
-<td>The zero of channel 2 measured with the bridge switching.</td>
 </tr>
 <tr>
 <td>49</td>
-<td><code>PARAM_CURRENT_BANDWIDTH</code></td>
-<td>set, read</td>
+<td>Writing it sets Kp_iq and Ki_iq at once from R, L and this bandwidth, as <code>#Cbw</code> does. Reading gives the bandwidth the gains in force amount to with the R and L in force (0 without them).<br><span class="meta"><code>PARAM_CURRENT_BANDWIDTH</code> · Access: set, read · Kept by Save: no; the gains it sets are kept by Save</span></td>
 <td>Hz, 10-500 (outside, or with R or L not set: refused). 160 at every start-up</td>
-<td>no; the gains it sets are kept by Save</td>
-<td>Writing it sets Kp_iq and Ki_iq at once from R, L and this bandwidth, as <code>#Cbw</code> does. Reading gives the bandwidth the gains in force amount to with the R and L in force (0 without them).</td>
 </tr>
 <tr>
 <td>58</td>
-<td><code>PARAM_ID_SETPOINT</code></td>
-<td>set, read</td>
+<td>The d-axis current setpoint, as <code>#Id</code>. It makes no torque, only more current in the coils.<br><span class="meta"><code>PARAM_ID_SETPOINT</code> · Access: set, read · Kept by Save: no</span></td>
 <td>mA, -3000 to 3000 (outside: refused). Default 0</td>
-<td>no</td>
-<td>The d-axis current setpoint, as <code>#Id</code>. It makes no torque, only more current in the coils.</td>
 </tr>
 <tr>
 <td>59</td>
-<td><code>PARAM_ZERO_TRIM1</code></td>
-<td>set, read</td>
+<td>The trim added to the zero of channel 1 measured at every start-up; writing it moves the zero in use at once. The Spectral Micro firmware 109 skips the trim step of the anti-cogging identification, so only a write sets it.<br><span class="meta"><code>PARAM_ZERO_TRIM1</code> · Access: set, read · Kept by Save: yes, encoder block</span></td>
 <td>counts, -60 to 60 (outside: refused). Default 0</td>
-<td>yes, encoder block</td>
-<td>The trim added to the zero of channel 1 measured at every start-up; writing it moves the zero in use at once. The Spectral Micro firmware 109 skips the trim step of the anti-cogging identification, so only a write sets it.</td>
 </tr>
 <tr>
 <td>60</td>
-<td><code>PARAM_ZERO_TRIM2</code></td>
-<td>set, read</td>
+<td>The trim of channel 2, as 59.<br><span class="meta"><code>PARAM_ZERO_TRIM2</code> · Access: set, read · Kept by Save: yes, encoder block</span></td>
 <td>counts, -60 to 60 (outside: refused). Default 0</td>
-<td>yes, encoder block</td>
-<td>The trim of channel 2, as 59.</td>
 </tr>
 <tr>
 <td>61</td>
-<td><code>PARAM_THETA_OFFSET</code></td>
-<td>read only</td>
+<td>The electrical offset between the encoder and the motor, found by calibration (<code>#Offset</code> in rad).<br><span class="meta"><code>PARAM_THETA_OFFSET</code> · Access: read only · Kept by Save: yes, with the calibration</span></td>
 <td>0.1° electrical</td>
-<td>yes, with the calibration</td>
-<td>The electrical offset between the encoder and the motor, found by calibration (<code>#Offset</code> in rad).</td>
 </tr>
 <tr>
 <td>62</td>
-<td><code>PARAM_TRIM_H1_BEFORE</code></td>
-<td>read only</td>
+<td>The 1<sup>st</sup> harmonic of the anti-cogging set found by an identification with the trim (43 = 4 or 5).<br><span class="meta"><code>PARAM_TRIM_H1_BEFORE</code> · Access: read only · Kept by Save: no</span></td>
 <td>0.1 mA</td>
-<td>no</td>
-<td>The 1<sup>st</sup> harmonic of the anti-cogging set found by an identification with the trim (43 = 4 or 5).</td>
 </tr>
 <tr>
 <td>63</td>
-<td><code>PARAM_TRIM_H1_AFTER</code></td>
-<td>read only</td>
+<td>After a trim, the 1<sup>st</sup> harmonic again; the Spectral Micro skips the trim, so it equals 62.<br><span class="meta"><code>PARAM_TRIM_H1_AFTER</code> · Access: read only · Kept by Save: no</span></td>
 <td>0.1 mA</td>
-<td>no</td>
-<td>After a trim, the 1<sup>st</sup> harmonic again; the Spectral Micro skips the trim, so it equals 62.</td>
 </tr>
 <tr>
 <td>64</td>
-<td><code>PARAM_COMM_DELAY_US</code></td>
-<td>set, read</td>
+<td>Commutation delay compensation: the output voltage is turned forward by the angle the rotor covers in this time. Applied in the closed-loop modes above 100 ticks/s. 234 µs is the Spectral Micro's own delay, measured on the bench.<br><span class="meta"><code>PARAM_COMM_DELAY_US</code> · Access: set, read · Kept by Save: no: 234 at every start-up</span></td>
 <td>µs, 0-500 (outside: refused), 0 = off. Default 234</td>
-<td>no: 234 at every start-up</td>
-<td>Commutation delay compensation: the output voltage is turned forward by the angle the rotor covers in this time. Applied in the closed-loop modes above 100 ticks/s. 234 µs is the Spectral Micro's own delay, measured on the bench.</td>
 </tr>
 <tr>
 <td>65</td>
-<td><code>PARAM_FAST_TRIG</code></td>
-<td>set, read</td>
+<td>Where the transforms of every control loop take sin and cos from. On the STEPFOC bench the table was not faster.<br><span class="meta"><code>PARAM_FAST_TRIG</code> · Access: set, read · Kept by Save: no</span></td>
 <td>1 from the integer sine table, 0 from the float routine. Default 0</td>
-<td>no</td>
-<td>Where the transforms of every control loop take sin and cos from. On the STEPFOC bench the table was not faster.</td>
 </tr>
 <tr>
 <td>88</td>
-<td><code>PARAM_SENSE_SAMPLE_AT</code></td>
-<td>set, read</td>
+<td>An experimental diagnostic of when the current sensors are read, off by default. They are read by a software start, wherever the code happens to be in the 25 kHz centre-aligned <abbr title="Pulse-Width Modulation">PWM</abbr> cycle, so the moment of a reading depends on the code before it. With a count set, the driver waits until the <abbr title="Pulse-Width Modulation">PWM</abbr> counter is within 24 counts of it (at most about 60 µs), then reads. Leave it at -1 unless you are investigating the current sensing.<br><span class="meta"><code>PARAM_SENSE_SAMPLE_AT</code> · Access: set, read · Kept by Save: no: -1 at every start-up</span></td>
 <td>-1: read wherever the code is (the default); 0 to the <abbr title="Pulse-Width Modulation">PWM</abbr> period (the timer's reload value): wait for that count first (outside: refused)</td>
-<td>no: -1 at every start-up</td>
-<td>An experimental diagnostic of when the current sensors are read, off by default. They are read by a software start, wherever the code happens to be in the 25 kHz centre-aligned <abbr title="Pulse-Width Modulation">PWM</abbr> cycle, so the moment of a reading depends on the code before it. With a count set, the driver waits until the <abbr title="Pulse-Width Modulation">PWM</abbr> counter is within 24 counts of it (at most about 60 µs), then reads. Leave it at -1 unless you are investigating the current sensing.</td>
 </tr>
 <tr>
 <td>89</td>
-<td><code>PARAM_SENSE_SAMPLE_SEEN</code></td>
-<td>read only</td>
+<td>Where in the <abbr title="Pulse-Width Modulation">PWM</abbr> cycle the last current reading happened; it shows where parameter 88 puts the readings.<br><span class="meta"><code>PARAM_SENSE_SAMPLE_SEEN</code> · Access: read only · Kept by Save: —</span></td>
 <td>the <abbr title="Pulse-Width Modulation">PWM</abbr> counter at the last reading, +65536 while it counts down</td>
-<td>—</td>
-<td>Where in the <abbr title="Pulse-Width Modulation">PWM</abbr> cycle the last current reading happened; it shows where parameter 88 puts the readings.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="speed-estimate-and-the-velocity-loop">Speed estimate and the velocity loop<a class="headerlink" href="#speed-estimate-and-the-velocity-loop" title="Permanent link">&para;</a></h3>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>50</td>
-<td><code>PARAM_SPEED_ESTIMATOR</code></td>
-<td>set, read</td>
+<td>The speed the loops, the watchdog descend, telemetry and the capture use. Calibration and the gripper's stop detection always use the moving average.<br><span class="meta"><code>PARAM_SPEED_ESTIMATOR</code> · Access: set, read · Kept by Save: no: 2 at every start-up</span></td>
 <td>0 moving average, 1 PLL, 2 direct PLL (outside: refused). Default 2</td>
-<td>no: 2 at every start-up</td>
-<td>The speed the loops, the watchdog descend, telemetry and the capture use. Calibration and the gripper's stop detection always use the moving average.</td>
 </tr>
 <tr>
 <td>51</td>
-<td><code>PARAM_SPEED_PLL_BANDWIDTH</code></td>
-<td>set, read</td>
+<td>The natural frequency of both PLLs.<br><span class="meta"><code>PARAM_SPEED_PLL_BANDWIDTH</code> · Access: set, read · Kept by Save: no: 100 at every start-up</span></td>
 <td>Hz, 10-250 (outside: refused). Default 100</td>
-<td>no: 100 at every start-up</td>
-<td>The natural frequency of both PLLs.</td>
 </tr>
 <tr>
 <td>74</td>
-<td><code>PARAM_INPUT_FILTER_HZ</code></td>
-<td>set, read</td>
+<td>The position input filter, position and <abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr> modes: a critically damped filter between the host's position setpoints and the loops, which also makes the speed from them. Only for hosts that send positions without the speed; about the host's setpoint rate ÷ 12.<br><span class="meta"><code>PARAM_INPUT_FILTER_HZ</code> · Access: set, read · Kept by Save: no</span></td>
 <td>Hz, 0-200 (outside: refused), 0 = off. Default 0</td>
-<td>no</td>
-<td>The position input filter, position and <abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr> modes: a critically damped filter between the host's position setpoints and the loops, which also makes the speed from them. Only for hosts that send positions without the speed; about the host's setpoint rate ÷ 12.</td>
 </tr>
 <tr>
 <td>75</td>
-<td><code>PARAM_VEL_INT_DEADBAND</code></td>
-<td>set, read</td>
+<td>Position mode: the velocity integral sees the position error less this band, so a holding motor stops pushing against a small error. It trades holding current for accuracy.<br><span class="meta"><code>PARAM_VEL_INT_DEADBAND</code> · Access: set, read · Kept by Save: no</span></td>
 <td>ticks, 0-2000 (outside: refused), 0 = off. Default 0</td>
-<td>no</td>
-<td>Position mode: the velocity integral sees the position error less this band, so a holding motor stops pushing against a small error. It trades holding current for accuracy.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="anti-cogging">Anti-cogging<a class="headerlink" href="#anti-cogging" title="Permanent link">&para;</a></h3>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>37</td>
-<td><code>PARAM_COGGING_MODE</code></td>
-<td>set, read</td>
+<td>Which form of the stored anti-cogging is added to the current setpoint in velocity and position modes. 1 or 2 is refused while the stored set holds nothing for that form: read it back.<br><span class="meta"><code>PARAM_COGGING_MODE</code> · Access: set, read · Kept by Save: yes, anti-cogging block</span></td>
 <td>0 off, 1 harmonics, 2 table. Default 0</td>
-<td>yes, anti-cogging block</td>
-<td>Which form of the stored anti-cogging is added to the current setpoint in velocity and position modes. 1 or 2 is refused while the stored set holds nothing for that form: read it back.</td>
 </tr>
 <tr>
 <td>38</td>
-<td><code>PARAM_COGGING_SCALE</code></td>
-<td>set, read</td>
+<td>How much of the stored anti-cogging is applied.<br><span class="meta"><code>PARAM_COGGING_SCALE</code> · Access: set, read · Kept by Save: yes, anti-cogging block</span></td>
 <td>percent, 0-200 (clamped). Default 100</td>
-<td>yes, anti-cogging block</td>
-<td>How much of the stored anti-cogging is applied.</td>
 </tr>
 <tr>
 <td>43</td>
-<td><code>PARAM_COGCAL</code></td>
-<td>set starts or stops a run; read gives its state</td>
+<td>The anti-cogging identification on the drive: one motor turn forward and one back in velocity mode at the speed of 44. The shaft must be free to turn. A command from a host or an error aborts it. On the Spectral Micro 4 and 5 identify like 1 and 2 (the trim step is skipped); not yet tested on its bench.<br><span class="meta"><code>PARAM_COGCAL</code> · Access: set starts or stops a run; read gives its state · Kept by Save: the result, when started with 2, 3 or 5</span></td>
 <td>Write 0 abort, 1 identify, 2 identify and save, 3 encoder table, then anti-cogging, then save all, 4 identify with the current-sense zero trim, 5 the same and save. Read 0 idle, 1 turning forward, 2 turning backward, 3 done (harmonics on), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the shaft did not turn), 7 a combined run is measuring the encoder table, 8 the combined run's encoder table failed (52 says why), 9 not used, 10 switched off (the encoder table was measured again on its own), 11 done without the trim</td>
-<td>the result, when started with 2, 3 or 5</td>
-<td>The anti-cogging identification on the drive: one motor turn forward and one back in velocity mode at the speed of 44. The shaft must be free to turn. A command from a host or an error aborts it. On the Spectral Micro 4 and 5 identify like 1 and 2 (the trim step is skipped); not yet tested on its bench.</td>
 </tr>
 <tr>
 <td>44</td>
-<td><code>PARAM_COGCAL_SPEED</code></td>
-<td>set, read</td>
+<td>The speed the identification turns at.<br><span class="meta"><code>PARAM_COGCAL_SPEED</code> · Access: set, read · Kept by Save: no</span></td>
 <td>ticks/s, 100-20000 (clamped). Default 1500</td>
-<td>no</td>
-<td>The speed the identification turns at.</td>
 </tr>
 <tr>
 <td>45</td>
-<td><code>PARAM_COGCAL_RIPPLE</code></td>
-<td>read only</td>
+<td>The cogging current the last identification found, rms.<br><span class="meta"><code>PARAM_COGCAL_RIPPLE</code> · Access: read only · Kept by Save: no</span></td>
 <td>0.1 mA rms</td>
-<td>no</td>
-<td>The cogging current the last identification found, rms.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="encoder-table">Encoder table<a class="headerlink" href="#encoder-table" title="Permanent link">&para;</a></h3>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>52</td>
-<td><code>PARAM_ENCAL</code></td>
-<td>set starts or stops a run; read gives its state</td>
+<td>Measures the encoder table: the field turns the rotor open loop one shaft turn forward and one back at 2048 ticks/s (about 20 s). The shaft must be free.<br><span class="meta"><code>PARAM_ENCAL</code> · Access: set starts or stops a run; read gives its state · Kept by Save: the table, when started with 2 or 3</span></td>
 <td>Write 0 abort, 1 measure and use, 2 measure, use and save, 3 then the anti-cogging and save all. Read 0 idle, 1 turning forward, 2 turning backward, 3 done (in use), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the rotor did not follow the field), 7 rejected (over 4° peak to peak, or an offset move over 60° electrical)</td>
-<td>the table, when started with 2 or 3</td>
-<td>Measures the encoder table: the field turns the rotor open loop one shaft turn forward and one back at 2048 ticks/s (about 20 s). The shaft must be free.</td>
 </tr>
 <tr>
 <td>53</td>
-<td><code>PARAM_ENCAL_USE</code></td>
-<td>set, read</td>
+<td>Corrects the encoder reading with the table.<br><span class="meta"><code>PARAM_ENCAL_USE</code> · Access: set, read · Kept by Save: yes, encoder block</span></td>
 <td>1 on, 0 off; 1 only when a table was measured; refused while one is being measured</td>
-<td>yes, encoder block</td>
-<td>Corrects the encoder reading with the table.</td>
 </tr>
 <tr>
 <td>54</td>
-<td><code>PARAM_ENCAL_PP</code></td>
-<td>read only</td>
+<td>The table's error, peak to peak (0 without a table).<br><span class="meta"><code>PARAM_ENCAL_PP</code> · Access: read only · Kept by Save: with the table</span></td>
 <td>0.01° of the shaft</td>
-<td>with the table</td>
-<td>The table's error, peak to peak (0 without a table).</td>
 </tr>
 <tr>
 <td>55</td>
-<td><code>PARAM_ENCAL_ONCE</code></td>
-<td>read only</td>
+<td>The once-per-turn part of the error, its amplitude (mostly a magnet off the axis).<br><span class="meta"><code>PARAM_ENCAL_ONCE</code> · Access: read only · Kept by Save: with the table</span></td>
 <td>0.01° of the shaft</td>
-<td>with the table</td>
-<td>The once-per-turn part of the error, its amplitude (mostly a magnet off the axis).</td>
 </tr>
 <tr>
 <td>56</td>
-<td><code>PARAM_AFTER_CAL</code></td>
-<td>set, read</td>
+<td>No effect on the Spectral Micro: <code>#Cal</code> always runs the encoder table and the anti-cogging, and <code>#Calonly</code> never does. It stays so that the parameter numbers match STEPFOC.<br><span class="meta"><code>PARAM_AFTER_CAL</code> · Access: set, read · Kept by Save: yes, encoder block</span></td>
 <td>0, 1 or 2 (outside: refused). Default 0</td>
-<td>yes, encoder block</td>
-<td>No effect on the Spectral Micro: <code>#Cal</code> always runs the encoder table and the anti-cogging, and <code>#Calonly</code> never does. It stays so that the parameter numbers match STEPFOC.</td>
 </tr>
 <tr>
 <td>57</td>
-<td><code>PARAM_ENCAL_OFFSET</code></td>
-<td>read only</td>
+<td>How far the last encoder-table run moved the electrical offset.<br><span class="meta"><code>PARAM_ENCAL_OFFSET</code> · Access: read only · Kept by Save: no</span></td>
 <td>0.1° electrical</td>
-<td>no</td>
-<td>How far the last encoder-table run moved the electrical offset.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="capture-and-histogram">Capture and histogram<a class="headerlink" href="#capture-and-histogram" title="Permanent link">&para;</a></h3>
 <p>The signal numbers: 0 none, 1 measured Iq (mA), 2 measured Id (mA), 3 Iq setpoint with the anti-cogging (mA), 4 speed (ticks/s, saturates at ±32767), 5 speed ÷ 16, 6 position (ticks, the low 16 bits), 7 position error (ticks), 8 electrical angle (0-16383 per electrical turn, from the encoder alone), 9 encoder (0-16383 per motor turn), 10 Vbus (10 mV), 11 and 12 the two current-sense readings (counts after the zero), 13 the control interrupt's time (µs), 14 the anti-cogging feedforward (mA), 15 the Iq setpoint without the anti-cogging (mA), 16 the Uq setpoint (mV), 17 and 18 the d and q voltage the output transform received (mV). None of these settings is saved.</p>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>24</td>
-<td><code>PARAM_CAPTURE_SOURCE_A</code></td>
-<td>set, read</td>
+<td>The signal of channel A, which is also the trigger channel.<br><span class="meta"><code>PARAM_CAPTURE_SOURCE_A</code> · Access: set, read · Kept by Save: no</span></td>
 <td>signal 0-18 (outside: 0). Default 4, speed</td>
-<td>no</td>
-<td>The signal of channel A, which is also the trigger channel.</td>
 </tr>
 <tr>
 <td>25</td>
-<td><code>PARAM_CAPTURE_SOURCE_B</code></td>
-<td>set, read</td>
+<td>The signal of channel B.<br><span class="meta"><code>PARAM_CAPTURE_SOURCE_B</code> · Access: set, read · Kept by Save: no</span></td>
 <td>signal 0-18 (outside: 0). Default 1, Iq</td>
-<td>no</td>
-<td>The signal of channel B.</td>
 </tr>
 <tr>
 <td>26</td>
-<td><code>PARAM_CAPTURE_SOURCE_C</code></td>
-<td>set, read</td>
+<td>The signal of channel C.<br><span class="meta"><code>PARAM_CAPTURE_SOURCE_C</code> · Access: set, read · Kept by Save: no</span></td>
 <td>signal 0-18 (outside: 0). Default 8, electrical angle</td>
-<td>no</td>
-<td>The signal of channel C.</td>
 </tr>
 <tr>
 <td>27</td>
-<td><code>PARAM_CAPTURE_DIVIDER</code></td>
-<td>set, read</td>
+<td>One sample every N control loops of 200 µs.<br><span class="meta"><code>PARAM_CAPTURE_DIVIDER</code> · Access: set, read · Kept by Save: no</span></td>
 <td>control loops per sample, 1-65535 (clamped). Default 1</td>
-<td>no</td>
-<td>One sample every N control loops of 200 µs.</td>
 </tr>
 <tr>
 <td>28</td>
-<td><code>PARAM_CAPTURE_TRIGGER</code></td>
-<td>set, read</td>
+<td>1 to 4 clear the buffer and arm a capture; 0 stops one and keeps what was recorded. The error trigger fires when the error flag rises, a watchdog trip included; an error already present does not fire it.<br><span class="meta"><code>PARAM_CAPTURE_TRIGGER</code> · Access: set, read · Kept by Save: no</span></td>
 <td>0 stop, 1 now, 2 on an error, 3 channel A rising through the level, 4 falling through it (outside: 0)</td>
-<td>no</td>
-<td>1 to 4 clear the buffer and arm a capture; 0 stops one and keeps what was recorded. The error trigger fires when the error flag rises, a watchdog trip included; an error already present does not fire it.</td>
 </tr>
 <tr>
 <td>29</td>
-<td><code>PARAM_CAPTURE_LEVEL</code></td>
-<td>set, read</td>
+<td>The level of triggers 3 and 4.<br><span class="meta"><code>PARAM_CAPTURE_LEVEL</code> · Access: set, read · Kept by Save: no</span></td>
 <td>channel A's unit, -32768 to 32767 (saturated). Default 0</td>
-<td>no</td>
-<td>The level of triggers 3 and 4.</td>
 </tr>
 <tr>
 <td>30</td>
-<td><code>PARAM_CAPTURE_PRETRIGGER</code></td>
-<td>set, read</td>
+<td>How many samples from before the trigger the capture keeps.<br><span class="meta"><code>PARAM_CAPTURE_PRETRIGGER</code> · Access: set, read · Kept by Save: no</span></td>
 <td>samples, 0-1023 (clamped). Default 0</td>
-<td>no</td>
-<td>How many samples from before the trigger the capture keeps.</td>
 </tr>
 <tr>
 <td>31</td>
-<td><code>PARAM_CAPTURE_STATE</code></td>
-<td>read only</td>
+<td>Where the capture stands.<br><span class="meta"><code>PARAM_CAPTURE_STATE</code> · Access: read only · Kept by Save: no</span></td>
 <td>0 idle, 1 armed, 2 recording, 3 done</td>
-<td>no</td>
-<td>Where the capture stands.</td>
 </tr>
 <tr>
 <td>32</td>
-<td><code>PARAM_CAPTURE_COUNT</code></td>
-<td>read only</td>
+<td>The samples readable with buffer kind 0.<br><span class="meta"><code>PARAM_CAPTURE_COUNT</code> · Access: read only · Kept by Save: no</span></td>
 <td>samples, 0-1024</td>
-<td>no</td>
-<td>The samples readable with buffer kind 0.</td>
 </tr>
 <tr>
 <td>33</td>
-<td><code>PARAM_CAPTURE_TRIGGER_INDEX</code></td>
-<td>read only</td>
+<td>Which sample of the read-out is the trigger sample.<br><span class="meta"><code>PARAM_CAPTURE_TRIGGER_INDEX</code> · Access: read only · Kept by Save: no</span></td>
 <td>sample index; -1 before a trigger</td>
-<td>no</td>
-<td>Which sample of the read-out is the trigger sample.</td>
 </tr>
 <tr>
 <td>34</td>
-<td><code>PARAM_HIST_X</code></td>
-<td>set, read</td>
+<td>1 or 2 clear the histogram and start it; 0 stops it and keeps the data readable.<br><span class="meta"><code>PARAM_HIST_X</code> · Access: set, read · Kept by Save: no</span></td>
 <td>0 off, 1 electrical angle, 2 encoder (256 bins each; outside: 0)</td>
-<td>no</td>
-<td>1 or 2 clear the histogram and start it; 0 stops it and keeps the data readable.</td>
 </tr>
 <tr>
 <td>35</td>
-<td><code>PARAM_HIST_Y</code></td>
-<td>set, read</td>
+<td>The signal summed per bin. Set it before 34.<br><span class="meta"><code>PARAM_HIST_Y</code> · Access: set, read · Kept by Save: no</span></td>
 <td>signal 0-18 (outside: 0). Default 3, Iq setpoint</td>
-<td>no</td>
-<td>The signal summed per bin. Set it before 34.</td>
 </tr>
 <tr>
 <td>36</td>
-<td><code>PARAM_HIST_SAMPLES</code></td>
-<td>read only</td>
+<td>Samples summed since the start. The histogram stops by itself when one bin holds 65535.<br><span class="meta"><code>PARAM_HIST_SAMPLES</code> · Access: read only · Kept by Save: no</span></td>
 <td>samples</td>
-<td>no</td>
-<td>Samples summed since the start. The histogram stops by itself when one bin holds 65535.</td>
 </tr>
 <tr>
 <td>39</td>
-<td><code>PARAM_CAPTURE_LENGTH</code></td>
-<td>read only</td>
+<td>The samples per channel a capture holds.<br><span class="meta"><code>PARAM_CAPTURE_LENGTH</code> · Access: read only · Kept by Save: —</span></td>
 <td>1024</td>
-<td>—</td>
-<td>The samples per channel a capture holds.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="sound">Sound<a class="headerlink" href="#sound" title="Permanent link">&para;</a></h3>
 <p>None of the sound settings is saved; see <a href="../../../06-operation/sound/">Sound</a>.</p>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>80</td>
-<td><code>PARAM_SOUND_STATE</code></td>
-<td>read only</td>
+<td>What the sound is doing; a host that refills the queue or the sample buffer reads it.<br><span class="meta"><code>PARAM_SOUND_STATE</code> · Access: read only · Kept by Save: —</span></td>
 <td>bits 0-7 events queued, 8-18 samples buffered, 24 a tone sounds, 25 the queue plays, 26 samples play, 27 the samples ran dry</td>
-<td>—</td>
-<td>What the sound is doing; a host that refills the queue or the sample buffer reads it.</td>
 </tr>
 <tr>
 <td>81</td>
-<td><code>PARAM_SOUND_LIMIT_MV</code></td>
-<td>set, read</td>
+<td>The sound's voltage at most, all tones and samples together.<br><span class="meta"><code>PARAM_SOUND_LIMIT_MV</code> · Access: set, read · Kept by Save: no: 2000 at every start-up</span></td>
 <td>mV, 0-6000 (outside: refused). Default 2000; 0 refuses sound and stops what plays</td>
-<td>no: 2000 at every start-up</td>
-<td>The sound's voltage at most, all tones and samples together.</td>
 </tr>
 <tr>
 <td>82</td>
-<td><code>PARAM_SOUND_AXIS</code></td>
-<td>set, read</td>
+<td>Which axis carries the sound. The q axis makes torque, a small ripple at the tone's pitch, and was much louder on the bench; the d axis makes no torque and is quieter.<br><span class="meta"><code>PARAM_SOUND_AXIS</code> · Access: set, read · Kept by Save: no: 1 at every start-up</span></td>
 <td>1 the q axis (default), 0 the d axis (outside: refused)</td>
-<td>no: 1 at every start-up</td>
-<td>Which axis carries the sound. The q axis makes torque, a small ripple at the tone's pitch, and was much louder on the bench; the d axis makes no torque and is quieter.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h3>
+<div class="ref-table params">
 <table>
 <thead>
 <tr>
 <th>No.</th>
-<th>Name</th>
-<th>Access</th>
-<th>Value</th>
-<th>Kept by Save</th>
 <th>What it is</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>79</td>
-<td><code>PARAM_FEATURES</code></td>
-<td>read only</td>
+<td>What is in force and what is running, one bit each.<br><span class="meta"><code>PARAM_FEATURES</code> · Access: read only · Kept by Save: —</span></td>
 <td>bits, see What is in force</td>
-<td>—</td>
-<td>What is in force and what is running, one bit each.</td>
 </tr>
 <tr>
 <td>83</td>
-<td><code>PARAM_STACK_UNUSED</code></td>
-<td>read only</td>
+<td>The stack margin: RAM between the heap and the stack that the stack has not used since start-up (setup() fills it with a pattern at its end, and this counts the bytes the pattern is still in). The stack needs about 1.5 to 2 KB of the about 7 KB there are; a value far below that means the drive is short of RAM.<br><span class="meta"><code>PARAM_STACK_UNUSED</code> · Access: read only · Kept by Save: —</span></td>
 <td>bytes; -1 if it was not measured</td>
-<td>—</td>
-<td>The stack margin: RAM between the heap and the stack that the stack has not used since start-up (setup() fills it with a pattern at its end, and this counts the bytes the pattern is still in). The stack needs about 1.5 to 2 KB of the about 7 KB there are; a value far below that means the drive is short of RAM.</td>
 </tr>
 <tr>
 <td>84</td>
-<td><code>PARAM_BUILD_COMMIT</code></td>
-<td>read only</td>
+<td>The git commit the firmware was built from. <code>#Info</code> prints it as <code>Build:</code>, with a <code>+</code> for bit 28.<br><span class="meta"><code>PARAM_BUILD_COMMIT</code> · Access: read only · Kept by Save: —</span></td>
 <td>the commit's first 7 hex digits as a number (bits 0-27); bit 28 set: built with uncommitted changes; 0 when git was not available at the build</td>
-<td>—</td>
-<td>The git commit the firmware was built from. <code>#Info</code> prints it as <code>Build:</code>, with a <code>+</code> for bit 28.</td>
 </tr>
 <tr>
 <td>85</td>
-<td><code>PARAM_BUILD_TIME</code></td>
-<td>read only</td>
+<td>When the firmware was built.<br><span class="meta"><code>PARAM_BUILD_TIME</code> · Access: read only · Kept by Save: —</span></td>
 <td>Unix seconds, UTC; 0 when the build did not set it</td>
-<td>—</td>
-<td>When the firmware was built.</td>
 </tr>
 <tr>
 <td>86</td>
-<td><code>PARAM_BOARD_ID</code></td>
-<td>read only</td>
+<td>This board: the chip's factory-unique 96-bit number folded into 32 bits. It never changes, also not with a new firmware or <code>#Default</code>. <code>#Info</code> prints it as <code>Board ID:</code>, 8 hex digits. It is not the bootloader's board ID (0 to 13).<br><span class="meta"><code>PARAM_BOARD_ID</code> · Access: read only · Kept by Save: —</span></td>
 <td>32 bits, read as unsigned</td>
-<td>—</td>
-<td>This board: the chip's factory-unique 96-bit number folded into 32 bits. It never changes, also not with a new firmware or <code>#Default</code>. <code>#Info</code> prints it as <code>Board ID:</code>, 8 hex digits. It is not the bootloader's board ID (0 to 13).</td>
 </tr>
 <tr>
 <td>87</td>
-<td><code>PARAM_CALIBRATION_ID</code></td>
-<td>read only</td>
+<td>A new number at every successful calibration, so a host can tell one calibration from the next. Send_Save_config keeps it, and <code>#Default</code> sets it back to 0. <code>#Info</code> prints it as <code>Calibration ID:</code>, 8 hex digits.<br><span class="meta"><code>PARAM_CALIBRATION_ID</code> · Access: read only · Kept by Save: yes, settings block 2</span></td>
 <td>32 bits, read as unsigned; 0 before the first calibration</td>
-<td>yes, settings block 2</td>
-<td>A new number at every successful calibration, so a host can tell one calibration from the next. Send_Save_config keeps it, and <code>#Default</code> sets it back to 0. <code>#Info</code> prints it as <code>Calibration ID:</code>, 8 hex digits.</td>
 </tr>
 </tbody>
 </table>
+</div>
 <h2 id="what-is-in-force-parameter-79">What is in force: parameter 79<a class="headerlink" href="#what-is-in-force-parameter-79" title="Permanent link">&para;</a></h2>
 <p>Parameter 79 says in one read what the drive runs with. <code>#Info</code> prints the same at its end, under <code>In force:</code>.
 Bit 0 is the least significant.</p>
@@ -3249,6 +2986,26 @@ samples from before the trigger. <a href="../../../06-operation/diagnostics/">St
 </ol>
 <p>The histogram works the same way with parameters 34 to 36 and kind 1: it adds a signal into 256 bins by the
 electrical angle or by the encoder, every control loop, until it is stopped or one bin holds 65535 samples.</p>
+
+  
+  
+  
+    <nav class="page-nav" aria-label="Footer">
+      
+        <a href="../system/" class="md-button page-nav__prev" rel="prev" aria-label="Previous: System">
+          <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg></span>
+          <span>Previous: System</span>
+        </a>
+      
+      
+        <a href="../sound/" class="md-button md-button--primary page-nav__next" rel="next" aria-label="Next: Sound">
+          <span>Next: Sound</span>
+          <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span>
+        </a>
+      
+    </nav>
+  
+
 
 
 
@@ -3483,7 +3240,18 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
       
       
     
-    <a href="https://www.instagram.com/5arcrnjak/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
+    <a href="https://www.youtube.com/@source-robotics" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.instagram.com/source_robotics/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M224.3 141a115 115 0 1 0-.6 230 115 115 0 1 0 .6-230m-.6 40.4a74.6 74.6 0 1 1 .6 149.2 74.6 74.6 0 1 1-.6-149.2m93.4-45.1a26.8 26.8 0 1 1 53.6 0 26.8 26.8 0 1 1-53.6 0m129.7 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8M399 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1"/></svg>
     </a>
   
@@ -3505,7 +3273,7 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
       
       
     
-    <a href="https://www.linkedin.com/in/petar-crnjak-009b43180/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+    <a href="https://www.linkedin.com/company/source-robotics" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
     </a>
   
@@ -3518,6 +3286,17 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
     
     <a href="https://discord.gg/prjUvjmGpZ" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.tiktok.com/@source.robotics" target="_blank" rel="noopener" title="www.tiktok.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M448.5 209.9c-44 .1-87-13.6-122.8-39.2v178.7c0 33.1-10.1 65.4-29 92.6s-45.6 48-76.6 59.6-64.8 13.5-96.9 5.3-60.9-25.9-82.7-50.8-35.3-56-39-88.9 2.9-66.1 18.6-95.2 40-52.7 69.6-67.7 62.9-20.5 95.7-16v89.9c-15-4.7-31.1-4.6-46 .4s-27.9 14.6-37 27.3-14 28.1-13.9 43.9 5.2 31 14.5 43.7 22.4 22.1 37.4 26.9 31.1 4.8 46-.1 28-14.4 37.2-27.1 14.2-28.1 14.2-43.8V0h88c-.1 7.4.6 14.9 1.9 22.2 3.1 16.3 9.4 31.9 18.7 45.7s21.3 25.6 35.2 34.6c19.9 13.1 43.2 20.1 67 20.1V210z"/></svg>
     </a>
   
 </div>

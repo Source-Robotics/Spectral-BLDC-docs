@@ -48,8 +48,10 @@ and the object detection:
 
 An empty Send_gripper_data_pack (0 bytes) only asks for the state. The answer to a 5-byte command goes out
 before the driver acts on it, so its object detection and error bits are still those of the moment before
-(KI-6); the answers to the next frames show the new move. The action bit in the answer is a copy of the last
-command's action bit and stays 1 after the move ends (KI-8): the object detection tells when it has ended.
+(KI-6); the answers to the next frames show the new move.
+
+The action bit in the answer is a copy of the last command's action bit and stays 1 after the move ends (KI-8): the
+object detection tells when it has ended.
 
 Send_gripper_data_pack's E-stop bit raises the gripper E-stop error; `#Gripstop 1` does the same over UART. The
 error stays: while the E-stop bit is 1 the driver raises it again on every control cycle (KI-5). To recover,

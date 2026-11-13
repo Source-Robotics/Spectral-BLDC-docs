@@ -604,9 +604,43 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../quick-start/" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quick-start/" class="md-nav__link">
+      
   
   
   <span class="md-ellipsis">
@@ -620,7 +654,13 @@
   
   
 
-      </a>
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
     </li>
   
 
@@ -2084,16 +2124,18 @@
 Nothing here is needed to use the driver; the chapters say what to type.</p>
 <h2 id="field-oriented-control-of-a-brushless-motor">Field-oriented control of a brushless motor<a class="headerlink" href="#field-oriented-control-of-a-brushless-motor" title="Permanent link">&para;</a></h2>
 <p>A brushless motor has three stator windings and a rotor of permanent magnets with <span class="arithmatex">\(p\)</span> pole pairs: one mechanical
-revolution is <span class="arithmatex">\(p\)</span> electrical cycles, 11 for a typical 5208 gimbal motor. The torque the rotor receives depends on
-the angle between the stator field and the rotor field, the <em>load angle</em>; it is largest when the stator field
-stands a quarter of an electrical cycle ahead of the rotor and zero when the two are aligned. A hobby ESC does not
-measure the rotor angle: it steps the field around in six fixed states and infers the rotor's position from the
-back-EMF of the winding it is not driving, which works at speed and fails at standstill. That is why an ESC cannot
-hold a position or produce a controlled torque at low speed.</p>
+revolution is <span class="arithmatex">\(p\)</span> electrical cycles, 11 for a typical 5208 gimbal motor.</p>
+<p>The torque the rotor receives depends on the angle between the stator field and the rotor field, the <em>load angle</em>; it
+is largest when the stator field stands a quarter of an electrical cycle ahead of the rotor and zero when the two are
+aligned.</p>
+<p>A hobby ESC does not measure the rotor angle: it steps the field around in six fixed states and infers the rotor's
+position from the back-EMF of the winding it is not driving, which works at speed and fails at standstill. That is why
+an ESC cannot hold a position or produce a controlled torque at low speed.</p>
 <p>Field-oriented control (<abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr>) measures the rotor angle instead. The encoder on the motor shaft gives the mechanical
 angle <span class="arithmatex">\(\theta\)</span>; with the pole pairs <span class="arithmatex">\(p\)</span> and the angle offset <span class="arithmatex">\(\theta_0\)</span> found by calibration, the electrical angle
-is <span class="arithmatex">\(\theta_e = p\,\theta + \theta_0\)</span>. The three phase currents, which sum to zero, are reduced to two (the Clarke
-transform) and then expressed in the rotor's frame of reference (the Park transform):</p>
+is <span class="arithmatex">\(\theta_e = p\,\theta + \theta_0\)</span>.</p>
+<p>The three phase currents, which sum to zero, are reduced to two (the Clarke transform) and then expressed in the
+rotor's frame of reference (the Park transform):</p>
 <div class="arithmatex">\[
 I_\alpha = I_U,\qquad I_\beta = \frac{I_U + 2\,I_V}{\sqrt{3}}
 \]</div>
@@ -2103,23 +2145,26 @@ I_q = -I_\alpha \sin\theta_e + I_\beta \cos\theta_e
 \]</div>
 <p><span class="arithmatex">\(I_q\)</span>, the <em>quadrature</em> current, is the part of the current that stands at right angles to the rotor field and
 produces torque: <span class="arithmatex">\(\tau = K_t\, I_q\)</span>. <span class="arithmatex">\(I_d\)</span>, the <em>direct</em> current, is aligned with the field and produces none. Two
-<abbr title="Proportional-Integral controller">PI</abbr> controllers regulate <span class="arithmatex">\(I_q\)</span> to the torque demand and <span class="arithmatex">\(I_d\)</span> to zero by choosing the voltages <span class="arithmatex">\(U_q\)</span> and <span class="arithmatex">\(U_d\)</span>;
-the inverse transforms turn those into three phase voltages, applied by <abbr title="Pulse-Width Modulation">PWM</abbr> at 25 kHz with space-vector
-modulation, which gets about 15 % more phase voltage out of the supply than a plain sine would. The loop runs at
-5 kHz.</p>
-<p>The consequences are what makes a <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> drive behave like a servo: the current is only what the torque needs, so
-the motor runs cool and quiet; the field is always placed where it produces the most torque per ampere; the motor
-produces its full torque at standstill and holds a position; and the torque is known from the current, which is
-what makes impedance control and force-limited motion possible.</p>
+<abbr title="Proportional-Integral controller">PI</abbr> controllers regulate <span class="arithmatex">\(I_q\)</span> to the torque demand and <span class="arithmatex">\(I_d\)</span> to zero by choosing the voltages <span class="arithmatex">\(U_q\)</span> and <span class="arithmatex">\(U_d\)</span>.</p>
+<p>The inverse transforms turn those into three phase voltages, applied by <abbr title="Pulse-Width Modulation">PWM</abbr> at 25 kHz with space-vector modulation,
+which gets about 15 % more phase voltage out of the supply than a plain sine would. The loop runs at 5 kHz.</p>
+<p>The consequences are what makes a <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> drive behave like a servo:</p>
+<ul>
+<li>the current is only what the torque needs, so the motor runs cool and quiet;</li>
+<li>the field is always placed where it produces the most torque per ampere;</li>
+<li>the motor produces its full torque at standstill and holds a position;</li>
+<li>the torque is known from the current, which is what makes impedance control and force-limited motion possible.</li>
+</ul>
 <p>Calibration supplies the constants this needs. The resistance <span class="arithmatex">\(R\)</span> and inductance <span class="arithmatex">\(L\)</span> of a winding are measured.
 The current loop gains follow from them and the chosen bandwidth <span class="arithmatex">\(\omega_c = 2\pi f_c\)</span> (<code>#Cbw</code>):
 <span class="arithmatex">\(K_p = L\,\omega_c\)</span> and <span class="arithmatex">\(K_i = R\,\omega_c\)</span> cancel the winding's electrical time constant and give a first-order
-response at <span class="arithmatex">\(f_c\)</span>. The driver stores them in the form its 5 kHz loop uses: <code>Kpiq</code> is close to <span class="arithmatex">\(L\,\omega_c\)</span>, and
-<code>Kiiq</code> is <span class="arithmatex">\(R\,\omega_c T\)</span>, with <span class="arithmatex">\(T\)</span> the 200 µs control period. The pole pairs come from an open-loop spin: the field is turned a known number of electrical
-cycles and the encoder says how far the rotor went. The angle offset is found by driving a current along the <span class="arithmatex">\(d\)</span>
-axis and reading where the rotor settles. The velocity constant <span class="arithmatex">\(K_V\)</span> comes from the back-EMF the spinning motor
-generates, and the torque constant follows from it: in SI units <span class="arithmatex">\(K_t = 1/K_V\)</span>. The firmware computes
-<span class="arithmatex">\(K_t = 8.27/K_V\)</span> Nm/A, with <span class="arithmatex">\(K_V\)</span> in rpm/V.</p>
+response at <span class="arithmatex">\(f_c\)</span>.</p>
+<p>The driver stores them in the form its 5 kHz loop uses: <code>Kpiq</code> is close to <span class="arithmatex">\(L\,\omega_c\)</span>, and <code>Kiiq</code> is
+<span class="arithmatex">\(R\,\omega_c T\)</span>, with <span class="arithmatex">\(T\)</span> the 200 µs control period. The pole pairs come from an open-loop spin: the field is turned a
+known number of electrical cycles and the encoder says how far the rotor went.</p>
+<p>The angle offset is found by driving a current along the <span class="arithmatex">\(d\)</span> axis and reading where the rotor settles. The velocity
+constant <span class="arithmatex">\(K_V\)</span> comes from the back-EMF the spinning motor generates, and the torque constant follows from it: in SI
+units <span class="arithmatex">\(K_t = 1/K_V\)</span>. The firmware computes <span class="arithmatex">\(K_t = 8.27/K_V\)</span> Nm/A, with <span class="arithmatex">\(K_V\)</span> in rpm/V.</p>
 <h2 id="the-cascade-of-loops">The cascade of loops<a class="headerlink" href="#the-cascade-of-loops" title="Permanent link">&para;</a></h2>
 <p>Position, velocity and current are controlled by three loops nested inside one another:</p>
 <div class="arithmatex">\[
@@ -2131,16 +2176,17 @@ generates, and the torque constant follows from it: in SI units <span class="ari
 \]</div>
 <p>The position loop is proportional: its output is a speed demand, limited by the velocity limit. The velocity loop
 is a <abbr title="Proportional-Integral controller">PI</abbr> controller: its output is a current demand, limited by the current limit; the integral term removes the
-steady-state error a load would otherwise leave. The current loop is the innermost and fastest. Each loop must be
-slower than the one inside it, by a factor of five to ten, for the inner loop to look like an ideal actuator to the
-outer one; that is why the loops are tuned from the inside out, and why a current loop bandwidth of 160 Hz (the
-default from firmware 109) leaves room for a velocity loop of a few tens of hertz and a position loop below that.</p>
+steady-state error a load would otherwise leave. The current loop is the innermost and fastest.</p>
+<p>Each loop must be slower than the one inside it, by a factor of five to ten, for the inner loop to look like an
+ideal actuator to the outer one.</p>
+<p>That is why the loops are tuned from the inside out, and why a current loop bandwidth of 160 Hz (the default from
+firmware 109) leaves room for a velocity loop of a few tens of hertz and a position loop below that.</p>
 <p>A command picks where the cascade is entered: a current setpoint uses the current loop alone, a speed setpoint
-the two inner loops, a position setpoint all three. The <em>feedforward</em> terms the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> motion frames carry are added
-to the demands rather than computed from an error: a speed feedforward is added to the position loop's output, a
-current feedforward to the velocity loop's output. A host that knows the trajectory can command it directly and
-leave the loops to correct what is left, which gives a faster, smoother response than letting the loops produce
-the whole demand from the error.</p>
+the two inner loops, a position setpoint all three.</p>
+<p>The <em>feedforward</em> terms the <abbr title="Controller Area Network, the bus between the host and the drivers">CAN</abbr> motion frames carry are added to the demands rather than computed from an error: a
+speed feedforward is added to the position loop's output, a current feedforward to the velocity loop's output.</p>
+<p>A host that knows the trajectory can command it directly and leave the loops to correct what is left, which gives a
+faster, smoother response than letting the loops produce the whole demand from the error.</p>
 <p>An integrator accumulates error over time, and keeps accumulating while the output is at its limit; the overshoot
 this causes when the limit is released is <em>windup</em>. The velocity loop's integrator is clamped to the current
 limit, and <code>#Rstint</code> resets the integrators on every new setpoint, which suits a host that sends one setpoint
@@ -2156,15 +2202,17 @@ spring and a damper around the setpoint:</p>
 load such as gravity. The torque is produced by the current loop (<span class="arithmatex">\(I_q = \tau / K_t\)</span>), which is what makes <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> a
 prerequisite: a drive without the rotor angle cannot produce a commanded torque at low speed.</p>
 <p>The driver computes the same loop in its own units. Its <code>KP</code> is in mA per encoder tick and its <code>KD</code> in mA per
-tick/s (0.14 and 0.0028 by default), and the result is a current in mA. The stiffness in Nm/rad is
-<code>KP</code> × <span class="arithmatex">\(K_t\)</span> × 2.608, and the damping in Nm·s/rad is <code>KD</code> × <span class="arithmatex">\(K_t\)</span> × 2.608 (16384 ticks per turn, 1000 mA per A).</p>
+tick/s (0.14 and 0.0028 by default), and the result is a current in mA.</p>
+<p>The stiffness in Nm/rad is <code>KP</code> × <span class="arithmatex">\(K_t\)</span> × 2.608, and the damping in Nm·s/rad is <code>KD</code> × <span class="arithmatex">\(K_t\)</span> × 2.608 (16384 ticks per
+turn, 1000 mA per A).</p>
 <p>Pushed off its setpoint by an external force <span class="arithmatex">\(F\)</span>, the motor yields by <span class="arithmatex">\(\Delta\theta = \tau_{ext}/K_P\)</span> and pushes
 back with that force; let go, it returns, with the damper settling the motion. A small <span class="arithmatex">\(K_P\)</span> makes a soft joint,
-a large one a stiff joint; <span class="arithmatex">\(K_D\)</span> without <span class="arithmatex">\(K_P\)</span> is a pure damper. The setpoint can move, in which case the virtual
-spring drags the rotor along a trajectory with a bounded force — the property legged robots, hand-guided arms and
-anything that touches people or an uncertain environment need. The impedance loop is also what a position loop
-is <em>not</em>: the position loop's integral action removes any steady-state deflection and so makes the joint as stiff
-as the current limit allows, which is the right thing for a machine tool and the wrong thing for a leg.</p>
+a large one a stiff joint; <span class="arithmatex">\(K_D\)</span> without <span class="arithmatex">\(K_P\)</span> is a pure damper.</p>
+<p>The setpoint can move, in which case the virtual spring drags the rotor along a trajectory with a bounded force — the
+property legged robots, hand-guided arms and anything that touches people or an uncertain environment need.</p>
+<p>The impedance loop is also what a position loop is <em>not</em>: the position loop's integral action removes any steady-state
+deflection and so makes the joint as stiff as the current limit allows, which is the right thing for a machine tool
+and the wrong thing for a leg.</p>
 <p>The full impedance model includes an inertia term, <span class="arithmatex">\(M\ddot\theta\)</span>; the driver, like most joint controllers, leaves
 it out, so the apparent inertia is the motor's own.</p>
 <h2 id="admittance-control">Admittance control<a class="headerlink" href="#admittance-control" title="Permanent link">&para;</a></h2>
@@ -2174,15 +2222,16 @@ it out, so the apparent inertia is the motor's own.</p>
 \]</div>
 <p>on top of a stiff position controller. It is the natural form for a machine that has a force sensor and a position
 loop that cannot be made soft, such as an industrial arm; impedance control is the natural form for a machine whose
-actuator is a torque source, such as a <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> motor. The driver has no force sensor and implements impedance; a host
-that wants admittance behaviour can estimate the external torque from <span class="arithmatex">\(K_t I_q\)</span> minus the known load and command
-positions accordingly, with the limits of that estimate (friction, cogging, the current loop's accuracy).</p>
+actuator is a torque source, such as a <abbr title="Field-Oriented Control: the motor's current is controlled as a vector relative to the rotor position">FOC</abbr> motor.</p>
+<p>The driver has no force sensor and implements impedance; a host that wants admittance behaviour can estimate the
+external torque from <span class="arithmatex">\(K_t I_q\)</span> minus the known load and command positions accordingly, with the limits of that
+estimate (friction, cogging, the current loop's accuracy).</p>
 <h2 id="compliance-and-stiffness">Compliance and stiffness<a class="headerlink" href="#compliance-and-stiffness" title="Permanent link">&para;</a></h2>
 <p>Stiffness <span class="arithmatex">\(K\)</span> is the force per unit of displacement; compliance is its inverse, <span class="arithmatex">\(C = 1/K\)</span>, the displacement per
 unit of force. <em>Passive</em> compliance is in the mechanism — a spring, a flexible finger, a belt; <em>active</em> compliance
-is in the controller — the impedance loop above. The driver offers three points on that scale: the position mode,
-stiff up to the current limit; the <abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr> mode, as stiff as <span class="arithmatex">\(K_P\)</span>; and the current mode, which is no stiffness at all,
-a torque source the host shapes as it likes.</p>
+is in the controller — the impedance loop above.</p>
+<p>The driver offers three points on that scale: the position mode, stiff up to the current limit; the <abbr title="Proportional-Derivative controller, the impedance control mode">PD</abbr> mode, as stiff
+as <span class="arithmatex">\(K_P\)</span>; and the current mode, which is no stiffness at all, a torque source the host shapes as it likes.</p>
 <p>The current limit <code>#Ilim</code> is a force limit in every mode: the largest torque the motor will produce before it
 yields, whatever the loops ask. Set it for the motor's rating, and for the mechanism's.</p>
 <h2 id="which-mode">Which mode<a class="headerlink" href="#which-mode" title="Permanent link">&para;</a></h2>
@@ -2218,6 +2267,26 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
 </tbody>
 </table>
 
+  
+  
+  
+    <nav class="page-nav" aria-label="Footer">
+      
+        <a href="../hardware-revisions/" class="md-button page-nav__prev" rel="prev" aria-label="Previous: Hardware revisions">
+          <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg></span>
+          <span>Previous: Hardware revisions</span>
+        </a>
+      
+      
+        <a href="../../terminology/" class="md-button md-button--primary page-nav__next" rel="next" aria-label="Next: Glossary">
+          <span>Next: Glossary</span>
+          <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span>
+        </a>
+      
+    </nav>
+  
+
+
 
 
 
@@ -2237,7 +2306,7 @@ yields, whatever the loops ask. Set it for the motor's rating, and for the mecha
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 10, 2026 14:33:03 UTC">November 10, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 11, 2026 20:04:54 UTC">November 11, 2026</span>
   </span>
 
     
@@ -2451,7 +2520,18 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
       
       
     
-    <a href="https://www.instagram.com/5arcrnjak/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
+    <a href="https://www.youtube.com/@source-robotics" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.instagram.com/source_robotics/" target="_blank" rel="noopener" title="www.instagram.com" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M224.3 141a115 115 0 1 0-.6 230 115 115 0 1 0 .6-230m-.6 40.4a74.6 74.6 0 1 1 .6 149.2 74.6 74.6 0 1 1-.6-149.2m93.4-45.1a26.8 26.8 0 1 1 53.6 0 26.8 26.8 0 1 1-53.6 0m129.7 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8M399 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1"/></svg>
     </a>
   
@@ -2473,7 +2553,7 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
       
       
     
-    <a href="https://www.linkedin.com/in/petar-crnjak-009b43180/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+    <a href="https://www.linkedin.com/company/source-robotics" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
     </a>
   
@@ -2486,6 +2566,17 @@ Code examples <a href="https://github.com/Source-Robotics/Spectral-BLDC-docs/blo
     
     <a href="https://discord.gg/prjUvjmGpZ" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.tiktok.com/@source.robotics" target="_blank" rel="noopener" title="www.tiktok.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M448.5 209.9c-44 .1-87-13.6-122.8-39.2v178.7c0 33.1-10.1 65.4-29 92.6s-45.6 48-76.6 59.6-64.8 13.5-96.9 5.3-60.9-25.9-82.7-50.8-35.3-56-39-88.9 2.9-66.1 18.6-95.2 40-52.7 69.6-67.7 62.9-20.5 95.7-16v89.9c-15-4.7-31.1-4.6-46 .4s-27.9 14.6-37 27.3-14 28.1-13.9 43.9 5.2 31 14.5 43.7 22.4 22.1 37.4 26.9 31.1 4.8 46-.1 28-14.4 37.2-27.1 14.2-28.1 14.2-43.8V0h88c-.1 7.4.6 14.9 1.9 22.2 3.1 16.3 9.4 31.9 18.7 45.7s21.3 25.6 35.2 34.6c19.9 13.1 43.2 20.1 67 20.1V210z"/></svg>
     </a>
   
 </div>

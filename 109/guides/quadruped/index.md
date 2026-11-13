@@ -49,7 +49,9 @@ value l1 is 0.112 meters and value l2 is 0.1 meters. The frame 2 is the end / fo
 
 ## Testing / Calibrating the leg
 
-Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg. We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
+Before running the main code lets check if the comms are working and get initial position values of our robot leg. This code will try to get data from the 2 motors of our robot leg.
+
+We are most interested in position data of those 2 motors. Position the leg like shown in this image. Run the leg_calib code and write down position values of each motor. 
 
 ![The leg in its reference pose and the positions leg_calib.py prints](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/leg_terminal.webp)
 
@@ -104,7 +106,9 @@ while True:
 Joint level control involves directly controlling the angles or positions of the robot's individual joints. Each joint is treated as an independent actuator, and the control system sends commands to each joint to achieve the desired angles. 
 
 For this example we will not use joint level control but a different method called Task/Cartesian Level Control.<br />
- Task or cartesian level control focuses on controlling the position and orientation of the robot's end-effector in a Cartesian coordinate system (X, Y, Z coordinates and orientations). In our robot leg case we don't have Z axes (or orientation) and our end-effector is foot (end of our robot leg).
+ Task or cartesian level control focuses on controlling the position and orientation of the robot's end-effector in a Cartesian coordinate system (X, Y, Z coordinates and orientations).
+
+In our robot leg case we don't have Z axes (or orientation) and our end-effector is foot (end of our robot leg).
 
 In this example we will follow a circle trajectory i X,Y plane.
 We defined that trajectory with our function generate_circle_coords and with parameters: 

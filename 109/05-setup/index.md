@@ -15,4 +15,4 @@ every step also gives the terminal command, for a terminal or for the console in
 6. [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/saving/): nothing survives a power cycle until it is saved; where it is kept.
 
 A driver that has been through these pages is ready for [Operation](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/). The
-[Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/) is the same path on one page.
+[Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/) is the same path in four short parts.

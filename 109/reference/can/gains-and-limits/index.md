@@ -10,10 +10,14 @@ Sets KP and KD, the gains of the impedance (PD) loop. Keep them with Send_Save_c
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | KP | float 32 |  |
-| 4-7 |  | KD | float 32 |  |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | KP | float 32 |  |
+| 4-7 | KD | float 32 |  |
+
+</div>
 
 The driver does not answer this command.
 
@@ -27,10 +31,14 @@ Sets Kp and Ki of the PI current loop of Iq. The Id loop keeps its gains; over U
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Kp_iq | float 32 |  |
-| 4-7 |  | Ki_iq | float 32 |  |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Kp_iq | float 32 |  |
+| 4-7 | Ki_iq | float 32 |  |
+
+</div>
 
 The driver does not answer this command.
 
@@ -44,10 +52,14 @@ Sets Kp and Ki of the PI velocity loop.
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Kpv | float 32 |  |
-| 4-7 |  | Kiv | float 32 |  |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Kpv | float 32 |  |
+| 4-7 | Kiv | float 32 |  |
+
+</div>
 
 The driver does not answer this command.
 
@@ -61,9 +73,13 @@ Sets Kp of the P position loop.
 
 **4 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Kpp | float 32 |  |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Kpp | float 32 |  |
+
+</div>
 
 The driver does not answer this command.
 
@@ -77,10 +93,14 @@ Sets the speed limit and the current limit the loops may reach. From firmware 10
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Speed limit | float 32 | encoder ticks/s |
-| 4-7 |  | Current limit | float 32 | mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Speed limit | float 32 | encoder ticks/s |
+| 4-7 | Current limit | float 32 | mA |
+
+</div>
 
 The driver does not answer this command.
 
@@ -94,9 +114,13 @@ Sets the motor's torque constant Kt, which the driver uses to estimate torque fr
 
 **4 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Kt | float 32 | Nm/A |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Kt | float 32 | Nm/A |
+
+</div>
 
 The driver does not answer this command.
 
@@ -110,9 +134,13 @@ Sets the voltage limit of the current loops (the same value as `#Vlim`), in mV. 
 
 **4 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Voltage limit | signed 32-bit | mV; 0 = Vbus |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Voltage limit | signed 32-bit | mV; 0 = Vbus |
+
+</div>
 
 The driver does not answer this command.
 

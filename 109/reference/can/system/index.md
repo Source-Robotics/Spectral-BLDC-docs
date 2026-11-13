@@ -10,9 +10,13 @@ Gives the driver a new node ID, 0 to 13 (the firmware accepts up to 15, but the 
 
 **1 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | ID | unsigned 8-bit | 0 to 13 (14 and 15 are accepted but reserved by the bootloader) |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | ID | unsigned 8-bit | 0 to 13 (14 and 15 are accepted but reserved by the bootloader) |
+
+</div>
 
 The driver does not answer this command.
 
@@ -76,10 +80,14 @@ Sets the watchdog. The motion commands (Send_data_pack_1, Send_data_pack_PD, Sen
 
 **5 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Time | unsigned 32-bit | ms; 0 = off |
-| 4 |  | Action | unsigned 8-bit | 0 legacy (the motor disabled, coasting), 1 hold the position, 2 brake (not current-limited), 3 coast, 4 descend at the fallback current and speed; other values act as 0 |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Time | unsigned 32-bit | ms; 0 = off |
+| 4 | Action | unsigned 8-bit | 0 legacy (the motor disabled, coasting), 1 hold the position, 2 brake (not current-limited), 3 coast, 4 descend at the fallback current and speed; other values act as 0 |
+
+</div>
 
 The driver does not answer this command.
 
@@ -95,9 +103,13 @@ Sets the heartbeat interval in ms; 0 turns the heartbeat off (the default). Kept
 
 **4 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-3 |  | Interval | unsigned 32-bit | ms; 0 = off |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-3 | Interval | unsigned 32-bit | ms; 0 = off |
+
+</div>
 
 ---
 
@@ -109,10 +121,14 @@ Sets boolean settings that have no command of their own: a mask byte says which 
 
 **2 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | Mask | unsigned 8-bit | bit 0 = write the idle behaviour |
-| 1 |  | Value | unsigned 8-bit | bit 0: 1 brake, 0 coast |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | Mask | unsigned 8-bit | bit 0 = write the idle behaviour |
+| 1 | Value | unsigned 8-bit | bit 0: 1 brake, 0 coast |
+
+</div>
 
 The driver does not answer this command.
 

@@ -51,10 +51,14 @@ Sets one parameter by its number (the [parameter table](#every-parameter)). Firm
 
 **5 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | Parameter | unsigned 8-bit | the parameter number, 1-87 |
-| 1-4 |  | Value | signed 32-bit | the new value, in the parameter's unit; for the gains, limits and Kt (8-16, 20) a float's bit pattern |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | Parameter | unsigned 8-bit | the parameter number, 1-87 |
+| 1-4 | Value | signed 32-bit | the new value, in the parameter's unit; for the gains, limits and Kt (8-16, 20) a float's bit pattern |
+
+</div>
 
 The driver does not answer this command.
 
@@ -70,9 +74,13 @@ Asks for the value in force of one parameter. The answer, Respond_Parameter, com
 
 **1 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | Parameter | unsigned 8-bit | the parameter number |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | Parameter | unsigned 8-bit | the parameter number |
+
+</div>
 
 The driver answers with **Respond_Parameter**.
 
@@ -86,10 +94,14 @@ The answer to Send_Get_Parameter: the number and the value in force. For a numbe
 
 **The frame** (5 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | parameter | unsigned 8-bit | the parameter number |
-| 1-4 |  | value | signed 32-bit | the value in force; a float's bits for 8-16 and 20 |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | parameter | unsigned 8-bit | the parameter number |
+| 1-4 | value | signed 32-bit | the value in force; a float's bits for 8-16 and 20 |
+
+</div>
 
 ---
 
@@ -101,11 +113,15 @@ Asks for entries of one of the drive's buffers: the capture, the histogram, the 
 
 **5 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | Kind | unsigned 8-bit | 0 capture (up to 1024 samples: parameter 32 says how many), 1 histogram (256 bins), 2 anti-cogging harmonics (8 slots), 3 anti-cogging table (256 values), 4 encoder table (128 values) |
-| 1-2 |  | First | unsigned 16-bit | the first index |
-| 3-4 |  | Count | unsigned 16-bit | how many entries; 0 cancels a read-out |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | Kind | unsigned 8-bit | 0 capture (up to 1024 samples: parameter 32 says how many), 1 histogram (256 bins), 2 anti-cogging harmonics (8 slots), 3 anti-cogging table (256 values), 4 encoder table (128 values) |
+| 1-2 | First | unsigned 16-bit | the first index |
+| 3-4 | Count | unsigned 16-bit | how many entries; 0 cancels a read-out |
+
+</div>
 
 The driver does not answer this command.
 
@@ -119,12 +135,16 @@ One entry of a buffer, the answer to Send_Buffer_Read. The first two bytes say w
 
 **The frame** (8 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | header | unsigned 16-bit | kind × 8192 + index |
-| 2-3 |  | word_a | signed 16-bit | capture: channel A; histogram: the count (unsigned); harmonics: the harmonic number (0 = slot unused); tables: entry index |
-| 4-5 |  | word_b | signed 16-bit | capture: channel B; histogram: the sum's upper 16 bits; harmonics: a, the cosine term in mA; tables: entry index + 1 |
-| 6-7 |  | word_c | signed 16-bit | capture: channel C; histogram: the sum's lower 16 bits; harmonics: b, the sine term in mA; tables: entry index + 2 (0 past the end) |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | header | unsigned 16-bit | kind × 8192 + index |
+| 2-3 | word_a | signed 16-bit | capture: channel A; histogram: the count (unsigned); harmonics: the harmonic number (0 = slot unused); tables: entry index |
+| 4-5 | word_b | signed 16-bit | capture: channel B; histogram: the sum's upper 16 bits; harmonics: a, the cosine term in mA; tables: entry index + 1 |
+| 6-7 | word_c | signed 16-bit | capture: channel C; histogram: the sum's lower 16 bits; harmonics: b, the sine term in mA; tables: entry index + 2 (0 past the end) |
+
+</div>
 
 | Kind | Index | Bytes 2-7 |
 |---|---|---|
@@ -144,12 +164,16 @@ Writes the anti-cogging set: kind 2 one harmonic slot per frame, kind 3 three ta
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | Header | unsigned 16-bit | kind × 8192 + index; kind 2 or 3 |
-| 2-3 |  | Word A | signed 16-bit | kind 2: the harmonic (1-32, 0 = unused); kind 3: value at index |
-| 4-5 |  | Word B | signed 16-bit | kind 2: a in mA; kind 3: value at index + 1 |
-| 6-7 |  | Word C | signed 16-bit | kind 2: b in mA; kind 3: value at index + 2 |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | Header | unsigned 16-bit | kind × 8192 + index; kind 2 or 3 |
+| 2-3 | Word A | signed 16-bit | kind 2: the harmonic (1-32, 0 = unused); kind 3: value at index |
+| 4-5 | Word B | signed 16-bit | kind 2: a in mA; kind 3: value at index + 1 |
+| 6-7 | Word C | signed 16-bit | kind 2: b in mA; kind 3: value at index + 2 |
+
+</div>
 
 The driver does not answer this command.
 
@@ -164,142 +188,182 @@ parameter ignores a write; a run parameter starts or stops a run when written an
 
 Parameters 1 to 5 live in settings block 2 of the EEPROM, 6 and 7 in the first settings block beside the other settings; Send_Save_config keeps all seven. A value outside a range is clamped, replaced or ignored, as the Value column says.
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 1 | `PARAM_TOOL_ID` | set, read | 0 none, 1 SSG-48, 11-33 MSG, 200-254 your own tools; a value outside 0-255 is ignored. Default 0 | yes, settings block 2 | What the drive is built into. For an MSG the tens digit is the rail (1 = 100, 2 = 150, 3 = 200 mm) and the units digit the stepper (1 = 21.5, 2 = 40, 3 = 60 mm). Also `#Tool`; reported in the identity frame. |
-| 2 | `PARAM_WD_FALLBACK_TIME` | set, read | ms, 0-60000 (clamped). Default 2000 | yes, settings block 2 | How long watchdog hold or descend runs before the after-action takes over. |
-| 3 | `PARAM_WD_FALLBACK_CURRENT` | set, read | mA, signed, -32768 to 32767 (outside: 0). Default 0 | yes, settings block 2 | The current watchdog descend applies. 0 lets gravity lower a joint; a gripper gets its grip current. |
-| 4 | `PARAM_WD_FALLBACK_SPEED` | set, read | ticks/s, 0-65535 (outside: 1000). Default 1000 | yes, settings block 2 | The speed watchdog descend never exceeds, in either direction. |
-| 5 | `PARAM_WD_AFTER_ACTION` | set, read | 0 legacy, 2 brake, 3 coast (any other value: 0). Default 0 | yes, settings block 2 | What follows hold or descend when the fallback time has run out. |
-| 6 | `PARAM_WD_TIME` | set, read | ms, 0 = off (a negative value: 0). Default 0 | yes, settings block 1 | The watchdog time, the same value Send_Watchdog sets. |
-| 7 | `PARAM_WD_ACTION` | set, read | 0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (outside 0-255: 0; 5-255 act as legacy). Default 0 | yes, settings block 1 | What a trip of the watchdog alone does, the same value as byte 4 of Send_Watchdog. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 1 | What the drive is built into. For an MSG the tens digit is the rail (1 = 100, 2 = 150, 3 = 200 mm) and the units digit the stepper (1 = 21.5, 2 = 40, 3 = 60 mm). Also `#Tool`; reported in the identity frame.<br><span class="meta">`PARAM_TOOL_ID` · Access: set, read · Kept by Save: yes, settings block 2</span> | 0 none, 1 SSG-48, 11-33 MSG, 200-254 your own tools; a value outside 0-255 is ignored. Default 0 |
+| 2 | How long watchdog hold or descend runs before the after-action takes over.<br><span class="meta">`PARAM_WD_FALLBACK_TIME` · Access: set, read · Kept by Save: yes, settings block 2</span> | ms, 0-60000 (clamped). Default 2000 |
+| 3 | The current watchdog descend applies. 0 lets gravity lower a joint; a gripper gets its grip current.<br><span class="meta">`PARAM_WD_FALLBACK_CURRENT` · Access: set, read · Kept by Save: yes, settings block 2</span> | mA, signed, -32768 to 32767 (outside: 0). Default 0 |
+| 4 | The speed watchdog descend never exceeds, in either direction.<br><span class="meta">`PARAM_WD_FALLBACK_SPEED` · Access: set, read · Kept by Save: yes, settings block 2</span> | ticks/s, 0-65535 (outside: 1000). Default 1000 |
+| 5 | What follows hold or descend when the fallback time has run out.<br><span class="meta">`PARAM_WD_AFTER_ACTION` · Access: set, read · Kept by Save: yes, settings block 2</span> | 0 legacy, 2 brake, 3 coast (any other value: 0). Default 0 |
+| 6 | The watchdog time, the same value Send_Watchdog sets.<br><span class="meta">`PARAM_WD_TIME` · Access: set, read · Kept by Save: yes, settings block 1</span> | ms, 0 = off (a negative value: 0). Default 0 |
+| 7 | What a trip of the watchdog alone does, the same value as byte 4 of Send_Watchdog.<br><span class="meta">`PARAM_WD_ACTION` · Access: set, read · Kept by Save: yes, settings block 1</span> | 0 legacy, 1 hold, 2 brake, 3 coast, 4 descend (outside 0-255: 0; 5-255 act as legacy). Default 0 |
+
+</div>
 
 ### Gains, limits and settings
 
 The values in force, readable and writable by parameter (their own commands, given in each row, still work). A float travels as its IEEE-754 bit pattern, big-endian, the way the gain commands send it; over UART `#Par 9,0.02` sets Kpv. A write goes to RAM like the commands' own; Send_Save_config keeps it. Parameter 23, the product stamp, stays read only.
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 8 | `PARAM_KPP` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | Kp of the position loop (Send_Position_Gains, `#Kpp`). |
-| 9 | `PARAM_KPV` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | Kp of the velocity loop (Send_Velocity_Gains, `#Kpv`). |
-| 10 | `PARAM_KIV` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | Ki of the velocity loop (Send_Velocity_Gains, `#Kiv`). |
-| 11 | `PARAM_KPIQ` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | Kp of the current loops; writing it sets the Iq and the Id loop, as `#Kpiq` does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too. |
-| 12 | `PARAM_KIIQ` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | Ki of the current loops; writing it sets the Iq and the Id loop, as `#Kiiq` does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too. |
-| 13 | `PARAM_KP` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | KP, the stiffness of the impedance (PD) loop (Send_PD_Gains). |
-| 14 | `PARAM_KD` | set, read | float; 0 or more, below 10^9 (negative or not a number: refused) | yes | KD, the damping of the impedance (PD) loop (Send_PD_Gains). |
-| 15 | `PARAM_VELOCITY_LIMIT` | set, read | float, ticks/s; 0 or more, below 10^9 (otherwise refused) | yes | The velocity limit (Send_Limits, `#Vlimit`). |
-| 16 | `PARAM_CURRENT_LIMIT` | set, read | float, mA; 0-2800 (negative or above 2800: refused) | yes | The current limit (Send_Limits, `#Ilim`). |
-| 17 | `PARAM_VOLTAGE_LIMIT` | set, read | mV, 0-60000 (outside: refused); 0 = the supply voltage | yes | The voltage limit of the current loops (Send_Voltage_Limit, `#Vlim`). |
-| 18 | `PARAM_BRAKE_COAST` | set, read | 1 brake, 0 coast (any value but 0: brake) | no: the driver coasts at every power-up | The idle behaviour (Send_Settings bit 0, `#Brake`). |
-| 19 | `PARAM_HEARTBEAT_MS` | set, read | ms, 0-60000 (outside: refused); 0 = off | yes | The heartbeat interval (Send_Heartbeat_Setup). |
-| 20 | `PARAM_KT` | set, read | float, Nm/A; 0 or more, below 10^9 (otherwise refused) | yes | The torque constant (Send_Kt, `#Kt`, calibration). |
-| 23 | `PARAM_BOARD_PRODUCT` | read only | 2 Spectral Micro, 1 STEPFOC, 0 none | yes, settings block 2 (stamped by the firmware) | The product lock: the product that calibrated this board. Stamped at the first start-up of a calibrated board and at every save. A firmware that finds the other product's stamp drives nothing (see Errors). |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 8 | Kp of the position loop (Send_Position_Gains, `#Kpp`).<br><span class="meta">`PARAM_KPP` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 9 | Kp of the velocity loop (Send_Velocity_Gains, `#Kpv`).<br><span class="meta">`PARAM_KPV` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 10 | Ki of the velocity loop (Send_Velocity_Gains, `#Kiv`).<br><span class="meta">`PARAM_KIV` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 11 | Kp of the current loops; writing it sets the Iq and the Id loop, as `#Kpiq` does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.<br><span class="meta">`PARAM_KPIQ` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 12 | Ki of the current loops; writing it sets the Iq and the Id loop, as `#Kiiq` does (Send_Current_Gains sets the Iq loop only). A calibration and parameter 49 set it too.<br><span class="meta">`PARAM_KIIQ` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 13 | KP, the stiffness of the impedance (PD) loop (Send_PD_Gains).<br><span class="meta">`PARAM_KP` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 14 | KD, the damping of the impedance (PD) loop (Send_PD_Gains).<br><span class="meta">`PARAM_KD` · Access: set, read · Kept by Save: yes</span> | float; 0 or more, below 10^9 (negative or not a number: refused) |
+| 15 | The velocity limit (Send_Limits, `#Vlimit`).<br><span class="meta">`PARAM_VELOCITY_LIMIT` · Access: set, read · Kept by Save: yes</span> | float, ticks/s; 0 or more, below 10^9 (otherwise refused) |
+| 16 | The current limit (Send_Limits, `#Ilim`).<br><span class="meta">`PARAM_CURRENT_LIMIT` · Access: set, read · Kept by Save: yes</span> | float, mA; 0-2800 (negative or above 2800: refused) |
+| 17 | The voltage limit of the current loops (Send_Voltage_Limit, `#Vlim`).<br><span class="meta">`PARAM_VOLTAGE_LIMIT` · Access: set, read · Kept by Save: yes</span> | mV, 0-60000 (outside: refused); 0 = the supply voltage |
+| 18 | The idle behaviour (Send_Settings bit 0, `#Brake`).<br><span class="meta">`PARAM_BRAKE_COAST` · Access: set, read · Kept by Save: no: the driver coasts at every power-up</span> | 1 brake, 0 coast (any value but 0: brake) |
+| 19 | The heartbeat interval (Send_Heartbeat_Setup).<br><span class="meta">`PARAM_HEARTBEAT_MS` · Access: set, read · Kept by Save: yes</span> | ms, 0-60000 (outside: refused); 0 = off |
+| 20 | The torque constant (Send_Kt, `#Kt`, calibration).<br><span class="meta">`PARAM_KT` · Access: set, read · Kept by Save: yes</span> | float, Nm/A; 0 or more, below 10^9 (otherwise refused) |
+| 23 | The product lock: the product that calibrated this board. Stamped at the first start-up of a calibrated board and at every save. A firmware that finds the other product's stamp drives nothing (see Errors).<br><span class="meta">`PARAM_BOARD_PRODUCT` · Access: read only · Kept by Save: yes, settings block 2 (stamped by the firmware)</span> | 2 Spectral Micro, 1 STEPFOC, 0 none |
+
+</div>
 
 ### The motor
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 76 | `PARAM_R_MOHM` | set, read | mΩ, 1-100000 (outside: refused) | yes, with the calibration | The phase resistance, the same value as `#R` (in Ω there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written. |
-| 77 | `PARAM_L_UH` | set, read | µH, 1-1000000 (outside: refused) | yes, with the calibration | The phase inductance, the same value as `#L` (in H there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written. |
-| 78 | `PARAM_POLE_PAIRS` | set, read | 1-49, only while the driver is idle (otherwise refused); 50 and more would read as a STEPFOC calibration | yes, with the calibration | The motor's pole pairs, the same value as `#PP`. Calibration finds them. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 76 | The phase resistance, the same value as `#R` (in Ω there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written.<br><span class="meta">`PARAM_R_MOHM` · Access: set, read · Kept by Save: yes, with the calibration</span> | mΩ, 1-100000 (outside: refused) |
+| 77 | The phase inductance, the same value as `#L` (in H there). Calibration measures it; set by hand, the current gains follow when parameter 49 is written.<br><span class="meta">`PARAM_L_UH` · Access: set, read · Kept by Save: yes, with the calibration</span> | µH, 1-1000000 (outside: refused) |
+| 78 | The motor's pole pairs, the same value as `#PP`. Calibration finds them.<br><span class="meta">`PARAM_POLE_PAIRS` · Access: set, read · Kept by Save: yes, with the calibration</span> | 1-49, only while the driver is idle (otherwise refused); 50 and more would read as a STEPFOC calibration |
+
+</div>
 
 ### Current sensing and the current loop
 
 The current-sense zero is the ADC reading with no current flowing, in counts from 2048 (1 count is about 1.6 mA). The driver measures it at every start-up with the bridge off; the trim is added to it.
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 21 | `PARAM_SENSE1_OFFSET` | set, read | counts from 2048, -400 to 400 (outside: refused) | no: measured again at every start-up | The current-sense zero of channel 1 in use. Measured at start-up (the trim, 59, added); writable for tests, until the next start-up. |
-| 22 | `PARAM_SENSE2_OFFSET` | set, read | counts from 2048, -400 to 400 (outside: refused) | no: measured again at every start-up | The current-sense zero of channel 2 in use, as 21. |
-| 40 | `PARAM_SENSE1_OFFSET_OFF` | read only | counts from 2048 | no: measured at every start-up | The zero of channel 1 measured with the bridge off, the trim added. |
-| 41 | `PARAM_SENSE2_OFFSET_OFF` | read only | counts from 2048 | no: measured at every start-up | The zero of channel 2 measured with the bridge off, the trim added. |
-| 42 | `PARAM_SENSE_ZERO_SWITCHING` | read only | 0 not run, 1 measuring, 2 in use, 3 rejected (implausible), 4 interrupted (a command or an error came first), 5 measured, not in use | no | The second zero measurement, made in idle after start-up with the bridge switching at 50 % duty. On the bench it made the current ripple worse, so it is measured and kept but not used unless 46 asks for it. |
-| 46 | `PARAM_SENSE_ZERO_USE_SWITCHING` | set, read | 1 the zero measured with the bridge switching, 0 the bridge-off zero. Default 0 | no | Which zero is in use. 1 takes effect only while 42 reads 5 (measured, not in use). |
-| 47 | `PARAM_SENSE1_OFFSET_SW` | read only | counts from 2048 | no | The zero of channel 1 measured with the bridge switching. |
-| 48 | `PARAM_SENSE2_OFFSET_SW` | read only | counts from 2048 | no | The zero of channel 2 measured with the bridge switching. |
-| 49 | `PARAM_CURRENT_BANDWIDTH` | set, read | Hz, 10-500 (outside, or with R or L not set: refused). 160 at every start-up | no; the gains it sets are kept by Save | Writing it sets Kp_iq and Ki_iq at once from R, L and this bandwidth, as `#Cbw` does. Reading gives the bandwidth the gains in force amount to with the R and L in force (0 without them). |
-| 58 | `PARAM_ID_SETPOINT` | set, read | mA, -3000 to 3000 (outside: refused). Default 0 | no | The d-axis current setpoint, as `#Id`. It makes no torque, only more current in the coils. |
-| 59 | `PARAM_ZERO_TRIM1` | set, read | counts, -60 to 60 (outside: refused). Default 0 | yes, encoder block | The trim added to the zero of channel 1 measured at every start-up; writing it moves the zero in use at once. The Spectral Micro firmware 109 skips the trim step of the anti-cogging identification, so only a write sets it. |
-| 60 | `PARAM_ZERO_TRIM2` | set, read | counts, -60 to 60 (outside: refused). Default 0 | yes, encoder block | The trim of channel 2, as 59. |
-| 61 | `PARAM_THETA_OFFSET` | read only | 0.1° electrical | yes, with the calibration | The electrical offset between the encoder and the motor, found by calibration (`#Offset` in rad). |
-| 62 | `PARAM_TRIM_H1_BEFORE` | read only | 0.1 mA | no | The 1st harmonic of the anti-cogging set found by an identification with the trim (43 = 4 or 5). |
-| 63 | `PARAM_TRIM_H1_AFTER` | read only | 0.1 mA | no | After a trim, the 1st harmonic again; the Spectral Micro skips the trim, so it equals 62. |
-| 64 | `PARAM_COMM_DELAY_US` | set, read | µs, 0-500 (outside: refused), 0 = off. Default 234 | no: 234 at every start-up | Commutation delay compensation: the output voltage is turned forward by the angle the rotor covers in this time. Applied in the closed-loop modes above 100 ticks/s. 234 µs is the Spectral Micro's own delay, measured on the bench. |
-| 65 | `PARAM_FAST_TRIG` | set, read | 1 from the integer sine table, 0 from the float routine. Default 0 | no | Where the transforms of every control loop take sin and cos from. On the STEPFOC bench the table was not faster. |
-| 88 | `PARAM_SENSE_SAMPLE_AT` | set, read | -1: read wherever the code is (the default); 0 to the PWM period (the timer's reload value): wait for that count first (outside: refused) | no: -1 at every start-up | An experimental diagnostic of when the current sensors are read, off by default. They are read by a software start, wherever the code happens to be in the 25 kHz centre-aligned PWM cycle, so the moment of a reading depends on the code before it. With a count set, the driver waits until the PWM counter is within 24 counts of it (at most about 60 µs), then reads. Leave it at -1 unless you are investigating the current sensing. |
-| 89 | `PARAM_SENSE_SAMPLE_SEEN` | read only | the PWM counter at the last reading, +65536 while it counts down | — | Where in the PWM cycle the last current reading happened; it shows where parameter 88 puts the readings. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 21 | The current-sense zero of channel 1 in use. Measured at start-up (the trim, 59, added); writable for tests, until the next start-up.<br><span class="meta">`PARAM_SENSE1_OFFSET` · Access: set, read · Kept by Save: no: measured again at every start-up</span> | counts from 2048, -400 to 400 (outside: refused) |
+| 22 | The current-sense zero of channel 2 in use, as 21.<br><span class="meta">`PARAM_SENSE2_OFFSET` · Access: set, read · Kept by Save: no: measured again at every start-up</span> | counts from 2048, -400 to 400 (outside: refused) |
+| 40 | The zero of channel 1 measured with the bridge off, the trim added.<br><span class="meta">`PARAM_SENSE1_OFFSET_OFF` · Access: read only · Kept by Save: no: measured at every start-up</span> | counts from 2048 |
+| 41 | The zero of channel 2 measured with the bridge off, the trim added.<br><span class="meta">`PARAM_SENSE2_OFFSET_OFF` · Access: read only · Kept by Save: no: measured at every start-up</span> | counts from 2048 |
+| 42 | The second zero measurement, made in idle after start-up with the bridge switching at 50 % duty. On the bench it made the current ripple worse, so it is measured and kept but not used unless 46 asks for it.<br><span class="meta">`PARAM_SENSE_ZERO_SWITCHING` · Access: read only · Kept by Save: no</span> | 0 not run, 1 measuring, 2 in use, 3 rejected (implausible), 4 interrupted (a command or an error came first), 5 measured, not in use |
+| 46 | Which zero is in use. 1 takes effect only while 42 reads 5 (measured, not in use).<br><span class="meta">`PARAM_SENSE_ZERO_USE_SWITCHING` · Access: set, read · Kept by Save: no</span> | 1 the zero measured with the bridge switching, 0 the bridge-off zero. Default 0 |
+| 47 | The zero of channel 1 measured with the bridge switching.<br><span class="meta">`PARAM_SENSE1_OFFSET_SW` · Access: read only · Kept by Save: no</span> | counts from 2048 |
+| 48 | The zero of channel 2 measured with the bridge switching.<br><span class="meta">`PARAM_SENSE2_OFFSET_SW` · Access: read only · Kept by Save: no</span> | counts from 2048 |
+| 49 | Writing it sets Kp_iq and Ki_iq at once from R, L and this bandwidth, as `#Cbw` does. Reading gives the bandwidth the gains in force amount to with the R and L in force (0 without them).<br><span class="meta">`PARAM_CURRENT_BANDWIDTH` · Access: set, read · Kept by Save: no; the gains it sets are kept by Save</span> | Hz, 10-500 (outside, or with R or L not set: refused). 160 at every start-up |
+| 58 | The d-axis current setpoint, as `#Id`. It makes no torque, only more current in the coils.<br><span class="meta">`PARAM_ID_SETPOINT` · Access: set, read · Kept by Save: no</span> | mA, -3000 to 3000 (outside: refused). Default 0 |
+| 59 | The trim added to the zero of channel 1 measured at every start-up; writing it moves the zero in use at once. The Spectral Micro firmware 109 skips the trim step of the anti-cogging identification, so only a write sets it.<br><span class="meta">`PARAM_ZERO_TRIM1` · Access: set, read · Kept by Save: yes, encoder block</span> | counts, -60 to 60 (outside: refused). Default 0 |
+| 60 | The trim of channel 2, as 59.<br><span class="meta">`PARAM_ZERO_TRIM2` · Access: set, read · Kept by Save: yes, encoder block</span> | counts, -60 to 60 (outside: refused). Default 0 |
+| 61 | The electrical offset between the encoder and the motor, found by calibration (`#Offset` in rad).<br><span class="meta">`PARAM_THETA_OFFSET` · Access: read only · Kept by Save: yes, with the calibration</span> | 0.1° electrical |
+| 62 | The 1st harmonic of the anti-cogging set found by an identification with the trim (43 = 4 or 5).<br><span class="meta">`PARAM_TRIM_H1_BEFORE` · Access: read only · Kept by Save: no</span> | 0.1 mA |
+| 63 | After a trim, the 1st harmonic again; the Spectral Micro skips the trim, so it equals 62.<br><span class="meta">`PARAM_TRIM_H1_AFTER` · Access: read only · Kept by Save: no</span> | 0.1 mA |
+| 64 | Commutation delay compensation: the output voltage is turned forward by the angle the rotor covers in this time. Applied in the closed-loop modes above 100 ticks/s. 234 µs is the Spectral Micro's own delay, measured on the bench.<br><span class="meta">`PARAM_COMM_DELAY_US` · Access: set, read · Kept by Save: no: 234 at every start-up</span> | µs, 0-500 (outside: refused), 0 = off. Default 234 |
+| 65 | Where the transforms of every control loop take sin and cos from. On the STEPFOC bench the table was not faster.<br><span class="meta">`PARAM_FAST_TRIG` · Access: set, read · Kept by Save: no</span> | 1 from the integer sine table, 0 from the float routine. Default 0 |
+| 88 | An experimental diagnostic of when the current sensors are read, off by default. They are read by a software start, wherever the code happens to be in the 25 kHz centre-aligned PWM cycle, so the moment of a reading depends on the code before it. With a count set, the driver waits until the PWM counter is within 24 counts of it (at most about 60 µs), then reads. Leave it at -1 unless you are investigating the current sensing.<br><span class="meta">`PARAM_SENSE_SAMPLE_AT` · Access: set, read · Kept by Save: no: -1 at every start-up</span> | -1: read wherever the code is (the default); 0 to the PWM period (the timer's reload value): wait for that count first (outside: refused) |
+| 89 | Where in the PWM cycle the last current reading happened; it shows where parameter 88 puts the readings.<br><span class="meta">`PARAM_SENSE_SAMPLE_SEEN` · Access: read only · Kept by Save: —</span> | the PWM counter at the last reading, +65536 while it counts down |
+
+</div>
 
 ### Speed estimate and the velocity loop
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 50 | `PARAM_SPEED_ESTIMATOR` | set, read | 0 moving average, 1 PLL, 2 direct PLL (outside: refused). Default 2 | no: 2 at every start-up | The speed the loops, the watchdog descend, telemetry and the capture use. Calibration and the gripper's stop detection always use the moving average. |
-| 51 | `PARAM_SPEED_PLL_BANDWIDTH` | set, read | Hz, 10-250 (outside: refused). Default 100 | no: 100 at every start-up | The natural frequency of both PLLs. |
-| 74 | `PARAM_INPUT_FILTER_HZ` | set, read | Hz, 0-200 (outside: refused), 0 = off. Default 0 | no | The position input filter, position and PD modes: a critically damped filter between the host's position setpoints and the loops, which also makes the speed from them. Only for hosts that send positions without the speed; about the host's setpoint rate ÷ 12. |
-| 75 | `PARAM_VEL_INT_DEADBAND` | set, read | ticks, 0-2000 (outside: refused), 0 = off. Default 0 | no | Position mode: the velocity integral sees the position error less this band, so a holding motor stops pushing against a small error. It trades holding current for accuracy. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 50 | The speed the loops, the watchdog descend, telemetry and the capture use. Calibration and the gripper's stop detection always use the moving average.<br><span class="meta">`PARAM_SPEED_ESTIMATOR` · Access: set, read · Kept by Save: no: 2 at every start-up</span> | 0 moving average, 1 PLL, 2 direct PLL (outside: refused). Default 2 |
+| 51 | The natural frequency of both PLLs.<br><span class="meta">`PARAM_SPEED_PLL_BANDWIDTH` · Access: set, read · Kept by Save: no: 100 at every start-up</span> | Hz, 10-250 (outside: refused). Default 100 |
+| 74 | The position input filter, position and PD modes: a critically damped filter between the host's position setpoints and the loops, which also makes the speed from them. Only for hosts that send positions without the speed; about the host's setpoint rate ÷ 12.<br><span class="meta">`PARAM_INPUT_FILTER_HZ` · Access: set, read · Kept by Save: no</span> | Hz, 0-200 (outside: refused), 0 = off. Default 0 |
+| 75 | Position mode: the velocity integral sees the position error less this band, so a holding motor stops pushing against a small error. It trades holding current for accuracy.<br><span class="meta">`PARAM_VEL_INT_DEADBAND` · Access: set, read · Kept by Save: no</span> | ticks, 0-2000 (outside: refused), 0 = off. Default 0 |
+
+</div>
 
 ### Anti-cogging
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 37 | `PARAM_COGGING_MODE` | set, read | 0 off, 1 harmonics, 2 table. Default 0 | yes, anti-cogging block | Which form of the stored anti-cogging is added to the current setpoint in velocity and position modes. 1 or 2 is refused while the stored set holds nothing for that form: read it back. |
-| 38 | `PARAM_COGGING_SCALE` | set, read | percent, 0-200 (clamped). Default 100 | yes, anti-cogging block | How much of the stored anti-cogging is applied. |
-| 43 | `PARAM_COGCAL` | set starts or stops a run; read gives its state | Write 0 abort, 1 identify, 2 identify and save, 3 encoder table, then anti-cogging, then save all, 4 identify with the current-sense zero trim, 5 the same and save. Read 0 idle, 1 turning forward, 2 turning backward, 3 done (harmonics on), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the shaft did not turn), 7 a combined run is measuring the encoder table, 8 the combined run's encoder table failed (52 says why), 9 not used, 10 switched off (the encoder table was measured again on its own), 11 done without the trim | the result, when started with 2, 3 or 5 | The anti-cogging identification on the drive: one motor turn forward and one back in velocity mode at the speed of 44. The shaft must be free to turn. A command from a host or an error aborts it. On the Spectral Micro 4 and 5 identify like 1 and 2 (the trim step is skipped); not yet tested on its bench. |
-| 44 | `PARAM_COGCAL_SPEED` | set, read | ticks/s, 100-20000 (clamped). Default 1500 | no | The speed the identification turns at. |
-| 45 | `PARAM_COGCAL_RIPPLE` | read only | 0.1 mA rms | no | The cogging current the last identification found, rms. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 37 | Which form of the stored anti-cogging is added to the current setpoint in velocity and position modes. 1 or 2 is refused while the stored set holds nothing for that form: read it back.<br><span class="meta">`PARAM_COGGING_MODE` · Access: set, read · Kept by Save: yes, anti-cogging block</span> | 0 off, 1 harmonics, 2 table. Default 0 |
+| 38 | How much of the stored anti-cogging is applied.<br><span class="meta">`PARAM_COGGING_SCALE` · Access: set, read · Kept by Save: yes, anti-cogging block</span> | percent, 0-200 (clamped). Default 100 |
+| 43 | The anti-cogging identification on the drive: one motor turn forward and one back in velocity mode at the speed of 44. The shaft must be free to turn. A command from a host or an error aborts it. On the Spectral Micro 4 and 5 identify like 1 and 2 (the trim step is skipped); not yet tested on its bench.<br><span class="meta">`PARAM_COGCAL` · Access: set starts or stops a run; read gives its state · Kept by Save: the result, when started with 2, 3 or 5</span> | Write 0 abort, 1 identify, 2 identify and save, 3 encoder table, then anti-cogging, then save all, 4 identify with the current-sense zero trim, 5 the same and save. Read 0 idle, 1 turning forward, 2 turning backward, 3 done (harmonics on), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the shaft did not turn), 7 a combined run is measuring the encoder table, 8 the combined run's encoder table failed (52 says why), 9 not used, 10 switched off (the encoder table was measured again on its own), 11 done without the trim |
+| 44 | The speed the identification turns at.<br><span class="meta">`PARAM_COGCAL_SPEED` · Access: set, read · Kept by Save: no</span> | ticks/s, 100-20000 (clamped). Default 1500 |
+| 45 | The cogging current the last identification found, rms.<br><span class="meta">`PARAM_COGCAL_RIPPLE` · Access: read only · Kept by Save: no</span> | 0.1 mA rms |
+
+</div>
 
 ### Encoder table
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 52 | `PARAM_ENCAL` | set starts or stops a run; read gives its state | Write 0 abort, 1 measure and use, 2 measure, use and save, 3 then the anti-cogging and save all. Read 0 idle, 1 turning forward, 2 turning backward, 3 done (in use), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the rotor did not follow the field), 7 rejected (over 4° peak to peak, or an offset move over 60° electrical) | the table, when started with 2 or 3 | Measures the encoder table: the field turns the rotor open loop one shaft turn forward and one back at 2048 ticks/s (about 20 s). The shaft must be free. |
-| 53 | `PARAM_ENCAL_USE` | set, read | 1 on, 0 off; 1 only when a table was measured; refused while one is being measured | yes, encoder block | Corrects the encoder reading with the table. |
-| 54 | `PARAM_ENCAL_PP` | read only | 0.01° of the shaft | with the table | The table's error, peak to peak (0 without a table). |
-| 55 | `PARAM_ENCAL_ONCE` | read only | 0.01° of the shaft | with the table | The once-per-turn part of the error, its amplitude (mostly a magnet off the axis). |
-| 56 | `PARAM_AFTER_CAL` | set, read | 0, 1 or 2 (outside: refused). Default 0 | yes, encoder block | No effect on the Spectral Micro: `#Cal` always runs the encoder table and the anti-cogging, and `#Calonly` never does. It stays so that the parameter numbers match STEPFOC. |
-| 57 | `PARAM_ENCAL_OFFSET` | read only | 0.1° electrical | no | How far the last encoder-table run moved the electrical offset. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 52 | Measures the encoder table: the field turns the rotor open loop one shaft turn forward and one back at 2048 ticks/s (about 20 s). The shaft must be free.<br><span class="meta">`PARAM_ENCAL` · Access: set starts or stops a run; read gives its state · Kept by Save: the table, when started with 2 or 3</span> | Write 0 abort, 1 measure and use, 2 measure, use and save, 3 then the anti-cogging and save all. Read 0 idle, 1 turning forward, 2 turning backward, 3 done (in use), 4 aborted, 5 failed (an error, or not calibrated), 6 failed (the rotor did not follow the field), 7 rejected (over 4° peak to peak, or an offset move over 60° electrical) |
+| 53 | Corrects the encoder reading with the table.<br><span class="meta">`PARAM_ENCAL_USE` · Access: set, read · Kept by Save: yes, encoder block</span> | 1 on, 0 off; 1 only when a table was measured; refused while one is being measured |
+| 54 | The table's error, peak to peak (0 without a table).<br><span class="meta">`PARAM_ENCAL_PP` · Access: read only · Kept by Save: with the table</span> | 0.01° of the shaft |
+| 55 | The once-per-turn part of the error, its amplitude (mostly a magnet off the axis).<br><span class="meta">`PARAM_ENCAL_ONCE` · Access: read only · Kept by Save: with the table</span> | 0.01° of the shaft |
+| 56 | No effect on the Spectral Micro: `#Cal` always runs the encoder table and the anti-cogging, and `#Calonly` never does. It stays so that the parameter numbers match STEPFOC.<br><span class="meta">`PARAM_AFTER_CAL` · Access: set, read · Kept by Save: yes, encoder block</span> | 0, 1 or 2 (outside: refused). Default 0 |
+| 57 | How far the last encoder-table run moved the electrical offset.<br><span class="meta">`PARAM_ENCAL_OFFSET` · Access: read only · Kept by Save: no</span> | 0.1° electrical |
+
+</div>
 
 ### Capture and histogram
 
 The signal numbers: 0 none, 1 measured Iq (mA), 2 measured Id (mA), 3 Iq setpoint with the anti-cogging (mA), 4 speed (ticks/s, saturates at ±32767), 5 speed ÷ 16, 6 position (ticks, the low 16 bits), 7 position error (ticks), 8 electrical angle (0-16383 per electrical turn, from the encoder alone), 9 encoder (0-16383 per motor turn), 10 Vbus (10 mV), 11 and 12 the two current-sense readings (counts after the zero), 13 the control interrupt's time (µs), 14 the anti-cogging feedforward (mA), 15 the Iq setpoint without the anti-cogging (mA), 16 the Uq setpoint (mV), 17 and 18 the d and q voltage the output transform received (mV). None of these settings is saved.
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 24 | `PARAM_CAPTURE_SOURCE_A` | set, read | signal 0-18 (outside: 0). Default 4, speed | no | The signal of channel A, which is also the trigger channel. |
-| 25 | `PARAM_CAPTURE_SOURCE_B` | set, read | signal 0-18 (outside: 0). Default 1, Iq | no | The signal of channel B. |
-| 26 | `PARAM_CAPTURE_SOURCE_C` | set, read | signal 0-18 (outside: 0). Default 8, electrical angle | no | The signal of channel C. |
-| 27 | `PARAM_CAPTURE_DIVIDER` | set, read | control loops per sample, 1-65535 (clamped). Default 1 | no | One sample every N control loops of 200 µs. |
-| 28 | `PARAM_CAPTURE_TRIGGER` | set, read | 0 stop, 1 now, 2 on an error, 3 channel A rising through the level, 4 falling through it (outside: 0) | no | 1 to 4 clear the buffer and arm a capture; 0 stops one and keeps what was recorded. The error trigger fires when the error flag rises, a watchdog trip included; an error already present does not fire it. |
-| 29 | `PARAM_CAPTURE_LEVEL` | set, read | channel A's unit, -32768 to 32767 (saturated). Default 0 | no | The level of triggers 3 and 4. |
-| 30 | `PARAM_CAPTURE_PRETRIGGER` | set, read | samples, 0-1023 (clamped). Default 0 | no | How many samples from before the trigger the capture keeps. |
-| 31 | `PARAM_CAPTURE_STATE` | read only | 0 idle, 1 armed, 2 recording, 3 done | no | Where the capture stands. |
-| 32 | `PARAM_CAPTURE_COUNT` | read only | samples, 0-1024 | no | The samples readable with buffer kind 0. |
-| 33 | `PARAM_CAPTURE_TRIGGER_INDEX` | read only | sample index; -1 before a trigger | no | Which sample of the read-out is the trigger sample. |
-| 34 | `PARAM_HIST_X` | set, read | 0 off, 1 electrical angle, 2 encoder (256 bins each; outside: 0) | no | 1 or 2 clear the histogram and start it; 0 stops it and keeps the data readable. |
-| 35 | `PARAM_HIST_Y` | set, read | signal 0-18 (outside: 0). Default 3, Iq setpoint | no | The signal summed per bin. Set it before 34. |
-| 36 | `PARAM_HIST_SAMPLES` | read only | samples | no | Samples summed since the start. The histogram stops by itself when one bin holds 65535. |
-| 39 | `PARAM_CAPTURE_LENGTH` | read only | 1024 | — | The samples per channel a capture holds. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 24 | The signal of channel A, which is also the trigger channel.<br><span class="meta">`PARAM_CAPTURE_SOURCE_A` · Access: set, read · Kept by Save: no</span> | signal 0-18 (outside: 0). Default 4, speed |
+| 25 | The signal of channel B.<br><span class="meta">`PARAM_CAPTURE_SOURCE_B` · Access: set, read · Kept by Save: no</span> | signal 0-18 (outside: 0). Default 1, Iq |
+| 26 | The signal of channel C.<br><span class="meta">`PARAM_CAPTURE_SOURCE_C` · Access: set, read · Kept by Save: no</span> | signal 0-18 (outside: 0). Default 8, electrical angle |
+| 27 | One sample every N control loops of 200 µs.<br><span class="meta">`PARAM_CAPTURE_DIVIDER` · Access: set, read · Kept by Save: no</span> | control loops per sample, 1-65535 (clamped). Default 1 |
+| 28 | 1 to 4 clear the buffer and arm a capture; 0 stops one and keeps what was recorded. The error trigger fires when the error flag rises, a watchdog trip included; an error already present does not fire it.<br><span class="meta">`PARAM_CAPTURE_TRIGGER` · Access: set, read · Kept by Save: no</span> | 0 stop, 1 now, 2 on an error, 3 channel A rising through the level, 4 falling through it (outside: 0) |
+| 29 | The level of triggers 3 and 4.<br><span class="meta">`PARAM_CAPTURE_LEVEL` · Access: set, read · Kept by Save: no</span> | channel A's unit, -32768 to 32767 (saturated). Default 0 |
+| 30 | How many samples from before the trigger the capture keeps.<br><span class="meta">`PARAM_CAPTURE_PRETRIGGER` · Access: set, read · Kept by Save: no</span> | samples, 0-1023 (clamped). Default 0 |
+| 31 | Where the capture stands.<br><span class="meta">`PARAM_CAPTURE_STATE` · Access: read only · Kept by Save: no</span> | 0 idle, 1 armed, 2 recording, 3 done |
+| 32 | The samples readable with buffer kind 0.<br><span class="meta">`PARAM_CAPTURE_COUNT` · Access: read only · Kept by Save: no</span> | samples, 0-1024 |
+| 33 | Which sample of the read-out is the trigger sample.<br><span class="meta">`PARAM_CAPTURE_TRIGGER_INDEX` · Access: read only · Kept by Save: no</span> | sample index; -1 before a trigger |
+| 34 | 1 or 2 clear the histogram and start it; 0 stops it and keeps the data readable.<br><span class="meta">`PARAM_HIST_X` · Access: set, read · Kept by Save: no</span> | 0 off, 1 electrical angle, 2 encoder (256 bins each; outside: 0) |
+| 35 | The signal summed per bin. Set it before 34.<br><span class="meta">`PARAM_HIST_Y` · Access: set, read · Kept by Save: no</span> | signal 0-18 (outside: 0). Default 3, Iq setpoint |
+| 36 | Samples summed since the start. The histogram stops by itself when one bin holds 65535.<br><span class="meta">`PARAM_HIST_SAMPLES` · Access: read only · Kept by Save: no</span> | samples |
+| 39 | The samples per channel a capture holds.<br><span class="meta">`PARAM_CAPTURE_LENGTH` · Access: read only · Kept by Save: —</span> | 1024 |
+
+</div>
 
 ### Sound
 
 None of the sound settings is saved; see [Sound](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/sound/).
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 80 | `PARAM_SOUND_STATE` | read only | bits 0-7 events queued, 8-18 samples buffered, 24 a tone sounds, 25 the queue plays, 26 samples play, 27 the samples ran dry | — | What the sound is doing; a host that refills the queue or the sample buffer reads it. |
-| 81 | `PARAM_SOUND_LIMIT_MV` | set, read | mV, 0-6000 (outside: refused). Default 2000; 0 refuses sound and stops what plays | no: 2000 at every start-up | The sound's voltage at most, all tones and samples together. |
-| 82 | `PARAM_SOUND_AXIS` | set, read | 1 the q axis (default), 0 the d axis (outside: refused) | no: 1 at every start-up | Which axis carries the sound. The q axis makes torque, a small ripple at the tone's pitch, and was much louder on the bench; the d axis makes no torque and is quieter. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 80 | What the sound is doing; a host that refills the queue or the sample buffer reads it.<br><span class="meta">`PARAM_SOUND_STATE` · Access: read only · Kept by Save: —</span> | bits 0-7 events queued, 8-18 samples buffered, 24 a tone sounds, 25 the queue plays, 26 samples play, 27 the samples ran dry |
+| 81 | The sound's voltage at most, all tones and samples together.<br><span class="meta">`PARAM_SOUND_LIMIT_MV` · Access: set, read · Kept by Save: no: 2000 at every start-up</span> | mV, 0-6000 (outside: refused). Default 2000; 0 refuses sound and stops what plays |
+| 82 | Which axis carries the sound. The q axis makes torque, a small ripple at the tone's pitch, and was much louder on the bench; the d axis makes no torque and is quieter.<br><span class="meta">`PARAM_SOUND_AXIS` · Access: set, read · Kept by Save: no: 1 at every start-up</span> | 1 the q axis (default), 0 the d axis (outside: refused) |
+
+</div>
 
 ### Status
 
-| No. | Name | Access | Value | Kept by Save | What it is |
-|---|---|---|---|---|---|
-| 79 | `PARAM_FEATURES` | read only | bits, see What is in force | — | What is in force and what is running, one bit each. |
-| 83 | `PARAM_STACK_UNUSED` | read only | bytes; -1 if it was not measured | — | The stack margin: RAM between the heap and the stack that the stack has not used since start-up (setup() fills it with a pattern at its end, and this counts the bytes the pattern is still in). The stack needs about 1.5 to 2 KB of the about 7 KB there are; a value far below that means the drive is short of RAM. |
-| 84 | `PARAM_BUILD_COMMIT` | read only | the commit's first 7 hex digits as a number (bits 0-27); bit 28 set: built with uncommitted changes; 0 when git was not available at the build | — | The git commit the firmware was built from. `#Info` prints it as `Build:`, with a `+` for bit 28. |
-| 85 | `PARAM_BUILD_TIME` | read only | Unix seconds, UTC; 0 when the build did not set it | — | When the firmware was built. |
-| 86 | `PARAM_BOARD_ID` | read only | 32 bits, read as unsigned | — | This board: the chip's factory-unique 96-bit number folded into 32 bits. It never changes, also not with a new firmware or `#Default`. `#Info` prints it as `Board ID:`, 8 hex digits. It is not the bootloader's board ID (0 to 13). |
-| 87 | `PARAM_CALIBRATION_ID` | read only | 32 bits, read as unsigned; 0 before the first calibration | yes, settings block 2 | A new number at every successful calibration, so a host can tell one calibration from the next. Send_Save_config keeps it, and `#Default` sets it back to 0. `#Info` prints it as `Calibration ID:`, 8 hex digits. |
+<div class="ref-table params" markdown>
+
+| No. | What it is | Value |
+|---|---|---|
+| 79 | What is in force and what is running, one bit each.<br><span class="meta">`PARAM_FEATURES` · Access: read only · Kept by Save: —</span> | bits, see What is in force |
+| 83 | The stack margin: RAM between the heap and the stack that the stack has not used since start-up (setup() fills it with a pattern at its end, and this counts the bytes the pattern is still in). The stack needs about 1.5 to 2 KB of the about 7 KB there are; a value far below that means the drive is short of RAM.<br><span class="meta">`PARAM_STACK_UNUSED` · Access: read only · Kept by Save: —</span> | bytes; -1 if it was not measured |
+| 84 | The git commit the firmware was built from. `#Info` prints it as `Build:`, with a `+` for bit 28.<br><span class="meta">`PARAM_BUILD_COMMIT` · Access: read only · Kept by Save: —</span> | the commit's first 7 hex digits as a number (bits 0-27); bit 28 set: built with uncommitted changes; 0 when git was not available at the build |
+| 85 | When the firmware was built.<br><span class="meta">`PARAM_BUILD_TIME` · Access: read only · Kept by Save: —</span> | Unix seconds, UTC; 0 when the build did not set it |
+| 86 | This board: the chip's factory-unique 96-bit number folded into 32 bits. It never changes, also not with a new firmware or `#Default`. `#Info` prints it as `Board ID:`, 8 hex digits. It is not the bootloader's board ID (0 to 13).<br><span class="meta">`PARAM_BOARD_ID` · Access: read only · Kept by Save: —</span> | 32 bits, read as unsigned |
+| 87 | A new number at every successful calibration, so a host can tell one calibration from the next. Send_Save_config keeps it, and `#Default` sets it back to 0. `#Info` prints it as `Calibration ID:`, 8 hex digits.<br><span class="meta">`PARAM_CALIBRATION_ID` · Access: read only · Kept by Save: yes, settings block 2</span> | 32 bits, read as unsigned; 0 before the first calibration |
+
+</div>
 
 ## What is in force: parameter 79
 

@@ -1,10 +1,13 @@
 # Calibration
 
-Calibration teaches the driver its motor: it checks the magnet and the supply, measures the motor's phase
-resistance and inductance and computes the current loop gains from them, spins the motor in open loop to find
-the pole pairs and the direction, checks the order of the phases and aligns the encoder to the rotor field, and
-measures the motor constants Kt, KV and the flux linkage. Nothing about the motor has to be entered first. It
-runs once per motor; the result is kept by saving. From firmware 109 every `#Cal` goes on by itself to two more
+Calibration teaches the driver its motor. It checks the magnet and the supply, then measures the motor's phase
+resistance and inductance and computes the current loop gains from them.
+
+It spins the motor in open loop to find the pole pairs and the direction, checks the order of the phases and
+aligns the encoder to the rotor field, and measures the motor constants Kt, KV and the flux linkage. Nothing about
+the motor has to be entered first.
+
+It runs once per motor; the result is kept by saving. From firmware 109 every `#Cal` goes on by itself to two more
 runs, the [encoder table and the anti-cogging](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/anti-cogging/), and saves. `#Calonly` is the calibration alone.
 
 !!! danger "The motor turns"
@@ -62,6 +65,12 @@ anti-cogging set from another motor; note what `#Info` printed if you need them.
 ID is kept. [Saving the configuration](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/saving/) says what else it does.
 
 ## 2. Run it
+
+!!! tip "We recommend a Motor GUI preset"
+    In Motor GUI's **Presets** tab, apply *Generic motor*, *BLDC motor on Spectral Micro (soft)* before you
+    calibrate. It writes a low current limit and soft loops and leaves the resistance, the inductance and the pole
+    pairs to the calibration, which measures them, so the motor calibrates safely. Raise the limits and the gains
+    from there ([Current limit and loop tuning](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/tuning/)). More: [Motor GUI](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/motor-gui/).
 
 === "Motor GUI"
     Start the calibration. The driver enters *Calibration mode* and the GUI shows its log step by step; when it
@@ -136,11 +145,13 @@ What the steps are:
 ## What follows the calibration
 
 Half a second after `Calibration success!` of a `#Cal` the driver starts two runs on its own: the encoder table,
-then the anti-cogging identification. Keep the shaft free for about a minute more. When they succeed, everything is
-saved. A command from a host (a motion command, `#Idle`) stops them; then nothing is saved, and the calibration is
-kept only if you `#Save` it. A host that takes the drive before they start has 3 s: after that the runs are
-dropped and do not start later. `#Cal` always runs them; `#Calonly` never does.
-[Encoder table and anti-cogging](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/anti-cogging/) explains both.
+then the anti-cogging identification. Keep the shaft free for about a minute more.
+
+When they succeed, everything is saved. A command from a host (a motion command, `#Idle`) stops them; then nothing is
+saved, and the calibration is kept only if you `#Save` it.
+
+A host that takes the drive before they start has 3 s: after that the runs are dropped and do not start later. `#Cal`
+always runs them; `#Calonly` never does. [Encoder table and anti-cogging](https://docs.source-robotics.com/Spectral-BLDC-docs/109/05-setup/anti-cogging/) explains both.
 
 !!! warning "Set the current limit before you calibrate"
     The encoder table turns the field with a current of 80 % of the current limit, for about 20 s. Calibration uses

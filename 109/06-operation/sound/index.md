@@ -35,8 +35,10 @@ frequency, and the motor, and above all whatever it is fixed to, radiate it as s
 
 From idle, a calibrated driver first holds the position it is at and says so (`Holding the position while it
 plays (#Idle releases it)`); `#Idle` releases it afterwards. Left out, the loudness is 200 mA and the length
-500 ms. `Tone: not played` means the driver is not calibrated or in an error, the pitch is outside 20 Hz to half the
-loop rate, or parameter 81 is 0.
+500 ms.
+
+`Tone: not played` means the driver is not calibrated or in an error, the pitch is outside 20 Hz to half the loop
+rate, or parameter 81 is 0.
 
 ## Over CAN and from Python
 
@@ -105,7 +107,9 @@ while sent < len(samples):
 
 `coil_tau_s` is the coil's L ÷ R (here 1.49 mH and 7.0 Ω, the motor of the calibration example): the function
 raises the high frequencies the coil would otherwise swallow, and `clip_percentile` levels speech so that it plays
-about four times louder. At 2500 samples a second a driver takes about 313 frames a second, some 4 % of the bus. When the buffer runs dry the
+about four times louder.
+
+At 2500 samples a second a driver takes about 313 frames a second, some 4 % of the bus. When the buffer runs dry the
 playing stops and bit 27 of parameter 80 says so.
 
 Send_Sound and Send_Sound_Samples do not reset the watchdog: with a watchdog set, keep sending a status request
@@ -124,17 +128,22 @@ while the sound plays.
 
 Sound has not been tested on a Spectral Micro yet; the code is the same as STEPFOC's. On the STEPFOC bench
 (2026-11-08, a bare NEMA 17 taped down), tones, scales, a tune from the queue, four-note chords and streamed speech
-all played. The q axis was much louder than the d axis, speech was audible but muffled, and there were no errors,
-no warming and only small vibrations.
+all played.
+
+The q axis was much louder than the d axis, speech was audible but muffled, and there were no errors, no warming and
+only small vibrations.
 
 ## The arm as an instrument
 
 Every joint of a robot can play its own line, and because the sound rides on top of the control, the arm keeps
-holding its pose while it plays. Load each driver's queue first, then start them one after another: the starts
-are meant to fall within about a millisecond of each other, and from then on each driver keeps its own time
-(whether they stay together over a whole song is still to be measured). Split a MIDI file
-into as many lines as there are channels, four per driver, and give each driver its four. Through a gearbox the
-sound changes with the joint; try each joint's range. Playing on an assembled arm has not been tested yet.
+holding its pose while it plays.
+
+Load each driver's queue first, then start them one after another: the starts are meant to fall within about a
+millisecond of each other, and from then on each driver keeps its own time (whether they stay together over a whole
+song is still to be measured).
+
+Split a MIDI file into as many lines as there are channels, four per driver, and give each driver its four. Through a
+gearbox the sound changes with the joint; try each joint's range. Playing on an assembled arm has not been tested yet.
 
 ## Checking what plays
 

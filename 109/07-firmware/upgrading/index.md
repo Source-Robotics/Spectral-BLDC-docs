@@ -2,8 +2,10 @@
 
 Firmware 109 adds more to the Spectral Micro than any release before it: parameters, the watchdog actions, the
 identity and telemetry frames, captures, the current loop from one bandwidth, a choice of speed estimates, and the
-encoder table and anti-cogging. This page says what a driver keeps when it is updated to 109, what works at once,
-what can be run, and how to go back. [Updating through the bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/109/07-firmware/update/) is how to flash it.
+encoder table and anti-cogging.
+
+This page says what a driver keeps when it is updated to 109, what works at once, what can be run, and how to go back.
+[Updating through the bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/109/07-firmware/update/) is how to flash it.
 
 There is no firmware 108 for the Spectral Micro: from 109 the Spectral Micro and STEPFOC share their version
 numbers, so a Spectral Micro goes from 107 straight to 109.

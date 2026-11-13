@@ -17,6 +17,8 @@ numbered from the most significant bit (bit 7 first).
 
 ## Every message
 
+<div class="ref-table overview" markdown>
+
 | ID | Message | Direction | Length | Group |
 |---|---|---|---|---|
 | 0 | [Send_ESTOP](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_estop) | host → driver | 0 | System |
@@ -66,6 +68,8 @@ numbered from the most significant bit (bit 7 first).
 | 60 | [Respond_Gripper_data_pack](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#respond_gripper_data_pack) | driver → host | 4 | Gripper |
 | 61 | [Send_gripper_data_pack](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#send_gripper_data_pack) | host → driver | 0, 5 | Gripper |
 | 62 | [Send_gripper_calibrate](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#send_gripper_calibrate) | host → driver | 0 | Gripper |
+
+</div>
 
 ## By group
 

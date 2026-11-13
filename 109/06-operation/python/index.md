@@ -82,10 +82,12 @@ finally:
 ```
 
 `receive_can_messages` returns the raw `python-can` message and a tuple with the node ID, the command ID and the
-error bit of the identifier; `UnpackData` decodes the message into the attributes the message carries. This example resends the same
-setpoint at 50 Hz for five seconds, prints only matching motion feedback, and puts the motor in idle when it
-ends. Idle releases torque: support any attached mechanism before running it. A missing reply is reported
-without claiming that a move finished. Configure and calibrate the driver first ([Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/)).
+error bit of the identifier; `UnpackData` decodes the message into the attributes the message carries.
+
+This example resends the same setpoint at 50 Hz for five seconds, prints only matching motion feedback, and puts the
+motor in idle when it ends. Idle releases torque: support any attached mechanism before running it. A missing reply is
+reported without claiming that a move finished. Configure and calibrate the driver first
+([Quick start](https://docs.source-robotics.com/Spectral-BLDC-docs/109/quick-start/)).
 
 !!! success "Check"
     The program prints a line of position, speed, current and error bit for each cycle, the position moves to

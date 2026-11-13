@@ -1,17 +1,18 @@
 # Over CAN
 
 CAN is the interface for running a machine: compact frames, a fixed cost per message, up to 14 drivers on one bus,
-and a host that can be a PC, a microcontroller or a robot control box. The driver answers a motion command with
-its position, speed and current in the same frame exchange, so a control loop on the host needs one frame out and
-one frame back per motor and cycle.
+and a host that can be a PC, a microcontroller or a robot control box.
+
+The driver answers a motion command with its position, speed and current in the same frame exchange, so a control loop
+on the host needs one frame out and one frame back per motor and cycle.
 
 ## The frame
 
 CAN 2.0 data frames with 11-bit identifiers at 1 Mbit/s. The identifier carries the node, the command and the
 error state:
 
-![Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/CANID.PNG){ width="600" }
-![Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/CANID_dark.webp){ width="600" }
+![Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/can-id.svg){ width="600" }
+![Bits 10 to 7 of the identifier are the node ID, bits 6 to 1 the command ID, bit 0 the error bit.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/can-id_dark.svg){ width="600" }
 
 - **Node ID**, bits 10 to 7: which driver, 0 to 15. A driver acts only on frames with its own node ID and sends
   with it. Set it with `#CANID` or Send_CAN_ID and save; every driver ships as node 0. Use 0 to 13: the
@@ -39,13 +40,15 @@ single precision. Flags inside a byte are numbered from the most significant bit
 ## A control loop
 
 Send Send_data_pack_1 at a fixed rate, 100 Hz to 1 kHz, with the setpoint for this cycle; read Respond_data_pack_1
-for the position, speed and current of the last cycle. Every motion command (and every request the driver
-answers) resets the watchdog, so with Send_Watchdog set to a few cycle times the motor stops when the host stops;
-from firmware 109 it can also hold its position, brake, coast or let a joint down slowly
-([The watchdog](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/watchdog/)). Other frames, such as gains, limits, Send_Parameter or Send_Idle, do not reset it,
-and neither does anything sent over UART. The heartbeat is the other way round:
-Send_Heartbeat_Setup makes the driver send a frame on its own every N ms when it has nothing else to send, so the
-host can see it is alive.
+for the position, speed and current of the last cycle.
+
+Every motion command (and every request the driver answers) resets the watchdog, so with Send_Watchdog set to a few
+cycle times the motor stops when the host stops; from firmware 109 it can also hold its position, brake, coast or let
+a joint down slowly ([The watchdog](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/watchdog/)).
+
+Other frames, such as gains, limits, Send_Parameter or Send_Idle, do not reset it, and neither does anything sent over
+UART. The heartbeat is the other way round: Send_Heartbeat_Setup makes the driver send a frame on its own every N ms
+when it has nothing else to send, so the host can see it is alive.
 
 ```mermaid
 sequenceDiagram

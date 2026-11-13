@@ -6,44 +6,48 @@ The `Spectral-BLDC` package ([Spectral-BLDC-Python](https://github.com/Source-Ro
 
 ## Calls and messages
 
-| Library call | Sends | Answered with | Reference |
-|---|---|---|---|
-| `Send_data_pack_1()` | Send_data_pack_1 (ID 2) | Respond_data_pack_1 | [Motion](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/motion/#send_data_pack_1) |
-| `Send_data_pack_PD()` | Send_data_pack_PD (ID 4) | Respond_data_pack_1 | [Motion](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/motion/#send_data_pack_pd) |
-| `Send_PD_Gains()` | Send_PD_Gains (ID 16) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_pd_gains) |
-| `Send_Current_Gains()` | Send_Current_Gains (ID 17) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_current_gains) |
-| `Send_Velocity_Gains()` | Send_Velocity_Gains (ID 18) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_velocity_gains) |
-| `Send_Position_Gains()` | Send_Position_Gains (ID 19) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_position_gains) |
-| `Send_Limits()` | Send_Limits (ID 20) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_limits) |
-| `Send_Kt()` | Send_Kt (ID 22) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_kt) |
-| `Send_Voltage_Limit()` | Send_Voltage_Limit (ID 34) | — | [Gains and limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_voltage_limit) |
-| `Send_Respond_Ping()` | Send_Respond_Ping (ID 10) | Send_Respond_Ping (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_ping) |
-| `Send_Respond_Temperature()` | Send_Respond_Temperature (ID 23) | Send_Respond_Temperature (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_temperature) |
-| `Send_Respond_Voltage()` | Send_Respond_Voltage (ID 24) | Send_Respond_Voltage (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_voltage) |
-| `Send_Respond_Device_Info()` | Send_Respond_Device_Info (ID 25) | Send_Respond_Device_Info (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_device_info) |
-| `Send_Respond_State_of_Errors()` | Send_Respond_State_of_Errors (ID 26) | Send_Respond_State_of_Errors (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_state_of_errors) |
-| `Send_Respond_Iq_data()` | Send_Respond_Iq_data (ID 27) | Send_Respond_Iq_data (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_iq_data) |
-| `Send_Respond_Encoder_data()` | Send_Respond_Encoder_data (ID 28) | Send_Respond_Encoder_data (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_encoder_data) |
-| `Send_Respond_Kt()` | Send_Respond_Kt (ID 33) | Send_Respond_Kt (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_kt) |
-| `Send_Respond_Identity()` | Send_Respond_Identity (ID 39) | Send_Respond_Identity (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_identity) |
-| `Send_Respond_Telemetry()` | Send_Respond_Telemetry (ID 40) | Send_Respond_Telemetry (data frame) | [Status requests](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_telemetry) |
-| `Send_CAN_ID()` | Send_CAN_ID (ID 11) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_can_id) |
-| `Send_ESTOP()` | Send_ESTOP (ID 0) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_estop) |
-| `Send_Idle()` | Send_Idle (ID 12) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_idle) |
-| `Send_Save_config()` | Send_Save_config (ID 13) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_save_config) |
-| `Send_Reset()` | Send_Reset (ID 14) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_reset) |
-| `Send_Clear_Error()` | Send_Clear_Error (ID 1) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_clear_error) |
-| `Send_Watchdog()` | Send_Watchdog (ID 15) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_watchdog) |
-| `Send_Heartbeat_Setup()` | Send_Heartbeat_Setup (ID 30) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_heartbeat_setup) |
-| `Send_Settings()` | Send_Settings (ID 35) | — | [System](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_settings) |
-| `Send_Parameter()` | Send_Parameter (ID 36) | — | [Parameters and buffers](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_parameter) |
-| `Send_Get_Parameter()` | Send_Get_Parameter (ID 37) | Respond_Parameter | [Parameters and buffers](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_get_parameter) |
-| `Send_Buffer_Read()` | Send_Buffer_Read (ID 41) | — | [Parameters and buffers](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_buffer_read) |
-| `Send_Cogging_Harmonic(), Send_Cogging_Table()` | Send_Buffer_Write (ID 43) | — | [Parameters and buffers](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_buffer_write) |
-| `Send_Sound()` | Send_Sound (ID 44) | — | [Sound](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/sound/#send_sound) |
-| `Send_Samples()` | Send_Sound_Samples (ID 45) | — | [Sound](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/sound/#send_sound_samples) |
-| `Send_gripper_data_pack()` | Send_gripper_data_pack (ID 61) | Respond_Gripper_data_pack | [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#send_gripper_data_pack) |
-| `Send_gripper_calibrate()` | Send_gripper_calibrate (ID 62) | — | [Gripper](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#send_gripper_calibrate) |
+<div class="ref-table calls" markdown>
+
+| Library call | Sends | Answered with |
+|---|---|---|
+| `Send_data_pack_1()` | [Send_data_pack_1](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/motion/#send_data_pack_1) (ID 2)<br><span class="meta">Motion</span> | Respond_data_pack_1 |
+| `Send_data_pack_PD()` | [Send_data_pack_PD](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/motion/#send_data_pack_pd) (ID 4)<br><span class="meta">Motion</span> | Respond_data_pack_1 |
+| `Send_PD_Gains()` | [Send_PD_Gains](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_pd_gains) (ID 16)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Current_Gains()` | [Send_Current_Gains](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_current_gains) (ID 17)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Velocity_Gains()` | [Send_Velocity_Gains](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_velocity_gains) (ID 18)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Position_Gains()` | [Send_Position_Gains](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_position_gains) (ID 19)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Limits()` | [Send_Limits](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_limits) (ID 20)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Kt()` | [Send_Kt](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_kt) (ID 22)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Voltage_Limit()` | [Send_Voltage_Limit](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gains-and-limits/#send_voltage_limit) (ID 34)<br><span class="meta">Gains and limits</span> | — |
+| `Send_Respond_Ping()` | [Send_Respond_Ping](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_ping) (ID 10)<br><span class="meta">Status requests</span> | Send_Respond_Ping (data frame) |
+| `Send_Respond_Temperature()` | [Send_Respond_Temperature](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_temperature) (ID 23)<br><span class="meta">Status requests</span> | Send_Respond_Temperature (data frame) |
+| `Send_Respond_Voltage()` | [Send_Respond_Voltage](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_voltage) (ID 24)<br><span class="meta">Status requests</span> | Send_Respond_Voltage (data frame) |
+| `Send_Respond_Device_Info()` | [Send_Respond_Device_Info](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_device_info) (ID 25)<br><span class="meta">Status requests</span> | Send_Respond_Device_Info (data frame) |
+| `Send_Respond_State_of_Errors()` | [Send_Respond_State_of_Errors](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_state_of_errors) (ID 26)<br><span class="meta">Status requests</span> | Send_Respond_State_of_Errors (data frame) |
+| `Send_Respond_Iq_data()` | [Send_Respond_Iq_data](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_iq_data) (ID 27)<br><span class="meta">Status requests</span> | Send_Respond_Iq_data (data frame) |
+| `Send_Respond_Encoder_data()` | [Send_Respond_Encoder_data](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_encoder_data) (ID 28)<br><span class="meta">Status requests</span> | Send_Respond_Encoder_data (data frame) |
+| `Send_Respond_Kt()` | [Send_Respond_Kt](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_kt) (ID 33)<br><span class="meta">Status requests</span> | Send_Respond_Kt (data frame) |
+| `Send_Respond_Identity()` | [Send_Respond_Identity](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_identity) (ID 39)<br><span class="meta">Status requests</span> | Send_Respond_Identity (data frame) |
+| `Send_Respond_Telemetry()` | [Send_Respond_Telemetry](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/status/#send_respond_telemetry) (ID 40)<br><span class="meta">Status requests</span> | Send_Respond_Telemetry (data frame) |
+| `Send_CAN_ID()` | [Send_CAN_ID](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_can_id) (ID 11)<br><span class="meta">System</span> | — |
+| `Send_ESTOP()` | [Send_ESTOP](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_estop) (ID 0)<br><span class="meta">System</span> | — |
+| `Send_Idle()` | [Send_Idle](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_idle) (ID 12)<br><span class="meta">System</span> | — |
+| `Send_Save_config()` | [Send_Save_config](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_save_config) (ID 13)<br><span class="meta">System</span> | — |
+| `Send_Reset()` | [Send_Reset](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_reset) (ID 14)<br><span class="meta">System</span> | — |
+| `Send_Clear_Error()` | [Send_Clear_Error](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_clear_error) (ID 1)<br><span class="meta">System</span> | — |
+| `Send_Watchdog()` | [Send_Watchdog](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_watchdog) (ID 15)<br><span class="meta">System</span> | — |
+| `Send_Heartbeat_Setup()` | [Send_Heartbeat_Setup](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_heartbeat_setup) (ID 30)<br><span class="meta">System</span> | — |
+| `Send_Settings()` | [Send_Settings](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/system/#send_settings) (ID 35)<br><span class="meta">System</span> | — |
+| `Send_Parameter()` | [Send_Parameter](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_parameter) (ID 36)<br><span class="meta">Parameters and buffers</span> | — |
+| `Send_Get_Parameter()` | [Send_Get_Parameter](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_get_parameter) (ID 37)<br><span class="meta">Parameters and buffers</span> | Respond_Parameter |
+| `Send_Buffer_Read()` | [Send_Buffer_Read](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_buffer_read) (ID 41)<br><span class="meta">Parameters and buffers</span> | — |
+| `Send_Cogging_Harmonic(), Send_Cogging_Table()` | [Send_Buffer_Write](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/parameters/#send_buffer_write) (ID 43)<br><span class="meta">Parameters and buffers</span> | — |
+| `Send_Sound()` | [Send_Sound](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/sound/#send_sound) (ID 44)<br><span class="meta">Sound</span> | — |
+| `Send_Samples()` | [Send_Sound_Samples](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/sound/#send_sound_samples) (ID 45)<br><span class="meta">Sound</span> | — |
+| `Send_gripper_data_pack()` | [Send_gripper_data_pack](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#send_gripper_data_pack) (ID 61)<br><span class="meta">Gripper</span> | Respond_Gripper_data_pack |
+| `Send_gripper_calibrate()` | [Send_gripper_calibrate](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/can/gripper/#send_gripper_calibrate) (ID 62)<br><span class="meta">Gripper</span> | — |
+
+</div>
 
 The calls for the messages added in firmware 109 (Send_Parameter, Send_Get_Parameter, Send_Respond_Identity,
 Send_Respond_Telemetry, Send_Buffer_Read, Send_Cogging_Harmonic, Send_Cogging_Table, Send_Sound, Send_Samples),

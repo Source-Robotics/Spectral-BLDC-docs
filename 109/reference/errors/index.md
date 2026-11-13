@@ -6,6 +6,7 @@
 |---|---|
 | three short flashes, a pause | normal operation: calibrated, no error |
 | fast flashing, about 10 times a second | calibration running |
+| blinking for about 2 s after power-up | the bootloader waits for a host before it starts the firmware |
 | on, steady | error mode, or not calibrated |
 | off | no power, or `#LED 0` |
 

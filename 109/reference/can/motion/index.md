@@ -10,24 +10,36 @@ The motion command. Its length decides the control mode the driver enters: 8 byt
 
 **8 bytes** — position setpoint with speed and current feedforward (position mode)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-2 |  | Position setpoint | signed 24-bit | encoder ticks |
-| 3-5 |  | Speed feedforward | signed 24-bit | encoder ticks/s |
-| 6-7 |  | Current feedforward | signed 16-bit | mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-2 | Position setpoint | signed 24-bit | encoder ticks |
+| 3-5 | Speed feedforward | signed 24-bit | encoder ticks/s |
+| 6-7 | Current feedforward | signed 16-bit | mA |
+
+</div>
 
 **5 bytes** — speed setpoint with current feedforward (velocity mode)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-2 |  | Speed setpoint | signed 24-bit | encoder ticks/s |
-| 3-4 |  | Current feedforward | signed 16-bit | mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-2 | Speed setpoint | signed 24-bit | encoder ticks/s |
+| 3-4 | Current feedforward | signed 16-bit | mA |
+
+</div>
 
 **2 bytes** — current setpoint (current mode)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-1 |  | Current setpoint | signed 16-bit | mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-1 | Current setpoint | signed 16-bit | mA |
+
+</div>
 
 The driver answers with **Respond_data_pack_1**.
 
@@ -43,11 +55,15 @@ Puts the driver in impedance (PD) mode and sets the position, speed and current 
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-2 |  | Position setpoint | signed 24-bit | encoder ticks |
-| 3-5 |  | Speed setpoint | signed 24-bit | encoder ticks/s |
-| 6-7 |  | Current feedforward | signed 16-bit | mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-2 | Position setpoint | signed 24-bit | encoder ticks |
+| 3-5 | Speed setpoint | signed 24-bit | encoder ticks/s |
+| 6-7 | Current feedforward | signed 16-bit | mA |
+
+</div>
 
 The driver answers with **Respond_data_pack_1**.
 
@@ -63,11 +79,15 @@ The driver's answer to Send_data_pack_1 and Send_data_pack_PD: where the motor i
 
 **The frame** (8 bytes)
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0-2 |  | position | signed 24-bit | encoder ticks |
-| 3-5 |  | speed | signed 24-bit | encoder ticks/s |
-| 6-7 |  | current | signed 16-bit | Iq in mA |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0-2 | position | signed 24-bit | encoder ticks |
+| 3-5 | speed | signed 24-bit | encoder ticks/s |
+| 6-7 | current | signed 16-bit | Iq in mA |
+
+</div>
 
 ---
 

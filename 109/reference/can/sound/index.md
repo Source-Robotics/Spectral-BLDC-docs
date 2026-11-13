@@ -12,13 +12,17 @@ Plays sound through the motor: a tone now, a queue of timed events, or samples. 
 
 **8 bytes**
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | Operation | unsigned 8-bit | 0 stop everything (tones, queue, samples); 1 a tone now; 2 add an event to the queue; 3 play the queue; 4 play the samples; 5 samples off, buffer cleared; 6 clear the queue (tones that sound keep sounding) |
-| 1 |  | Channel | unsigned 8-bit | the tone channel, 0-3 (operations 1 and 2) |
-| 2-3 |  | A | unsigned 16-bit | 1, 2: the pitch in Hz (2: 0 silences the channel); 4: the sample rate in Hz, at most the loop rate |
-| 4-5 |  | B | unsigned 16-bit | 1, 2: the loudness in mA; 4: the voltage of a full-scale sample in mV |
-| 6-7 |  | C | unsigned 16-bit | 1: the duration in ms, 0 = until stopped; 2: the wait in ms before the next event, 0 = the next one starts with it |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | Operation | unsigned 8-bit | 0 stop everything (tones, queue, samples); 1 a tone now; 2 add an event to the queue; 3 play the queue; 4 play the samples; 5 samples off, buffer cleared; 6 clear the queue (tones that sound keep sounding) |
+| 1 | Channel | unsigned 8-bit | the tone channel, 0-3 (operations 1 and 2) |
+| 2-3 | A | unsigned 16-bit | 1, 2: the pitch in Hz (2: 0 silences the channel); 4: the sample rate in Hz, at most the loop rate |
+| 4-5 | B | unsigned 16-bit | 1, 2: the loudness in mA; 4: the voltage of a full-scale sample in mV |
+| 6-7 | C | unsigned 16-bit | 1: the duration in ms, 0 = until stopped; 2: the wait in ms before the next event, 0 = the next one starts with it |
+
+</div>
 
 The driver does not answer this command.
 
@@ -34,16 +38,20 @@ Appends 1 to 8 samples (signed 8-bit, one per byte, −127 to 127 = full scale) 
 
 **8 bytes** — eight samples; a shorter frame carries fewer
 
-| Byte | Bit | Field | Type | Meaning |
-|---|---|---|---|---|
-| 0 |  | Sample 1 | signed 8-bit | the next sample |
-| 1 |  | Sample 2 | signed 8-bit |  |
-| 2 |  | Sample 3 | signed 8-bit |  |
-| 3 |  | Sample 4 | signed 8-bit |  |
-| 4 |  | Sample 5 | signed 8-bit |  |
-| 5 |  | Sample 6 | signed 8-bit |  |
-| 6 |  | Sample 7 | signed 8-bit |  |
-| 7 |  | Sample 8 | signed 8-bit |  |
+<div class="ref-table fields" markdown>
+
+| Byte | Field | Type | Meaning |
+|---|---|---|---|
+| 0 | Sample 1 | signed 8-bit | the next sample |
+| 1 | Sample 2 | signed 8-bit |  |
+| 2 | Sample 3 | signed 8-bit |  |
+| 3 | Sample 4 | signed 8-bit |  |
+| 4 | Sample 5 | signed 8-bit |  |
+| 5 | Sample 6 | signed 8-bit |  |
+| 6 | Sample 7 | signed 8-bit |  |
+| 7 | Sample 8 | signed 8-bit |  |
+
+</div>
 
 The driver does not answer this command.
 

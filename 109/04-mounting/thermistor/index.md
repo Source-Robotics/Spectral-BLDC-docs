@@ -16,11 +16,13 @@ standstill, which heats one winding without any movement to show it.
 
 Solder the thermistor's leads to the two thermistor pads, TERM and 3V3 ([Connectors and pinout](https://docs.source-robotics.com/Spectral-BLDC-docs/109/03-technical-data/connectors/)).
 Put its bead inside the motor's windings, where the heat is: on a gimbal motor the windings are open at the
-bottom and can be reached through one of the mounting holes or past the edge of the stator. Thermal cement holds
-the bead in place and conducts the heat; keep the leads clear of the rotor.
+bottom and can be reached through one of the mounting holes or past the edge of the stator.
+
+Thermal cement holds the bead in place and conducts the heat; keep the leads clear of the rotor.
 
 <figure markdown="span">
   ![Thermal cement](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/Thermal_cement.webp){ width="220" }
+  ![Thermal cement](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/Thermal_cement_dark.webp){ width="220" }
   <figcaption>Thermal cement: it sets hard and conducts heat. Thermal paste stays soft and lets the bead move, ordinary glue insulates it. <a href="https://s.click.aliexpress.com/e/_c3dBOwTD" target="_blank" rel="noopener">Where to buy it</a>.</figcaption>
 </figure>
 
@@ -35,9 +37,11 @@ the bead in place and conducts the heat; keep the leads clear of the rotor.
 ```
 
 `#Temp` then prints the temperature; with the thermistor disabled it prints `Temp Off`. Above the limit the driver
-raises a temperature error and stops; it clears with `#Clear` once the motor has cooled. Below −20 °C it raises
-the same error, so `#Term 1` without a thermistor, or with a broken lead, stops the driver too. 75 °C is the default
-limit and a safe one for the enamel of most small motors; do not go higher unless the motor is rated for it.
+raises a temperature error and stops; it clears with `#Clear` once the motor has cooled.
+
+Below −20 °C it raises the same error, so `#Term 1` without a thermistor, or with a broken lead, stops the driver too.
+75 °C is the default limit and a safe one for the enamel of most small motors; do not go higher unless the motor is
+rated for it.
 
 Over CAN, Send_Respond_Temperature returns the temperature, and the temperature error is one of the bits of
 Send_Respond_State_of_Errors.

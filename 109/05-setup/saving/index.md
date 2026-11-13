@@ -12,11 +12,14 @@ Nothing you set survives a power cycle until you save it.
 
 Saving writes the configuration to the EEPROM: the motor parameters and the calibration, every gain and limit,
 the CAN node ID, the heartbeat and watchdog settings, the thermistor and LED settings, the temperature and voltage
-limits and the gripper flag. From firmware 109 also the tool id and the watchdog fallback, the anti-cogging set
-with its mode and scale, and the encoder table with its on/off switch, parameter 56 and the current-sense zero
-trims. Over CAN, Send_Save_config does the same. Saving also copies the node ID into the bootloader's board ID
-([The bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/109/07-firmware/the-bootloader/#the-board-id)). Save after calibration, after tuning, and
-after changing the node ID.
+limits and the gripper flag.
+
+From firmware 109 also the tool id and the watchdog fallback, the anti-cogging set with its mode and scale, and the
+encoder table with its on/off switch, parameter 56 and the current-sense zero trims.
+
+Over CAN, Send_Save_config does the same. Saving also copies the node ID into the bootloader's board ID
+([The bootloader](https://docs.source-robotics.com/Spectral-BLDC-docs/109/07-firmware/the-bootloader/#the-board-id)). Save after calibration, after tuning, and after
+changing the node ID.
 
 !!! warning "Set the current limit before you save a calibration"
     Firmware 107 and older left the current limit at 1600 mA after a calibration, and a save stored it. From
@@ -51,11 +54,14 @@ These settings are lost at a power cycle, whatever you save. The driver starts w
 
 Restoring the defaults writes the factory values to the EEPROM and loads them. It erases the calibration (the
 driver reports *Not calibrated*), clears the gripper flag, the heartbeat rate and the watchdog, sets the hardware
-version to 1 and the batch date to 24092024, and stores 1111 as the serial number; from firmware 109 it also
-clears the tool id, the watchdog fallback, the anti-cogging set, the encoder table and its zero trims, and sets
-parameter 56 back to 0. The CAN node ID is kept from firmware 109 (it is 0 only when no valid ID is stored);
-firmware 107 and older set it to 0. Note what the driver reports before you use it. The values are listed in the
-[Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/defaults/) reference.
+version to 1 and the batch date to 24092024, and stores 1111 as the serial number.
+
+From firmware 109 it also clears the tool id, the watchdog fallback, the anti-cogging set, the encoder table and
+its zero trims, and sets parameter 56 back to 0. The CAN node ID is kept from firmware 109 (it is 0 only when no
+valid ID is stored); firmware 107 and older set it to 0.
+
+Note what the driver reports before you use it. The values are listed in the [Defaults](https://docs.source-robotics.com/Spectral-BLDC-docs/109/reference/defaults/)
+reference.
 
 Use it before the first calibration of a motor, after a firmware update when the driver behaves oddly, and when
 the state shows nonsense values (a `-1` where a number should be).
@@ -75,23 +81,32 @@ firmware 106 the saved configuration is in blocks, each with its own checksum; f
 | encoder table (109) | 884-1147 | 880 | the table, its on/off switch, parameter 56, the current-sense zero trims |
 
 At power-up the driver checks each. A block that fails, after a power loss during a save for instance, is replaced
-by its factory values without a message, and the others are kept: a failed settings block gives the default gains
-and limits (from firmware 109 the node ID stays, if it was valid), a failed calibration block leaves the driver
-*Not calibrated*. The new blocks need the chip's upper banks; on a smaller chip they keep their defaults in RAM
-and are not saved, which `#Info` says (`Settings block 2: not available`, `block 3 not available`). Going back to an
-older firmware is safe: the first two blocks are unchanged, and older firmware ignores everything from byte 256
-on. [Upgrading from older firmware](https://docs.source-robotics.com/Spectral-BLDC-docs/109/07-firmware/upgrading/) says what changes when you update.
+by its factory values without a message, and the others are kept.
+
+A failed settings block gives the default gains and limits (from firmware 109 the node ID stays, if it was valid);
+a failed calibration block leaves the driver *Not calibrated*.
+
+The new blocks need the chip's upper banks; on a smaller chip they keep their defaults in RAM and are not saved, which
+`#Info` says (`Settings block 2: not available`, `block 3 not available`).
+
+Going back to an older firmware is safe: the first two blocks are unchanged, and older firmware ignores everything
+from byte 256 on. [Upgrading from older firmware](https://docs.source-robotics.com/Spectral-BLDC-docs/109/07-firmware/upgrading/) says what changes when you update.
 
 A board that comes from a release before 106 has no checksums yet: the driver keeps its values once and seals
-them; from firmware 109 every board that was ever saved is trusted this way. A value that was already wrong (a
-`-1` in `#Info`, for instance) then stays, and `#Default` with a new calibration is the fix. A blank EEPROM gets
-the defaults.
+them; from firmware 109 every board that was ever saved is trusted this way.
+
+A value that was already wrong (a `-1` in `#Info`, for instance) then stays, and `#Default` with a new calibration is
+the fix. A blank EEPROM gets the defaults.
 
 ## What the driver reports
 
-`#Info` prints the identity and the motor: hardware version, batch date, firmware version, CAN ID, whether the
-motor is calibrated, temperature, supply voltage, the phase order and direction, the pole pairs, resistance,
-inductance, Kt and KV, and from firmware 109 the build, the board ID and the calibration ID, the tool id, the
-watchdog, the EEPROM blocks and, at its end, what is in force. `#SERNUM` prints the serial number, `#Param` the gains and limits, `#Error` the active errors. They are
-the first thing to look at when something is off, and the thing to copy into a bug report.
+- `#Info` prints the identity and the motor: hardware version, batch date, firmware version, CAN ID, whether the
+  motor is calibrated, temperature, supply voltage, the phase order and direction, the pole pairs, resistance,
+  inductance, Kt and KV, and from firmware 109 the build, the board ID and the calibration ID, the tool id, the
+  watchdog, the EEPROM blocks and, at its end, what is in force;
+- `#SERNUM` prints the serial number;
+- `#Param` the gains and limits;
+- `#Error` the active errors.
+
+They are the first thing to look at when something is off, and the thing to copy into a bug report.
 [Status and diagnostics](https://docs.source-robotics.com/Spectral-BLDC-docs/109/06-operation/diagnostics/) explains the new lines.

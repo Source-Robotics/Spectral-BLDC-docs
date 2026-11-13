@@ -8,7 +8,9 @@ Gravity compensation is a fundamental concept in robotic control that helps coun
 
 ## Why is it so important?
 
-In robotics, a significant portion of motor power is consumed just fighting against gravity. Gravity compensation algorithms are standard in all industrial robots and collaborative robot arms because they provide: improved position accuracy and control, smoother motion planning, and more precise force control applications. The gravity compensation algorithm works as a feedforward component to the motor PID control loops, reducing their computational load and improving overall performance.
+In robotics, a significant portion of motor power is consumed just fighting against gravity. Gravity compensation algorithms are standard in all industrial robots and collaborative robot arms because they provide: improved position accuracy and control, smoother motion planning, and more precise force control applications.
+
+The gravity compensation algorithm works as a feedforward component to the motor PID control loops, reducing their computational load and improving overall performance.
 
 ## The Approach
 

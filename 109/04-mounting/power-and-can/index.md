@@ -23,7 +23,8 @@ feeds the next driver, so a chain of drivers hangs on one supply cable and one C
     ways, and the wrong way puts DC+ on DC−. Every cable must run as in the picture below, the same way at both
     ends. A wrong cable destroys the driver at the moment it is powered.
 
-![The orientation of the daisy-chain cables. The picture shows a generic 4-pin cable; the rule is the same for the 2-pin CAN and power cables.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/Orientation.webp){ width="600" }
+![The orientation of the daisy-chain cables, the same for the 2-pin power and CAN cables.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/daisy-chain-cable.svg){ width="600" }
+![The orientation of the daisy-chain cables, the same for the 2-pin power and CAN cables.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/daisy-chain-cable_dark.svg){ width="600" }
 
 The cables from the shop are made this way: [CAN cable](https://source-robotics.com/products/spectral-micro-can-cable),
 [power cable](https://source-robotics.com/products/spectral-micro-power-cable), and all of them under
@@ -43,3 +44,4 @@ The cables from the shop are made this way: [CAN cable](https://source-robotics.
   which has its own termination.
 
 ![The termination switch, ON for the first and the last node.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/TERM.webp){ width="520" }
+![The termination switch, ON for the first and the last node.](https://docs.source-robotics.com/Spectral-BLDC-docs/109/assets/TERM_dark.webp){ width="520" }
