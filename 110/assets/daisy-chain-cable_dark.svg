@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 250" width="1000" height="250" role="img" aria-labelledby="title desc">
+<title id="title">The orientation of a daisy-chain cable</title>
+<desc id="desc">A two-wire cable, black above red at both ends. The left housing shows its contact windows, the right housing shows its latch side.</desc>
+<rect width="1000" height="250" rx="12" fill="#1e2029"/>
+<rect x="200" y="83" width="600" height="30" fill="#202226" stroke="#c3cad4" stroke-width="1.5"/>
+<rect x="200" y="88" width="600" height="6" fill="#ffffff" opacity="0.18"/>
+<rect x="200" y="137" width="600" height="30" fill="#e5484d" stroke="#c3cad4" stroke-width="1.5"/>
+<rect x="200" y="142" width="600" height="6" fill="#ffffff" opacity="0.18"/>
+<rect x="40" y="48" width="140" height="154" rx="8" fill="#e9ecf0" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="166" y="38" width="36" height="174" rx="6" fill="#d5d9df" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="58" y="85" width="96" height="26" rx="4" fill="#b9c0ca" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M66 98 h30 l10 -6 v12 l-10 -6" fill="none" stroke="#aab2bf" stroke-width="2" stroke-linejoin="round"/>
+<rect x="58" y="139" width="96" height="26" rx="4" fill="#b9c0ca" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M66 152 h30 l10 -6 v12 l-10 -6" fill="none" stroke="#aab2bf" stroke-width="2" stroke-linejoin="round"/>
+<rect x="798" y="38" width="36" height="174" rx="6" fill="#d5d9df" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="834" y="54" width="126" height="142" rx="8" fill="#e9ecf0" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="900" y="108" width="44" height="34" rx="3" fill="#b9c0ca" stroke="#aab2bf" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>
